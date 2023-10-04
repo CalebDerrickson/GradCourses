@@ -13,7 +13,28 @@
 \usepackage{setspace}
 \usepackage{braket}
 \usepackage{color}
+\usepackage{listings}
 
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
 \setlength{\droptitle}{-6em}
 
 \newcommand{\hop}{\vspace{1mm}}
@@ -60,7 +81,7 @@ standing up and then squatting back down with some appropriate rhythm, to be det
 }
 \jump
 
-\begin{enumerate}
+\begin{enumerate}[]
     \item Make an approximation where you keep only the leading order term in $\ep$, i.e linearize about $\varepsilon$ = 0. Then choose a non-dimensionalization of time that puts (1) into this form:
 
     \begin{align}
@@ -128,7 +149,7 @@ standing up and then squatting back down with some appropriate rhythm, to be det
         \begin{equation}
         \begin{cases}
             \dot{\theta} = \Omega, \\
-            \dot{\Omega} = -\big(\alpha + \beta \cos(\tau)\big)\sin(\theta)
+            \dot{\Omega} = -\big(\alpha + \beta \cos(\tau)\big)\sin(\theta) \label{Nonlinear system}
         \end{cases}    
         \end{equation}
 
@@ -143,7 +164,7 @@ standing up and then squatting back down with some appropriate rhythm, to be det
 
         \begin{align}
             E(\theta, \Omega) &= \frac{1}{2} \dot{\theta}^2 + V(\theta),    \nonumber   \\
-            &= \frac{1}{2} \Omega^2 -\alpha\cos(\theta).
+            E(\theta, \Omega) &= \frac{1}{2} \Omega^2 -\alpha\cos(\theta).
         \end{align}
 
         Where the instantaneous change in energy (with respect to time) is,
@@ -155,5 +176,134 @@ standing up and then squatting back down with some appropriate rhythm, to be det
             &= -\beta\Omega\cos(\tau)\sin(\theta)
         \end{align}
         \end{solution}
+
+        \hrule
+        
+        \jump
+        For the child in the swing picture, is the energy $E$ (instantaneously) increasing or decreasing or neither in each of the frames shown? Try making a rough sketch of the time course of each of these quantities: $\theta(t), \Omega(t), \ell(t)$ and $E(t)$, assuming a periodic motion of the swing as well as the swinger. What is the period of the swing motion compared to the period of $\ell(t)$? Are they the same?
+
+        \begin{solution}
+            As a means of faithfully showing the plots, I used matplotlib to create them. Note I am not showing the numerical values of the functions, since they are not enlightening. Note the function $\ell(t)$ is bounded by $1 \pm \ep$. Here is my code:
+
+            \begin{lstlisting}
+
+            import matplotlib.pyplot as plt
+            import numpy as np
+            import pandas as pd
+            %matplotlib inline
+
+            def ell(tau, ep):
+                return (1 + ep * np.cos(2 * tau))
+            def Omega(tau, ep):
+                return -1*(np.sin(tau))
+            def energy(tau, ep):
+                return 0.5 * Omega(tau, ep) **2 - np.cos(theta(tau))
+            def theta(tau):
+                return np.cos(tau)
+
+            ep = 0.1
+            tau = np.linspace(-np.pi * 2, np.pi * 2, 200)
+            tau_ticks = np.arange(-np.pi * 2, np.pi * 2, np.pi/2)
+            tau_ticks_label = [f'0' if n == 0 else f'-pi/2' if n == -1 else f'pi/2' if n == 1 else f'{int(n/2)}pi' if n%2 == 0 else f'{int(n)}pi/2' for n in tau_ticks / (np.pi / 2)] 
+            
+            plt.figure(figsize=(10, 8))
+            plt.subplots_adjust(hspace=0.5)
+            
+            plt.subplot(2, 2, 1)
+            plt.plot(tau, ell(tau, ep), 'b-', label = "Length")
+            plt.plot(tau, [np.mean(ell(tau, ep)) for _ in range(len(tau))], 'k--')
+            plt.xlabel("tau")
+            plt.title("Length")
+            plt.yticks([])  
+            plt.xticks(tau_ticks, tau_ticks_label)
+            
+            plt.subplot(2, 2, 2)
+            plt.plot(tau, Omega(tau, ep), 'r-', label = "Omega")
+            plt.plot(tau, 0 * tau, 'k--')
+            plt.xlabel("tau")
+            plt.title("Omega")
+            plt.yticks([])  
+            plt.xticks(tau_ticks, tau_ticks_label)
+            
+            plt.subplot(2, 2, 3)
+            plt.plot(tau, energy(tau, ep), 'g-', label = "Energy")
+            plt.plot(tau, [np.mean(energy(tau, ep)) for _ in range(len(tau))], 'k--')
+            plt.xlabel("tau")
+            plt.title("Energy")
+            plt.yticks([])  
+            plt.xticks(tau_ticks, tau_ticks_label)
+            
+            plt.subplot(2, 2, 4)
+            plt.plot(tau, theta(tau),  'm-', label = "Theta")
+            plt.plot(tau, 0 * tau, 'k--')
+            plt.xlabel("tau")
+            plt.title("Theta")
+            plt.yticks([])  
+            plt.xticks(tau_ticks, tau_ticks_label)
+            
+            plt.show()
+
+            \end{lstlisting}
+
+            Here are the resulting plots (I tried making this as horizontally aligned as possible):
+            
+            \jump
+            \centerline{\noindent}%
+            \makebox[\textwidth]{
+            \includegraphics[scale = 0.6]{Images/homework1 heuristic plots.PNG}
+            }
+            \jump
+
+            Note that these are here purely as a heuristic. As we expect the length of the pendulum arm to be maximal when
+            \textbf{GIVE INTERPRETATION OF PLOTS!!}
+        \end{solution}
+
+        \item Linearize your system of first order equations about the equilibrium position $\theta = \Omega = 0$ to obtain a linear non-autonomous system to study:
+
+        \begin{align}
+            \frac{d\textbf{x}}{d\tau} = A(\tau)\textbf{x}, \label{Linearized system}
+        \end{align}
+
+        where $A(\tau) = A(\tau + T)$ is a 2$\times$2 T-periodic matrix, and $\textbf{x} \in \R^{2}$ is your state space vector. What is T for your non-dimensional problem?
+        
+        \jump
+        \hrule
+
+        \begin{solution}
+        
+            In preparation for this, we wrote out our "pseudo system" as \ref{Nonlinear system}. From this, we are only interested in small perturbations of $\theta$ and $\Omega$ around $\theta = \Omega = 0$. Thus, we can replace functions dependent on $\theta$ and $\Omega$ with their Taylor Expanded equivalent, up to linear term. From \ref{Nonlinear system}, the only function is $\sin(\theta)$, which can be approximated by $\sin(\theta) \approx \theta$ under our assumptions. Therefore we have,
+
+            \begin{align}
+                \begin{pmatrix}
+                    \dot{\theta}    \\
+                    \dot{\Omega}
+                \end{pmatrix}
+                \hspace{3mm}
+                =
+                \hspace{3mm}
+                \begin{pmatrix}
+                    0   &1  \\
+                    -\big( \alpha + \beta\cos(\tau)\big) &0
+                \end{pmatrix}
+                \begin{pmatrix}
+                    \theta  \\
+                    \Omega
+                \end{pmatrix}   \label{Linear system}
+            \end{align}
+
+            It is quite easy to see that our state vector, \textbf{x} is just $(\theta, \Omega)^t \in \R^2$, where $t$ denotes the transpose. It is also noted that our system $A(\tau)$ is periodic, with period $T = 2\pi$.
+        \end{solution}
+
+        \jump
+        \hrule
+        
+        \jump
+        Briefly summarize what Floquet theory tells us about the form of the solutions of \ref{Linear system}.
+
+        \begin{solution}
+        
+            \textbf{WHAT DOES FLOQUET THEORY TELL US?}
+        \end{solution}
+        
 \end{enumerate}
 \end{document}
