@@ -14,6 +14,10 @@
 \usepackage{braket}
 \usepackage{color}
 \usepackage{listings}
+\usepackage{mathrsfs}
+\usepackage{stackengine}
+
+\setstackEOL{\\}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -50,6 +54,17 @@
 
 \vspace{5mm}
 \medskip\noindent{\color{cit}\textbf{Solution:} #1}}
+
+\newcounter{tmpctr}
+\newcommand\fancyRoman[1]{%
+  \setcounter{tmpctr}{#1}%
+  \setbox0=\hbox{\kern.1pt\textsf{\Roman{tmpctr}}}%
+  \setstackgap{S}{-.2pt}%
+  \Shortstack{\rule{\dimexpr\wd0+.1ex}{.5pt}\\\copy0\\
+              \rule{\dimexpr\wd0+.1ex}{.5pt}}%
+}
+
+\newcommand{\Id}{\fancyRoman{2}}
 
 % Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
 \title{STAT 31410: Homework 1}
@@ -173,7 +188,7 @@ standing up and then squatting back down with some appropriate rhythm, to be det
             \dot{E}(\theta, \Omega) &=  \frac{d}{d\tau}\bigg[ \frac{1}{2}\Omega^2 - \alpha\cos(\theta) \bigg]  \nonumber\\
             &= \Omega\dot{\Omega} - \alpha\frac{d}{d\tau}\bigg[ \cos(\theta) \bigg] \nonumber\\
             &= -\Omega\big(\alpha + \beta \cos(\tau)\big)\sin(\theta) + \alpha\sin(\theta)\dot{\theta}\nonumber\\
-            &= -\beta\Omega\cos(\tau)\sin(\theta)
+            &= -\beta\Omega\cos(\tau)\sin(\theta) \label{Edot}
         \end{align}
         \end{solution}
 
@@ -254,8 +269,9 @@ standing up and then squatting back down with some appropriate rhythm, to be det
             }
             \jump
 
-            Note that these are here purely as a heuristic. As we expect the length of the pendulum arm to be maximal when
-            \textbf{GIVE INTERPRETATION OF PLOTS!!}
+            Note that these are here purely as a heuristic. As we expect the length of the pendulum arm to be the greatest while the child is squatting down, and minimal when the child to be standing up. Squatting down should correlate to maximum values of theta, and standing up should correlate to minimum values of theta. We can see this represented in the plots of length and theta. Since $\dot{theta} = \Omega$, we should see maxed values of $\omega$ when $\theta$ = 0, which is shown. Energy is slightly different. When $E$ = 0, the kinetic energy is equal to its potential, which happens going to and coming from max values of $\theta$. It's maximal values should then be when either the kinetic or potential energies are maximized, lining up with values $\theta = -\pi/2, 0, \pi/2$. Regardless, in an entire swing interval, when going from $-\pi/2$ to $\pi/2$, we should hit the zeros of $E$ four times, indicating that the energy runs with frequency four times that of $\theta$, twice the frequency of $\ell$. Though this seems to not be represented in the plot of energy, I expect my rationality to be a better interpretation. 
+
+            From our calculation of $\dot{E}$, we can inspect the change of the energy in the given frames of the system. Note that we are to expect the system to achieve its maximum heights in the first and third frames. In the first frame, we can argue the change in energy is zero, as shown by \ref{Edot}, $\Omega$ should be zero. This is also seen in the third frame. The second frame shows the child at $\theta = 0$, thus $\sin(\theta) = 0$, making our $\dot{E}$ also zero. 
         \end{solution}
 
         \item Linearize your system of first order equations about the equilibrium position $\theta = \Omega = 0$ to obtain a linear non-autonomous system to study:
@@ -271,7 +287,7 @@ standing up and then squatting back down with some appropriate rhythm, to be det
 
         \begin{solution}
         
-            In preparation for this, we wrote out our "pseudo system" as \ref{Nonlinear system}. From this, we are only interested in small perturbations of $\theta$ and $\Omega$ around $\theta = \Omega = 0$. Thus, we can replace functions dependent on $\theta$ and $\Omega$ with their Taylor Expanded equivalent, up to linear term. From \ref{Nonlinear system}, the only function is $\sin(\theta)$, which can be approximated by $\sin(\theta) \approx \theta$ under our assumptions. Therefore we have,
+            In preparation for this, we wrote out our ``pseudo system" as \ref{Nonlinear system}. From this, we are only interested in small perturbations of $\theta$ and $\Omega$ around $\theta = \Omega = 0$. Thus, we can replace functions dependent on $\theta$ and $\Omega$ with their Taylor Expanded equivalent, up to linear term. From \ref{Nonlinear system}, the only function is $\sin(\theta)$, which can be approximated by $\sin(\theta) \approx \theta$ under our assumptions. Therefore we have,
 
             \begin{align}
                 \begin{pmatrix}
@@ -302,8 +318,23 @@ standing up and then squatting back down with some appropriate rhythm, to be det
 
         \begin{solution}
         
-            \textbf{WHAT DOES FLOQUET THEORY TELL US?}
+            Floquet theory tells us that there exists some periodicity in our solutions. Since our system is periodic (with period $T = 2\pi$), the general form of the solutions is given by theorem 2.36 in the course book.
+
+            \begin{align}
+                \upPhi (t,0) = \mathscr{P}(t)e^{tB}, 
+            \end{align}
+
+            where $\mathscr{P}$ is a $T$-periodic matrix and $B = \frac{1}{T} \ln M$, where M is the monodromy matrix: $M \equiv \upPhi(T,0)$. 
         \end{solution}
+
+        \item Let $\upPhi(\tau)$ be the fundamental matrix solution associated with the linear problem \ref{Linear system} that satisfies $\upPhi(0) = \Id$, the 2×2 identity matrix. Derive and then solve a first order ordinary differential equation for $det(\upPhi)$.
+
+        \jump
+        \hrule
+
+        \begin{solution}
+          
         
+        \end{solution}
 \end{enumerate}
 \end{document}
