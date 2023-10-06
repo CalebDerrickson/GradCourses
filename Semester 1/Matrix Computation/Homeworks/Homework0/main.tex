@@ -284,12 +284,29 @@ Therefore, ker(A) $\neq$ ker(A$^T$A).
 \[
 \text{A$^T$A}\textbf{x} = \text{A$^T$}\textbf{b}
 \]
-always has a solution (even if A\textbf{x} = \textbf{b} has no solution). Give an example to show that this is true over a finite field.  
+always has a solution (even if A\textbf{x} = \textbf{b} has no solution). Give an example to show that this is not true over a finite field.  
 
 \hop
 Since im(A$^T$A) = im(A$^T$), any vector in the image of im(A$^T$A) is in the image of im(A$^T$). so if A$^T$\textbf{b} $\in$ im(A$^T$), then A$^T$\textbf{b} $\in$ im(A$^T$A), thus $\exists$ \textbf{x} $\in \R^{n}$ such that A$^T$A\textbf{x} = A$^T$\textbf{b}. Thus even if A\textbf{x} = \textbf{b} has no solution, A$^T$A\textbf{x} = A$^T$\textbf{b} will have a solution. 
 
-\textbf{GIVE AN EXAMPLE WHERE THIS IS NOT THE CASE OVER A FINITE FIELD}
+Over a finite field, we can choose 
+\[
+A = 
+\begin{pmatrix}
+    1 &0    \\
+    0 &0
+\end{pmatrix}
+,
+\hspace{5mm}
+\textbf{b} = 
+\begin{pmatrix}
+    0   \\
+    1
+\end{pmatrix}.
+\]
+
+\hop
+Note this system has no solutions. Then, $A^TA = A^T = A$, keeping our original system with no solutions.
 % end problem 3
 \end{enumerate}
 \jump
@@ -544,13 +561,13 @@ This makes no sense, for n = 2 (dimension as well as power), this would imply $a
         Since in the previous part we showed that matrices commute under the trace operator, we are free to use binomial expansion on $(A+B)^k$.
 
         \[
-        \implies \text{tr}\big[ (A+B)^k\big] = \text{tr}\big[ \sum_{j = 0}^k {k \choose j} A^{k - j}B^j\big].
+        \implies \text{tr}\big[ (A+B)^k\big] = \text{tr}\big[ \sum_{j = 0}^k \binom{k}{j} A^{k - j}B^j\big].
         \]
 
         From this expansion, we can take out the two cases where $j = 0$ and $j = k$ to get our leading terms.
 
         \[
-        \hspace{15mm}\text{tr}\big[ \sum_{j = 0}^k {k \choose j} A^{k - j}B^j\big] = \text{tr}\big[ A^k + B^k + \sum_{j = 1}^k {k \choose j} A^{k - j}B^j\big].
+        \hspace{15mm}\text{tr}\big[ \sum_{j = 0}^k \binom{k}{j} A^{k - j}B^j\big] = \text{tr}\big[ A^k + B^k + \sum_{j = 1}^k \binom{k}{j} A^{k - j}B^j\big].
         \]
 
         We can note that under the summation, each term will have an AB product in it, thus making the entire term 0. We can discard the summation in that case. 
