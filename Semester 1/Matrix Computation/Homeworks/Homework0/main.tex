@@ -333,8 +333,19 @@ For the backward implication we have \textbf{v}$_1$, ..., \textbf{v}$_r$ are pai
 This proves the backward implication, proving the statement. $\square$
 
 \hop
-\textbf{NEED TO PROVE THE NEXT PART!!!}
-Shouldn't the summation run from i = 1 to n?
+To prove (4.1), we can expand out $\lVert \textbf{v} \rVert ^2_2$ and compare summations.
+
+\[
+\lVert \textbf{v} \rVert ^2_2 = \sum_{i = 1}^n \textbf{v}_i^2 = \sum_{i= 1}^n (e^t_i\textbf{v})^2
+\]
+
+Here we're just taking the inner product of the vector \textbf{v} with the standard basis vector $e_i$, $i = 1,..., n$. Since \textbf{v}$_1$, ..., \textbf{v}$_r$ are assumed to be pairwise orthogonal unit vectors, these \textbf{v}$_i$'s can be swapped with $r$ standard unit vectors (or there exists some mapping from the \textbf{v}$_i$'s to the standard unit vectors).
+
+\[
+\hspace{-5mm}\implies \sum_{i = 1}^r(\textbf{v}^tv_i)^2 = \sum_{i = 1}^r (\textbf{v}^te_i)
+\]
+
+Since $r \leq n$, the summation running to $r$ will always be less than or equal to the summation running to $n$, with equality holding only when $r = n$.
 % End problem 4
 \end{enumerate}
 
@@ -501,21 +512,60 @@ This makes no sense, for n = 2 (dimension as well as power), this would imply $a
         \hspace{5mm}
         \text{tr}[(BA)] = \sum_{i = 1}^n (BA)_{ii} = \sum_{k = 1}^n b_{ik}a_{ki}
         \]
+
+        \hop
         \[
         \hspace{-10mm}\implies \text{tr}[(AB)] = \text{tr}[(BA)]
         \]
 
         \hop
-        Thus the base case has been proven. Next, assume the claim holds for some $l < k$, we will show the $l+1$ case holds.
+        Thus the base case has been proven. Next, assume the claim holds for some $l < k$, we will show the $l+1$ case holds. I.e., we wish to show
 
         \hop
-        \textbf{NEED TO SHOW!!}
+        \[
+        \text{tr}\big[ (AB)^{l+1}\big] = \text{tr}\big[ (BA)^{l+1}\big]
+        \]
+
+        \begin{align*}
+            \text{tr}\big[ (AB)^{l+1}\big] &= \text{tr}\big[ (AB)^{l}(AB)\big]  &\text{(Matrix Exponent.)} \\
+            &= \text{tr}\big[ (BA)^{l}(AB)\big] &\text{(Inductive Hypothesis.)} \\
+            &= \text{tr}\big[ (BA)^{l}(AB)^T\big] &\text{(From Problem 5, part b.)}\\
+            &= \text{tr}\big[ (BA)^{l}(B^TA^T)\big] &\text{(Matrix Transpose Property.)}\\
+            &= \text{tr}\big[ (BA)^{l}(BA)\big] &\text{(Problem 5, part b applied  to A and B.)}\\
+            &= \text{tr}\big[ (BA)^{l+1}\big] &\text{(Matrix Exponent.)}
+        \end{align*}
+
+        Therefore, the statement holds by induction. $\square$
 
         \jump
         \item and if AB = 0, Then tr$[(A+B)^k]$ = tr$(A^k)$ + tr$(B^k)$, for all $k \in \mathbb{N}$
 
-        \hop 
-        \textbf{NEED TO SHOW!!}
+        \jump
+        Since in the previous part we showed that matrices commute under the trace operator, we are free to use binomial expansion on $(A+B)^k$.
+
+        \[
+        \implies \text{tr}\big[ (A+B)^k\big] = \text{tr}\big[ \sum_{j = 0}^k {k \choose j} A^{k - j}B^j\big].
+        \]
+
+        From this expansion, we can take out the two cases where $j = 0$ and $j = k$ to get our leading terms.
+
+        \[
+        \hspace{15mm}\text{tr}\big[ \sum_{j = 0}^k {k \choose j} A^{k - j}B^j\big] = \text{tr}\big[ A^k + B^k + \sum_{j = 1}^k {k \choose j} A^{k - j}B^j\big].
+        \]
+
+        We can note that under the summation, each term will have an AB product in it, thus making the entire term 0. We can discard the summation in that case. 
+
+        \[
+        \text{tr}\big[ (A+B)^k\big] = \text{tr}\big[A^k + B^k\big].  
+        \]
+
+        And finally, since the trace function is a linear operator, we can break this apart into two pieces.
+
+        \[
+        \hspace{-5mm}\implies \text{tr}\big[ (A+B)^k\big] = \text{tr}(A^k) + \text{tr}(B^k), 
+        \]
+
+        thus proving the statement. $\square$
         
     \end{enumerate}
 
@@ -529,7 +579,7 @@ This makes no sense, for n = 2 (dimension as well as power), this would imply $a
     \[
     m_A(x) = (x - \lm_1)\cdots(x - \lm_d)
     \]
-    where $\lm_1$, ..., $\lm_d \in \C$ are all distinct. Hence deduce for a diagonalizable matrix, the degree of its polynomial equals the number of distinct eigenvalues
+    where $\lm_1$, ..., $\lm_d \in \C$ are all distinct. Hence deduce for a diagonalizable matrix, the degree of its polynomial equals the number of distinct eigenvalues.
 
 % End number 6 
 \end{enumerate}
