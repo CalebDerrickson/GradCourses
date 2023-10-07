@@ -63,7 +63,7 @@
         \item rank(AB) $\leq$ min \{rank(A), rank(B)\}, 
         \jump
 
-        Note it is enough to show that rank(AB) $\leq$ rank(A) and rank(AB) $\leq$ rank(B). The former follows directly from the first proof of the previous part, noting that im(AB) $\subseteq$ im(A) implies dim(im(AB)) $\leq$ dim(im(A)). The latter follows from the second proof of the first part. Using the rank-nullity theorem, we can rewrite rank(AB) as
+        Note it is sufficient to show rank(AB) $\leq$ rank(A) and rank(AB) $\leq$ rank(B). The former follows directly from the first proof of the previous part, noting that im(AB) $\subseteq$ im(A) implies dim(im(AB)) $\leq$ dim(im(A)). The latter follows from the second proof of the first part. Using the rank-nullity theorem, we can rewrite rank(AB) as
         \[
         \text{rank(AB) = n - null(AB)}
         \]
@@ -489,7 +489,7 @@ So if A = B, we can write
 \]
 
 \hop
-If B = $E_{ij} \in \R^{m \times n}$, it breaks the formula I've given, since B did not depend on indices. Instead, it will have to be evaluated separately. Reminder that E on the right of A swaps columns, E on the left swaps rows. 
+Note that by this calculation, tr($AB^T$) = tr($A^TB$), up to a relabelling of indices. If B = $E_{ij} \in \R^{m \times n}$, it breaks the formula I've given, since B did not depend on indices. Instead, it will have to be evaluated separately. Reminder that E on the right of A swaps columns, E on the left swaps rows. 
 
 \jump
 For the case of tr($A^TB$), the resulting matrix will have one non-zero column, where the i-th column of A is represented as the j-th column. Since A is being transposed, the i-th \textit{row} is being represented as the j-th column. This results in the element in the i-th row, j-th column being the trace. So tr($AE_{ij}$) = $a_{ij}$.
@@ -497,11 +497,41 @@ For the case of tr($A^TB$), the resulting matrix will have one non-zero column, 
 \jump
 For the case of tr($AB^T$), the resulting matrix will have one non-zero column, where the j-th column of A is represented as the i-th column. These are swapped since E is transposed ($E_{ij} \rightarrow E_{ji}$). This means the element on the diagonal is $a_{ii}$, therefore tr($AE_{ji}$) = $a_{ii}$. 
 
+\jump
 \item Suppose m = n and tr(A) = tr(A$^2$) = ... = tr(A$^n$) = 0. Show that A$^n$ = 0.
 
 \jump
-This makes no sense, for n = 2 (dimension as well as power), this would imply $a_{12}a_{21} = 0$, which only requires one element to be zero.  
+Let $\lm_1, ..., \lm_n$ be the eigenvalues of A, with associated eigenvector \textbf{v}. Note that $A^2\textbf{v} = A(A\textbf{v}) = A\lm\textbf{v} = \lm^2\textbf{v}$, thus \textbf{v} is an eigenvector of $A^k$ with eigenvalue $\lm^k$. We are given tr(A) = tr(A$^2$) = ... = tr(A$^n$) = 0. Since the trace of a matrix is the sum of its eigenvalues, we can write the following system of equations:
 
+\begin{align*}
+    &\lm_1 + \ ... \ + \lm_n = 0  \\
+    &\lm_1^2 + \ ... \ + \lm_n^2 = 0 \\
+    &... \\
+    &\lm_n^n + \ ... \ + \lm_n^n = 0
+\end{align*}
+
+This system of equations is called the symmetric powers of A. Since these are all equal 0, this will help tremendously in the next step. 
+
+\hop
+Writing out the characteristic polynomial of A, we get,
+
+\[
+\chi_A(x) = (x - \lm_1)(x-\lm_2)(...)(x-\lm_n)
+\]
+
+which, when expanded, is of the form,
+
+\[
+x^n - \bigg(\sum_i\lm_i\bigg)x^{n-1} \bigg(\sum_{i<j\leq n} \lm_i\lm_j\bigg)x^{n - 2} + ... + (-1)^ne_n(\lm_1, ..., \lm_n),
+\]
+
+Where $e_i$ is an Elementary symmetric polynomial, defined as the sum of all distinct products of n distinct variables. Note that a property of elementary symmetric polynomials is they can be expressed as sums and products of the symmetric powers stated above. Since the symmetric powers are all equivalent to zero, this means each Elementary symmetric polynomial is a sum and product of zero, thus all coefficients of our characteristic polynomial equal zero. This leaves us with,
+
+\[
+\chi_A(x) = x^n.
+\]
+
+By The Cayley-Hamilton theorem, the matrix A satisfies its characteristic polynomial, that is $\chi_A(A) = 0$. Thus $A^n = 0$, which proves the statement. $\square$
 \hop
 \item Suppose $m = n$. Show that
     \begin{enumerate}
@@ -598,6 +628,74 @@ This makes no sense, for n = 2 (dimension as well as power), this would imply $a
     \]
     where $\lm_1$, ..., $\lm_d \in \C$ are all distinct. Hence deduce for a diagonalizable matrix, the degree of its polynomial equals the number of distinct eigenvalues.
 
+\jump
+Since any square matrix can be written in Jordan Canonical Form, i.e. 
+\[
+A = XJX^{-1}.
+\]
+
+Where $J$ is composed of block matrices along its diagonal of the form $J_k = \lm_kI + N$, where N is a nilpotent matrix of nilpotency p and $\lm_k$ is the k-th eigenvalue of A. There are a few things to note about the Jordan Canonical form of a matrix:
+\begin{enumerate}
+    \item The number of total blocks inside $J$ is equal to the number of distinct eigenvectors, thus each Jordan block has one eigenvector. 
+    \item For the minimum polynomial $\mu_A$ of A, we need only investigate $J$ itself. That is, $\mu_A(A) = X\mu_A(J)X^-1$.
+    \item The size of a Jordan block $J_k$ depends on how many eigenvectors are associated with the eigenvalue $\lm_k$. That is, the eigenspace of $\lm_k$ has size equal to the size of $J_k$.  
+\end{enumerate}
+
+For the backward implication, we suppose the minimal polynomial is of the form 
+\[
+\mu_A(x) = (x - \lm_1)(...)(x - \lm_d)
+\]
+
+where $\lm_1, ..., \lm_d$ are the only distinct eigenvalues of A. By the Cayley-Hamilton Theorem, $\mu_A(A) = 0$, i.e.
+
+\[
+\mu_A(A) = (A - \lm_1I)(A-\lm_2I)(...)(A - \lm_dI) = 0
+\]
+
+since $\mu_A(A) = 0$, then A must zero out all non-diagonal terms of $J$, leaving $J$ with entries only along the diagonal. Thus A is diagonalizable. 
+
+\hop
+For the forward implication, we assume A is diagonalizable. It's Jordan Canonical form is thus a diagonal matrix. Its characteristic polynomial is thus
+\[
+\chi_A(x) = (x - \lm_1)^{\alpha_1}(...)(x - \lm_d)^{\alpha_d}
+\]
+
+where $\alpha_1,..., \alpha_d > 1$ are the algebraic multiplicities of the eigenvalue $\lm_i$. 
+
+\jump
+\underline{Claim:} $\mu_A(x) = (x -\lm_1)(...)(x - \lm_d)$, i.e. $\alpha_1 = ... = \alpha_i = 1$.
+
+\jump
+Suppose false, meaning $\exists$ $g < d$ such that $\mu_A(x) = (x -\lm_1)(...)(x - \lm_g)$. Consider the Jordan block associated with the i-th eigenvalue, $J_i$ with $g < i \leq d$. Since $\lm_1,..., \lm_d$ are distinct eigenvalues, $\lm_k$ cannot zero out the diagonal values of the Jordan block $J_i$ for $k \leq g$, thus making this impossible. Therefore, $\mu_A(x) = (x -\lm_1)(...)(x - \lm_d)$. Now we just need to show $\alpha_1 = ... = \alpha_i = 1$. This is simple, since 
+\[
+\chi_A(J) = (J_1 - \lm_1I)^{\alpha_1}(...)(J_d - \lm_dI)^{\alpha_d} = 0.
+\]
+
+Since $J_k = \lm_k + N$, $J_k - \lm_kI = N$. And since A is diagonalizable, $N = 0$, meaning A has no off-diagonal terms in its Jordan form. Thus  $\alpha_1 = ... = \alpha_i = 1$, finishing the proof. $\square$
+
+\jump
+\item Let $A$ be diagonalizable. Let $\textbf{x}_1, ..., \textbf{x}_n \in \C^n$ be $n$ linearly independent right eigenvectors of A, and $\textbf{y}_1, ..., \textbf{y}_n \in \C^n$ be $n$ linearly independent left eigenvectors of A. Show that we may choose $\textbf{x}_1, ..., \textbf{x}_n$ and $\textbf{y}_1, ..., \textbf{y}_n$ so that any vector $\textbf{v} \in C^n$ can be expressed as 
+\[
+\textbf{v} = \sum_{i = 1}^n(\textbf{y}^T_i\textbf{v})\textbf{x}_i.
+\]
+
+If we write $X$ = $[\textbf{x}_1, ..., \textbf{x}_n] \in \C^{n\times n}$ and $Y$ = $[\textbf{y}_1, ..., \textbf{y}_n] \in \C^{n\times n}$, what is the relation between $X$ and $Y$?
+
+By some manipulation of the summation, 
+\begin{align*}
+    \textbf{v} &= \sum_{i = 1}^n(\textbf{y}^T_i\textbf{v})\textbf{x}_i &\text{(Given.)} \\
+    &= \sum_{i = 1}^n\textbf{x}_i(\textbf{y}^T_i\textbf{v}) &\text{(Vector-scalar commutation.)}\\
+    &= \sum_{i = 1}^n\textbf{x}_i\textbf{y}^T_i\textbf{v} &\text{(Associativity.)}\\
+    &= \sum_{i = 1}^n(\textbf{x}_i\textbf{y}^T_i)\textbf{v} &\text{(Associativity.)}\\
+    &= \bigg[\sum_{i = 1}^n(\textbf{x}_i\textbf{y}^T_i)\bigg]\textbf{v} &\text{(Distributive Law.)}\\
+\end{align*}
+
+Thus we can note that 
+\[
+\sum_{i = 1}^n(\textbf{x}_i\textbf{y}^T_i) = I.
+\]
+
+This should hold for any choice of linearly independent eigenvectors, provided we are in the basis of the eigenvectors of A. If we were to write $X$ = $[\textbf{x}_1, ..., \textbf{x}_n] \in \C^{n\times n}$ and $Y$ = $[\textbf{y}_1, ..., \textbf{y}_n] \in \C^{n\times n}$, then we can interpret the above summation as multiplying the i-th column of X with the i-th row of Y and summing over all results. This is one of the ways to interpret Matrix Multiplication, therefore: $XY = I$. Since $X$ and $Y$ are written to have linearly independent columns, both are invertible, thus $X = Y^{-1}$ and vice versa.
 % End number 6 
 \end{enumerate}
 
