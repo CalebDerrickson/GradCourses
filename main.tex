@@ -16,6 +16,7 @@
 \usepackage{listings}
 \usepackage{mathrsfs}
 \usepackage{stackengine}
+\usepackage{afterpage}
 
 \setstackEOL{\\}
 
@@ -75,6 +76,9 @@
 \onehalfspacing
 \maketitle
 
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, Nathan Suhr, and Steven Lee.
+
+\jump
 For this problem set, we consider the equation for an idealized pendulum
 \begin{align}
     \frac{d^2\theta}{dt^2} = -\frac{g}{\ell(t)}sin(\theta), \label{Original ode}
@@ -104,8 +108,6 @@ standing up and then squatting back down with some appropriate rhythm, to be det
     \end{align}
 
         where you define the dimensionless parameters $\alpha$ and $\beta$ in terms of the original parameters $g$, $\ell_0$, $\varepsilon$ and $\omega$. Re-write the second order equation \ref{linearish} as two first order equations for the angle $\theta$ and the angular speed $\omega \equiv \dot{\theta}$. For $\beta$ = 0, derive a conserved quantity, the energy of the pendulum, denoted $E(\theta, \Omega)$. Write an equation for $\dot{E}$ that applies if $\beta \neq 0$.
-
-        {\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, Nathan Suhr, and Steven Lee.
         \begin{solution}
 
         Since we are taking $\ep \ll 1$ from \ref{Original ode}, we can define a function $f(\ep)$ on which we will expand using ordinary Taylor expansion. Here, I will define $f(\ep)$ as:
@@ -283,7 +285,6 @@ standing up and then squatting back down with some appropriate rhythm, to be det
         where $A(\tau) = A(\tau + T)$ is a 2$\times$2 T-periodic matrix, and $\textbf{x} \in \R^{2}$ is your state space vector. What is T for your non-dimensional problem?
         
         \jump
-        \hrule
 
         \begin{solution}
         
@@ -330,11 +331,357 @@ standing up and then squatting back down with some appropriate rhythm, to be det
         \item Let $\upPhi(\tau)$ be the fundamental matrix solution associated with the linear problem \ref{Linear system} that satisfies $\upPhi(0) = \Id$, the 2×2 identity matrix. Derive and then solve a first order ordinary differential equation for $det(\upPhi)$.
 
         \jump
-        \hrule
 
         \begin{solution}
           
+        This is done in the book as the proof of Abel's formula, so I will transcribe the proof in my own words. 
+
+        \jump
+        First we re-write det($\upPhi$) into an equivalent form, 
         
+        \begin{align}
+            \text{det($\upPhi$) = } \sum_{j = 1}^nc_{ij}\varphi_{ij}, \label{detupphi}
+        \end{align}
+
+        where $c_{ij}$ is the co-factor of the $i,j$-th entry of $\upPhi$. Note that \ref{detupphi} can be taken over any row of $\upPhi$, thus if we decouple the respective indices row entries of $\varphi_{ij}$ and $c_{ij}$, we get,
+
+        \begin{align}
+             \text{det($\upPhi$) $\delta_{ik}$= } \sum_{j = 1}^nc_{ij}\varphi_{kj}, \label{deltadetupphi}
+        \end{align}
+
+        where $\delta_{ik}$ is the Kronnecker delta of $i$ and $k$. Furthermore, since the only term in \ref{detupphi} which depends on $\varphi_{ij}$ is exactly the term $c_{ij}\varphi_{ij}$, we can write,
+
+        \begin{align}
+            \frac{\partial}{\partial\varphi_{ij}}\text{det($\upPhi$) = }c_{ij}. \label{partialdetphi}
+        \end{align}
+
+        Therefore, using the chain rule and \ref{partialdetphi}, we can write the time derivative of det($\upPhi$) as,
+
+        \begin{align*}
+            \frac{d}{dt}\text{det($\upPhi(t)$)} = \sum_{i = 1}^n\sum_{j = 1}^n c_{ij}(t)\frac{d}{dt}\varphi_{ij}.
+        \end{align*}
+
+        Note that the fundamental matrix has columns of the linearly independent solutions of \ref{Linear system}, thus 
+        \[
+        \frac{d}{dt}\varphi_{ij}(t) = A(t)\upPhi(t) = \sum_{k = 1}^n a_{ik}\varphi_{kj}(t)
+        \]
+
+        This can then be substituted into our ODE, making it,
+
+        \[
+        \frac{d}{dt}\text{det($\upPhi(t)$)} = \sum_{i, j, k}^n c_{ij}(t)a_{ik}(t)\varphi_{kj}(t),
+        \]
+
+        where I have compressed the triple sum for legibility. Rearranging these terms and noting that $a_ik$ does not depend on the $j$ summation implies,
+
+        \[
+        \frac{d}{dt}\text{det($\upPhi(t)$)} = \sum_{i,k = 1}^na_{ik}(t)\sum_{j = 1}^n c_{ij}(t)\varphi_{kj}(t).
+        \]
+
+        The inner summation is equivalent to \ref{deltadetupphi}, thus,
+
+        \[        
+        \frac{d}{dt}\text{det($\upPhi(t)$)} = \sum_{i,k = 1}^na_{ik}(t)\delta_{ik}\text{det($\upPhi$)}.
+        \]
+
+        det($\upPhi$) can be taken out of the summation, and the Kronnecker delta collapses the summation to the case where $i = k$, so,
+
+        \[        
+        \frac{d}{dt}\text{det($\upPhi(t)$)} = \text{det($\upPhi$)}\sum_{i = 1}^na_{ii}(t).
+        \]
+
+        This summation is exactly the trace of A, then our ODE is exactly
+
+        \[
+        \frac{d}{dt}\text{det($\upPhi(t)$)} = \text{det($\upPhi$)}\text{tr($A$)}.
+        \]
+
+        Treating this as a separable ODE, and nothing the trace of a matrix is a scalar, we get,
+
+        \begin{align}
+        &\frac{d(\text{det($\upPhi$)})}{\text{det($\upPhi$)}} = \text{tr($A(t)$)}dt, \nonumber\\
+         \iff \int &\frac{d(\text{det($\upPhi$)})}{\text{det($\upPhi$)}} = \int_{t_0}^t \text{tr($A(s)$)}ds, \nonumber\\
+         \iff \hspace{5mm}&\text{det($\upPhi$)} = \text{exp}\bigg[ \int_{t_0}^t\text{tr($A(s)$)$ds$}\bigg] \label{Abelresult}
+        \end{align}
+
+        This is the result of Abel's theorem, completing the proof. 
         \end{solution}
+
+        \newpage
+        \hrule
+        \jump
+        What can you say, based on this, about the eigenvalues $\mu$ of the monodromy matrix $M \equiv \upPhi(T,0)$?
+
+        \jump
+        \begin{solution}
+        
+            By our Linear system, $A(s) = 0$, so the determinant of our fundamental matrix, by \ref{Abelresult}, is equal to $e^0 = 1$ for any time $t$. Thus, for $t = 0$, the monodromy matrix has determinant 1. This then breaks down into two cases, depending if the eigenvalues are real or complex.
+
+            In the real case, this means that $\mu_1$ and $\mu_2$ are inverses of each other, i.e. $\mu_1 = \frac{1}{\mu_2}$. As explained briefly in the lectures, this solution will lead to instability in our solutions. 
+
+            In the complex case, this means $\mu_1 = \overline{\mu_2}$, i.e. they are complex conjugates of each other. This will mean our solutions are stable, leading to some oscillation.
+        \end{solution}
+
+        \jump
+        \hrule
+        \jump
+        If we add some linear damping to the problem so that \ref{linearish} becomes
+
+        \begin{align}
+            \ddot{\theta} = -\bigg(    \alpha + \beta\cos(\tau)\bigg)\sin(\theta) - \gamma\dot{\theta}     \hspace{5mm} \gamma > 0,
+        \end{align}
+
+        What can you say about the determinant of the Monodromy matrix associated with the linearized problem in that case?
+
+        \jump
+        \begin{solution}
+
+            Under the approximation we employed to derive \ref{Linear system}, we'll take $\sin(\theta) \approx \theta$. Also, we will decompose this second order ODE into two first order by the substitution $\Omega = \dot{\theta}$, $\dot{\Omega} = -(\alpha + \beta\cos(\tau))\theta - \gamma \Omega$. Thus our system is now.
+
+            \begin{align}
+                \begin{pmatrix}
+                    \dot{\theta} \\
+                    \dot{\Omega}
+                \end{pmatrix}
+                \hspace{3mm}
+                = 
+                \hspace{3mm}
+                \begin{pmatrix}
+                    0    &1 \\
+                    -(\alpha + \beta\cos(\tau)) &-\gamma
+                \end{pmatrix}
+                \begin{pmatrix}
+                    \theta  \\
+                    \Omega
+                \end{pmatrix}
+                \label{damplinearsystem}
+            \end{align}
+
+            Thus, by \ref{Abelresult}, 
+            \begin{align}
+                \text{det(M)} &= \text{det($\upPhi(T,0)$) = } \exp\Bigg[-\int_0^T \gamma \text{ds}\Bigg] \nonumber\\
+                &=e^{-\gamma T}
+            \end{align}
+        \end{solution}
+
+        \jump
+        \hrule
+        \jump
+
+     Very briefly discuss what type of stability claims, about the equilibrium $\theta = \Omega = 0$, can be made from an analysis of the solutions of \ref{Linearized system} in the case of $\gamma = 0$ and the case of $\gamma > 0$. Recall that there are different types of “stability”, e.g. Lyapunov stability, asymptotic stability, linear stability, as well as instability. Later we will be looking at some results that tell us when it is enough to examine the linearized problem to determine the stability properties of an equilibrium of the nonlinear problem. We will also be interested in cases where that is not enough.
+
+     \jump
+     \begin{solution}
+         To start off my brief discussion, I will summarize these two classes of stability. Lyapunov stability claims that there exists a neighborhood centered at $x^*$ such that $x^*$ is a zero of of \ref{Linearized system} within which our solution resides for any $t$. Asymptotic stability takes the Lyapunov stability and adds the condition that a solution will tend to $x^*$ as $t \rightarrow \infty$. So or the case of $\gamma = 0$, our system will be only Lyapunov stable if the Floquet multipliers are complex. If they are real, the system will only have unstable solutions. When we take $\gamma > 0$, the real case stays the same, but the complex case will graduate to asymptotic stability. This are due to our calculation above. 
+     \end{solution}
+
+\jump
+\hrule
+\jump
+\item The remainder of this problem involves numerical computations for the linearized problem \ref{Linearized system}. On an appropriate grid of parameter values $(\alpha, \beta)$ numerically compute the Monodromy matrix and its eigenvalues in order to estimate the boundary separating parameter regions where solutions are bounded vs. unbounded. Can we assume $\alpha$ and/or $\beta$ is positive?
+
+You should find “resonance tongues” in the $(\alpha, \beta)$ parameter plane that correspond to parameters where solutions of the linear problem grow exponentially. Along the way, check how
+well your numerical results match the analytic ones on det(M) from part 3.
+
+\jump
+\begin{solution}
+    As a quick mention. We specifically chose both $\alpha$ and $\beta$ to be positive when we made our shift in $\tau$. The code for generating the boundaries of bounded and unbounded solutions. I had the help of Steven Lee in generating these plots. The code to generate the plots are shown first.
+
+    We can see the "resonance tongues", boundaries of the unbounded and bounded regions in \ref{png:bounded_vs_unbounded_solns}. We can also investigate the numerical accuracy of the products of the eigenvalues. This is shown in \ref{png:mag_plots}. For both unbounded and bounded solutions, we can see product of the eigenvalues to be within 1e-6 of 1. 
+\end{solution}
+\jump
+
+\begin{lstlisting}
+#Function to model the system
+def system(Y, t, a, b):
+    x, y, phi11, phi12, phi21, phi22 = Y
+
+    dxdt = y
+    dydt = -(a + b * np.cos(t)) * x
+    dphi11dt = phi12
+    dphi12dt = -(a + b * np.cos(t)) * phi11
+    dphi21dt = phi22
+    dphi22dt = -(a + b * np.cos(t)) * phi21
+
+    return [dxdt, dydt, dphi11dt, dphi12dt, dphi21dt, dphi22dt]
+    
+
+#Calculates the monodromy matrix from given alpha and beta
+def calcualte_monodromy_matrix(alpha, beta):
+    #Setting the period
+    T = 2 * np.pi
+    time = np.linspace(0, T, 1000)
+    Y0 = [0, 1, 1, 0, 0, 1]  # initial conditions: [x0, y0, phi11, phi12, phi21, phi22]
+
+    sol = odeint(system, Y0, time, args=(alpha, beta))
+
+    M = np.array([[sol[-1, 2], sol[-1, 3]],
+                  [sol[-1, 4], sol[-1, 5]]])
+    return M
+
+
+#Set up the values for alpha
+alpha_span = np.linspace(0, 4, 1000)
+beta_span = np.linspace(0, 4, 1000)
+
+#Arrays to categorize solutions by choice of beta, alpha
+bounded_solns = []
+unbounded_solns = []
+unbounded_eigenvals = []
+bounded_eigenvals = []
+
+for alpha in alpha_span:
+    for beta in beta_span:
+        # Calculate mono matrix
+        monodromy = calcualte_monodromy_matrix(alpha, beta)
+        
+        #Extracting eigenvalues
+        eigenvalues = np.linalg.eigvals(monodromy)
+        
+        #saving off eigenvalues
+        eigenvals.append(eigenvalues)
+        
+        #Checking magnitudes to see distance from 1.0
+        magnitudes = np.abs(eigenvalues)
+        
+        if all(np.isclose(magnitudes, 1.0, atol=1e-3)):
+            bounded_solns.append((alpha, beta))
+            bounded_eigenvals.append(magnitudes)
+        else:
+            unbounded_solns.append((alpha, beta))
+            unbounded_eigenvals.append(magnitudes)
+            
+bounded_solns = np.array(bounded_solns)
+unbounded_solns = np.array(unbounded_solns)
+
+plt.scatter(bounded_solns[:, 0], bounded_solns[:, 1], color='blue', label='Bounded')
+plt.scatter(unbounded_solns[:, 0], unbounded_solns[:, 1], color='red', label='Unbounded')
+plt.xlabel('alpha')
+plt.ylabel('beta')
+plt.legend()
+plt.title('Regions of Bounded vs. Unbounded Solutions')
+plt.show()
+\end{lstlisting}
+
+\jump
+\begin{lstlisting}
+#Code to generate the numerical distance of Det(M) from 1
+unbounded_mag = [e1*e2 - 1 for e1, e2 in unbounded_eigenvals]
+bounded_mag = [e1*e2 - 1 for e1, e2 in bounded_eigenvals]
+fig, axs = plt.subplots(2)
+fig.suptitle('Eigenvalue Product Distances from 1')
+axs[0].plot(np.abs(unbounded_mag), label = "unbounded")
+axs[1].plot(np.abs(bounded_mag), label = "bounded")
+\end{lstlisting}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale = 0.8]{Images/bounded_vs_unbounded_solns.png}
+\label{png:bounded_vs_unbounded_solns}
+\caption{"Resonance Tongues"}
+\end{figure}
+\jump
+\vspace{\floatsep}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale = 0.7]{Images/unbounded_bounded_ev_plots.png}
+\label{png:mag_plots}
+\caption{Above is unbounded eigenvalues, below is bounded eigenvalues.}
+\end{figure}
+
+\vspace{\floatsep}
+\clearpage
+\jump
+\hrule
+\jump
+
+For $\beta$ = 0.1, plot the real and imaginary parts of the Floquet multipliers as a function of $\alpha$; make sure to choose a large enough range of $\alpha$ values to capture the first 3 resonance tongues. (You should find that they are associated with particular values of $\alpha$; for example the first resonance tongue is associated with $\alpha$ = 0.25.) What are the Floquet multipliers on the boundary between the stable and unstable regions, for each of the tongues? What can you say about the period of the solutions on the boundaries?
+
+\jump
+\begin{solution}
+    
+I modified the code for generating the "Resonance tongues" plot to instead just capture the real and imaginary parts of the Floquet multipliers for $\alpha$ up to 2. Setting $\beta$ = 0.4, we see not only the first resonance tongue appear for $\alpha$ = 0.25, but also the second resonance tongue at $\alpha$ = 1.0. I could not capture the third resonance tongue, however, due to keeping a constant beta. The code to generate this is shown below, followed by the resulting plots.
+
+Interestingly enough, the imaginary part of the Floquet multipliers collapse along the boundary of the bounded and unbounded solutions, while the real part take on an elliptic shape. It seems that, as we increase the value of $\beta$, we are getting increasingly higher ``slices" of \ref{png:bounded_vs_unbounded_solns}. I modified the targeted value of $\beta$ to capture the second tongue. This characteristic does not hold for higher values of $\alpha$, however, but we can see that the period of these elliptic shapes only increases, requiring higher values of $\beta$ to capture. 
+
+\end{solution}
+
+\jump
+\begin{lstlisting}
+#Function to model the system
+def system(Y, t, a, b):
+    x, y, phi11, phi12, phi21, phi22 = Y
+
+    dxdt = y
+    dydt = -(a + b * np.cos(t)) * x
+    dphi11dt = phi12
+    dphi12dt = -(a + b * np.cos(t)) * phi11
+    dphi21dt = phi22
+    dphi22dt = -(a + b * np.cos(t)) * phi21
+
+    return [dxdt, dydt, dphi11dt, dphi12dt, dphi21dt, dphi22dt]
+
+
+#Calculates the monodromy matrix from given alpha and beta
+def calcualte_monodromy_matrix(alpha, beta):
+    #Setting the period
+    T = 2 * np.pi
+    time = np.linspace(0, T, 100)
+    Y0 = [0, 1, 1, 0, 0, 1]  # initial conditions: [x0, y0, phi11, phi12, phi21, phi22]
+
+    sol = odeint(system, Y0, time, args=(alpha, beta))
+
+    M = np.array([[sol[-1, 2], sol[-1, 3]],
+                  [sol[-1, 4], sol[-1, 5]]])
+    return M
+
+
+#Set up the values for alpha
+alpha_span = np.linspace(0, 2, 500)
+beta = 0.4
+real_eigenvals = []
+imag_eigenvals = []
+
+for alpha in alpha_span:
+    # Calculate mono matrix
+    monodromy = calcualte_monodromy_matrix(alpha, beta)
+
+    #Extracting eigenvalues
+
+    eigenvalues = np.linalg.eigvals(monodromy)
+
+    #saving off eigenvalues
+    for val in eigenvalues: 
+        real_eigenvals.append(tuple([alpha, val.real]))
+        imag_eigenvals.append(tuple([alpha, val.imag]))
+        
+fig, axs = plt.subplots(2, figsize=(12,8))
+fig.suptitle('Floquet multipliers for beta = {}'.format(beta))
+axs[0].scatter(*zip(*real_eigenvals))
+axs[0].set_xlabel("alpha")
+axs[0].set_ylabel("Real")
+
+axs[1].scatter(*zip(*imag_eigenvals))
+axs[1].set_xlabel("alpha")
+axs[1].set_ylabel("Imaginary")
+
+\end{lstlisting}
+
+\jump
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale = 0.5]{Images/real_imag_floquet_mutipliers.png}
+\caption{Real and Imaginary values for Floquet multipliers. }
+\label{png:real_imag_plots}
+
+\end{figure}
+
+\vspace{\floatsep}
+\clearpage
+
+\item The following are examples of more open-ended questions and you are encouraged to explore
+at lease one of them, and/or pose and answer your own:
+
 \end{enumerate}
 \end{document}
