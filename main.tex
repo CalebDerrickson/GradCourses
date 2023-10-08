@@ -6,7 +6,8 @@
 \usepackage{mathtools}
 \usepackage[utf8]{inputenc}
 \usepackage{newtxtext, newtxmath}
-\usepackage{enumitem}
+%\usepackage{enumitem}
+\usepackage[shortlabels]{enumitem}
 \usepackage{titling}
 \usepackage{graphicx}
 \usepackage[colorlinks=true]{hyperref}
@@ -107,7 +108,7 @@ standing up and then squatting back down with some appropriate rhythm, to be det
         \ddot{\theta} = -(\alpha + \beta \cos(\tau))\sin(\theta),   \label{linearish}
     \end{align}
 
-        where you define the dimensionless parameters $\alpha$ and $\beta$ in terms of the original parameters $g$, $\ell_0$, $\varepsilon$ and $\omega$. Re-write the second order equation \ref{linearish} as two first order equations for the angle $\theta$ and the angular speed $\omega \equiv \dot{\theta}$. For $\beta$ = 0, derive a conserved quantity, the energy of the pendulum, denoted $E(\theta, \Omega)$. Write an equation for $\dot{E}$ that applies if $\beta \neq 0$.
+        where you define the dimensionless parameters $\alpha$ and $\beta$ in terms of the original parameters $g$, $\ell_0$, $\varepsilon$ and $\omega$. Re-write the second order equation \ref{linearish} as two first order equations for the angle $\theta$ and the angular speed $\Omega \equiv \dot{\theta}$. For $\beta$ = 0, derive a conserved quantity, the energy of the pendulum, denoted $E(\theta, \Omega)$. Write an equation for $\dot{E}$ that applies if $\beta \neq 0$.
         \begin{solution}
 
         Since we are taking $\ep \ll 1$ from \ref{Original ode}, we can define a function $f(\ep)$ on which we will expand using ordinary Taylor expansion. Here, I will define $f(\ep)$ as:
@@ -200,81 +201,81 @@ standing up and then squatting back down with some appropriate rhythm, to be det
         For the child in the swing picture, is the energy $E$ (instantaneously) increasing or decreasing or neither in each of the frames shown? Try making a rough sketch of the time course of each of these quantities: $\theta(t), \Omega(t), \ell(t)$ and $E(t)$, assuming a periodic motion of the swing as well as the swinger. What is the period of the swing motion compared to the period of $\ell(t)$? Are they the same?
 
         \begin{solution}
-            As a means of faithfully showing the plots, I used matplotlib to create them. Note I am not showing the numerical values of the functions, since they are not enlightening. Note the function $\ell(t)$ is bounded by $1 \pm \ep$. Here is my code:
+            As a means of faithfully showing the plots, I used matplotlib to create them. Note I am not showing the numerical values of the functions, since they are not enlightening. Note the function $\ell(t)$ is bounded by $1 \pm \ep$. My code is shown below, followed by the generated plots.
 
-            \begin{lstlisting}
-
-            import matplotlib.pyplot as plt
-            import numpy as np
-            import pandas as pd
-            %matplotlib inline
-
-            def ell(tau, ep):
-                return (1 + ep * np.cos(2 * tau))
-            def Omega(tau, ep):
-                return -1*(np.sin(tau))
-            def energy(tau, ep):
-                return 0.5 * Omega(tau, ep) **2 - np.cos(theta(tau))
-            def theta(tau):
-                return np.cos(tau)
-
-            ep = 0.1
-            tau = np.linspace(-np.pi * 2, np.pi * 2, 200)
-            tau_ticks = np.arange(-np.pi * 2, np.pi * 2, np.pi/2)
-            tau_ticks_label = [f'0' if n == 0 else f'-pi/2' if n == -1 else f'pi/2' if n == 1 else f'{int(n/2)}pi' if n%2 == 0 else f'{int(n)}pi/2' for n in tau_ticks / (np.pi / 2)] 
-            
-            plt.figure(figsize=(10, 8))
-            plt.subplots_adjust(hspace=0.5)
-            
-            plt.subplot(2, 2, 1)
-            plt.plot(tau, ell(tau, ep), 'b-', label = "Length")
-            plt.plot(tau, [np.mean(ell(tau, ep)) for _ in range(len(tau))], 'k--')
-            plt.xlabel("tau")
-            plt.title("Length")
-            plt.yticks([])  
-            plt.xticks(tau_ticks, tau_ticks_label)
-            
-            plt.subplot(2, 2, 2)
-            plt.plot(tau, Omega(tau, ep), 'r-', label = "Omega")
-            plt.plot(tau, 0 * tau, 'k--')
-            plt.xlabel("tau")
-            plt.title("Omega")
-            plt.yticks([])  
-            plt.xticks(tau_ticks, tau_ticks_label)
-            
-            plt.subplot(2, 2, 3)
-            plt.plot(tau, energy(tau, ep), 'g-', label = "Energy")
-            plt.plot(tau, [np.mean(energy(tau, ep)) for _ in range(len(tau))], 'k--')
-            plt.xlabel("tau")
-            plt.title("Energy")
-            plt.yticks([])  
-            plt.xticks(tau_ticks, tau_ticks_label)
-            
-            plt.subplot(2, 2, 4)
-            plt.plot(tau, theta(tau),  'm-', label = "Theta")
-            plt.plot(tau, 0 * tau, 'k--')
-            plt.xlabel("tau")
-            plt.title("Theta")
-            plt.yticks([])  
-            plt.xticks(tau_ticks, tau_ticks_label)
-            
-            plt.show()
-
-            \end{lstlisting}
-
-            Here are the resulting plots (I tried making this as horizontally aligned as possible):
-            
-            \jump
-            \centerline{\noindent}%
-            \makebox[\textwidth]{
-            \includegraphics[scale = 0.6]{Images/homework1 heuristic plots.PNG}
-            }
             \jump
 
-            Note that these are here purely as a heuristic. As we expect the length of the pendulum arm to be the greatest while the child is squatting down, and minimal when the child to be standing up. Squatting down should correlate to maximum values of theta, and standing up should correlate to minimum values of theta. We can see this represented in the plots of length and theta. Since $\dot{theta} = \Omega$, we should see maxed values of $\omega$ when $\theta$ = 0, which is shown. Energy is slightly different. When $E$ = 0, the kinetic energy is equal to its potential, which happens going to and coming from max values of $\theta$. It's maximal values should then be when either the kinetic or potential energies are maximized, lining up with values $\theta = -\pi/2, 0, \pi/2$. Regardless, in an entire swing interval, when going from $-\pi/2$ to $\pi/2$, we should hit the zeros of $E$ four times, indicating that the energy runs with frequency four times that of $\theta$, twice the frequency of $\ell$. Though this seems to not be represented in the plot of energy, I expect my rationality to be a better interpretation. 
+            Note that these are here purely as a heuristic. As we expect the length of the pendulum arm to be the greatest while the child is squatting down, and minimal when the child to be standing up. Squatting down should correlate to maximum values of theta, and standing up should correlate to minimum values of theta. We can see this represented in the plots of length and theta. Since $\dot{\theta} = \Omega$, we should see maxed values of $\omega$ when $\theta$ = 0, which is shown. Energy is slightly different. When $E$ = 0, the kinetic energy is equal to its potential, which happens going to and coming from max values of $\theta$. It's maximal values should then be when either the kinetic or potential energies are maximized, lining up with values $\theta = -\pi/2, \ 0, \ \pi/2$. Regardless, in an entire swing interval, when going from $-\pi/2$ to $\pi/2$, we should hit the zeros of $E$ four times, indicating that the energy runs with frequency four times that of $\theta$, twice the frequency of $\ell$. Though this seems to not be represented in the plot of energy, I expect my rationality to be a better interpretation. 
 
             From our calculation of $\dot{E}$, we can inspect the change of the energy in the given frames of the system. Note that we are to expect the system to achieve its maximum heights in the first and third frames. In the first frame, we can argue the change in energy is zero, as shown by \ref{Edot}, $\Omega$ should be zero. This is also seen in the third frame. The second frame shows the child at $\theta = 0$, thus $\sin(\theta) = 0$, making our $\dot{E}$ also zero. 
         \end{solution}
+        \jump
+        \begin{lstlisting}
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        import pandas as pd
+        %matplotlib inline
+
+        def ell(tau, ep):
+            return (1 + ep * np.cos(2 * tau))
+        def Omega(tau, ep):
+            return -1*(np.sin(tau))
+        def energy(tau, ep):
+            return 0.5 * Omega(tau, ep) **2 - np.cos(theta(tau))
+        def theta(tau):
+            return np.cos(tau)
+
+        ep = 0.1
+        tau = np.linspace(-np.pi * 2, np.pi * 2, 200)
+        tau_ticks = np.arange(-np.pi * 2, np.pi * 2, np.pi/2)
+        tau_ticks_label = [f'0' if n == 0 else f'-pi/2' if n == -1 else f'pi/2' if n == 1 else f'{int(n/2)}pi' if n%2 == 0 else f'{int(n)}pi/2' for n in tau_ticks / (np.pi / 2)] 
+        
+        plt.figure(figsize=(10, 8))
+        plt.subplots_adjust(hspace=0.5)
+        
+        plt.subplot(2, 2, 1)
+        plt.plot(tau, ell(tau, ep), 'b-', label = "Length")
+        plt.plot(tau, [np.mean(ell(tau, ep)) for _ in range(len(tau))], 'k--')
+        plt.xlabel("tau")
+        plt.title("Length")
+        plt.yticks([])  
+        plt.xticks(tau_ticks, tau_ticks_label)
+        
+        plt.subplot(2, 2, 2)
+        plt.plot(tau, Omega(tau, ep), 'r-', label = "Omega")
+        plt.plot(tau, 0 * tau, 'k--')
+        plt.xlabel("tau")
+        plt.title("Omega")
+        plt.yticks([])  
+        plt.xticks(tau_ticks, tau_ticks_label)
+        
+        plt.subplot(2, 2, 3)
+        plt.plot(tau, energy(tau, ep), 'g-', label = "Energy")
+        plt.plot(tau, [np.mean(energy(tau, ep)) for _ in range(len(tau))], 'k--')
+        plt.xlabel("tau")
+        plt.title("Energy")
+        plt.yticks([])  
+        plt.xticks(tau_ticks, tau_ticks_label)
+        
+        plt.subplot(2, 2, 4)
+        plt.plot(tau, theta(tau),  'm-', label = "Theta")
+        plt.plot(tau, 0 * tau, 'k--')
+        plt.xlabel("tau")
+        plt.title("Theta")
+        plt.yticks([])  
+        plt.xticks(tau_ticks, tau_ticks_label)
+        
+        plt.show()
+
+        \end{lstlisting}
+        
+        \jump
+        \centerline{\noindent}%
+        \makebox[\textwidth]{
+        \includegraphics[scale = 0.6]{Images/homework1 heuristic plots.PNG}
+        }
+        \jump
 
         \item Linearize your system of first order equations about the equilibrium position $\theta = \Omega = 0$ to obtain a linear non-autonomous system to study:
 
@@ -407,7 +408,7 @@ standing up and then squatting back down with some appropriate rhythm, to be det
         This is the result of Abel's theorem, completing the proof. 
         \end{solution}
 
-        \newpage
+        \jump
         \hrule
         \jump
         What can you say, based on this, about the eigenvalues $\mu$ of the monodromy matrix $M \equiv \upPhi(T,0)$?
@@ -470,8 +471,8 @@ standing up and then squatting back down with some appropriate rhythm, to be det
 
      Very briefly discuss what type of stability claims, about the equilibrium $\theta = \Omega = 0$, can be made from an analysis of the solutions of \ref{Linearized system} in the case of $\gamma = 0$ and the case of $\gamma > 0$. Recall that there are different types of “stability”, e.g. Lyapunov stability, asymptotic stability, linear stability, as well as instability. Later we will be looking at some results that tell us when it is enough to examine the linearized problem to determine the stability properties of an equilibrium of the nonlinear problem. We will also be interested in cases where that is not enough.
 
-     \jump
      \begin{solution}
+     
          To start off my brief discussion, I will summarize these two classes of stability. Lyapunov stability claims that there exists a neighborhood centered at $x^*$ such that $x^*$ is a zero of of \ref{Linearized system} within which our solution resides for any $t$. Asymptotic stability takes the Lyapunov stability and adds the condition that a solution will tend to $x^*$ as $t \rightarrow \infty$. So or the case of $\gamma = 0$, our system will be only Lyapunov stable if the Floquet multipliers are complex. If they are real, the system will only have unstable solutions. When we take $\gamma > 0$, the real case stays the same, but the complex case will graduate to asymptotic stability. This are due to our calculation above. 
      \end{solution}
 
@@ -483,8 +484,8 @@ standing up and then squatting back down with some appropriate rhythm, to be det
 You should find “resonance tongues” in the $(\alpha, \beta)$ parameter plane that correspond to parameters where solutions of the linear problem grow exponentially. Along the way, check how
 well your numerical results match the analytic ones on det(M) from part 3.
 
-\jump
 \begin{solution}
+
     As a quick mention. We specifically chose both $\alpha$ and $\beta$ to be positive when we made our shift in $\tau$. The code for generating the boundaries of bounded and unbounded solutions. I had the help of Steven Lee in generating these plots. The code to generate the plots are shown first.
 
     We can see the "resonance tongues", boundaries of the unbounded and bounded regions in \ref{png:bounded_vs_unbounded_solns}. We can also investigate the numerical accuracy of the products of the eigenvalues. This is shown in \ref{png:mag_plots}. For both unbounded and bounded solutions, we can see product of the eigenvalues to be within 1e-6 of 1. 
@@ -505,7 +506,6 @@ def system(Y, t, a, b):
 
     return [dxdt, dydt, dphi11dt, dphi12dt, dphi21dt, dphi22dt]
     
-
 #Calculates the monodromy matrix from given alpha and beta
 def calcualte_monodromy_matrix(alpha, beta):
     #Setting the period
@@ -518,7 +518,6 @@ def calcualte_monodromy_matrix(alpha, beta):
     M = np.array([[sol[-1, 2], sol[-1, 3]],
                   [sol[-1, 4], sol[-1, 5]]])
     return M
-
 
 #Set up the values for alpha
 alpha_span = np.linspace(0, 4, 1000)
@@ -574,16 +573,15 @@ axs[0].plot(np.abs(unbounded_mag), label = "unbounded")
 axs[1].plot(np.abs(bounded_mag), label = "bounded")
 \end{lstlisting}
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[scale = 0.8]{Images/bounded_vs_unbounded_solns.png}
 \label{png:bounded_vs_unbounded_solns}
 \caption{"Resonance Tongues"}
 \end{figure}
-\jump
 \vspace{\floatsep}
 
-\begin{figure}[h]
+\begin{figure}[!h]
 \centering
 \includegraphics[scale = 0.7]{Images/unbounded_bounded_ev_plots.png}
 \label{png:mag_plots}
@@ -682,6 +680,141 @@ axs[1].set_ylabel("Imaginary")
 
 \item The following are examples of more open-ended questions and you are encouraged to explore
 at lease one of them, and/or pose and answer your own:
+\begin{enumerate}[(b)]
+    \item For this, let’s return to the child on the swing modeled by the nonlinear equation \ref{linearish}
+rather than the linearized model \ref{Linearized system} that assumes a small angle approximation. Choose a value of $\alpha$ inside the first resonance tongue for $\beta = 0.1$. Choose an initial condition corresponding to a small angle for the pendulum. Solve this initial value problem numerically and plot $\theta(t)$ (and/or $E(t)$ and/or $\Omega(t)$ and/or $\ell(t)$) for some time interval and compare with the numerical solution of the linearized problem. It could be especially interesting to think about resonant forcing in the context of Problem Set $\#$0 where you computed the period of the pendulum as a function of its amplitude, for instance.
 
+\jump
+\begin{solution}
+
+    For this problem, I started from scratch and numerically solved both the linear and nonlinear systems for $\alpha = 0.25, \ \beta = 0.2$. I chose these numbers just to give slightly different results, which as shown in \ref{png:bounded_vs_unbounded_solns}, should behave similarly to the requested values. I chose initial conditions $\theta_0 = \pi/10$ and $\Omega_0 = 1$. The code which solves the two systems is shown below, followed by the generated plots. Unfortunately, there is something flawed in my code, which resulted from switching to interactive plotting for various values of the initial conditions. In this transition I had to update some packages, so this might be the cause of the issue. Fortunately enough, I saved off the plots before this problem happened, so I have something legible to present. The ``better" plots are shown in \ref{png:nonlinear_vs_linear_systems}, while the plots which contain the error are shown in \ref{png:nonlinear_vs_linear_systems_error}. Note that I will only comment on the correct plots, as they give interpretable solutions. 
+
+    \jump
+    Comparing the linear and nonlinear systems, it looks as though their difference results in an increasing phase shift in $\theta$ and $\Omega$, with a slight increase in amplitude for the nonlinear system. The Length of the pendulum arm seems to stay the same, however, which was strange when I first saw it. I confirmed that I was not plotting the same function twice. The most interesting plot, I feel, is the energy difference. We can see the nonlinear system appears to result in higher energies for each period. As we stray further from starting conditions, the two systems will steadily diverge. I would have plotted the period as a function of the amplitude for both systems, but this would result in nonsense since all I have is the code which results in an error.
+
+\jump
+\end{solution}
+
+\begin{lstlisting}
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from scipy import integrate
+
+#Defining our linear and nonlinear systems
+#Note they differ only by the taylor expansion of sin(x)
+def nonlinear_system(x, tau, alpha, beta):
+    dthetadt = x[1]
+    dOmegadt = -(alpha + beta * np.cos(tau))*np.sin(x[0])
+    
+    return [dthetadt, dOmegadt]
+
+def linear_system(x, tau, alpha, beta):
+    dthetadt = x[1]
+    dOmegadt = -(alpha + beta * np.cos(tau))*x[0]
+    
+    return [dthetadt, dOmegadt]
+
+#Defining functions for length and energy
+# These are just for plotting purposes
+def ell(theta, eps, tau):
+    return 1 + eps * np.cos(tau)
+
+def energy(theta, Omega, alpha, tau):
+    return 0.5*Omega**2 - alpha*np.cos(theta)
+
+#setting parameters
+alpha = 0.25
+beta = 0.2
+
+#Setting initial conditions
+#These are random numbers
+theta0 = np.pi/10
+Omega0 = 1
+x0 = [theta0, Omega0]
+
+#Setting the time
+tau = np.linspace(0, 10, 1000)
+
+lin_solution = integrate.odeint(linear_system, x0, tau, args=(alpha, beta))
+nonlin_solution = integrate.odeint(nonlinear_system, x0, tau, args=(alpha, beta))
+
+ltheta = np.take(lin_solution, 0, axis=1)
+lOmega = np.take(lin_solution, 1, axis=1)
+
+nltheta = np.take(nonlin_solution, 0, axis=1)
+nlOmega = np.take(nonlin_solution, 1, axis=1)
+
+#Setting the xticks as increments of pi/2
+tau_ticks = np.arange(0, 10, np.pi/2)
+tau_ticks_label = [f'0' if n == 0 else f'pi/2' if n == 1 else f'{int(n/2)}pi' if n%2 == 0 else f'{int(n)}pi/2' for n in tau_ticks / (np.pi / 2)] 
+
+#Plotting Thetas
+plt.figure(figsize=(10, 16))
+plt.subplots_adjust(hspace=0.5)
+
+plt.subplot(4, 1, 1)
+plt.plot(tau, ltheta, label= "Linear", color = 'b')
+plt.plot(tau, nltheta, label= "NonLinear", color= 'g')
+plt.xticks(tau_ticks, tau_ticks_label)
+plt.xlabel("tau")
+plt.ylabel("theta")
+plt.title("Theta linear vs nonlinear")
+plt.legend()
+
+#Plotting Omegas
+plt.subplot(4, 1, 2)
+plt.plot(tau, lOmega, label= "Linear", color= 'b')
+plt.plot(tau, nlOmega, label= "NonLinear", color= 'g')
+plt.xticks(tau_ticks, tau_ticks_label)
+plt.xlabel("tau")
+plt.ylabel("Omega")
+plt.title("Omega linear vs nonlinear")
+plt.legend()
+
+#plotting Lengths
+plt.subplot(4, 1, 3)
+plt.plot(tau, ell(ltheta, beta/alpha, tau), label= "Linear", color = 'b')
+plt.plot(tau, ell(nltheta, beta/alpha, tau), label= "NonLinear", color= 'g')
+plt.xticks(tau_ticks, tau_ticks_label)
+plt.xlabel("tau")
+plt.ylabel("Length")
+plt.title("Length linear vs nonlinear")
+plt.legend()
+
+#Plotting Energies
+plt.subplot(4, 1, 4)
+plt.plot(tau, energy(ltheta, lOmega, alpha, tau), label= "Linear", color= 'b')
+plt.plot(tau, energy(nltheta, nlOmega, alpha, tau), label= "NonLinear", color= 'g')
+plt.xticks(tau_ticks, tau_ticks_label)
+plt.xlabel("tau")
+plt.ylabel("Energy")
+plt.title("Energy linear vs nonlinear")
+plt.legend()
+
+plt.show()
+\end{lstlisting}
+
+
+\jump
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale = 0.6]{Images/nonlinear_vs_linear_systems.png}
+\caption{Plots to show the difference in the nonlinear versus linear systems. }
+\label{png:nonlinear_vs_linear_systems}
+\end{figure}
+
+\jump
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale = 0.6]{Images/nonlinear_vs_linear_systems_error.png}
+\caption{Error plots, not sure what the problem is. }
+\label{png:nonlinear_vs_linear_systems_error}
+\end{figure}
+
+
+
+
+\end{enumerate}
 \end{enumerate}
 \end{document}
