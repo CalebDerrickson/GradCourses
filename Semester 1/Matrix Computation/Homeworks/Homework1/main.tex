@@ -25,6 +25,134 @@
     \begin{solution}
         
     \end{solution}
+
 \end{enumerate}
 
+\newpage
+\section{Problem 2}
+Let $A \in \C^{n\times n}$ and $\lVert \cdot \rVert_p : \C^{n \times n} \rightarrow [0, \infty )$ be the matrix $p$-norm for some $p \in [1, \infty]$. 
+
+\subsection{Problem 2, part a}
+Show that if $\norm{A}_p < 1$, then $\Id - A$ is invertible and furthermore, 
+\begin{align}
+\frac{1}{1 + \lVert A\rVert_p} \leq \lVert(\Id - A)^{-1}\rVert_p \leq \frac{1}{1 - \lVert A\rVert_p}. \label{p2a:chain ineq}    
+\end{align}
+\partbreak
+\begin{solution}
+
+    Let \textbf{v} $\in \C^{n\times n} \backslash \{0\}$ be an eigenvector of $A$ with eigenvalue $\lm$. Then $A\textbf{v} = \lm \textbf{v} \iff \norm{A\textbf{v}}_p = \norm{\lm\textbf{v}}_p$. Note the matrix $p$-norm is taken as a max over all \textbf{x} $\neq 0$. Along with $\norm{A} < 1$, we get, 
+    \[
+    1 > \max_{\textbf{x} \neq 0}\frac{\norm{A\textbf{x}}}{\norm{\textbf{v}}} \leq \frac{\norm{A\textbf{v}}}{\norm{\textbf{v}}}
+    \]
+    then $\norm{A\textbf{v}} < \norm{\textbf{v}}$. So 1 is then not an eigenvector of $A$. This implies that $(A - \id)\textbf{v} = (\lm - 1)\textbf{v}$. Note that \textbf{v} was taken as a nonzero vector, so $(1 - \lm)\textbf{v} \neq 0$. This means that 0 is not an eigenvalue of $A - \id$, making the determinant nonzero, thus $A - \id$ is invertible.  
+
+    \jump
+    We then wish to show \ref{p2a:chain ineq}
+    
+    \[
+    \frac{1}{1 + \lVert A\rVert_p} \leq \lVert(\Id - A)^{-1}\rVert_p \leq \frac{1}{1 - \lVert A\rVert_p}.
+    \]
+    
+    To prove the first inequality, we note that if \textbf{v} is an eigenvector of $A$ with eigenvalue $\lm$, (and $A$ invertible) then \textbf{v} is an eigenvector of $A$ with eigenvalue $\lm^{-1}$. This is shown by the following:
+    
+    \[
+    A\textbf{v} = \lm\textbf{v} \iff A^{-1}A\textbf{v} = A^{-1}\lm\textbf{v} \iff A^{-1}\textbf{v} = \frac{1}{\lm} \textbf{v}.
+    \]
+
+    Thus, take \textbf{v} as an eigenvector of $A$ with eigenvalue $(1 - \lm)$. The above claim implies that \textbf{v} is also an eigenvector of $(\id - A)^{-1}$ with eigenvalue $(1 - \lm)^{-1}$. Furthermore, since $\norm{\cdot}_p$ is consistent, we have that the spectral radius $\rho(A) = \max\{ |\lm(A)|\}$ is less than or equal to $\norm{A}$, ie $\rho(A) \leq \norm{A}$. The following steps can then be justified
+
+    \alignbreak
+    \begin{align}
+        &(\id - A)^{-1}\textbf{v} = \frac{1}{1 - |\lm|}\textbf{v}   &\text{(Given.)}\nonumber\\
+        &\norm{(\id - A)^{-1}\textbf{v}} = \frac{1}{1 - |\lm|}\norm{\textbf{v}} &\text{(Taking norm and eigenvalue is positive.)}\nonumber\\
+        &\norm{(\id - A)^{-1}\textbf{v}} \leq \norm{(\id - A)^{-1}}\norm{\textbf{v}}    &\text{(Norm Consistency of $\norm{\cdot}_p$.)} \label{p2a:normconsistency}\\
+        \implies &\norm{(\id - A)^{-1}} > \frac{1}{1 - |\lm |} &\text{(Applying \ref{p2a:normconsistency} and cancelling $\norm{v}$)}\nonumber\\
+        &\norm{(\id - A)^{-1}} > \frac{1}{1 + |\lm |} &\text{($1 - |\lm | < 1 + |\lm |$.)} \nonumber\\
+        &\norm{(\id - A)^{-1}} \geq \frac{1}{1 + \norm{A}_p} &\text{($\rho(A) \leq \norm{A}$.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    This solves the first inequality of \ref{p2a:chain ineq}. We then can show the second inequality via the Taylor expansion of $\norm{(\id - A)^{-1}}_p$. Noting further that $\norm{A}_p < 1$, the following steps can be taken:
+
+    \alignbreak
+    \begin{align}
+        &\norm{(\id - A)^{-1}}_p &\text{(Given.)}\nonumber\\
+        &= \norm{\sum_{k = 0}^\infty A^k}_p &\text{(Taylor Expansion.)}\nonumber\\
+        &\leq \sum_{k = 0}^\infty \norm{A^k}_p &\text{(Triangle inequality.)}\nonumber\\
+        &\leq\sum_{k = 0}^\infty\norm{A}^k_p &\text{(Submultiplication of $\norm{\cdot}_p$.)}\nonumber\\
+        \implies \norm{(\id - A)^{-1}}_p&\leq \frac{1}{1 - \norm{A}_p} &\text{(Taylor Expansion Equivalent.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    This proves both inequalities, thus \ref{p2a:chain ineq} has been shown. $\square$
+\end{solution}
+
+\subsection{Problem 2, part b}
+Suppose $A$ is invertible. show that and $X \in \C^{n\times n}$ with
+\[
+\norm{X - A}_p < \frac{1}{\norm{A^{-1}}_p}
+\]
+must also be invertible. 
+\partbreak
+
+\begin{solution}
+
+    We first should note that if a matrix product $AB$ is invertible, then both $A$ and $B$ are invertible. This can be reasoned by a rank argument: if $AB$ is invertible, then $AB$ has full rank. If $B$ mapped anything other than \textbf{0} to \textbf{0}, then $AB$ would map a nonzero vector to zero, which is a contradiction. Thus, $B$ has full rank, meaning that any vector in its target space can be represented by an element in the domain of $B$ scaled by matrix $B$ (i.e. $B\textbf{x} = \textbf{y}$). If we supposed that $A$ mapped $\textbf{y}$ to the zero vector for some arbitrary $\textbf{y}$, then $AB$ would map $\textbf{y}$ to zero, which can only be the zero vector. Thus $\textbf{y} = \textbf{0}$, meaning $A$ and $B$ have full rank, thus both are invertible. This will be used in the following steps:
+    
+    \alignbreak
+    \begin{align}
+        &\norm{X - A}_p < \frac{1}{\norm{A^{-1}}_p} &\text{(Given.)}\nonumber\\
+        &\norm{X - A}_p\norm{A^{-1}}_p < 1  &\text{(Rearranging.)}\nonumber\\
+        &\norm{(X - A)A^{-1}}_p \leq \norm{X - A}_p\norm{A^{-1}}_p &\text{(Norm submultiplicative.)}\label{p2b:normconsistency}\\
+        \implies &\norm{XA^{-1} - AA^{-1}}_p < 1 &\text{(Applying \ref{p2b:normconsistency}.)}\nonumber\\
+        &\norm{XA^{-1} - \id}_p < 1 &\text{(Simplifying.)}\nonumber\\
+        \implies &\id - XA^{-1} + \id \text{ is invertible.} &\text{(By part a.)}\nonumber\\
+        \implies &XA^{-1} \text{ is invertible.} &\text{(Simplifying.)}\nonumber\\
+        \implies &X \text{ is invertible.} &\text{(By proof above.)}\nonumber
+    \end{align}
+    \alignbreak
+    
+    The steps above thus prove $X$ is invertible. $\square$
+\end{solution}
+
+\subsection{Problem 2, part c}
+Let $\norm{\cdot} : \C^{n\times n} \rightarrow [0, \infty)$ be an arbitrary norm that may not be submultiplicative. Suppose $\norm{A} < 1$, can we conclude that $\id - A$ is invertible?
+\partbreak
+
+\begin{solution}
+    As a counterexample, take A to be
+    \[
+    A = 
+    \begin{bmatrix}
+    1/2     &-1/2   \\
+    -1/2    &1/2
+    \end{bmatrix}
+    \]
+
+    Under the H\"{o}lder $\infty$-norm. Thus $\norm{A} < 1$, but 
+    \[
+    \id - A = 
+    \begin{bmatrix}
+    1/2     &1/2   \\
+    1/2    &1/2
+    \end{bmatrix}
+    \]
+
+    which is clearly not invertible, since $\id - A$ does not have full rank.
+\end{solution}
+
+\newpage
+\section{Problem 3}
+Recall that in the lectures, we mentioned that
+\begin{enumerate}[(i)]
+    \item there are matrix norms that are not submutiplicative and an example is the H\"{o}lder $\infty$-norm;
+    \item we may always construct a norm that approximates the spectral radius of a given matrix $A$ as closely as we want.  
+\end{enumerate}
+\partbreak
+\subsection{Problem 3, part a}
+Let $\norm{\cdot} : \C^{m\times n} \rightarrow \R$ be a norm, defined for all $m, n \in \N$. show that there always exist a $c > 0$ such that the constant multiple $\norm{\cdot}_c := c\norm{\cdot}$ defines a submultiplicative norm, i.e.,
+\[
+\norm{AB}_c \leq \norm{A}_c\norm{B}_c
+\]
+for any $A \in \C^{m\times n}$ and $B \in \C^{n\times p}$ (even if $\norm{\cdot}$ does not have this property). Note that the constant $c$ will depend on $m, n, p \in \N$ in general. Find the constant $c$ for the H\"{o}lder $\infty$-norm. 
 \end{document}
