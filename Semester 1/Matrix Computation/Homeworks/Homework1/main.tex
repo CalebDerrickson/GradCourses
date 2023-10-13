@@ -9,7 +9,7 @@
 \onehalfspacing
 \maketitle
 
-{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, Nathan Suhr, and Steven Lee.
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Steven Lee.
 
 \tableofcontents
 
@@ -38,11 +38,57 @@ Your expressions should agree with the matrix 1-norm and matrix $\infty$-norm wh
 
     From \ref{p1a:pnorm}, this means the argument inside the max is less than or equal to the max column of $A$. The question now is when this is equal to $\norm{A}_{1,p}$. We are free to choose any nonzero \textbf{x}, so a natural one to choose would be the one to pick the max column when multiplied to $A$. Meaning if \textbf{x} $= e_M$, where M is the index corresponding to the max column of $A$, then equality it obtained. Note this is given as the definition of $\norm{A}_1$ when $p = 1$. 
 \newpage
-    We next wish to find a closed form expression for $\norm{A}_{p, \infty}$.
+    We next wish to find a closed form expression for $\norm{A}_{p, \infty}$. It follows the same processes done in the previous section, with some slight modifications.
+
+    \alignbreak
+    \begin{align}
+        \norm{A\textbf{x}}_\infty &= \max \{ |(A\textbf{x})_j | : 1 \leq j \leq n\} &\text{(Given.)}\nonumber\\
+        &= \max \{ \Big|\sum_{k = 1}^nx_kA_{ik}\Big| : 1 \leq i \leq m\} &\text{(Matrix-vector multiplication.)}\nonumber\\
+        &\leq \max \{ \sum_{k = 1}^n|x_kA_{ik}| : 1 \leq i \leq m\} &\text{(Triangle inequality.)}\nonumber\\
+        &= \max \{ \sum_{k = 1}^n|x_k||A_{ik}| : 1 \leq i \leq m\} &\text{(Absolute Homogeneity.)}\nonumber\\
+        &= \sum_{k = 1}^n|x_k||A_{Mk}| &\text{($M$ is max row of $A$.)}\nonumber\\
+        &\leq |x_M|\sum_{k = 1}^n|A_{Mk}| &\text{($M$ is max element of \textbf{x}.)}\nonumber\\
+        &= \norm{\textbf{x}}_\infty\sum_{k = 1}^n|A_{Mk}| &\text{(Definition of $\infty$-norm.)}\nonumber\\
+        &\leq \norm{\textbf{x}}_p\sum_{k = 1}^n|A_{Mk}| &\text{($\infty$-norm is included in all $p$-norms.)}\nonumber\\
+        \implies \norm{A\textbf{x}}_\infty &\leq \norm{\textbf{x}}_p\norm{A}_\infty &\text{(Definition of $\infty$-norm for matrices.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Thus, we can see $\norm{A}_{p,\infty}$ is the max of $\norm{A}_\infty$, which is just $\norm{A}_\infty$. We note that $\norm{A}_\infty$ is the max row sum of the matrix $A$. Thus, both expressions have been found.
 \end{solution}
 
+\newpage
+\subsection{Problem 1, part b}
+Let $\S^n := \{ A \in \R^{n\times n} : A^T = A \}$. Recall the Gram matrix from Homework \textbf{0}, Problem \textbf{4}:
+\\
+For \textbf{x}$_1$, ..., \textbf{x}$_n \in \R^n$, we write
 
+\[
+G(\textbf{x}_1, ...,\textbf{x}_n) := 
+\begin{bmatrix}
+    \textbf{x}_1^T\textbf{x}_1 &\textbf{x}_1^T\textbf{x}_2 &... &\textbf{x}_1^T\textbf{x}_n\\
+    \textbf{x}_2^T\textbf{x}_1 &\textbf{x}_2^T\textbf{x}_2 &... &\textbf{x}_2^T\textbf{x}_n\\
+    \vdots    &\vdots     &\ddots    &\vdots\\
+    \textbf{x}_n^T\textbf{x}_1 &\textbf{x}_n^T\textbf{x}_2 &... &\textbf{x}_n^T\textbf{x}_n\\
+\end{bmatrix}
+\in \S^n.
+\]
 
+Consider the set $\G^n := \{G(\textbf{x}_1, ..., \textbf{x}_n) \in \S^n : \norm{\textbf{x}_1}_2 \leq 1, ..., \norm{\textbf{x}_n}_2 \leq 1 \}$. Prove that for any $A \in \S^n$,
+
+\[
+\norm{A}_G := \max \{ |\text{tr}(AG)| : G \in \G^n \}
+\]
+
+defines a norm on $S^n$. Show that if $A$ = diag($a_{11}, ..., a_{nn}$) $\in \S^n$, then 
+\[
+\norm{A}_G = \max\bigg( \sum_{i = 1}^n \max (a_{ii}, 0), -\sum_{i = 1}^n \min (a_{ii}, 0)\bigg).
+\]
+
+\partbreak
+\begin{solution}
+    
+\end{solution}
 \newpage
 \section{Problem 2}
 Let $A \in \C^{n\times n}$ and $\lVert \cdot \rVert_p : \C^{n \times n} \rightarrow [0, \infty )$ be the matrix $p$-norm for some $p \in [1, \infty]$. 
