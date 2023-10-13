@@ -15,18 +15,33 @@
 
 \newpage
 \section{Problem 1}
-\begin{enumerate}[(a)]
-    \item Let $A \in \C^{m \times n}$ and $1 \leq p \leq \infty$. Find the closed form solutions for 
-    \[
-    \lVert A \rVert_{1, p} := \max_{\textbf{x} \neq \textbf{0}} \frac{\lVert A\textbf{x} \rVert_{p}}{\lVert \textbf{x} \rVert_1} \hspace{5mm} \text{and} \hspace{5mm} \lVert A \rVert_{p, \infty} := \max_{\textbf{x} \neq \textbf{0}} \frac{\lVert A\textbf{x} \rVert_{\infty}}{\lVert \textbf{x} \rVert_p} 
-    \]
-    Your expressions should agree with the matrix 1-norm and matrix $\infty$-norm when $p = 1$ and $\infty$ respectively.
-    \partbreak
-    \begin{solution}
-        
-    \end{solution}
 
-\end{enumerate}
+\subsection{Problem 1, part a} Let $A \in \C^{m \times n}$ and $1 \leq p \leq \infty$. Find the closed form expressions for 
+\[
+\lVert A \rVert_{1, p} := \max_{\textbf{x} \neq \textbf{0}} \frac{\lVert A\textbf{x} \rVert_{p}}{\lVert \textbf{x} \rVert_1} \hspace{5mm} \text{and} \hspace{5mm} \lVert A \rVert_{p, \infty} := \max_{\textbf{x} \neq \textbf{0}} \frac{\lVert A\textbf{x} \rVert_{\infty}}{\lVert \textbf{x} \rVert_p} 
+\]
+Your expressions should agree with the matrix 1-norm and matrix $\infty$-norm when $p = 1$ and $\infty$ respectively.
+\partbreak
+\begin{solution}
+
+    Let $A_k$ denote the k-th column of $A$. Then, 
+    \alignbreak
+    \begin{align}
+        \norm{A\textbf{x}}_p &= \norm{\sum_{k = 1}^n x_kA_k}_p &\text{(Definition of vector norm.)}\nonumber\\
+        &\leq \sum_{k = 1}^n \norm{x_kA_k}_p &\text{(Triangle Inequality.)}\nonumber\\
+        &= \sum_{k = 1}^n|x_k|\norm{A_k}_p &\text{(Absolute Homogeneity of norm.)}\nonumber\\
+        &\leq \max \{ \norm{A_k}_p : 1 \leq k \leq n \} \Bigg(\sum_{k = 1}^n |x_k| \Bigg) &\text{(All columns of A are $\leq$ max column.)}\nonumber\\
+        &=\max \{ \norm{A_k}_p : 1 \leq k \leq n \} \norm{\textbf{x}_1} &\text{(Definition of 1-norm.)}\nonumber\\
+        \implies \frac{\norm{A\textbf{x}}_p}{\norm{\textbf{x}}_1} &\leq \max \{\norm{A_k}_p : 1 \leq k \leq n \} &\text{(Rearranging.)}\label{p1a:pnorm}
+    \end{align}
+    \alignbreak
+
+    From \ref{p1a:pnorm}, this means the argument inside the max is less than or equal to the max column of $A$. The question now is when this is equal to $\norm{A}_{1,p}$. We are free to choose any nonzero \textbf{x}, so a natural one to choose would be the one to pick the max column when multiplied to $A$. Meaning if \textbf{x} $= e_M$, where M is the index corresponding to the max column of $A$, then equality it obtained. Note this is given as the definition of $\norm{A}_1$ when $p = 1$. 
+\newpage
+    We next wish to find a closed form expression for $\norm{A}_{p, \infty}$.
+\end{solution}
+
+
 
 \newpage
 \section{Problem 2}
@@ -42,17 +57,18 @@ Show that if $\norm{A}_p < 1$, then $\Id - A$ is invertible and furthermore,
 
     Let \textbf{v} $\in \C^{n\times n} \backslash \{0\}$ be an eigenvector of $A$ with eigenvalue $\lm$. Then $A\textbf{v} = \lm \textbf{v} \iff \norm{A\textbf{v}}_p = \norm{\lm\textbf{v}}_p$. Note the matrix $p$-norm is taken as a max over all \textbf{x} $\neq 0$. Along with $\norm{A} < 1$, we get, 
     \[
-    1 > \max_{\textbf{x} \neq 0}\frac{\norm{A\textbf{x}}}{\norm{\textbf{v}}} \leq \frac{\norm{A\textbf{v}}}{\norm{\textbf{v}}}
+    1 > \max_{\textbf{x} \neq 0}\frac{\norm{A\textbf{x}}}{\norm{\textbf{x}}} \leq \frac{\norm{A\textbf{v}}}{\norm{\textbf{v}}}
     \]
     then $\norm{A\textbf{v}} < \norm{\textbf{v}}$. So 1 is then not an eigenvector of $A$. This implies that $(A - \id)\textbf{v} = (\lm - 1)\textbf{v}$. Note that \textbf{v} was taken as a nonzero vector, so $(1 - \lm)\textbf{v} \neq 0$. This means that 0 is not an eigenvalue of $A - \id$, making the determinant nonzero, thus $A - \id$ is invertible.  
 
     \jump
-    We then wish to show \ref{p2a:chain ineq}
+    We then wish to show \ref{p2a:chain ineq},
     
     \[
     \frac{1}{1 + \lVert A\rVert_p} \leq \lVert(\Id - A)^{-1}\rVert_p \leq \frac{1}{1 - \lVert A\rVert_p}.
     \]
     
+    \jump
     To prove the first inequality, we note that if \textbf{v} is an eigenvector of $A$ with eigenvalue $\lm$, (and $A$ invertible) then \textbf{v} is an eigenvector of $A$ with eigenvalue $\lm^{-1}$. This is shown by the following:
     
     \[
