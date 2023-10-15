@@ -17,6 +17,7 @@
 \usepackage{listings}
 \usepackage{mathrsfs}
 \usepackage{stackengine}
+\usepackage{physics}
 \usepackage{afterpage}
 
 \setstackEOL{\\}
@@ -57,16 +58,21 @@
 \newcommand{\prefix@subsubsection}{}
 \renewcommand{\thesubsection}{\arabic{subsection}}
 \makeatother
-
+\DeclareMathOperator*{\argmin}{argmin}
 \newcommand{\partbreak}{\begin{center}\rule{17.5cm}{2pt}\end{center}}
 \newcommand{\alignbreak}{\begin{center}\rule{15cm}{1pt}\end{center}}
 \newcommand{\hop}{\vspace{1mm}}
 \newcommand{\jump}{\vspace{5mm}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\G}{\mathbb{G}}
+\renewcommand{\S}{\mathbb{S}}
 \newcommand{\bt}{\textbf}
 \newcommand{\lm}{\lambda}
+\newcommand{\id}{\Id}
 \newcommand{\ep}{\varepsilon}
+%\renewcomand{\norm}[1]{\left\lVert#1\right\rVert}
 \definecolor{cit}{rgb}{0.05,0.2,0.45}
 \addtolength{\jot}{1em}
 \newcommand{\solution}[1]{
@@ -77,10 +83,10 @@
 \newcounter{tmpctr}
 \newcommand\fancyRoman[1]{%
   \setcounter{tmpctr}{#1}%
-  \setbox0=\hbox{\kern.1pt\textsf{\Roman{tmpctr}}}%
-  \setstackgap{S}{-.2pt}%
-  \Shortstack{\rule{\dimexpr\wd0+.1ex}{.5pt}\\\copy0\\
-              \rule{\dimexpr\wd0+.1ex}{.5pt}}%
+  \setbox0=\hbox{\kern0.3pt\textsf{\Roman{tmpctr}}}%
+  \setstackgap{S}{-.9pt}%
+  \Shortstack{\rule{\dimexpr\wd0+.1ex}{.9pt}\\\copy0\\
+              \rule{\dimexpr\wd0+.1ex}{.9pt}}%
 }
 
 \newcommand{\Id}{\fancyRoman{2}}

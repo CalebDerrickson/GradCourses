@@ -9,7 +9,7 @@
 \onehalfspacing
 \maketitle
 
-{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, Nathan Suhr, and Steven Lee.
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Steven Lee.
 
 \tableofcontents
 
@@ -41,6 +41,7 @@ From \ref{pb1:cases}, we run into an immediate issue concerning $\beta$. Since $
 
 \alignbreak
 
+\newpage
 \underline{\textbf{Case 1:}} $\beta > 1$
 
 Then, 
@@ -66,6 +67,7 @@ Then,
 
 Since our solution is an exponential in $t$, there will be no finite time $T$ such that $x(t)$ ``blows up".
 
+\newpage
 \underline{\textbf{Case 3:}} $0 < \beta < 1$
 
 Then,
@@ -154,17 +156,307 @@ where $x(s)$ satisfies the original problem $dx/ds = x^2$. Show that this is a o
     \end{align}
     \alignbreak
 
-    With initial condition $y(\tau = 0) = x(t = 0)$???
+    With initial condition $y(\tau = 0) = x(t = 0) = 1$. Since $y(\tau) = x(t(\tau))$ with $x = \frac{1}{1 - t}$, there will only be finite time blow up when $t(\tau) = 1$. Note we have $\tau(t)$, given as \ref{p1:tau in t}. This function on the interval $(1, \infty)$ is strictly greater than $1$, so there is no such point that $t(\tau) = 1$, therefore, no finite time blow up will occur. 
 \end{solution}% End of problem 1 part 2
 
 \newpage
 
 \section{Problem 2}
 Consider the scalar initial value problem
-\[
-\dot{x} = -|x|^\beta, \hspace{5mm} x(0) = 0.
-\]
+\begin{align}
+    \dot{x} = -|x|^\beta, \hspace{5mm} x(0) = 0. \label{p2:ODE}
+\end{align}
+
 For which values of $\beta > 0$ is the solution $x(t) = 0$ guaranteed to be unique on some interval $J = [-a, a], \ a > 0$? If there is no such guarantee, explicitly construct a family of solutions to the initial value problem on the interval $J$.   
 \partbreak
+
+\begin{solution}
+
+    For the sake of completion, I will copy the theorem I will be using below:
+
+    \alignbreak
+    \begin{quote}
+            Suppose there are constants $a, b, > 0$ such that $f:B_b(x_0) \rightarrow \R^n$ is Lipschitz with constant $k \geq 1$. Then our initial value problem \ref{p2:ODE} has a unique solution $x(t)$ for $t \in J = [-a, a]$ provided $a < b/M$, where $M = \max \{|f(x)| : x \in B_b(x_0)\}.$
+    \end{quote}
+    \alignbreak
+
+    For any $x \in B_b(x_0) = B_b(0)$, $x^\beta \leq b^\beta$. Then $M = b^\beta$. This implies $a < b/M = b^{1 - \beta}$. Thus we have three cases, which will yield different intervals on which the solution $x(t) = 0$ is guaranteed unique. Note in each case given we are seeking a $b$ which will give us an upper bound on $a$.
+
+    \jump
+    \underline{\textbf{Case 1:}} $\beta > 1$. 
+    \jump
+    
+    If $\beta > 1$, then $a < \frac{1}{b^\beta}$. Since $b > 0$ by the theorem, any choice of $b$ will give us a valid bound for $a$, so $J = [-a, a]$ is finite, thus properly defined. 
+
+    \jump
+    \underline{\textbf{Case 2:}} $0 < \beta < 1$.
+    \jump
+
+    In this case, we run into a problem where our function $f(x) = -|x|^\beta$ is not Lipschitz continuous. to prove this, it suffices to show the derivative of $f(x)$ is not bounded. 
+
+    \alignbreak
+    \begin{align}
+        f'(x) &= \frac{d}{dx}\Big[ -|x|^\beta \Big] &\text{(Given.)}\nonumber\\
+        &= -\beta|x|^{\beta - 1} \cdot \frac{|x|}{x} &\text{(Taking derivative.)}\nonumber\\
+        &= -\frac{\beta\text{sgn}(x)}{|x|^{1 - \beta}} &\text{(Defintition of sgn(x) and simplifying.)}
+    \end{align}
+    \alignbreak
+
+    Thus as $x \rightarrow 0^+$, $f'(x) \rightarrow -\infty$, therefore $f'(x)$ is not bounded, meaning we cannot find a constant $k$ for Lipschitz continuity. Thus there is no bound for $a$ which $x(t) = 0$ is guaranteed unique.
+
+    \jump
+    To find a family of solutions for this ODE, we just need to solve it. I claim that the following solution $x(t)$ solves \ref{p2:ODE} for any choice of $\alpha > 0$.
+
+    \begin{align}
+        x(t) = 
+        \Bigg\{\begin{array}{lr}
+             0, &t < \alpha\\
+             -[(t - \alpha)(1 - \beta)]^{\frac{1}{1 - \beta}}, &t \geq \alpha
+        \end{array}
+        \label{p2: ooa soln}
+    \end{align}
+
+    I will show below it satisfies the ODE only when $t \geq \alpha$. The case for $t < \alpha$ is obvious. 
+    \alignbreak
+    \begin{align}
+        \frac{dx}{dt} &= \frac{d}{dx}\Bigg[ -[ (t - \alpha)(1 - \beta)] ^{\frac{1}{1-\beta}}\Bigg] &\text{(Given.)}\nonumber\\
+        &= -\frac{(1 - \beta)(t - \alpha)^{\frac{1}{1 - \beta}}}{(1 - \beta)(t - \alpha)}   &\text{(Taking derivative.)}\nonumber\\
+        &= -\frac{x}{x^{1 - \beta}} &\text{(Simplifying.)}\nonumber\\
+        &= -|x|^\beta &\text{(Simplifying.)}\nonumber
+    \end{align}
+    \alignbreak
+    
+    Thus, \ref{p2: ooa soln} solves the system. Now we just need to show $x(t = 0) = 0$ for any choice of $\alpha > 0$. If $t < \alpha$, then initial conditions hold immediately. So \ref{p2: ooa soln} is a solution to \ref{p2:ODE} for any $\alpha > 0$, which is our family of solutions.  
+
+    \jump
+    \underline{\textbf{Case 3:}} $\beta = 1$.
+    \jump
+
+    For this case, we have $a < b^{\beta - 1} = 1$, so $a \in (0, 1]$ will give us a unique solution, any $a$ outside this interval will not guarantee the uniqueness of $x(t) = 0$ on $J = [-a, a]$. We can then find a family of solutions in solving \ref{p2:ODE}. Since this is a nonlinear ordinary differential equation, it will be slightly tricky to find a solution $x(t)$. I will provide the steps below before running into a problem.
+    \alignbreak
+    \begin{align}
+        &\dot{x} = - |x| &\text{(Given.)}\nonumber\\
+        &\frac{dx}{|x|} = dt    &\text{(Assuming Separability.)}\nonumber\\
+        &-\frac{x\ln |x|}{|x|} = t + C  &\text{(Integrating both sides.)}\nonumber\\
+        &-\text{sgn}(x)\ln |x| = t + C   &\text{(Signature function definition.)}\nonumber\\
+        &|x|^{-\text{sgn}(x)} = Ce^t &\text{(Raising both sides by $e$.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    If we stop here and try to apply the initial conditions, we get $0^{-1}$, which is undefined. So we are not guaranteed solutions, but the family of solutions is just the singleton set {0}.
+\end{solution}
+
+\section{Problem 3}
+ Short response: what role (if any) does the Lipschitz constant $K$ play in proving (local) existence and uniqueness of solutions of initial value problems of the form
+
+\[
+\dot{\textbf{x}} = \textbf{f}(\textbf{x}), \hspace{5mm} x(0) = x_0 \in \R^n, \hspace{5mm} \textbf{f} : \R^n \rightarrow \R^n 
+\]
+
+\partbreak
+\begin{solution}
+
+    For existence, we only require continuity, so the Lipschitz constant does not play a role here. For uniqueness, the Lipschitz constant comes into play in the coefficient of the contraction mapping $Ka = c$ in the contraction mapping theorem. I will note here there are additional proofs which don't rely on the Lipschitz constant, but the one provided to us in class does rely on it.    
+\end{solution}
+
+\newpage
+\section{Problem 4}
+Often in applications, the dynamics of a system being modeled, may be governed by quite different processes in different regions of the state space. And this might lead to a dynamical system that is set-wise defined, e.g.
+
+    \begin{align}
+        \dot{\textbf{x}} = 
+        \Bigg\{\begin{array}{lr}
+             \textbf{f}^+(x), &\sigma(\textbf{x}) > 0\\
+             \textbf{f}^-(x), &\sigma(\textbf{x}) < 0
+        \end{array}
+        \label{p4: set dynamical system}
+    \end{align}
+
+    where the scalar equation $\sigma(x) = 0$ defines the boundary between different of state space governed by different dynamics (Note that I didn’t say anything about the dynamics for points \textbf{in} the boundary).
+ 
+    \jump
+    In the following, you explore how various possible definitions of the dynamics in the boundary might impact the behavior of the system. Specifically, consider \ref{p4: set dynamical system} with $\textbf{f}^\pm(\textbf{x})$ given as a planar, linear vector field
+
+    \[
+    \textbf{f}^\pm (\textbf{x}) = \begin{pmatrix}
+         -1 \pm x_2\\
+         x_2 \mp x_1
+    \end{pmatrix},
+    \]
+
+    and let the boundary be defined by $\sigma(x) = x_2$.
+
+\subsection{Problem 4, part a}
+Plot the phase portrait associated with $\dot{\textbf{x}} = \textbf{f}^+(\textbf{x})$ and $\dot{\textbf{x}} = \textbf{f}^-(\textbf{x})$ , separately in the square region $x_1, x_2 \in [-2, 2]$, i.e. don’t restrict them to their regions $x_2 > 0$ or $x_2 < 0$.
+
+\begin{solution}
+    I will provide the code below, followed by the generated plots. I have also noted the equilibrium points of both vector fields, at $(1, \pm1)$, respectively. 
+\partbreak
+\begin{lstlisting}
+import numpy as np 
+import matplotlib.pyplot as plt 
+
+#constants
+bound = 2 #PLotting bounds for x and y axis
+# Meshgrid 
+x, y = np.meshgrid(np.linspace(-bound, bound, 20),  
+                   np.linspace(-bound, bound, 20)) 
+
+#Vector directions for f plus and f minus
+uplus = -1 + y
+vplus = y - x
+umin = -1 - y
+vmin = x + y
+
+fig, axs = plt.subplots(2, 1, figsize =(12, 12))
+
+
+# Plotting Vector Field  
+axs[0].quiver(x, y, uplus, vplus, color='g') 
+axs[0].set_title('f^-(x)') 
+axs[0].grid(True)
+axs[0].scatter([1], [1], color = 'g')
+axs[0].annotate("Equilibrium", (1.05, 1.05))
+
+# Plotting Vector Field  
+axs[1].quiver(x, y, umin, vmin, color='g') 
+axs[1].set_title('f^+(x)') 
+axs[1].grid(True)
+axs[1].scatter([1], [-1], color = 'g')
+axs[1].annotate("Equilibrium", (1.05, -0.95))
+
+# Setting x, y boundary limits 
+plt.xlim(-bound, bound) 
+plt.ylim(-bound, bound) 
+  
+# show plot
+plt.show() 
+\end{lstlisting}
+
+\jump
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale = 0.6]{Images/individual vector fields.png}
+\caption{Vector fields for $f^+$ and $f^-$ respectively.}
+\label{png:individual vector fields}
+\end{figure}
+\end{solution}
+
+\vspace{\floatsep}
+\clearpage
+
+\newpage
+\subsection{Problem 4, part b}
+Show that the vector field is discontinuous on $x_2 = 0$, so we can’t expect solutions with
+initial values ($x_1$, 0) to be unique.
+
+\partbreak
+\begin{solution}
+I will show this analytically, as well as numerically. To begin, recall the definition of the direcitonal derivative in direction \textbf{v}:
+
+\alignbreak
+\begin{align}
+    \nabla_\textbf{v} f(\textbf{x}) := \lim_{h \rightarrow 0} \frac{\textbf{f}(\textbf{x} + h\textbf{v}) - \textbf{f}(\textbf{x})}{h} \label{p4b: directional derivative def}
+\end{align}
+\alignbreak
+
+We will show we get two different directions at the boundary $(x_2 = 0)$. Thus we shall break this into two cases, where we will take the directional derivate at a point $\textbf{x} = (a, 0)$, and in direction $\textbf{v} = (0, x_2)$ where both signs will depend on the case.
+
+\jump
+\underline{\textbf{Case 1:}} $a, x_2 > 0$.
+\jump
+
+In this case, we are above the boundary, which means our system $\dot{\textbf{x}} = \textbf{f}^+(\textbf{x})$. Then, the following hold:
+
+\alignbreak
+\begin{align}
+    &\textbf{x} + h\textbf{v} &= \begin{pmatrix} a\\hx_2\end{pmatrix}\nonumber\\
+    &\textbf{f}^+(\textbf{x} + h\textbf{v}) - \textbf{f}^+(\textbf{x}) &= \begin{pmatrix} hx_2\\ hx_2\end{pmatrix}\nonumber\\
+    \implies &\lim_{h \rightarrow 0} \frac{\textbf{f}^+(\textbf{x} + h\textbf{v}) - \textbf{f}^+(\textbf{x})}{h} &= x_2\begin{pmatrix}1\\1\end{pmatrix}\nonumber
+\end{align}
+\alignbreak
+
+This should hold for any $x_2 > 0$.
+
+\newpage
+\jump
+\underline{\textbf{Case 2:}} $a, x_2 < 0$.
+\jump
+
+In this case, we are below the boundary, which means our system $\dot{\textbf{x}} = \textbf{f}^-(\textbf{x})$. Then, the following hold:
+
+\alignbreak
+\begin{align}
+    &\textbf{x} + h\textbf{v} &= \begin{pmatrix} a\\hx_2\end{pmatrix}\nonumber\\
+    &\textbf{f}^-(\textbf{x} + h\textbf{v}) - \textbf{f}^-(\textbf{x}) &= \begin{pmatrix} -hx_2\\ hx_2\end{pmatrix}\nonumber\\
+    \implies &\lim_{h \rightarrow 0} \frac{\textbf{f}^-(\textbf{x} + h\textbf{v}) - \textbf{f}^-(\textbf{x})}{h} &= x_2\begin{pmatrix}-1\\1\end{pmatrix}\nonumber
+\end{align}
+\alignbreak
+
+This should hold for any $x_2 < 0$. Upon inspection, we see different directions in which our derivative is heading. If we take $x_2 \rightarrow 0$ in both cases, we see a discontinuity depending on the cases above.
+
+\jump
+In the numerical approach, we can plot these two vector fields together and notice the discontinuity along the boundary. The code is given below, followed by the generated plots.
+
+\begin{lstlisting}
+import numpy as np 
+import matplotlib.pyplot as plt 
+
+#Trying to get a combination of the two filed onto the same plot.
+xpos, ypos= np.meshgrid(np.linspace(-bound, bound, 20),  
+                   np.linspace(0 , bound, 10)) 
+xmin, ymin= np.meshgrid(np.linspace(-bound, bound, 20),  
+                   np.linspace(-bound, 0, 10)) 
+
+#Update vector fields
+#Vector directions for f plus and f minus
+uplus = -1 + ypos
+vplus = ypos - xpos
+umin = -1 - ymin
+vmin = xmin + ymin
+
+fig, axs = plt.subplots(1, 1, figsize =(12, 12))
+
+# Plotting Vector Field with QUIVER 
+axs.quiver(xpos, ypos, uplus, vplus, color='g') 
+axs.quiver(xmin, ymin, umin, vmin, color='g') 
+axs.set_title('Total Vector field') 
+axs.grid(True)
+axs.scatter([1, 1], [1, -1], color = 'g')
+axs.annotate("Equilibrium", (1.05, 1.05))
+axs.annotate("Equilibrium", (1.05, -0.95))
+axs.set_xlabel("x1")
+axs.set_ylabel("x2")
+# Setting x, y boundary limits 
+plt.xlim(-bound, bound) 
+plt.ylim(-bound, bound) 
+  
+# Show plot with grid 
+ 
+plt.show() 
+\end{lstlisting}
+
+
+\jump
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale = 0.6]{Images/vector field for system.png}
+\caption{The entire Vector field for problem 4. Note the discontinuity along the boundary}
+\label{png:vectorfield}
+\end{figure}
+\end{solution}
+
+\vspace{\floatsep}
+\clearpage
+
+\subsection{Problem 4, part c}
+
+Let’s proceed by restricting to consideration of the forward time behavior of the model with some prescribed dynamics on the discontinuity boundary. For example, one natural way that the dynamics might be defined is as a convex combination of $f^+$ and $f^-$, i.e. let
+
+\[
+\dot{\textbf{x}} = \alpha\textbf{f}^+(\textbf{x}) + (1 - \alpha)\textbf{f}^-(\textbf{x}), \hspace{3mm} \alpha \in [0, 1], \hspace{3mm} \text{ for \textbf{x} satisfying $\sigma(\textbf{x}) = 0$}
+\]
+
+For the following choices of $\alpha$, plot the forward solution in the phase plane for an initial condition $(x_1, x_2) = (2, 1)$. (This can be done as a somewhat qualitative sketch.) (i) $\alpha = 0$, (ii) $\alpha = 0.5$, (iii) $\alpha = 1$. Comment on whether the behavior is sensitive to the choice of the parameter $\alpha \in [0, 1]$.
 
 \end{document}
