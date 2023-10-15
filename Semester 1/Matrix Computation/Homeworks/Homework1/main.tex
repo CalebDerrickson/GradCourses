@@ -87,7 +87,34 @@ defines a norm on $S^n$. Show that if $A$ = diag($a_{11}, ..., a_{nn}$) $\in \S^
 
 \partbreak
 \begin{solution}
-    
+
+    As A quick reminder, a norm $\norm{\cdot}$ should satisfy the following properties for scalar $\alpha$ and matrices $A, B \in \R^{n\times n}$:
+    \jump
+    \hrule
+    \begin{enumerate}[(1)]
+        \item $\norm{A} \geq 0$.
+        \item $\norm{A} = 0 \iff A = 0$.
+        \item $\norm{\alpha A} = |\alpha| \norm{A}$.
+        \item $\norm{A + B} \leq \norm{A} + \norm{B}$.
+    \end{enumerate}
+    \hrule
+    \jump
+    Note that I'm taking $A, B \in \R^{n\times n}$ since the set $\S^n \subset \R^{n\times n}$. We will prove each property below.
+
+    \begin{enumerate}[(1)]
+        \item $\norm{A} \geq 0$.
+
+        By the definition of $\norm{A}_G$, we are taking the maximum over a set of strictly positive elements - the absolute value guarantees this. Thus this property is immediately obeyed.
+
+        \jump
+        \item $\norm{A} = 0 \iff A = 0$.
+
+        The backward implication is straightforward, as if $A = 0$, the $AG = 0$, thus the trace is taken over the zero matrix, meaning we are taking the maximum over the set containing only zeros, thus $\norm{A}_G = 0$.
+
+        The forward implication requires jumping through some extra hoops. We can note that by the symmetry of the inner product of the real numbers, $G$ is symmetric for all $G \in \G^n$. 
+
+            
+    \end{enumerate}
 \end{solution}
 \newpage
 \section{Problem 2}
@@ -182,6 +209,7 @@ Let $\norm{\cdot} : \C^{n\times n} \rightarrow [0, \infty)$ be an arbitrary norm
 \partbreak
 
 \begin{solution}
+
     As a counterexample, take A to be
     \[
     A = 
@@ -210,11 +238,503 @@ Recall that in the lectures, we mentioned that
     \item there are matrix norms that are not submutiplicative and an example is the H\"{o}lder $\infty$-norm;
     \item we may always construct a norm that approximates the spectral radius of a given matrix $A$ as closely as we want.  
 \end{enumerate}
-\partbreak
+
 \subsection{Problem 3, part a}
 Let $\norm{\cdot} : \C^{m\times n} \rightarrow \R$ be a norm, defined for all $m, n \in \N$. show that there always exist a $c > 0$ such that the constant multiple $\norm{\cdot}_c := c\norm{\cdot}$ defines a submultiplicative norm, i.e.,
 \[
 \norm{AB}_c \leq \norm{A}_c\norm{B}_c
 \]
 for any $A \in \C^{m\times n}$ and $B \in \C^{n\times p}$ (even if $\norm{\cdot}$ does not have this property). Note that the constant $c$ will depend on $m, n, p \in \N$ in general. Find the constant $c$ for the H\"{o}lder $\infty$-norm. 
+
+\partbreak
+\begin{solution}
+
+    By the Equivalence of Norms over a Finite Dimensional Vector Space, (in this case, $\R^{n\times n}$) there will exist some $0< a_1 < a_2$ such that 
+
+\begin{align}
+     a_1\norm{C}_* \leq \norm{C} \leq a_2\norm{C}_* \label{p3a: equiv}
+\end{align}
+
+for any norm $\norm{\cdot}_*$ over our space and matrix $C$. Consider the Frobenius norm, $\norm{\cdot}_F$. We know that the Frobenius norm obeys submultiplicivity, so the following steps are justified:
+
+\alignbreak
+\begin{align}
+    \norm{AB} &\leq a_2\norm{AB}_F   &\text{(Equivalence.)}\nonumber\\
+    &\leq a_2\norm{A}_F\norm{B}_F    &\text{(Submultiplicivity of F.)}\nonumber\\
+    &\leq \frac{a_2}{a_1}\norm{A}\frac{1}{a_1}\norm{B}  &\text{(Equivalence.)}\nonumber\\
+    &= \frac{a_2}{a_1^2}\norm{A}\norm{B}    &\text{(Rewriting.)}\nonumber
+\end{align}
+\alignbreak
+
+Therefore, let $c = \frac{a_2}{a_1^2} > 0$. Thus $\norm{AB}_c \leq \norm{A}_c\norm{B}_c$.
+
+
+We next wish to find the constant $c$ for the H\"{o}lder $\infty$-norm. We will be looking at its equivalence to the Frobenius norm. 
+
+\alignbreak
+\begin{align}
+    \norm{AB}^2_F &= \sum_{i = 1}^m\sum_{j = 1}^p\Big|\sum_{k = 1}^nA_{ik}B_{kj}\Big|^2
+    &\text{(Given.)}\nonumber\\
+    &\leq \sum_{i = 1}^mp\max_j \Big\{ \Big|\sum_{k = 1}^n A_{ik}B_{kj}\Big|^2\Big\}    &\text{(Taking max over B's columns.)}\nonumber\\
+    &\leq mp\max_{ij}\Big\{ \Big| \sum_{k = 1}^nA_{ik}B_{kj}\Big|^2\Big\}   &\text{(Taking max over A's rows.)}\nonumber\\
+    \implies \norm{AB}_F &\leq \sqrt{mp}\max_{ij}\Big\{\Big| \sum_{k = 1}^n A_{ik}B_{kj}\Big|\Big\} &\text{(Square root function is monotonic.)}\nonumber\\
+    \iff \norm{AB}_F &\leq \sqrt{mp}\norm{AB}_{H, \infty}\label{p3a: left ineq}
+\end{align}
+\alignbreak
+
+So $a_1 = (mp)^{-1/2}$. Now we need to find the next inequality in \ref{p3a: equiv}. $\norm{AB}^2_{H, \infty}$.
+
+    
+
+\end{solution}
+\newpage
+\section{Problem 4}
+\textbf{Note that for simplicity I will provide the results before the code block(s).}
+
+Let $A = [a_{ij}]$ be an $n \times n$ matrix with entries
+\[
+a_{ij} = 
+\begin{cases}
+    n + 1 - \max (i, j) &i \leq j + 1, \\
+    0   & i > j + 1
+\end{cases}
+\]
+This is an example of an \textit{upper Hessenberg} matrix: it is upper triangular except the entries on the subdiagonal $a_{j + 1, j}$ may also be non-zero. For $n = 12$ and $n = 25$, do the following:
+
+\subsection{Problem 4, part a}
+Compute $\norm{A}_\infty$ and $\norm{A}_1$.
+\partbreak
+\begin{solution}
+
+    The methods to compute the 1-norm and $\infty$-norm are provided below, as well as the method to compute the Hessenberg matrix. The code which uses these functions are provided in the second block. . When running the code below, I get the following:
+    \begin{itemize}
+        \item Size 12 Hessenberg matrix: 1-norm: 55.0, inf-norm: 90.0
+        \item Size 25 Hessenberg matrix: 1-norm: 195.0, inf-norm: 350.0
+    \end{itemize}
+    
+\begin{lstlisting}
+#Methods block
+def compute_hessenberg_matrix(n):
+    """
+    Returns the Hessenberg matrix of given size
+    """
+    A = np.empty((n, n))
+    for i in range(n):
+        for j in range(n):
+            if i <= j + 1:
+                A[i][j] = n + 1 - max(i,j)
+            else:
+                A[i][j] = 0
+    return A
+
+def compute_inf_norm(A):
+    """
+    Returns the infinity norm of the given matrix 
+    """
+    row_sums = []
+    for i in range(A.shape[0]):
+        row_sum = 0
+        for j in range(A.shape[0]):
+            row_sum += abs(A[i][j])
+        row_sums.append(row_sum)
+    
+    return max(row_sums)
+
+def compute_1_norm(A):
+    """"
+    Returns the 1-norm of the given matrix
+    """
+    column_sums = []
+    for i in range(A.shape[0]):
+        column_sum = 0
+        for j in range(A.shape[0]):
+            column_sum += abs(A[j][i])
+        column_sums.append(column_sum)
+    
+    return max(column_sums)
+
+\end{lstlisting}
+\begin{lstlisting}
+#"Main"
+hessenberg = [compute_hessenberg_matrix(x) for x in [12,25]]
+
+#Computing the matrix inf and 1 norms for matrices
+for matrix in hessenberg:
+    print("Size {} Hessenberg matrix: 1-norm: {}, inf-norm: {}".format(matrix.shape[0], compute_1_norm(matrix), compute_inf_norm(matrix)))
+\end{lstlisting}
+\end{solution}
+
+\newpage
+\subsection{Problem 4, part b}
+Compute $\rho(A)$ and $\norm{A}_2$. You may use any built-in functions of your program.
+\partbreak
+\begin{solution}
+
+    The code I used to calculate this is given below. The result when running this block is given as 
+    \begin{itemize}
+        \item Size 12 \\
+            Spectral Radius: 35.61 \\
+            Matrix 2-norm 54.92 \\
+        
+        \item Size 25 \\
+            Spectral Radius: 81.61 \\
+            Matrix 2-norm 194.43
+    \end{itemize}
+
+\begin{lstlisting}
+#Computing the spectral radius and 2-norm
+for matrix in hessenberg:
+    eigenvals = [x for x in abs(np.linalg.eigvals(matrix))]
+    print("Size {} ".format(matrix.shape[0]))
+    print("Spectral Radius: {:.2f}".format(max(eigenvals)))
+    print("Matrix 2-norm {:.2f}".format(np.linalg.norm(matrix, ord=2)))
+\end{lstlisting}
+\end{solution}
+
+\subsection{Problem 4, part c}
+Using Gerschgorin’s theorem, describe the domain that contains all of the eigenvalues.
+
+\partbreak
+\begin{solution}
+    The order of code shown will be given as: methods used, block to implement methods, then plotting. The resulting plots are given below. It seems that the radius of the balls increase with eigenvalue, resulting in the largest eigenvalue enclosing all smaller eigenvalues. I couldn't get the color bar to work exactly as I wanted, so just trust me on this.  
+
+\vspace{\floatsep}
+\clearpage
+
+\jump
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale = 0.6]{Images/gerschgorin balls.png}
+\caption{Gerschgorin sets for Gessenberg matrices of n = 12, 25. Larger values $\rightarrow$ darker colors. }
+\label{png:gerschgorin sets}
+\end{figure}
+
+\begin{lstlisting}
+#Methods Block
+def compute_gerschgorin_radius(row, diag_entry):
+"""
+Returns the summed absolute values of entries in the given row, 
+minus the specified entry index
+"""
+row_sum = 0
+for i in range(len(row)):
+    if i != diag_entry:
+        row_sum += abs(row[i])
+        
+return row_sum
+\end{lstlisting}
+
+\begin{lstlisting}
+#Computing tuples containing the diagonal entry and its radius for Gerschgorin's Theorem
+
+gerschgorin_balls = []
+for matrix in hessenberg:
+matrix_balls = []
+for i in range(matrix.shape[0]):
+    matrix_balls.append((matrix[i][i], compute_gerschgorin_radius(matrix[i], i)))
+    gerschgorin_balls.append(matrix_balls)
+\end{lstlisting}
+
+\begin{lstlisting}
+#Plotting block
+#Setting Color scale
+#Larger values -> darker colors
+viridis = mpl.colormaps['viridis'].resampled(8)
+color12 = viridis(np.linspace(0, 1, 12))
+color25 = viridis(np.linspace(0, 1, 25))
+
+fig, ax = plt.subplots(2, figsize=(24,16))
+
+#Plotting the gerschgorin plot for n = 12
+i = 0
+for tup in gerschgorin_balls[0]:
+    center = (tup[0], 0)
+    circle = Circle(center, tup[1], fill=False, color=color12[i])
+    ax[0].add_patch(circle)
+    i +=1
+
+ax[0].set_title("Gerschgorin Set for n = 12")
+ax[0].set_aspect('equal', adjustable='box')
+ax[0].set_xlim(-100, 100)
+ax[0].set_xlabel("Real")
+ax[0].set_ylim(-100, 100)
+ax[0].set_ylabel("Complex")
+ax[0].grid(True)  
+
+#Plotting the gerschgorin plot for n = 25
+i = 0
+for tup in gerschgorin_balls[1]:
+    center = (tup[0], 0)
+    circle = Circle(center, tup[1], fill=False, color=color25[i])
+    ax[1].add_patch(circle)
+    i+=1
+    
+ax[1].set_title("Gerschgorin Set for n = 25")
+ax[1].set_aspect('equal', adjustable='box')
+ax[1].set_xlim(-400, 400)
+ax[1].set_xlabel("Real")
+ax[1].set_ylim(-400, 400)
+ax[1].set_ylabel("Complex")
+ax[1].grid(True)  
+plt.show()
+\end{lstlisting}
+\end{solution}
+
+\subsection{Problem 4, part d}
+Compute all of the eigenvalues and singular values of $A$. How many of the eigenvalues are real and how many are complex? You may use any built-in functions of your program.
+\partbreak
+\begin{solution}
+
+    The code I used to calculate this is shown below. The results from this code block is given as:
+\begin{itemize}
+    \item Size 12\\
+          Real Eigenvalues: 12, Complex Eigenvalues: 0\\
+          Real Singular: 12, Complex Singular: 0\\
+    \item Size 25\\
+          Real Eigenvalues: 13, Complex Eigenvalues: 12\\
+          Real Singular: 25, Complex Singular: 0
+\end{itemize}
+    \begin{lstlisting}
+for matrix in hessenberg:
+    eigenvals = np.linalg.eigvals(matrix)
+    real_eigenvals = 0
+    complex_eigenvals = 0
+    for val in eigenvals:
+        if isinstance(val, complex):
+            if val.imag != 0:
+                complex_eigenvals+=1
+            else:
+                real_eigenvals+=1
+        else:
+            real_eigenvals+=1;
+    
+    real_sing = 0
+    complex_sing = 0
+    for sing in svdvals(matrix):
+        if isinstance(sing, complex):
+            if sing.imag != 0:
+                complex_sing+=1
+            else:
+                real_sing+=1
+        else:
+            real_sing+=1;
+            
+    print("Size {}".format(matrix.shape[0]))
+    print("Real Eigenvalues: {}, Complex Eigenvalues: {}".format(real_eigenvals, complex_eigenvals))
+    print("Real Singular: {}, Complex Singular: {}".format(real_sing, complex_sing))
+    \end{lstlisting}
+\end{solution}
+\newpage
+\section{Problem 5}
+You are not allowed to use the svd for this problem, i.e., no arguments should depend on the svd of $A$ or $A^*$. Let $W$ be a subspace of $\C^n$. The subspace $W^ \perp $ below is called the orthogonal complement of $W$.
+
+\[
+W^\perp = \{\textbf{v} \in \C^n: \textbf{v}^*\textbf{w} = 0 \text{ for all } \textbf{w} \in W\}
+\]
+
+For any subspace $W \subseteq \C^n$, we write $P_W \in \C^{n\times n}$ for an orthogonal projection onto $W$.
+
+\subsection{Problem 5, part a}
+Show that $\C^n = W \oplus W^\perp$ and that $W = (W^{\perp})^\perp.$
+
+\partbreak
+
+\begin{solution}
+
+To show $\C^n = W \oplus W^\perp$, we first need to show $W\cap W^\perp =\{0\}$. Let \textbf{v} $\in W$ and \textbf{v} $\in W^\perp$, then \textbf{v}$^*$\textbf{v} = 0 $\implies \norm{\textbf{v}}^2 = 0 \iff \textbf{v} = 0$. $\therefore W\cap W^\perp \subseteq \{0\}$. It is then easy to see that \textbf{0} $\in W, W^\perp$, since they are vector spaces. So $W\cap W^\perp =\{0\}$.
+
+\jump
+Next we need to show $\C^n = W + W^\perp$. Let \textbf{v} $\in \C^n, w_1 \in W$ st $\textbf{v} = P_W\textbf{w}_1$, and $\textbf{x} \in W$. We want to show $\textbf{w}_2 = $ \textbf{v} - $P_W\textbf{v} \in W^\perp$. 
+
+\alignbreak
+\begin{align}
+    \textbf{w}_2^*\textbf{x} &= \textbf{v}^*\textbf{x} - \textbf{v}^* P_{W}^*\textbf{x} &\text{(Definition of inner product.)}\nonumber\\
+    &= \textbf{v}^*\textbf{x} - \textbf{v}^*P_W\textbf{x} &\text{($P_W^*$ = $P_W$.)}\nonumber\\
+    &= \textbf{v}^*\textbf{x} - \textbf{v}^*\textbf{x} &\text{(\textbf{x} $\in W$.)}\nonumber\\
+    \implies \textbf{w}_2^*\textbf{x} &= 0\nonumber
+\end{align}
+\alignbreak
+
+Thus $\textbf{w}_2 \in W^\perp$. Next take $\textbf{w}_1 \in W, \textbf{w}_2 \in W^\perp.$. Then $\textbf{w}_1 + \textbf{w}_2 \in \C^n$ as $W$ and $W^\perp$ are vector spaces. Thus $\C^n = W\oplus W^\perp$. 
+
+We then wish to show $(W\perp)^\perp = W$. Note that the above proof was done for any subspace $W \in \C^{n}$. Thus is we swap $W$ with $W\perp$, we get $\C^n = W^perp\oplus (W^\perp)^\perp$. Since the direct sum operator is commutative, this implies $W = (W^\perp)^\perp.$
+\end{solution}
+
+\subsection{Problem 5, part b}
+Let $A \in \C^{m\times n}$. Show that
+\[
+\text{ker}(A^*) = \text{im}(A)^\perp \hspace{5mm} \text{and} \hspace{5mm} \text{im}(A^*) = \text{ker}(A)^\perp.
+\]
+
+\partbreak
+\begin{solution}
+
+    Let's take the first inequality. For the forward implication, take $\textbf{w} \in $ ker$(A^*)$, $\textbf{y} \in $im$(A)$. Thus $\textbf{y} = A\textbf{x}$ for some \textbf{x} $\in \C^n$. Then,
+    \[
+    \textbf{v}^* \textbf{y} = \textbf{v}^*A\textbf{x} = \textbf{x}^*A^*\textbf{v} = \textbf{x}^*(A^*\textbf{v}) = 0
+    \]
+
+    So $\textbf{w} \in$ im$(A)^\perp$. 
+
+    For the second inequality, let \textbf{v} $\in$ im$(A)$. Thus there A\textbf{u} = \textbf{v} for some \textbf{u} $\in \C^n$. So \textbf{v}$^*$ = \textbf{u}$^*A^*$. Thus the following steps can be justified:
+
+\alignbreak
+\begin{align}
+    \textbf{u}^* \textbf{v} &=\textbf{v}^* \textbf{w}\nonumber\\
+    \implies &\textbf{u}^*A^*\textbf{w} = 0\nonumber\\
+    \implies &\textbf{u}^*(A^*\textbf{w}) = 0\nonumber\\
+    \implies &A^*\textbf{w} = 0\nonumber
+\end{align}
+\alignbreak
+
+Therefore $\textbf{w} \in $ ker$(A^*)$, completing the equality. Note to get the next equality, we simply replace $A$ with $A^*$ and taking the orthogonal complement to both sides. I.e., ker$(A)$ = im$(A^*)^\perp$ by the first equality, then  ker$(A)^\perp$ = $(\text{im}(A^*)^\perp)^\perp$ = \text{im}$(A^*)$. Thus the second equality is obtained. 
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part c}
+
+Deduce the Fredholm alternative
+\[ 
+\C^m = \text{ker}(A^*) \oplus \text{im}(A) \hspace{5mm} \text{and} \hspace{5mm} \C^n = \text{im}(A^*) \oplus \text{ ker}(A).
+\]
+In other words, any \textbf{x} $\in \C^n$ and \textbf{y} $\in \C^m$ can be written uniquely as 
+\[
+\textbf{x} = \textbf{x}_0 + \textbf{x}_1, \hspace{5mm} \textbf{x}_0 \in \ker (A), \textbf{x}_1 \in \text{im} (A^*), \textbf{x}_0^*\textbf{x}_1 = 0
+\]
+ \[
+\textbf{y} = \textbf{y}_0 + \textbf{y}_1, \hspace{5mm} \textbf{y}_0 \in \ker (A^*), \textbf{y}_1 \in \text{im} (A), \textbf{y}_0^*\textbf{x}_1 = 0
+\]
+\partbreak
+\begin{solution}
+    
+Since ker$(A^*)$ is equal to im$(A)^\perp$ from the previous part, then $\C^m$ = im$(A)$ $\oplus$ im $(A)^\perp$ = im$(A)$ $\oplus$ ker $(A^*)$. We can similarly swap ker$(A)^\perp$ with im$(A^*)$ to get $\C^n$ = im$(A^*)$ $\oplus$ ker$(A)$.
+
+\end{solution}
+
+
+\subsection{Problem 5, part d}
+
+Show that 
+\[
+\textbf{x}_0 = P_{\ker(A)}\textbf{x}, \hspace{5mm} \textbf{x}_1 = P_{\text{im$(A^*)$}}\textbf{x}, \hspace{5mm} \textbf{y}_0 = P_{\ker (A^*)}\textbf{y}, \hspace{5mm} \textbf{y}_1 = P_{\text{im}(A)}\textbf{y}
+\]
+
+\partbreak
+
+\begin{solution}
+    
+    \begin{enumerate}[(i)]
+        \item 
+        \begin{align*}
+            P_{\ker (A)}(\textbf{x}) &= P_{\ker (A)}\textbf{x}_0 + P_{\ker (A)}\textbf{x}_1\\
+            &= \textbf{x}_0 + P_{\ker (A)}\textbf{x}_1\\
+            &= \textbf{x}_0
+        \end{align*}
+        Note that since $\textbf{x}_0$ is in the kernel of A, the projection does nothing to it. Also, since \textbf{x}$_1$ is in the image of $A^*$, it is in the orthogonal complement of the kernel of $A$, thus not in the kernel of $A$ if $\textbf{x}_1$ is \textbf{0}. If it is zero, then its projection is still zero, so it is just adding nothing in either case. Thus equality is shown.
+
+        \item 
+        \begin{align*}
+            P_{\text{im}(A^*)}(\textbf{x}) &= P_{\text{im}(A^*)}\textbf{x}_0 + P_{\text{im}(A^*)}\textbf{x}_1\\
+            &= P_{\text{im}(A^*)}\textbf{x}_0 + \textbf{x}_1\\
+            &= \textbf{x}_1
+        \end{align*}
+        Note this holds by the same argument given in (i), using the image of $A^*$ is equal to the orthogonal complement of the image of $A$.
+
+        \item 
+        \begin{align*}
+            P_{\ker (A^*)}(\textbf{y}) &= P_{\ker (A^*)}\textbf{y}_0 + P_{\ker (A^*)}\textbf{y}_1\\
+            &= \textbf{y}_0 + P_{\ker (A^*)}\textbf{y}_1\\
+            &= \textbf{y}_0
+        \end{align*}
+
+        Note this is the same as (i), except using the second equality in part c.
+
+        \item
+        \begin{align*}
+            P_{\text{im}(A)}(\textbf{y}) &= P_{\text{im}(A)}\textbf{y}_0 + P_{\text{im}(A)}\textbf{y}_1\\
+            &= P_{\text{im}(A)}\textbf{y}_0 + \textbf{y}_1\\
+            &= \textbf{y}_1    
+        \end{align*}
+
+            Note this is the same as (ii), except using the second equality in part c.
+    \end{enumerate}
+\end{solution}
+
+\subsection{Problem 5, part e}
+Consider the least squares problem for some \textbf{b} $\in \C^m$,
+\begin{align}
+    \min_{\textbf{x} \in \C^n}\norm{\textbf{b} - A\textbf{x}}_2. \label{p5e: lsp}
+\end{align}
+
+
+show that for any \textbf{x} $\in \C^n$, 
+\[
+\norm{\textbf{b} - A\textbf{x}}_2 \geq \norm{\textbf{b}_0}_2
+\]
+
+where \textbf{b}$_0 = P_{\ker (A^*) \textbf{b}}$. Deduce that \textbf{x} $\in \C^n$ is a solution to the least squares problem if and only if
+\begin{align}
+A\textbf{x} = \textbf{b}_1 \hspace{5mm} \text{or, equivalently} \hspace{5mm} \textbf{b} - A\textbf{x} = \textbf{b}_0. \label{p5e: equiv}
+\end{align}
+
+Why is $A\textbf{x} = \textbf{b}_1$ consistent?
+\partbreak
+\begin{solution}
+
+    Since \textbf{b} $\in \C^m$, we can represent \textbf{b} as \textbf{b} = \textbf{b}$_0$ + \textbf{b}$_1$, where \textbf{b}$_0 \in$ ker$(A^*)$ and \textbf{b}$_1 \in$ im$(A)$. Thus expanding \ref{p5e: lsp} yields the following:
+    
+    \alignbreak
+{\small
+    \begin{align}
+        &\norm{\textbf{b} - A\textbf{x}}_2^2 &\text{(Given.)}\nonumber\\
+        =& \ \norm{\textbf{b}_0 + \textbf{b}_1 - A\textbf{x}}_2^2 &\text{(From part c.)}\nonumber\\
+        =& \ (b_0 + b_1 - Ax)^*(b_0 + b_1 - Ax)   &\text{(Expanding.)}\nonumber\\
+        =& \ b_0^*b_0 + b_0^*b_1 - b_0^*Ax + b_1^*b_0 + b_1^*b_1 - b_1^*Ax - (Ax)^*b_0 - (Ax)^*b_1 + (Ax)^*(Ax) &\text{(Expanding.)}\nonumber\\
+        =& \ b_0^*b_0 - b_0^*Ax + b_1^*b_1 - b_1^*Ax - (Ax)^*b_0 - (Ax)^*b_1 + (Ax)^*(Ax) &\text{(Orthogonality.)}\nonumber\\
+        =& \ b_0^*b_0 - A^*b_0x + b_1^*b_1 - b_1^*Ax - x^*A^*b_0 - (Ax)^*b_1 + (Ax)^*(Ax) &\text{(Rearranging.)}\nonumber\\
+        =& \ b_0^*b_0 + b_1^*b_1 - b_1^*Ax - (Ax)^*b_1 + (Ax)^*(Ax) &(A^*b_0 = 0.)\nonumber\\ 
+        =& \ \norm{\textbf{b}_0}_2^2 + \norm{\textbf{b}_1 - A\textbf{x}}_2^2  &\text{(Grouping).}\nonumber\\
+        \geq& \ \norm{\textbf{b}_0}_2^2 + \min_{\textbf{x}\in \C^n}\norm{\textbf{b}_1 - A\textbf{x}}_2^2 &\text{(Property of min.)}\nonumber\\
+        =& \ \norm{\textbf{b}_0}_2^2 + \min_{\textbf{x}\in \C^n}\norm{A(\textbf{c}_1 - \textbf{x})}_2^2  &\text{(\textbf{b}$_1 \in$ im$(A)$.)}\nonumber\\
+        =& \ \norm{\textbf{b}_0}_2^2 &\text{(min is when \textbf{x} = \textbf{c}$_1$.)}\nonumber
+    \end{align}
+}%  
+    \alignbreak
+Thus $\norm{\textbf{b} - A\textbf{x}}_2  \geq \norm{\textbf{b}_0}_2$ by the above calculations. Next we wish to show that \textbf{x} is a solution to \ref{p5e: lsp} if and only if $A\textbf{x} = \textbf{b}_1$. If \textbf{x} is a solution to \ref{p5e: lsp}, then \textbf{x} is the minimum of $\norm{A(\textbf{c}_1 - \textbf{x})}$ for some $A\textbf{c}_1 = \textbf{b}_1$. But the minimum only happens when $\textbf{c}_1 - \textbf{x} = 0$, thus $\textbf{c}_1 = \textbf{x}$, or $A\textbf{x} = \textbf{b}_1$. Similarly, if \textbf{b} - $A$\textbf{x} = \textbf{b}$_0$, then $\textbf{b}_0 + \textbf{b}_1 - A\textbf{x} = \textbf{b}_0$. Simplifying yields $\textbf{b}_1 - A\textbf{x} = 0$, and since $\textbf{b}_1 \in$ im$(A)$, $\textbf{b}_1 = A\textbf{c}_1$ for some $\textbf{c}_1 \in \C^n$. then $A(\textbf{c}_1 - \textbf{x}) = 0$, which means $\textbf{c}_1 = \textbf{x}.$ Thus \textbf{x} is a solution to \ref{p5e: lsp}. Note $A\textbf{x} = \textbf{b}_1$ is consistent since $\textbf{b}_1 \in $im$(A)$.
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part f}
+Show that \ref{p5e: equiv} is equivalent to the normal equation
+\begin{align}
+A^*A\textbf{x} = A^*\textbf{b} \label{p5f:statement} 
+\end{align}
+
+
+\partbreak
+\begin{solution}
+
+For the forward direction, we assume $A\textbf{x} = \textbf{b}_1$ and will derive \ref{p5f:statement}. Noting that $\textbf{b}_0 \in \ker(A^*)$, we can ``add a zero"  to the right hand side when multiplying through by $A^*$ to get  $A^*A\textbf{x} = A^*\textbf{b}_1 + A^*\textbf{b}_0$. The right hand side thus equals $A(\textbf{b}_0 + \textbf{b}_1)$, which simplifies to $A^*\textbf{b}$. This implies \ref{p5f:statement} holds. 
+
+\jump
+Next we assume \ref{p5f:statement} and derive \ref{p5e: equiv}.  We expand the right hand side of \ref{p5f:statement} to get $A^*A\textbf{x} = A^*(\textbf{b}_0 + \textbf{b}_1$). Noting that $\textbf{b}_0 \in \ker(A^*)$, we can simplify and rearrange to get $A^*(A\textbf{x} - \textbf{b}_1) = 0$. This means $A\textbf{x} - \textbf{b}_1 = 0$, or $A\textbf{x} = \textbf{b}_1$, which is \ref{p5e: equiv}. Thus \ref{p5e: equiv} is equivalent to \ref{p5f:statement}.
+\end{solution}
+
+\subsection{Problem 5, part g}
+Show that the pseudoinverse solution
+\[
+\min \Big\{ \norm{\textbf{x}}_2 : \textbf{x} \in \argmin_{\textbf{x} \in \C^n}\norm{\textbf{b} - A\textbf{x}}_2\Big\}
+\]
+is given by
+\[
+\textbf{x}_1 = P_{\text{im}(A^*)}\textbf{x}
+\]
+where \textbf{x} $\in \C^n$ satisfies \ref{p5e: equiv}.
+
+\partbreak
+\begin{solution}
+
+    
+\end{solution}
+
 \end{document}

@@ -17,6 +17,7 @@
 \usepackage{listings}
 \usepackage{mathrsfs}
 \usepackage{stackengine}
+\usepackage{physics}
 \usepackage{afterpage}
 
 \setstackEOL{\\}
@@ -57,7 +58,7 @@
 \newcommand{\prefix@subsubsection}{}
 \renewcommand{\thesubsection}{\arabic{subsection}}
 \makeatother
-
+\DeclareMathOperator*{\argmin}{argmin}
 \newcommand{\partbreak}{\begin{center}\rule{17.5cm}{2pt}\end{center}}
 \newcommand{\alignbreak}{\begin{center}\rule{15cm}{1pt}\end{center}}
 \newcommand{\hop}{\vspace{1mm}}
@@ -71,7 +72,7 @@
 \newcommand{\lm}{\lambda}
 \newcommand{\id}{\Id}
 \newcommand{\ep}{\varepsilon}
-\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+%\renewcomand{\norm}[1]{\left\lVert#1\right\rVert}
 \definecolor{cit}{rgb}{0.05,0.2,0.45}
 \addtolength{\jot}{1em}
 \newcommand{\solution}[1]{
