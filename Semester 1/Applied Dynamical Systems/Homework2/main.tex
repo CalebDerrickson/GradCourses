@@ -37,9 +37,7 @@ Treating this as a separable ODE, we can apply the following:
 \end{align}
 \alignbreak
 
-From \ref{pb1:cases}, we run into an immediate issue concerning $\beta$. Since $\beta = 1$ will give a notable outcome, we can break \ref{pb1:cases} into three cases, depending on certain values of $\beta$.
-
-\alignbreak
+From \ref{pb1:cases}, we run into an immediate issue concerning $\beta$. Since the solution for $\beta = 1$ will have a different structure than other valid $\beta$, we can break \ref{pb1:cases} into three cases, depending on its value with respect to 1.
 
 \newpage
 \underline{\textbf{Case 1:}} $\beta > 1$
@@ -53,7 +51,7 @@ Then,
 &x = \frac{1}{\sqrt[\beta - 1]{(1 - \beta)t + x_0^{1 - \beta}}} &\text{(Applying reciprocal.)} \nonumber
 \end{align}
 
-Note the last step was performed with the mind that $\beta - 1 > 0$, and $1 - \beta < 0$. Since $t$ is given as a strictly positive number, $(1 - \beta)t$ is strictly negative, while $x_0^{1 - \beta}$ is strictly positive. Thus there will be some time T where these two quantities will equal, thus making the denominator zero, and making $x$ blow up. This will happen explicitly when
+Note the last step was performed with the mind that $1 - \beta < 0$. Since $t \geq 0, (1 - \beta)t \leq 0$, while $x_0^{1 - \beta}$ is strictly positive. Thus there will be some time T where these two quantities will equal, making the denominator zero, and $x$ blow up as a result. This will happen explicitly when
 \[T = \frac{1}{1 - \beta}\Bigg(\frac{1}{x_0^{\beta - 1}}\Bigg)\]
 
 \underline{\textbf{Case 2:}} $\beta = 1$
@@ -75,19 +73,19 @@ Then,
     &\int_{x_0}^x \frac{dx'}{(x')^\beta} = \int_0^t dt' &\text{(Given.)}\nonumber\\
     &\frac{1}{1 - \beta}(x')^{1 - \beta}\bigg|_{x_0}^x = t' \bigg|_0^t &\text{(Integrating.)}\nonumber\\
     &x^{1 - \beta} = (1 - \beta)t + x_0^{1 - \beta} &\text{(Applying bounds and Rearranging.)} \nonumber\\
-    &x = \sqrt[1 - \beta]{(1 - \beta)t + x_0^{1 - \beta}} &\text{(Simplifying.)}\nonumber\\
+    &x = \sqrt[1 - \beta]{(1 - \beta)t + x_0^{1 - \beta}} &\text{(Simplifying.)}\nonumber
 \end{align}
 
 Note that $0 < \beta < 1$, i.e. $1 - \beta > 0$. Thus, $(1 - \beta)t$ is strictly positive, as is $x_0^{1 - \beta}$. Thus there is no time such that $x(t)$ ``blows up".
 
 \alignbreak
 
-Therefore, it has been shown the only case where there is a finite time in which $x(t)$ ``blows up" is when $\beta > 1$, giving an explicit time $T$ where we approach $\infty$.
+Therefore, it has been shown the only case where there is a finite time in which $x(t)$ ``blows up" is when $\beta > 1$. In this case, a finite time $T$ was found for which the solution ``blows up". Any other values of $\beta$, i.e. $\beta \in (0, 1]$, gave solutions where there were no finite times in which our solution blows up.
 
 \jump
 \end{solution}% End of problem 1 part 1
 
-\partbreak
+\newpage
 \subsection{Problem 1, part 2}
 In the remainder of this problem, let's focus on $\beta = 2$  and $x_0 = 1$. What is the time $T$ to ``blow up" in this case? Introduce the following transformation from $t$ to a new time variable $\tau$:
 \[
@@ -95,6 +93,7 @@ In the remainder of this problem, let's focus on $\beta = 2$  and $x_0 = 1$. Wha
 \]
 where $x(s)$ satisfies the original problem $dx/ds = x^2$. Show that this is a one-to-one mapping between $t \in [0, T)$ and $\tau$, and specify the range of $\tau$. Let $y(\tau) = x(t(\tau))$; what differential equation does $y(\tau)$ satisfy? Does $y(\tau)$ have finite time blow-up? 
 
+\partbreak
 \begin{solution}
 
     We are given $\beta = 2, x_0 = 1$. From the first case of problem 1, we have
@@ -102,7 +101,7 @@ where $x(s)$ satisfies the original problem $dx/ds = x^2$. Show that this is a o
     x = \frac{1}{1 - t}, \hspace{10mm} T = \frac{1}{2 - 1}\Bigg(\frac{1}{1^{2 - 1}}\Bigg) = 1
     \]
 
-    Therefore, since we have an explicit function for $x(t)$, we can plug this in to the transformation to $\tau$.
+    Since we have an explicit function for $x(t)$, we can plug this in to find $\tau$.
 
     \alignbreak
     \begin{align}
@@ -133,20 +132,14 @@ where $x(s)$ satisfies the original problem $dx/ds = x^2$. Show that this is a o
     From the chain rule,
     \[\frac{dy}{d\tau} = \frac{dx}{dt}\frac{dt}{d\tau}\]
 
-    We have an explicit form for $dx/dt$, and we have the reciprocal for $dt/d\tau$. Thus, we will simply flip $d\tau/dt$ to get $dt/d\tau$. This implies,
+    We have an explicit form for $dx/dt$, and we have the reciprocal for $dt/d\tau$. Thus, we will simply flip $d\tau/dt$ to get $dt/d\tau$. The following steps can thus be justified:
 
+    \newpage
     \alignbreak
     \begin{align}
         \frac{d\tau}{dt} &= \frac{(1 - t)^2 + 1}{(1 - t)^2} \nonumber\\
         \frac{dt}{d\tau} &= \frac{(1 - t)^2}{(1 - t)^2 + 1} \label{p1:dtdtau}\\  
-        \frac{dx}{dt} &= \frac{d}{dt}\Bigg[ \frac{1}{1 - t}\Bigg] = \frac{1}{(1 - t)^2} \label{p1:dxdt}
-    \end{align}
-    \alignbreak
-
-    Thus, \ref{p1:dtdtau} can be applied to \ref{p1:dxdt} to get, 
-
-    \alignbreak
-    \begin{align}
+        \frac{dx}{dt} &= \frac{d}{dt}\Bigg[ \frac{1}{1 - t}\Bigg] = \frac{1}{(1 - t)^2} \label{p1:dxdt}\\
         \frac{dy}{d\tau} &= \frac{dx}{dt}\frac{dt}{d\tau} &\text{(Given.)}\nonumber\\
         &= \Bigg(\frac{1}{(1 - t)^2}\Bigg)\Bigg( \frac{(1 - t)^2}{(1 - t)^2 + 1}\Bigg) &\text{(Plugging in \ref{p1:dxdt} and \ref{p1:dtdtau}.)}\nonumber\\
         &= \frac{1}{(1 - t)^2 + 1} &\text{(Simplifying.)}\nonumber\\
@@ -156,7 +149,7 @@ where $x(s)$ satisfies the original problem $dx/ds = x^2$. Show that this is a o
     \end{align}
     \alignbreak
 
-    With initial condition $y(\tau = 0) = x(t = 0) = 1$. Since $y(\tau) = x(t(\tau))$ with $x = \frac{1}{1 - t}$, there will only be finite time blow up when $t(\tau) = 1$. Note we have $\tau(t)$, given as \ref{p1:tau in t}. This function on the interval $(1, \infty)$ is strictly greater than $1$, so there is no such point that $t(\tau) = 1$, therefore, no finite time blow up will occur. 
+    With initial condition $y(\tau = 0) = x(t = 0) = 1$. Since $y(\tau) = x(t(\tau))$ with $x = \frac{1}{1 - t}$, there will only be finite time blow up when $t(\tau) = 1$. Note we have $\tau(t)$, given as \ref{p1:tau in t}. We can investigate \ref{p1:tau in t} to surmise any issues which may arise in $t(\tau)$. \ref{p1:tau in t} takes in $t \in (1, \infty)$. Within this interval, \ref{p1:tau in t} lies above $\tau = 1$, so we can gesture there will be no such point where $t(\tau) = 1$, therefore no finite time blow up will occur. 
 \end{solution}% End of problem 1 part 2
 
 \newpage
@@ -172,7 +165,7 @@ For which values of $\beta > 0$ is the solution $x(t) = 0$ guaranteed to be uniq
 
 \begin{solution}
 
-    For the sake of completion, I will copy the theorem I will be using below:
+    For the sake of completion, I will include the theorem I will be invoking below:
 
     \alignbreak
     \begin{quote}
@@ -180,7 +173,7 @@ For which values of $\beta > 0$ is the solution $x(t) = 0$ guaranteed to be uniq
     \end{quote}
     \alignbreak
 
-    For any $x \in B_b(x_0) = B_b(0)$, $x^\beta \leq b^\beta$. Then $M = b^\beta$. This implies $a < b/M = b^{1 - \beta}$. Thus we have three cases, which will yield different intervals on which the solution $x(t) = 0$ is guaranteed unique. Note in each case given we are seeking a $b$ which will give us an upper bound on $a$.
+    For any $x \in B_b(x_0) = B_b(0)$, $x^\beta \leq b^\beta$. Then $M = \max \{|f(x)| : x \in B_b(0)\} = b^\beta$. We have a bound on $a$ which depends on $b$, i.e. $a < b/M$. Plugging in what we found for $M$ implies $a < b^{1 - \beta}$. Thus we have three cases, which will yield different intervals on which the solution $x(t) = 0$ is guaranteed unique. Note in each case given we are seeking a $b$ which will give us an upper bound on $a$.
 
     \jump
     \underline{\textbf{Case 1:}} $\beta > 1$. 
@@ -191,9 +184,9 @@ For which values of $\beta > 0$ is the solution $x(t) = 0$ guaranteed to be uniq
     \jump
     \underline{\textbf{Case 2:}} $0 < \beta < 1$.
     \jump
-
+    
     In this case, we run into a problem where our function $f(x) = -|x|^\beta$ is not Lipschitz continuous. to prove this, it suffices to show the derivative of $f(x)$ is not bounded. 
-
+    \newpage
     \alignbreak
     \begin{align}
         f'(x) &= \frac{d}{dx}\Big[ -|x|^\beta \Big] &\text{(Given.)}\nonumber\\
@@ -226,13 +219,14 @@ For which values of $\beta > 0$ is the solution $x(t) = 0$ guaranteed to be uniq
     \end{align}
     \alignbreak
     
-    Thus, \ref{p2: ooa soln} solves the system. Now we just need to show $x(t = 0) = 0$ for any choice of $\alpha > 0$. If $t < \alpha$, then initial conditions hold immediately. So \ref{p2: ooa soln} is a solution to \ref{p2:ODE} for any $\alpha > 0$, which is our family of solutions.  
+    Thus, \ref{p2: ooa soln} solves the system. Now we just need to show $x(t = 0) = 0$ for any choice of $\alpha > 0$. We are free to chose any $\alpha$, so if $t < \alpha$, then the initial conditions hold immediately. So \ref{p2: ooa soln} is a solution to our differential equation for any $\alpha > 0$. This is then our family of solutions in this case.  
 
+    \newpage
     \jump
     \underline{\textbf{Case 3:}} $\beta = 1$.
     \jump
 
-    For this case, we have $a < b^{\beta - 1} = 1$, so $a \in (0, 1]$ will give us a unique solution, any $a$ outside this interval will not guarantee the uniqueness of $x(t) = 0$ on $J = [-a, a]$. We can then find a family of solutions in solving \ref{p2:ODE}. Since this is a nonlinear ordinary differential equation, it will be slightly tricky to find a solution $x(t)$. I will provide the steps below before running into a problem.
+    For this case, we have $a < b^{0} = 1$, so $a \in (0, 1]$ will give us a unique solution, any $a$ outside this interval will not guarantee the uniqueness of $x(t) = 0$ on $J = [-a, a]$. We can then find a family of solutions in solving \ref{p2:ODE}. Since this is a nonlinear ordinary differential equation, it will be slightly tricky to find a solution $x(t)$. I will provide the steps below before running into a problem.
     \alignbreak
     \begin{align}
         &\dot{x} = - |x| &\text{(Given.)}\nonumber\\
@@ -243,9 +237,10 @@ For which values of $\beta > 0$ is the solution $x(t) = 0$ guaranteed to be uniq
     \end{align}
     \alignbreak
 
-    If we stop here and try to apply the initial conditions, we get $0^{-1}$, which is undefined. So we are not guaranteed solutions, but the family of solutions is just the singleton set {0}.
+    If we stop here and try to apply the initial conditions, we get $0^{-1}$, which is undefined. So we are not guaranteed solutions, but the family of solutions is just the singleton set $\{0\}$.
 \end{solution}
 
+\newpage
 \section{Problem 3}
  Short response: what role (if any) does the Lipschitz constant $K$ play in proving (local) existence and uniqueness of solutions of initial value problems of the form
 
@@ -289,15 +284,17 @@ Often in applications, the dynamics of a system being modeled, may be governed b
 \subsection{Problem 4, part a}
 Plot the phase portrait associated with $\dot{\textbf{x}} = \textbf{f}^+(\textbf{x})$ and $\dot{\textbf{x}} = \textbf{f}^-(\textbf{x})$ , separately in the square region $x_1, x_2 \in [-2, 2]$, i.e. don’t restrict them to their regions $x_2 > 0$ or $x_2 < 0$.
 
+\partbreak
 \begin{solution}
     I will provide the code below, followed by the generated plots. I have also noted the equilibrium points of both vector fields, at $(1, \pm1)$, respectively. 
-\partbreak
+    \jump
+    
 \begin{lstlisting}
 import numpy as np 
 import matplotlib.pyplot as plt 
 
 #constants
-bound = 2 #PLotting bounds for x and y axis
+bound = 2 #Plotting bounds for x and y axis
 # Meshgrid 
 x, y = np.meshgrid(np.linspace(-bound, bound, 20),  
                    np.linspace(-bound, bound, 20)) 
@@ -396,7 +393,7 @@ In this case, we are below the boundary, which means our system $\dot{\textbf{x}
 This should hold for any $x_2 < 0$. Upon inspection, we see different directions in which our derivative is heading. If we take $x_2 \rightarrow 0$ in both cases, we see a discontinuity depending on the cases above.
 
 \jump
-In the numerical approach, we can plot these two vector fields together and notice the discontinuity along the boundary. The code is given below, followed by the generated plots.
+In the numerical approach, we can plot these two vector fields together and notice the discontinuity along the boundary $x_2 = 0$. The code is given below, followed by the generated plots.
 
 \begin{lstlisting}
 import numpy as np 
@@ -441,7 +438,7 @@ plt.show()
 \begin{figure}[!ht]
 \centering
 \includegraphics[scale = 0.6]{Images/vector field for system.png}
-\caption{The entire Vector field for problem 4. Note the discontinuity along the boundary}
+\caption{The entire Vector Field for problem 4. Note the discontinuity along the boundary $x_2 = 0$.}
 \label{png:vectorfield}
 \end{figure}
 \end{solution}
@@ -458,5 +455,36 @@ Let’s proceed by restricting to consideration of the forward time behavior of 
 \]
 
 For the following choices of $\alpha$, plot the forward solution in the phase plane for an initial condition $(x_1, x_2) = (2, 1)$. (This can be done as a somewhat qualitative sketch.) (i) $\alpha = 0$, (ii) $\alpha = 0.5$, (iii) $\alpha = 1$. Comment on whether the behavior is sensitive to the choice of the parameter $\alpha \in [0, 1]$.
+
+
+\partbreak
+
+\begin{solution}
+
+    I will describe the solution for each value of $\alpha$ first, followed by some qualitative plots. If we consider our initial conditions to be $(x_1, x_2) = (1, 2)$, then we need not worry about encountering either equilibrium of the system on our journey to the boundary. Since we have $x_2 > 0$, we are in the ``positive" regime, i.e. the vector field is spinning in a clockwise direction about the equilibrium point $(x_1, x_2) = (1, 1)$. Our approach and eventual contact with the boundary will not depend on our values of $\alpha$. Once we hit the boundary above, the solution will ``slide along" the $x_2$ axis until we reach the origin. From here, the trajectory of the solution will depend on the value for $\alpha$.
+
+    \jump
+    If $\alpha = 0$, then our boundary almost acts as an extension of the vector filed below, causing the solution to wander into the ``negative" regime in a counter clockwise manner until hitting the boundary again. This behavior will repeat for any future span of time. If $\alpha = 0.5$, then our boundary acts neither like the negative nor positive regime. In this scenario, the horizontal components of $\textbf{f}^+$ and $\textbf{f}^-$ cancel, leaving only the vertical component of each vector field. This will cause the solution to follow the $x_2$ axis for any future time. If $\alpha$ = 1, our boundary will act almost as an extension to the positive regime, mirroring the $\alpha = 0$ case. Note that for the cases of $\alpha = 0, 1$ will we have our solution ``captured" by the system (I put \textit{captured} in quotes since our vector field extends to infinity in each axis, so there will never be a point in which we leave the influence of the vector field. Our solution will not spend its time around either equilibrium point, hence my use of the word \textit{captured}). 
+    
+    \jump
+    A qualitative plot will be provided below. This is an admittedly bad plot, since I am showing that for each successive approach along the boundary will hit at the exact same time (for $\alpha = 0, 1$) and will be sped up to the exact same speed. This is not the case, as I would expect this system would experience chaotic activity (meaning the nature of the solution will wildly vary depending on initial conditions).
+\end{solution}
+
+\jump
+\begin{figure}[!ht]
+\centering
+\includegraphics[width = 0.9\textwidth]{Images/qualitative plot.jpg}
+\caption{A qualitative plot for the solution of our system for $\alpha = 0, 0.5, 1$. This is a really bad drawing. }
+\label{png:qualitativeplot}
+\end{figure}
+
+
+\vspace{\floatsep}
+\clearpage
+
+\newpage
+\section{Problem 5}
+The following are examples of more open-ended questions, related to problem 4, and you are encouraged to explore at lease one of them, and/or pose and answer your own:
+
 
 \end{document}
