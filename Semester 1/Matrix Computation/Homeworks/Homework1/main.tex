@@ -274,18 +274,91 @@ We next wish to find the constant $c$ for the H\"{o}lder $\infty$-norm. We will 
 \alignbreak
 \begin{align}
     \norm{AB}^2_F &= \sum_{i = 1}^m\sum_{j = 1}^p\Big|\sum_{k = 1}^nA_{ik}B_{kj}\Big|^2
-    &\text{(Given.)}\nonumber\\
+    &\text{(Finding left inequality.)}\nonumber\\
     &\leq \sum_{i = 1}^mp\max_j \Big\{ \Big|\sum_{k = 1}^n A_{ik}B_{kj}\Big|^2\Big\}    &\text{(Taking max over B's columns.)}\nonumber\\
     &\leq mp\max_{ij}\Big\{ \Big| \sum_{k = 1}^nA_{ik}B_{kj}\Big|^2\Big\}   &\text{(Taking max over A's rows.)}\nonumber\\
     \implies \norm{AB}_F &\leq \sqrt{mp}\max_{ij}\Big\{\Big| \sum_{k = 1}^n A_{ik}B_{kj}\Big|\Big\} &\text{(Square root function is monotonic.)}\nonumber\\
-    \iff \norm{AB}_F &\leq \sqrt{mp}\norm{AB}_{H, \infty}\label{p3a: left ineq}
+    \iff \norm{AB}_F &\leq \sqrt{mp}\norm{AB}_{H, \infty}\label{p3a: left ineq}\\
+    \norm{AB}^2_{H, \infty} &= \max_{ij}\Big\{\Big| \sum_{k = 1}^n A_{ik}B_{kj}\Big|\Big\} &\text{(Finding right inequality.)}\nonumber\\
+    &\leq \max_{i}\Big\{\sum_{j = 1}^p\Big| \sum_{k = 1}^n A_{ik}B_{kj}\Big|\Big\} &\text{(Max over j is one of the sums.)}\nonumber\\
+    &\leq \sum_{i = 1}^m\sum_{j = 1}^p\Big| \sum_{k = 1}^n A_{ik}B_{kj}\Big| &\text{(Same argument.)}\nonumber\\
+    \implies \norm{AB}^2_{H, \infty} &\leq \norm{AB}_2^2 &\text{(Definition of Frobenius norm.)}\nonumber\\
+    \iff \norm{AB}_{H, \infty} &\leq \norm{AB}_2\label{p3a: right ineq}
+\end{align}
+
+\alignbreak
+
+In our calculations above, we can find values for $a_1, a_2$. Taking the factors in front of each norm, we get $a_1 = (\sqrt{mn})^{-1}$ and $a_2 = 1$. Note that these are not unique, since another valid value for $a_2$ is 2. It is entirely possible there could be smaller bounds which we could argue. These are just values I've found to work.  Thus $c$ will take the value $(mn)^{-1}$.
+
+\newpage
+\subsection{Problem 3, part b}
+Let $J \in \C^{n\times n}$ be in Jordan form. Let $\ep > 0$. Verify that $D^{-1}_\ep J D_\ep$ replaces the ones along the superdiagonal by $1, \ep, \ep^2, ..., \ep^{n - 1}$.
+\partbreak
+
+Note for any Jordan matrix $J$ can be rewritten as a diagonal matrix $A$ plus a nilpotent matrix $N$ of some degree. I.e., $J = A + N$, where $N$ has value 1 only along the superdiagonal (hence N had nilpotency degree n). Therefore, we can rewrite $D^{-1}_\ep J D_\ep$ as the following:
+
+\jump
+\[
+D^{-1}_\ep J D_\ep = D^{-1}_\ep (A + N) D_\ep = D^{-1}_\ep A D_\ep + D^{-1}_\ep N D_\ep
+\]
+\jump
+
+Note that $D_\ep^{-1} = $ diag($ 1, \ep^{-1}, \ep^{-2}, ... \ep^{1 - n}$). Since A is diagonal, each column will be multiplied then divided by the same degree of $\ep$, i.e. column 1 of $A$ will be multiplied by $\ep^0$ then divided by $\ep^0$, column 2 of $A$ will be multiplied by $\ep^1$ then divided by $\ep^1$, and so on, doing nothing in the process. So $D^{-1}_\ep A D_\ep = A$. We just need to show that the nilpotent matrix $N$ will be multiplied by $\ep$.
+
+\jump
+Denote $\gamma_i$ as the $i$-th row of $D_\ep$, and $\eta_j$ as the $j$-th column of $N$. Note $N, D_\ep \in \C^{n\times n}$. So $i,j \leq n$; $\eta_j = e_{j + 1}$ for $j \neq 1$ and $\eta_1 = 0$; and $\gamma_i$ = $\ep^{i -1}e_i$, where $e_i$ is the $i$-th canonical basis vector. The following steps are then justified.
+
+\alignbreak
+\begin{align}
+    ND_\ep &= \sum_{i = 1}^n \eta_i\gamma_i^t &\text{(Matrix product interpretation.)}\nonumber\\
+    &= \sum_{i = 1}^n e_{i + 1}\ep^{i - 1}e_i^t &\text{(Plugging in).}\nonumber\\
+    &= \text{superdiag}(\ep^2, \ep^3, ..., \ep^{n - 1}) &\text{(superdiag is shorthand.)}\nonumber
 \end{align}
 \alignbreak
 
-So $a_1 = (mp)^{-1/2}$. Now we need to find the next inequality in \ref{p3a: equiv}. $\norm{AB}^2_{H, \infty}$.
+I couldn't express the outer product $e_{i + 1}e_i^t$ elegantly, so please mind my shorthand notation of superdiag(-). The important thing to note here is that by our construction of $\eta_i$, the column of $D_\ep$ containing the linear $\ep$ is terminated, leaving us with the leading term being quadratic, $\ep^2$. We will then multiply on the left by $D_\ep^{-1}$ in a similar manner.
 
+\newpage
+\alignbreak
+\begin{align}
+    D^{-1}_\ep ND_\ep &= \sum_{i = 1}^n \ep^{1-i}e_i(ND_\ep)_i^t &\text{(Matrix product interpretation.)}\nonumber\\   
+    &= \sum_{i = 1}^n \ep^{1-i}e_i\ep^ie_{i + 1}^t &\text{(Plugging in.)}\nonumber\\
+    &= \sum_{i = 1}^n \ep^{1}(e_{i+1}^t)^*(e_i)^* &\text{(Antisymmetry of inner product.)}\nonumber\\
+    &= \sum_{i = 1}^n \ep e_{i+1}e_i^t &\text{(Basis vectors are real.)}\nonumber\\
+    D^{-1}_\ep ND_\ep &= \text{superdiag}(\ep, \ep, ..., \ep) &\text{(Shorthand.)}\nonumber
+\end{align}
+\alignbreak
+
+Therefore we have proven the claim. 
+\end{solution}
+
+\subsection{Problem 3, part c}
+Show that 
+\[ 
+\norm{D_\ep^{-1}JD_\ep}_\infty \leq \rho(J) + \ep
+\]
+
+\partbreak
+\begin{solution}
     
+It was shown in part b that the left and right multiplications of $D_\ep$ and its inverse did nothing to the diagonal of $J$. Since $J$ is an upper triangular matrix, its eigenvalues are located along its diagonal. Thus $\rho(J) = |\lm_M|$ for some $1 \leq M \leq k$. Note it could be the case that all eigenvalues are negative, thus when taking the $\infty$-norm, a different eigenvalue could be taken. Suppose $m$ is chosen such that $\norm{D_\ep^{-1}JD_\ep}_\infty = |\lm_m + \ep|$. By the triangle inequality, $|\lm_m + \ep| \leq |\lm_m| + \ep$, since $\ep$ is positive. But $|\lm_m| \leq \max_{i \leq k}\{|\lm_i|\} = \rho(J)$, thus $\norm{D_\ep^{-1}JD_\ep}_\infty \leq \rho(J) + \ep$. 
+\end{solution}
 
+\newpage
+\subsection{Problem 3, part d}
+Hence, or otherwise, show that for any given $A\in \C^{n\times n}$ and $\ep > 0$, there exists a norm $\norm{\cdot}_*$ on $\C^n$ such that 
+\[
+\norm{A} = \max_{\textbf{x} \neq \textbf{0}} \frac{\norm{A\textbf{x}}_*}{\norm{\textbf{x}}_*}
+\]
+
+has the property that 
+\[
+\rho(A) \leq \norm{A} \leq \rho(A) + \ep
+\]
+\partbreak
+
+\begin{solution}
+    
 \end{solution}
 \newpage
 \section{Problem 4}
