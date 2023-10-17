@@ -9,7 +9,7 @@
 \onehalfspacing
 \maketitle
 
-{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Steven Lee.
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, Alexander Cram, and Steven Lee.
 
 \tableofcontents
 
@@ -486,5 +486,167 @@ For the following choices of $\alpha$, plot the forward solution in the phase pl
 \section{Problem 5}
 The following are examples of more open-ended questions, related to problem 4, and you are encouraged to explore at lease one of them, and/or pose and answer your own:
 
+\partbreak
+\begin{solution}
 
+    I went on a slight tangent coming into this problem. Due to my lack of experience in drawing vector fields, I wanted to see an accurate representation of our system, and not me just giving it my best shot. This led me to trying to solve the system itself, given some initial conditions not knowing this was problem 5. The results I got were somewhat difficult to resolve with my intuition, but fit comfortably after re-evaluation. I will explain below, dispersing my plots when relevant, then once that's done I will include my code.
+
+    \jump
+    My initial guess to represent a boundary was to actually include an interval of $\pm \ep$ around $x_2 = 0$. From there I took the convex combination of both vector fields and noticed something interesting for fixed $\alpha$. I started with $\ep = 0.01$, which is an understandable value (I tried implementing $\ep = 0$, part c, but it seemed my program would run forever, so I omitted this). I noticed that the solution will stay on the side of the initial condition for some time, then will revert to following the expected behavior for given $\alpha$. Figure \ref{png:othervectorfield} shows this behavior.
+    
+    \jump
+    \begin{figure}[!ht]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Images/small ep other vector field.png}
+    \caption{A solution for $\ep = 0.01$ and $\alpha = 1$. Note for later times the solution shoots into the other field.}
+    \label{png:othervectorfield}
+    \end{figure}
+    
+    
+    \vspace{\floatsep}
+    \clearpage
+
+    From there, I decided to increase the value for $\ep$, thus increasing the size of the boundary. for increasing $\ep$, not only did my code run faster, but the solution immediately goes to its expected field and slowly increases the period of, what I will call orbits. I increased $\ep$ to 0.1 to observe this behavior. My intuition is that when increasing the height of the boundary, the solution experiences the intended vector field longer, thus biasing it to the intuitively correct side. Since it experiences the vector field longer, its orbit increases ever so slightly each time it hits the boundary, thus the cycle repeats. I have included Figure \ref{png:increasing orbit} to describe this behavior.
+    
+    \jump
+    \begin{figure}[!ht]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Images/longer orbits.png}
+    \caption{A solution for $\ep = 0.1$ and $\alpha = 1$. Note the slightly increasing orbit.}
+    \label{png:increasing orbit}
+    \end{figure}
+
+    \vspace{\floatsep}
+    \clearpage
+
+    Since this is a system which should experience some chaotic activity, I thought it necessary to investigate the system for various initial conditions. Note that I wanted to keep the system in a somewhat tight configuration, which means I will only be shifting the $x_2$ coordinate. I feel as though this should be enough for the system. It seems that there is \textit{some} changes in orbit when perturbing the initial conditions - over a longer time scale I would imagine to see more noticeable differences. I increased $\ep$ to 0.15 in Figure \ref{png:initial conditions} so we could see a larger differences in orbits. 
+
+    \jump
+    \begin{figure}[!ht]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Images/initial conditions.png}
+    \caption{A solution for $\ep = 0.15$ and $\alpha = 1$. There seems to be slight differences in orbit.}
+    \label{png:initial conditions}
+    \end{figure}
+
+    \vspace{\floatsep}
+    \clearpage
+
+
+    My intuition for $\alpha = 0.5$ would be that the solution would shoot off into the negative $x_2$ direction forever. Coming back to observing only one solution, it seems this is only the case when I put my initial conditions exactly on the boundary line. If I put place my initial conditions in a nonzero distance from the $x_2$ axis, but still within $\ep$, the solution will be attracted by the system, and will be captured in orbit. I have added my plot for initial conditions equal $(0, 0)$ in Figure \ref{png:origin  conditions}, as well as the initial conditions $(0, 0.01)$ in Figure \ref{png:perturbation condition}.
+    
+    \jump
+    \begin{figure}[!ht]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Images/origin conditions.png}
+    \caption{A solution for $\ep = 0.05$ and $\alpha = 0.5$ and initial conditions at the origin. Note the solution shoots off to the left. I increased the limits of the plot to confirm this.}
+    \label{png:origin conditions}
+    \end{figure}
+
+    \vspace{\floatsep}
+    \clearpage
+
+    \jump
+    \begin{figure}[!ht]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Images/perturbation conditions.png}
+    \caption{A solution for $\ep = 0.05$ and $\alpha = 0.5$ and initial conditions $(0, 0.01)$. This is within $\ep$ distance of the $x_2$ axis. Note the first orbit is much larger than resulting orbits due to initial weak attraction.}
+    \label{png:perturbation condition}
+    \end{figure}
+
+    \vspace{\floatsep}
+    \clearpage
+\end{solution}
+
+\begin{lstlisting}
+import numpy as np 
+import matplotlib.pyplot as plt 
+from scipy.integrate import solve_ivp
+import matplotlib.cm as cm
+
+#System definition
+def xdot(y, t, alpha, eps):
+    
+    x1, x2 = y
+    
+    if x2 > eps:
+        return [-1 + x2, x2 - x1]
+    elif x2 < -eps:
+        return [-1 - x2, x1 + x2]
+    else:
+        return [ alpha *(-1 + x2) + (1 - alpha) * (-1 - x2),
+                 alpha *(x2 - x1) + (1 - alpha) * (x2 + x1)]
+
+#define time range
+timespan = (0., 500.)
+#initial conditions
+x0s = np.linspace(0, 1, 1)
+y0 = 0.01
+alpha = 0.5
+eps = 0.05
+
+colors = np.linspace(0, 1 / max(max(x0s), 1), 5)
+fig, axs = plt.subplots(1, 1, figsize =(12, 12))
+i = 0
+for x0 in x0s:  
+    initial_conditions = [x0, y0]
+    #Getting numerical Solution
+    sol = solve_ivp(lambda t, y: xdot(y, t, alpha, eps), t_span=timespan, y0=initial_conditions, max_step = 0.1)
+    #Picking coords of solution 
+    x, y = sol.y
+    axs.plot(x, y, color = cm.hot(min(colors[i]**3, 0.7)), label = x0)
+    i+=1
+    
+bound = 20 #Plotting bounds for x and y axis
+
+
+#Adding a small buffer for which the boundary term will occupy
+xpos, ypos= np.meshgrid(np.linspace(-bound, bound, 20), 
+                   np.linspace(eps , bound, 10)) 
+                   
+xmin, ymin= np.meshgrid(np.linspace(-bound, bound, 20), 
+                   np.linspace(-bound, -eps, 10))
+                   
+# Not plotting these, they're pretty messy         
+#xbound, ybound = np.meshgrid(np.linspace(-bound, bound, 200),  
+#                   np.linspace(-eps, eps, 4))
+
+
+#Update vector fields
+#Vector directions for f plus and f minus
+uplus = -1 + ypos
+vplus = ypos - xpos
+umin = -1 - ymin
+vmin = xmin + ymin
+#ubound = alpha * uplus + (1 - alpha) * umin
+#vbound = alpha * vplus + (1 - alpha) * vmin
+
+
+
+
+# Plotting Vector Field
+axs.quiver(xpos, ypos, uplus, vplus, color='g') 
+axs.quiver(xmin, ymin, umin, vmin, color='g') 
+#axs.quiver(xbound, ybound, ubound, vbound, color = 'r')
+axs.set_title('Solution for alpha = {}'.format(alpha))
+axs.grid(True)
+axs.scatter([0], [0], color = 'k')
+axs.scatter([1, 1], [1, -1], color = 'g')
+
+axs.annotate("Equilibrium", (1.05, 1.05))
+axs.annotate("Equilibrium", (1.05, -0.95))
+#axs.annotate("Initial", (x0 - 1, y0 - 0.1))
+#axs.annotate("Final", (x[-1] - 1, y[-1] + 0.5))
+
+axs.set_xlabel("x1")
+axs.set_ylabel("x2")
+axs.legend()
+# Setting x, y boundary limits 
+plt.xlim(-8, bound) 
+plt.ylim(-5, 15) 
+  
+# Show plot with grid 
+plt.show() 
+
+\end{lstlisting}
 \end{document}
