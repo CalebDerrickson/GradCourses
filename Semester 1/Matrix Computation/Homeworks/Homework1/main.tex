@@ -249,7 +249,7 @@ for any $A \in \C^{m\times n}$ and $B \in \C^{n\times p}$ (even if $\norm{\cdot}
 \partbreak
 \begin{solution}
 
-    By the Equivalence of Norms over a Finite Dimensional Vector Space, (in this case, $\R^{n\times n}$) there will exist some $0< a_1 < a_2$ such that 
+    By the Equivalence of Norms over a Finite Dimensional Vector Space, (in this case, $\C^{m\times n}$) there will exist some $0< a_1 < a_2$ such that 
 
 \begin{align}
      a_1\norm{C}_* \leq \norm{C} \leq a_2\norm{C}_* \label{p3a: equiv}
@@ -810,4 +810,144 @@ where \textbf{x} $\in \C^n$ satisfies \ref{p5e: equiv}.
     
 \end{solution}
 
+\newpage
+\section{Problem 6}
+Let \textbf{x} $\in \C^m$, \textbf{y} $\in \C^n$, and $A = \textbf{x}\textbf{y}^* \in \C^{m\times n}$.
+
+\subsection{Problem 6, part a}
+Show that
+\[
+\norm{A}_F = \norm{A}_2 = \norm{\textbf{x}}_2\norm{\textbf{y}}_2
+\]
+and that 
+\[
+\norm{A}_\infty = \norm{\textbf{x}}_\infty \norm{\textbf{y}}_1.
+\]
+What can you say about $\norm{A}_1?$
+\partbreak
+\begin{solution}
+
+    Note that the Frobenius norm and martix $2$-norm are given as
+    \alignbreak
+    \begin{align}
+    \norm{A}_F^2 &= \sum_{i = 1}^m\sum_{j = 1}^n|a_{ij}|^2\nonumber\\
+    \norm{A}_2 &= \max_{\textbf{z} \neq 0}\frac{\norm{A\textbf{z}}_2}{\norm{\textbf{z}}_2}\nonumber
+    \end{align}
+    \alignbreak
+
+    If $A = \textbf{x}\textbf{y}^*$, then we can imagine each column of A as the vector \textbf{x} multiplied by the corresponding row element of \textbf{y}. In other words,
+    \[
+    A = a_{ij} = \textbf{x}_i\textbf{y}_j^*
+    \]
+    This is somewhat obvious, but I want to be thorough. We will next show both norms are equivalent to the product of the two norms on \textbf{x} and \textbf{y}. Note we will be looking at the squared norms for each, since they are equivalent.
+    
+    \alignbreak
+    \begin{align}
+        \norm{A}_F^2 &= \sum_{i = 1}^{n}\sum_{j = 1}^m |a_{ij}|^2 &\text{(Given.)}\nonumber\\
+        &= \sum_{i = 1}^{n}\sum_{j = 1}^m |x_i\Bar{y}_j|^2 &\text{(By observation.)}\nonumber\\
+        &= \sum_{i = 1}^{n}\sum_{j = 1}^m (\overline{x_i\Bar{y}_j})(x_i\Bar{y}_j) &\text{(Absolute value over $\C$.)}\nonumber\\
+        &= \sum_{i = 1}^{n}\sum_{j = 1}^m \Bar{x}_iy_jx_i\Bar{y}_j &\text{(Conjugation.)}\nonumber\\
+        &= \sum_{i = 1}^{n}\sum_{j = 1}^m \Bar{x}_ix_i y_j\Bar{y}_j &\text{(Commutivity over $\C$.)}\nonumber\\
+        &= \sum_{i = 1}^{n}|x_i|^2\sum_{j = 1}^m|y_j|^2 &\text{(Rearranging and norm over $\C$.)}\nonumber\\
+     \implies   \norm{A}_F^2&= \norm{\textbf{x}}_2^2\norm{\textbf{y}}_2^2 &\text{(Definition of $2$-norm.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Thus we have shown the Frobenius norm case. Next we will show the $2$-norm of $A$ is also equivalent. 
+
+    \alignbreak
+    \begin{align}
+        \norm{A}_2^2 &= \max_{\textbf{z} \neq 0}\frac{\norm{A\textbf{z}}_2}{\norm{\textbf{z}}_2^2} &\text{(Given.)}\nonumber\\ 
+        &= \frac{\norm{\textbf{xy}^*\textbf{z}}_2}{\norm{\textbf{z}}_2^2} &\text{(Inspection of argument and given.)}\nonumber\\ 
+        &= \frac{(\textbf{xy}^*\textbf{z})^*(\textbf{xy}^*\textbf{z})}{\textbf{z}^*\textbf{z}} &\text{(Definition of $2$-norm.)}\nonumber\\
+        &= \frac{\textbf{z}^*\textbf{y}\textbf{x}^*\textbf{x}\textbf{y}^* \textbf{z}}{\textbf{z}^*\textbf{z}} &\text{(Hermitian definition.)}\nonumber\\
+        &= \frac{\norm{\textbf{x}}^2_2\textbf{z}^*\textbf{y}\textbf{y}^*\textbf{z}}{\textbf{z}^*\textbf{z}} &\text{(Definition of $2$-norm and commutivity.)}\nonumber\\
+        &= \frac{\norm{\textbf{x}}^2_2\norm{\textbf{y}}^2_2\norm{\textbf{z}}^2_2}{\norm{\textbf{z}}_2^2} &\text{(Definition of $2$-norm.)}\nonumber\\
+       \implies \norm{A}_2^2  &= \norm{\textbf{x}}_2^2\norm{\textbf{y}}_2^2 &\text{(Simplifying.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Thus we have shown both norms are equivalent to the product of the $2$-norms of the relevant vectors \textbf{x}  and \textbf{y}. Note that by transitivity property of equality, we can say $\norm{A}_F = \norm{A}_2$ when $A = \textbf{x}\textbf{y}^*$. Next we want to show $\norm{A}_\infty = \norm{\textbf{x}}_\infty \norm{\textbf{y}}_1$. 
+
+    \alignbreak
+    \begin{align}
+        \norm{A}_\infty &= \max_{1 \leq i \leq m}\Big\{ \sum_{j = 1}^n |a_{ij}|\Big\} &\text{(Given.)}\nonumber\\
+        &= \max_{1 \leq i \leq m}\Big\{ \sum_{j = 1}^n |x_i\Bar{y}_j|\Big\} &\text{(By observation.)}\nonumber\\
+        &= \max_{1 \leq i \leq m}\Big\{ \sum_{j = 1}^n \sqrt{\Bar{x}_iy_jx_i\Bar{y}_j}\Big\} &\text{(Absolute value over $\C$.)}\nonumber\\
+        &= \max_{1 \leq i \leq m}\Big\{ \sum_{j = 1}^n \sqrt{\Bar{x}_ix_iy_j\Bar{y}_j}\Big\} &\text{(Commutivity over $\C$.)}\nonumber\\
+        &= \max_{1 \leq i \leq m}\Big\{ \sqrt{\Bar{x}_ix_i}\sum_{j = 1}^n \sqrt{y_j\Bar{y}_j}\Big\} &\text{Property of square root and rearranging.)}\nonumber\\
+        &= \max_{1 \leq i \leq m}\Big\{ \sqrt{\Bar{x}_ix_i}\Big\} \Big(\sum_{j = 1}^n \sqrt{y_j\Bar{y}_j}\Big) &\text{(Sum has no dependence on $i$.)}\nonumber\\
+        &= \max_{1 \leq i \leq m}\Big\{ |x_i|\Big\} \Big(\sum_{j = 1}^n |y_j|\Big) &\text{(Absolute value definition.)}\nonumber\\
+        \implies \norm{A}_\infty &= \norm{\textbf{x}}_\infty \norm{\textbf{y}}_1 &\text{(Definition of $1$, $\infty$- norms.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Thus we have shown the claim. I would imagine the $\norm{A}_1$ is swapping norms around, meaning $\norm{A}_1 = \norm{\textbf{x}}_1\norm{\textbf{y}}_\infty$. The proofs are very similar, except instead of pulling $|x_i|$ out of the sum, you pull $|y_j|$ out, then the result follows. For the sake of brevity I will omit this proof, but just note the way to show it is how I explained it.
+\end{solution}
+
+\newpage
+\subsection{Problem 6, part b}
+Let $\textbf{x}_1$, ..., $\textbf{x}_r$ $\in \C^m$ be linearly independent and $\textbf{y}_1$, ..., $\textbf{y}_r$ be linearly independent. Let 
+\[
+A = \textbf{x}_1\textbf{y}_1^* + ... + \textbf{x}_r\textbf{y}_r^*
+\]
+Show that rank$(A) = r$. Show that this is not necessarily true if we drop either of the linear independence conditions.
+\partbreak
+
+\begin{solution}
+
+    There might be more elegant ways to show this, but I will prove this by induction on r. First, denote $A_k$ as the first $k$ summations of the rank-1 matrices.
+
+    \jump
+    \underline{\textbf{Case 1:} r = 1}.
+    \jump
+
+    Then $A_1 = \textbf{x}_1\textbf{y}_1^*$. This is obviously rank 1, since its columns are linear combinations of the $\textbf{x}_1$ vector. Thus the base case holds. 
+
+    Next Suppose this holds for some $k \leq r$. We will show the $k+1$ case follows. 
+
+    \jump
+    \underline{\textbf{Case $k + 1$:} r = k + 1}
+    \jump
+    
+    Suppose false, that is, rank$(A_{k+1})$ = k. This means that $A_{k+1}$ does not have full rank, which is equivalent to saying there exists some nonzero $\textbf{v} \in \C^n$ such that $A_{k+1}\textbf{v} = 0$ (I.e, something maps to the kernel that is not the zero vector). Upon expansion of $A_{k+1}$, we see that
+    \begin{align}
+        (A_k + \textbf{x}_{k+1}\textbf{y}^*_{k+1})\textbf{v} &= 0 \nonumber\\
+        \iff \textbf{x}_{1}\textbf{y}^*_{1}\textbf{v} + ... + \textbf{x}_{k+1}\textbf{y}^*_{k+1}\textbf{v} &= 0 \nonumber
+    \end{align}
+
+    By associativity, $\textbf{x}_{i}\textbf{y}^*_{i}\textbf{v}$ = $\textbf{x}_{i}(\textbf{y}^*_{i}\textbf{v})$ for all $i \leq k+1$. Observe that $\textbf{y}^*_{i}\textbf{v}$ is some value in $\C$. These can be swapped around with the  $\textbf{x}_i$'s to get
+
+    \[
+    (\textbf{y}^*_{1}\textbf{v})\textbf{x}_{1} + ... + (\textbf{y}^*_{k+1}\textbf{v})\textbf{x}_{k+1} = 0 
+    \]
+
+    Since $\textbf{y}^*_{i}\textbf{v}$ are just scalar constants over $\C$, and $\textbf{x}_1, ..., \textbf{x}_{k+1}$ are linearly independent (by assumption), we get that $\textbf{y}^*_{i}\textbf{v} = 0$ for all $i \leq k+1$. Thus the following steps hold:
+
+    \alignbreak
+    \begin{align}
+        &\sum_{i = 1}^{k+1}\textbf{y}_i^* \textbf{v} = 0 &\text{(Sum over zeros is zero.)}\nonumber\\
+        &\sum_{i = 1}^{k+1}\textbf{v}^*\textbf{y}_i  = 0 &\text{(Conjugation.)}\nonumber\\
+        &\textbf{v}^*\sum_{i = 1}^{k+1}\textbf{y}_i = 0 &\text{(\textbf{v}$^*$ is independent of the sum.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    We can note the sum can be thought of as a linear combination of the $\textbf{y}_i$'s with coefficient 1. Since the $\textbf{y}_i$'s are linearly independent, and with nonzero coefficients, their linear combination is nonzero. This means that $\textbf{v}^* = 0$, which is a contradiction, since $\textbf{v}$ was taken to be nonzero. Therefore we have proven the induction step. $\square$ 
+
+    Note the proof relies on the fact that both $\textbf{x}_i$'s and $\textbf{y}_i$'s are linearly independent. If at least one set of vectors were linearly \textit{dependent}, then \textbf{v} is not necessarily zero. 
+\end{solution}
+
+\subsection{Problem 6, part c}
+Given an $0 \neq A \in \C^{m\times n}$, show that 
+\[
+\text{rank}(A) = \min \big\{ r \in \N : A = \sum_{i = 1}^r \textbf{x}_i\textbf{y}_i^*\big\}
+\]
+
+In other words, the rank of a matrix is the smallest $r$ so that it may be expressed as a sum of $r$ rank-1 matrices.
+
+\partbreak
+\begin{solution}
+
+    Basically want to show it can't be any lower. Here we're assuming the x's and y's are not necessarily linearly independent. Proof by contradiction?
+\end{solution}
 \end{document}
