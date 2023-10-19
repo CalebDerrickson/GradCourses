@@ -9,7 +9,7 @@
 \onehalfspacing
 \maketitle
 
-{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Steven Lee.
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, Alexander Cram, and Steven Lee.
 
 \tableofcontents
 
@@ -793,6 +793,7 @@ For the forward direction, we assume $A\textbf{x} = \textbf{b}_1$ and will deriv
 Next we assume \ref{p5f:statement} and derive \ref{p5e: equiv}.  We expand the right hand side of \ref{p5f:statement} to get $A^*A\textbf{x} = A^*(\textbf{b}_0 + \textbf{b}_1$). Noting that $\textbf{b}_0 \in \ker(A^*)$, we can simplify and rearrange to get $A^*(A\textbf{x} - \textbf{b}_1) = 0$. This means $A\textbf{x} - \textbf{b}_1 = 0$, or $A\textbf{x} = \textbf{b}_1$, which is \ref{p5e: equiv}. Thus \ref{p5e: equiv} is equivalent to \ref{p5f:statement}.
 \end{solution}
 
+\newpage
 \subsection{Problem 5, part g}
 Show that the pseudoinverse solution
 \[
@@ -807,7 +808,50 @@ where \textbf{x} $\in \C^n$ satisfies \ref{p5e: equiv}.
 \partbreak
 \begin{solution}
 
-    
+    Since we are given \textbf{x} satisfies \ref{p5e: equiv}, then we know that \textbf{x} $\in \argmin\{ \norm{\textbf{b - A\textbf{x}}}_2\}$. So, the minimum over this set will have the form justified below.
+    \alignbreak
+    \begin{align}
+        \norm{\textbf{x}}^2_2 &= \norm{\textbf{x}_0 + \textbf{x}_1}^2_2 &\text{(By part c.)}\nonumber\\
+        &= (\textbf{x}_0 + \textbf{x}_1)^*(\textbf{x}_0 + \textbf{x}_1) &\text{(Definition of $2$-norm for vectors.)}\nonumber\\
+        &= \textbf{x}_0^*\textbf{x}_0 + \textbf{x}_0^*\textbf{x}_1 + \textbf{x}_1^*\textbf{x}_0 + \textbf{x}_1^*\textbf{x}_1 &\text{(Expanding.)}\nonumber\\
+        &= \textbf{x}_0^*\textbf{x}_0 + \textbf{x}_1^*\textbf{x}_1 &\text{(Orthogonality of spaces.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Thus, $\min \{\norm{\textbf{x}}_2 \} = \min \{ \textbf{x}_0^*\textbf{x}_0 + \textbf{x}_1^*\textbf{x}_1 \}$. Since \textbf{x}$_0$ is the projection of $\textbf{x}$ onto the kernel of $A$, this part will equal zero when A is applied (equivalently, \textbf{x} satisfies \ref{p5e: equiv}). Then, the minimum of this set will have zero projection onto the kernel of $A$, so the solution to the pseudoinverse problem is given by $\textbf{x}_1 = P_{\text{im}(A^*)}\textbf{x}$.  
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part h}
+Let $A \in \C^{n \times n}$ be normal, i.e., $A^*A = AA^*$. Show that 
+\[
+\ker(A^*) = \ker(A) \hspace{5mm} \text{and} \hspace{5mm} \text{im}(A^*) = \text{im}(A)  
+\]
+and deduce that for a normal matrix, 
+\[
+\C^n = \ker (A) \oplus \text{im}(A).
+\]
+\partbreak
+\begin{solution}
+    Note that by applying the Fredholm alternative of $\C^n$ immediately implies $\C^n = \ker (A) \oplus \text{im}(A)$ if the two conditions above hold. I will thus show them to be true for $A \C^{n\times n}$. 
+
+    \alignbreak
+    \begin{align}
+        A^*\textbf{x} &= 0 &\text{($\textbf{x} \in \ker(A^*)$.)}\nonumber\\
+        \implies \norm{A^*\textbf{x}}_2 &= 0 &\text{(Definition of $2$-norm).} \nonumber\\
+        (A^*\textbf{x})^*A^*\textbf{x} &= 0 &\text{(Definition of $2$-norm).} \nonumber\\
+        \textbf{x}^*AA^*\textbf{x} &= 0 &\text{(Applying conjugate.)}\nonumber\\
+        \textbf{x}^*A^*A\textbf{x} &= 0 &\text{($A$ is normal.)}\nonumber\\
+        (A\textbf{x})^*A\textbf{x} &= 0 &\text{(Applying conjugate.)}\nonumber\\
+        \implies \norm{A\textbf{x}}_2 &= 0 &\text{(Definition of $2$-norm).}\nonumber\\ 
+         A\textbf{x} &= 0 &\text{($\textbf{x} \in \ker(A)$.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Note I wrote this proof to specifically be symmetric, i.e. to get the forward implication you go down and for the backward implication you go up. They are pretty much the exact same proof, so I thought I could condense it down into one proof. 
+
+    \jump
+    We next need to show the same for the images of $A$ and $A^*$. If $\textbf{y} \in $ im$(A)$, this means there exists some $\textbf{x} \in \C^n$ with \textbf{y} = $A\textbf{x}$. Applying the hermitian operator to both sides yields $\textbf{y}^* = \textbf{x}^*A^*$. We can note that $\textbf{x}^*A^*$ is some linear combination of the rows of $A^*$, which means that $\textbf{y}^*$ is in the row space of $A$, which means \textbf{y} is in the column space of $A^*$. This proof can be reversed in the exact same order to show that if $\textbf{y} \in $ im$(A^*)$, then $\textbf{y} \in $ im$(A)$, thus im$(A)$ = im$(A^*)$.  
 \end{solution}
 
 \newpage
@@ -948,6 +992,105 @@ In other words, the rank of a matrix is the smallest $r$ so that it may be expre
 \partbreak
 \begin{solution}
 
-    Basically want to show it can't be any lower. Here we're assuming the x's and y's are not necessarily linearly independent. Proof by contradiction?
+    Suppose we have two sets of vectors $\textbf{x}_1, ..., \textbf{x}_k \in \C^m$ and $\textbf{y}_1, ..., \textbf{y}_k \in \C^n$ such that 
+    \[
+    A = \sum_{i = 1}^k\textbf{x}_i\textbf{y}_i^*.
+    \]
+    Note that neither set of vectors are not necessarily linearly independent. Suppose further that from these two sets we can pick $r \leq k$ linearly independent vectors (if the two sets have a maximally different number of linearly independent, pick the minimum of the two). Then we can say that 
+    \[
+    \text{rank}(\sum_{i = 1}^r \textbf{x}_i\textbf{y}_i^*) = r
+    \]
+    From the last part, we showed that rank$(A) = r$, rather, A can be expressed as the sum of the outer product of two linearly independent vectors. We can recover the $\geq r$ outer products by scaling the first $r$ vectors, since they are each $\geq r$ case is a linear combination of the previous vectors. Thus the following steps hold:
+    \alignbreak
+    \begin{align}
+        \text{rank}(A) &= \text{rank}(\sum_{i = 1}^k \textbf{x}_i\textbf{y}_i^*) &\text{(Given,)}\nonumber\\
+        &=\text{rank} (\sum_{i = 1}^r \textbf{x}_i\textbf{y}_i^* + \sum_{i = r+1}^k \textbf{x}_i\textbf{y}_i^*) &\text{(Breaking up summation.)}\nonumber\\
+        &\leq \text{rank}(\sum_{i = 1}^r \textbf{x}_i\textbf{y}_i^*) + \text{rank}(\sum_{i = r+1}^k \textbf{x}_i\textbf{y}_i^*) &\text{(Homework 0, problem 1b.)}\nonumber\\
+        &= r + \text{rank}(\sum_{i = r+1}^k \textbf{x}_i\textbf{y}_i^*) &\text{(By construction.)}\nonumber\\
+        \implies \text{rank}(A) &\leq \text{rank}(A) + \text{rank}(\sum_{i = r+1}^k \textbf{x}_i\textbf{y}_i^*) &\text{(By last part.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Then equality is attained when rank$(\sum_{i = r+1}^k \textbf{x}_i\textbf{y}_i^*) = 0$, which is when none of the vectors $\textbf{x}_{r+1}, ..., \textbf{x}_k$ and $\textbf{y}_{r+1}, ..., \textbf{y}_k$ are linearly independent. Therefore, 
+
+    \[
+    \text{rank}(A) = \min \big\{ r \in \N : A = \sum_{i = 1}^r \textbf{x}_i\textbf{y}_i^*\big\}
+    \]
+
+    Thus the claim has been proven.
+\end{solution}
+
+\newpage
+\subsection{Problem 6, part d}
+Show the following generalization of part a,
+\[
+\norm{A}_F \leq \sqrt{\text{rank}(A)}\norm{A}_2
+\]
+\partbreak
+\begin{solution}
+    Before I show the inequality, I would like to write an equivalent form for $\norm{A}_2$. Looking at the inside of the max and for some \textbf{z} nonzero, we can write to following:
+
+    \alignbreak
+    \begin{align}
+    &\frac{\norm{A\textbf{z}}_2^2}{\norm{\textbf{z}}_2^2} &\text{(Given.)}\nonumber\\
+    =& \frac{\norm{\sum_{i = 1}^r\textbf{x}_i\textbf{y}_i^*\textbf{z}}_2^2}{\norm{\textbf{z}}_2^2} &\text{(By previous parts.)}\nonumber\\
+    \leq& \frac{\sum_{i = 1}^r\norm{\textbf{x}_i\textbf{y}_i^*\textbf{z}}_2^2}{\norm{\textbf{z}}_2^2} &\text{(Triangle inequality.)}\nonumber\\
+    \leq& \frac{\sum_{i = 1}^r\norm{\textbf{x}_i}_2^2\norm{\textbf{y}_i}_2^2\norm{\textbf{z}}_2^2}{\norm{\textbf{z}}_2^2} &\text{(Cauchy - Schwartz inequality.)}\nonumber\\
+    =&\sum_{i = 1}^r\norm{\textbf{x}_i}_2^2\norm{\textbf{y}_i}_2^2 &\text{(Simplifying.)}\nonumber\\
+    \implies \norm{A}_2^2 =& \sum_{i = 1}^r\norm{\textbf{x}_i}_2^2\norm{\textbf{y}_i}_2^2 &\text{($\norm{A}_2^2$ will have this form.)} \label{p6d: norm A2 form}
+    \end{align}
+    \alignbreak
+
+    Thus, the following steps are justified:
+    \alignbreak
+    \begin{align}
+        \norm{A}_F^2 &= \sum_{i = 1}^m\sum_{j = 1}^n |a_{ij}|^2 &\text{(Given.)}\nonumber\\
+        &= \sum_{i = 1}^m\sum_{j = 1}^n \Big| \sum_{k = 1}^r x_k^i\Bar{y}_k^j\Big|^2 &\text{(By inspection of elements of A.)}\nonumber\\
+        &\leq \sum_{i = 1}^m\sum_{j = 1}^n\sum_{k = 1}^r|x^i_k\Bar{y}_k^j|^2 &\text{(Triangle inequality.)}\nonumber\\
+        &= \sum_{k = 1}^r\sum_{i = 1}^m\sum_{j = 1}^n|x^i_k\Bar{y}_k^j|^2 &\text{(Rearranging sums.)}\nonumber\\
+        &= \sum_{k = 1}^r\sum_{i = 1}^m\sum_{j = 1}^n |x_k^i|^2|y_k^j|^2 &\text{(Same as in part a.)}\nonumber\\
+        &= \sum_{k = 1}^r \bigg[ \bigg( \sum_{i = 1}^m |x_k^i|^2\bigg)\bigg( \sum_{j = 1}^n|y_k^j|^2 \bigg)\bigg] &\text{(Separating sums.)}\nonumber\\
+        &= \sum_{k = 1}^r\norm{\textbf{x}_k}_2^2\norm{\textbf{y}_k}_2^2 &\text{(Definition of $2$-norm.)}\nonumber\\
+        &\leq \sum_{k = 1}^r \max\big\{\norm{\textbf{x}_l}_2^2\norm{\textbf{y}_l}_2^2 : 1 \leq l \leq r\big\} &\text{(Sum of max is more than sum over all.)}\nonumber\\
+        &= r \cdot \max\big\{\norm{\textbf{x}_l}_2^2\norm{\textbf{y}_l}_2^2 : 1 \leq l \leq r\big\} &\text{(Max is constant over sum.)}\nonumber\\
+        &= \text{rank}(A)\norm{\textbf{x}_l}_2^2\norm{\textbf{y}_l}_2^2 &\text{(Definition of rank$(A)$ and $l$ index is max.) }\nonumber\\
+        &\leq \text{rank}(A)\sum_{i = 1}^r\norm{\textbf{x}_i}_2^2\norm{\textbf{y}_i}_2^2 &\text{(Max is one of the indices in the sum.) }\nonumber\\
+        \implies \norm{A}_F^2 &= \text{rank}(A) \norm{A}_2^2&\text{(From \ref{p6d: norm A2 form}.)}\nonumber\\
+        \iff \norm{A}_F &= \sqrt{\text{rank}(A)} \norm{A}_2 &\text{(Square root is monotonic.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Thus the statement has been shown. $\square$
+\end{solution}
+
+\newpage
+\subsection{Problem 6, part e}
+Show that with the nuclear norm we get instead
+\[
+\norm{A}_* \leq \text{rank}(A)\norm{A}_2
+\]
+
+\partbreak
+\begin{solution}
+
+    For the sake of completion, I will include the nuclear norm of a matrix below, as well as an equivalent expression for the matrix $2$-norm.
+    \alignbreak
+    \begin{align}
+        \norm{A}_* &= \sum_{i = 1}^{\min\{m, n\}} \sigma_i(A) \label{p6e: nuclear norm},\\
+        \norm{A}_2 &= \max \{ \sigma_1, ..., \sigma_n\} = \norm{\boldsymbol{\sigma}}_\infty, \label{p6e: 2-norm sig}
+    \end{align}
+    \alignbreak
+    where $\sigma_i(A)$ is the $i$-th singular value of $A$ when SVD is applied and $\boldsymbol{\sigma}$ is the vector of singular values of $A$. Let $r = $ rank$(A)$, then \ref{p6e: nuclear norm} can be summed up to the $r$, since the singular values beyond $r$ will be zero. Thus, the following steps are justified:
+
+    \alignbreak
+    \begin{align}
+        \norm{A}_* &= \sum_{i = 1}^r\sigma_i &\text{(Given.)}\nonumber\\
+        &\leq \sum_{i = 1}^r \max\{ \sigma_1, ..., \sigma_n\} &\text{(sum of max $\geq$ sum over all.)}\nonumber\\
+        &= r\cdot \max\{ \sigma_1, ..., \sigma_n\}&\text{(Max is constant over sum.)}\nonumber\\
+        \implies \norm{A}_* &\leq \text{rank}(A) \cdot \norm{A}_2 &\text{(By \ref{p6e: 2-norm sig}.)}
+    \end{align}
+    \alignbreak
+
+    Thus, the statement has been shown to hold. 
 \end{solution}
 \end{document}
