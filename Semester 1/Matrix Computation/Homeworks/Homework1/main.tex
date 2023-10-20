@@ -127,7 +127,7 @@ defines a norm on $S^n$. Show that if $A$ = diag($a_{11}, ..., a_{nn}$) $\in \S^
         \alignbreak
 
            Thus, the off diagonal entries of $A$ are zero for all $G \in \G^n$. This, when paired with the diagonal terms being zero, means $A$ = 0.
-
+            \newpage
            \item $\norm{\alpha A} = |\alpha| \norm{A}$.
             
             \jump
@@ -160,7 +160,7 @@ defines a norm on $S^n$. Show that if $A$ = diag($a_{11}, ..., a_{nn}$) $\in \S^
            \alignbreak
     \end{enumerate}
 
-    \jump
+    \newpage
     For the second part of part b, we need to show if $A$ is diagonal, then,
 \[
 \norm{A}_G = \max\bigg( \sum_{i = 1}^n \max (a_{ii}, 0), -\sum_{i = 1}^n \min (a_{ii}, 0)\bigg).
@@ -190,8 +190,10 @@ We can first check the form of the absolute trace product, $|$tr$(AG)|$.
     \end{cases}
     \]
 
-    Therefore, when taking the max of $a_{ii}$ and zero, it is equivalent to the absolute value function. We can then write $a_{ii} \leq \max(a_{ii}, 0)$ for all $a_{ii}$. When plugging this into \ref{p1b: trag}, we can immediately see that 
-
+    Therefore, when taking the max of $a_{ii}$ and zero, it is equivalent to the absolute value function. We can then write $a_{ii} \leq \max(a_{ii}, 0)$ for all $a_{ii}$. When plugging this into \ref{p1b: trag}, we can immediately see the following:
+    
+    \newpage
+    \alignbreak
     \begin{align}
         \norm{A}_G &= \sum_{i = 1}^n |a_{ii}|\nonumber\\
         \norm{A}_G &\geq \sum_{i = 1}^n |\max(a_{ii}, 0)|\nonumber\\
@@ -204,7 +206,7 @@ We can first check the form of the absolute trace product, $|$tr$(AG)|$.
         \norm{A}_G &\geq \sum_{i = 1}^n |\min(a_{ii}, 0)|\nonumber\\
         \norm{A}_G &\geq -\sum_{i = 1}^n \min(a_{ii}, 0)\nonumber
     \end{align}
-
+    \alignbreak
     Therefore, $\norm{A}_G$ has been shown to be greater than or equal to both sums, so $\norm{A}_G$ is greater than or equal to the max of them, which is what we wanted to show. 
 \end{solution}
 \newpage
@@ -241,6 +243,7 @@ Show that if $\norm{A}_p < 1$, then $\Id - A$ is invertible and furthermore,
 
     Thus, take \textbf{v} as an eigenvector of $A$ with eigenvalue $(1 - \lm)$. The above claim implies that \textbf{v} is also an eigenvector of $(\id - A)^{-1}$ with eigenvalue $(1 - \lm)^{-1}$. Furthermore, since $\norm{\cdot}_p$ is consistent, we have that the spectral radius $\rho(A) = \max\{ |\lm(A)|\}$ is less than or equal to $\norm{A}$, ie $\rho(A) \leq \norm{A}$. The following steps can then be justified
 
+    \newpage
     \alignbreak
     \begin{align}
         &(\id - A)^{-1}\textbf{v} = \frac{1}{1 - |\lm|}\textbf{v}   &\text{(Given.)}\nonumber\\
@@ -310,7 +313,7 @@ Let $\norm{\cdot} : \C^{n\times n} \rightarrow [0, \infty)$ be an arbitrary norm
     \end{bmatrix}
     \]
 
-    Under the H\"{o}lder $\infty$-norm. Thus $\norm{A} < 1$, but 
+    under the H\"{o}lder $\infty$-norm. Thus $\norm{A} < 1$, but 
     \[
     \id - A = 
     \begin{bmatrix}
@@ -341,7 +344,7 @@ for any $A \in \C^{m\times n}$ and $B \in \C^{n\times p}$ (even if $\norm{\cdot}
 \begin{solution}
 
     By the Equivalence of Norms over a Finite Dimensional Vector Space, (in this case, $\C^{m\times n}$) there will exist some $0< a_1 < a_2$ such that 
-
+\vspace{-5mm}
 \begin{align}
      a_1\norm{C}_* \leq \norm{C} \leq a_2\norm{C}_* \label{p3a: equiv}
 \end{align}
@@ -360,9 +363,9 @@ for any norm $\norm{\cdot}_*$ over our space and matrix $C$. Consider the Froben
 Therefore, let $c = \frac{a_2}{a_1^2} > 0$. Thus $\norm{AB}_c \leq \norm{A}_c\norm{B}_c$.
 
 
+\jump
 We next wish to find the constant $c$ for the H\"{o}lder $\infty$-norm. We will be looking at its equivalence to the Frobenius norm. 
 
-\alignbreak
 \begin{align}
     \norm{AB}^2_F &= \sum_{i = 1}^m\sum_{j = 1}^p\Big|\sum_{k = 1}^nA_{ik}B_{kj}\Big|^2
     &\text{(Finding left inequality.)}\nonumber\\
@@ -397,25 +400,25 @@ D^{-1}_\ep J D_\ep = D^{-1}_\ep (A + N) D_\ep = D^{-1}_\ep A D_\ep + D^{-1}_\ep 
 Note that $D_\ep^{-1} = $ diag($ 1, \ep^{-1}, \ep^{-2}, ... \ep^{1 - n}$). Since A is diagonal, each column will be multiplied then divided by the same degree of $\ep$, i.e. column 1 of $A$ will be multiplied by $\ep^0$ then divided by $\ep^0$, column 2 of $A$ will be multiplied by $\ep^1$ then divided by $\ep^1$, and so on, doing nothing in the process. So $D^{-1}_\ep A D_\ep = A$. We just need to show that the nilpotent matrix $N$ will be multiplied by $\ep$.
 
 \jump
-Denote $\gamma_i$ as the $i$-th row of $D_\ep$, and $\eta_j$ as the $j$-th column of $N$. Note $N, D_\ep \in \C^{n\times n}$. So $i,j \leq n$; $\eta_j = e_{j + 1}$ for $j \neq 1$ and $\eta_1 = 0$; and $\gamma_i$ = $\ep^{i -1}e_i$, where $e_i$ is the $i$-th canonical basis vector. The following steps are then justified.
+Denote $\gamma_i$ as the $i$-th row of $D_\ep$, and $\eta_j$ as the $j$-th column of $N$. Note $N, D_\ep \in \C^{n\times n}$. So $i,j \leq n$; $\eta_j = e_{j}$ for $j \neq 1$ and $\eta_1 = 0$; and $\gamma_i$ = $\ep^{i -1}e_{i+1}$, where $e_i$ is the $i$-th canonical basis vector. The following steps are then justified.
 
 \alignbreak
 \begin{align}
     ND_\ep &= \sum_{i = 1}^n \eta_i\gamma_i^t &\text{(Matrix product interpretation.)}\nonumber\\
-    &= \sum_{i = 1}^n e_{i + 1}\ep^{i - 1}e_i^t &\text{(Plugging in).}\nonumber\\
+    &= \sum_{i = 1}^{n-1} e_{i}\ep^{i - 1}e_{i+1}^t &\text{(Plugging in).}\nonumber\\
     &= \text{superdiag}(\ep^2, \ep^3, ..., \ep^{n - 1}) &\text{(superdiag is shorthand.)}\nonumber
 \end{align}
 \alignbreak
 
-I couldn't express the outer product $e_{i + 1}e_i^t$ elegantly, so please mind my shorthand notation of superdiag(-). The important thing to note here is that by our construction of $\eta_i$, the column of $D_\ep$ containing the linear $\ep$ is terminated, leaving us with the leading term being quadratic, $\ep^2$. We will then multiply on the left by $D_\ep^{-1}$ in a similar manner.
+I couldn't express the outer product $e_{i}e_{i+1}^t$ elegantly, so please mind my shorthand notation of superdiag(-). The important thing to note here is that by our construction of $\eta_i$, the column of $D_\ep$ containing the linear $\ep$ is terminated, leaving us with the leading term being quadratic, $\ep^2$. We will then multiply on the left by $D_\ep^{-1}$ in a similar manner.
 
 \newpage
 \alignbreak
 \begin{align}
-    D^{-1}_\ep ND_\ep &= \sum_{i = 1}^n \ep^{1-i}e_i(ND_\ep)_i^t &\text{(Matrix product interpretation.)}\nonumber\\   
-    &= \sum_{i = 1}^n \ep^{1-i}e_i\ep^ie_{i + 1}^t &\text{(Plugging in.)}\nonumber\\
-    &= \sum_{i = 1}^n \ep^{1}(e_{i+1}^t)^*(e_i)^* &\text{(Antisymmetry of inner product.)}\nonumber\\
-    &= \sum_{i = 1}^n \ep e_{i+1}e_i^t &\text{(Basis vectors are real.)}\nonumber\\
+    D^{-1}_\ep ND_\ep &= \sum_{i = 1}^{n-1} \ep^{1-i}(ND_\ep)_i^t &\text{(Matrix product interpretation.)}\nonumber\\   
+    &= \sum_{i = 1}^{n-1} \ep^{1-i}e_{i+1}\ep^ie_{i}^t &\text{(Plugging in.)}\nonumber\\
+    &= \sum_{i = 1}^{n-1} \ep^{1}(e_{i}^t)^*(e_{i+1})^* &\text{(Antisymmetry of inner product.)}\nonumber\\
+    &= \sum_{i = 1}^{n-1} \ep e_{i}e_{i+1}^t &\text{(Basis vectors are real.)}\nonumber\\
     D^{-1}_\ep ND_\ep &= \text{superdiag}(\ep, \ep, ..., \ep) &\text{(Shorthand.)}\nonumber
 \end{align}
 \alignbreak
@@ -449,7 +452,22 @@ has the property that
 \partbreak
 
 \begin{solution}
-    
+
+    For the sake of summary, I will explain my thought process on this problem. In essence, we need to find the norm $\norm{\cdot}_*$ which, depending on the matrix $A$, will have the property given. If we define $\norm{\textbf{v}}_* = \norm{D_\ep^{-1}X^{-1}\textbf{v}}_\infty$., then by the process below, we will see that by the previous part, the property will hold. Note that I will be looking at an equivalent form of the norm, that is, $\norm{A} = \max \{\norm{A\textbf{x}}_* : \norm{\textbf{x}}_* = 1\}$.
+
+    \alignbreak
+    \begin{align}
+    \norm{A\textbf{x}}_* &= \norm{D_\ep^{-1}X^{-1}A\textbf{x}}_\infty &\text{(Given.)}\nonumber\\
+    &= \norm{D_\ep^{-1}X^{-1}AXD_\ep \textbf{y}}_\infty &\text{(By change of variable $y = D_\ep^{-1}X^{-1}\textbf{x}$.)}\nonumber\\
+    &= \norm{D_\ep^{-1}X^{-1}(XJX^{-1})XD_\ep \textbf{y}}_\infty &\text{(Jordan expansion of $A$.)}\nonumber\\
+    &= \norm{D_\ep^{-1}JD_{\ep}\textbf{y}}_\infty &\text{(Simplifying.)}\nonumber\\
+    &\leq \norm{D_\ep^{-1}JD_\ep}_\infty \norm{\textbf{y}}_\infty &\text{(Consistency of norm.)}\nonumber\\
+    &= \norm{D_\ep^{-1}JD_{\ep}}_\infty \norm{D_\ep^{-1}X^{-1}\textbf{x}}_\infty &\text{(Definition of \textbf{y}.)}\nonumber\\
+    &= \norm{D_\ep^{-1}JD_{\ep}}_\infty \norm{\textbf{x}}_* &\text{(Definition of $\norm{\cdot}_*$).}\nonumber
+    \end{align}
+    \alignbreak
+
+    Thus, $\frac{\norm{A\textbf{x}}_*}{\norm{\textbf{x}}_*}$ is of the form $\norm{D_\ep^{-1}JD_{\ep}}_\infty$. This is independent of \textbf{x}, thus $\norm{A} = \norm{D_\ep^{-1}JD_{\ep}}_\infty$. From the previous part, we can see that $\norm{A}$ is bounded above by $\rho(A) + \ep$. Furthermore, since the $\infty$-matrix norm is consistent, $\norm{A}$ is bounded below by $\rho(A)$ (As shown in class). Thus the property holds. $\square$  
 \end{solution}
 \newpage
 \section{Problem 4}
@@ -560,19 +578,21 @@ Using Gerschgorin’s theorem, describe the domain that contains all of the eige
 
 \partbreak
 \begin{solution}
-    The order of code shown will be given as: methods used, block to implement methods, then plotting. The resulting plots are given below. It seems that the radius of the balls increase with eigenvalue, resulting in the largest eigenvalue enclosing all smaller eigenvalues. I couldn't get the color bar to work exactly as I wanted, so just trust me on this.  
+
+    The order of code shown will be given as: methods used, block to implement methods, then plotting. The resulting plots are given below. It seems that the radius of the balls increase with eigenvalue, resulting in the largest eigenvalue enclosing all smaller eigenvalues. Note that although the number of discs corresponds to the number of eigenalues, each disc does not have to contain at least one eigenvalue. I couldn't get the color bar to  as I wanted, so just trust me on this.  
 
 \vspace{\floatsep}
 \clearpage
 
 \jump
-\begin{figure}[!ht]
+\begin{figure}[!h]
 \centering
 \includegraphics[scale = 0.6]{Images/gerschgorin balls.png}
-\caption{Gerschgorin sets for Gessenberg matrices of n = 12, 25. Larger values $\rightarrow$ darker colors. }
+\caption{Gerschgorin sets for Hessenberg matrices of n = 12, 25. Larger values $\rightarrow$ darker colors.}
 \label{png:gerschgorin sets}
 \end{figure}
 
+\newpage
 \begin{lstlisting}
 #Methods Block
 def compute_gerschgorin_radius(row, diag_entry):
@@ -644,6 +664,7 @@ plt.show()
 \end{lstlisting}
 \end{solution}
 
+\newpage
 \subsection{Problem 4, part d}
 Compute all of the eigenvalues and singular values of $A$. How many of the eigenvalues are real and how many are complex? You may use any built-in functions of your program.
 \partbreak
@@ -658,7 +679,8 @@ Compute all of the eigenvalues and singular values of $A$. How many of the eigen
           Real Eigenvalues: 13, Complex Eigenvalues: 12\\
           Real Singular: 25, Complex Singular: 0
 \end{itemize}
-    \begin{lstlisting}
+\newpage
+\begin{lstlisting}
 for matrix in hessenberg:
     eigenvals = np.linalg.eigvals(matrix)
     real_eigenvals = 0
@@ -775,7 +797,7 @@ Since ker$(A^*)$ is equal to im$(A)^\perp$ from the previous part, then $\C^m$ =
 
 \end{solution}
 
-
+\newpage
 \subsection{Problem 5, part d}
 
 Show that 
@@ -824,13 +846,12 @@ Show that
     \end{enumerate}
 \end{solution}
 
+\newpage
 \subsection{Problem 5, part e}
 Consider the least squares problem for some \textbf{b} $\in \C^m$,
 \begin{align}
     \min_{\textbf{x} \in \C^n}\norm{\textbf{b} - A\textbf{x}}_2. \label{p5e: lsp}
 \end{align}
-
-
 show that for any \textbf{x} $\in \C^n$, 
 \[
 \norm{\textbf{b} - A\textbf{x}}_2 \geq \norm{\textbf{b}_0}_2
@@ -843,12 +864,17 @@ A\textbf{x} = \textbf{b}_1 \hspace{5mm} \text{or, equivalently} \hspace{5mm} \te
 
 Why is $A\textbf{x} = \textbf{b}_1$ consistent?
 \partbreak
+\vspace{-8mm}
 \begin{solution}
 
     Since \textbf{b} $\in \C^m$, we can represent \textbf{b} as \textbf{b} = \textbf{b}$_0$ + \textbf{b}$_1$, where \textbf{b}$_0 \in$ ker$(A^*)$ and \textbf{b}$_1 \in$ im$(A)$. Thus expanding \ref{p5e: lsp} yields the following:
     
     \alignbreak
 {\small
+  \setlength{\abovedisplayskip}{0pt}
+  \setlength{\belowdisplayskip}{\abovedisplayskip}
+  \setlength{\abovedisplayshortskip}{0pt}
+  \setlength{\belowdisplayshortskip}{3pt}
     \begin{align}
         &\norm{\textbf{b} - A\textbf{x}}_2^2 &\text{(Given.)}\nonumber\\
         =& \ \norm{\textbf{b}_0 + \textbf{b}_1 - A\textbf{x}}_2^2 &\text{(From part c.)}\nonumber\\
@@ -975,7 +1001,7 @@ What can you say about $\norm{A}_1?$
     A = a_{ij} = \textbf{x}_i\textbf{y}_j^*
     \]
     This is somewhat obvious, but I want to be thorough. We will next show both norms are equivalent to the product of the two norms on \textbf{x} and \textbf{y}. Note we will be looking at the squared norms for each, since they are equivalent.
-    
+    \newpage
     \alignbreak
     \begin{align}
         \norm{A}_F^2 &= \sum_{i = 1}^{n}\sum_{j = 1}^m |a_{ij}|^2 &\text{(Given.)}\nonumber\\
@@ -989,7 +1015,7 @@ What can you say about $\norm{A}_1?$
     \alignbreak
 
     Thus we have shown the Frobenius norm case. Next we will show the $2$-norm of $A$ is also equivalent. 
-
+    \newpage
     \alignbreak
     \begin{align}
         \norm{A}_2^2 &= \max_{\textbf{z} \neq 0}\frac{\norm{A\textbf{z}}_2}{\norm{\textbf{z}}_2^2} &\text{(Given.)}\nonumber\\ 
@@ -1004,6 +1030,7 @@ What can you say about $\norm{A}_1?$
 
     Thus we have shown both norms are equivalent to the product of the $2$-norms of the relevant vectors \textbf{x}  and \textbf{y}. Note that by transitivity property of equality, we can say $\norm{A}_F = \norm{A}_2$ when $A = \textbf{x}\textbf{y}^*$. Next we want to show $\norm{A}_\infty = \norm{\textbf{x}}_\infty \norm{\textbf{y}}_1$. 
 
+    \newpage
     \alignbreak
     \begin{align}
         \norm{A}_\infty &= \max_{1 \leq i \leq m}\Big\{ \sum_{j = 1}^n |a_{ij}|\Big\} &\text{(Given.)}\nonumber\\
@@ -1059,6 +1086,7 @@ Show that rank$(A) = r$. Show that this is not necessarily true if we drop eithe
 
     Since $\textbf{y}^*_{i}\textbf{v}$ are just scalar constants over $\C$, and $\textbf{x}_1, ..., \textbf{x}_{k+1}$ are linearly independent (by assumption), we get that $\textbf{y}^*_{i}\textbf{v} = 0$ for all $i \leq k+1$. Thus the following steps hold:
 
+    \newpage
     \alignbreak
     \begin{align}
         &\sum_{i = 1}^{k+1}\textbf{y}_i^* \textbf{v} = 0 &\text{(Sum over zeros is zero.)}\nonumber\\
@@ -1072,6 +1100,7 @@ Show that rank$(A) = r$. Show that this is not necessarily true if we drop eithe
     Note the proof relies on the fact that both $\textbf{x}_i$'s and $\textbf{y}_i$'s are linearly independent. If at least one set of vectors were linearly \textit{dependent}, then \textbf{v} is not necessarily zero. 
 \end{solution}
 
+\newpage
 \subsection{Problem 6, part c}
 Given an $0 \neq A \in \C^{m\times n}$, show that 
 \[
@@ -1092,6 +1121,8 @@ In other words, the rank of a matrix is the smallest $r$ so that it may be expre
     \text{rank}(\sum_{i = 1}^r \textbf{x}_i\textbf{y}_i^*) = r
     \]
     From the last part, we showed that rank$(A) = r$, rather, A can be expressed as the sum of the outer product of two linearly independent vectors. We can recover the $\geq r$ outer products by scaling the first $r$ vectors, since they are each $\geq r$ case is a linear combination of the previous vectors. Thus the following steps hold:
+    
+    \newpage
     \alignbreak
     \begin{align}
         \text{rank}(A) &= \text{rank}(\sum_{i = 1}^k \textbf{x}_i\textbf{y}_i^*) &\text{(Given,)}\nonumber\\
@@ -1119,6 +1150,7 @@ Show the following generalization of part a,
 \]
 \partbreak
 \begin{solution}
+
     Before I show the inequality, I would like to write an equivalent form for $\norm{A}_2$. Looking at the inside of the max and for some \textbf{z} nonzero, we can write to following:
 
     \alignbreak
@@ -1132,6 +1164,7 @@ Show the following generalization of part a,
     \end{align}
     \alignbreak
 
+    \newpage
     Thus, the following steps are justified:
     \alignbreak
     \begin{align}
