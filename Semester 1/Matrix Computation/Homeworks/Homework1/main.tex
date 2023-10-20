@@ -31,21 +31,21 @@ Your expressions should agree with the matrix 1-norm and matrix $\infty$-norm wh
         &\leq \sum_{k = 1}^n \norm{x_kA_k}_p &\text{(Triangle Inequality.)}\nonumber\\
         &= \sum_{k = 1}^n|x_k|\norm{A_k}_p &\text{(Absolute Homogeneity of norm.)}\nonumber\\
         &\leq \max \{ \norm{A_k}_p : 1 \leq k \leq n \} \Bigg(\sum_{k = 1}^n |x_k| \Bigg) &\text{(All columns of A are $\leq$ max column.)}\nonumber\\
-        &=\max \{ \norm{A_k}_p : 1 \leq k \leq n \} \norm{\textbf{x}_1} &\text{(Definition of 1-norm.)}\nonumber\\
+        &=\max \{ \norm{A_k}_p : 1 \leq k \leq n \} \norm{\textbf{x}}_1 &\text{(Definition of 1-norm.)}\nonumber\\
         \implies \frac{\norm{A\textbf{x}}_p}{\norm{\textbf{x}}_1} &\leq \max \{\norm{A_k}_p : 1 \leq k \leq n \} &\text{(Rearranging.)}\label{p1a:pnorm}
     \end{align}
     \alignbreak
 
     From \ref{p1a:pnorm}, this means the argument inside the max is less than or equal to the max column of $A$. The question now is when this is equal to $\norm{A}_{1,p}$. We are free to choose any nonzero \textbf{x}, so a natural one to choose would be the one to pick the max column when multiplied to $A$. Meaning if \textbf{x} $= e_M$, where M is the index corresponding to the max column of $A$, then equality it obtained. Note this is given as the definition of $\norm{A}_1$ when $p = 1$. 
 \newpage
-    We next wish to find a closed form expression for $\norm{A}_{p, \infty}$. It follows the same processes done in the previous section, with some slight modifications.
+        We next wish to find a closed form expression for $\norm{A}_{p, \infty}$. It follows the same processes done in the previous section, with some slight modifications.
 
     \alignbreak
     \begin{align}
         \norm{A\textbf{x}}_\infty &= \max \{ |(A\textbf{x})_j | : 1 \leq j \leq n\} &\text{(Given.)}\nonumber\\
-        &= \max \{ \Big|\sum_{k = 1}^nx_kA_{ik}\Big| : 1 \leq i \leq m\} &\text{(Matrix-vector multiplication.)}\nonumber\\
-        &\leq \max \{ \sum_{k = 1}^n|x_kA_{ik}| : 1 \leq i \leq m\} &\text{(Triangle inequality.)}\nonumber\\
-        &= \max \{ \sum_{k = 1}^n|x_k||A_{ik}| : 1 \leq i \leq m\} &\text{(Absolute Homogeneity.)}\nonumber\\
+        &= \max \Big\{ \Big|\sum_{k = 1}^nx_kA_{ik}\Big| : 1 \leq i \leq m\Big\} &\text{(Matrix-vector multiplication.)}\nonumber\\
+        &\leq \max \Big\{ \sum_{k = 1}^n|x_kA_{ik}| : 1 \leq i \leq m\Big\} &\text{(Triangle inequality.)}\nonumber\\
+        &= \max \Big\{ \sum_{k = 1}^n|x_k||A_{ik}| : 1 \leq i \leq m\Big\} &\text{(Absolute Homogeneity.)}\nonumber\\
         &= \sum_{k = 1}^n|x_k||A_{Mk}| &\text{($M$ is max row of $A$.)}\nonumber\\
         &\leq |x_M|\sum_{k = 1}^n|A_{Mk}| &\text{($M$ is max element of \textbf{x}.)}\nonumber\\
         &= \norm{\textbf{x}}_\infty\sum_{k = 1}^n|A_{Mk}| &\text{(Definition of $\infty$-norm.)}\nonumber\\
@@ -88,7 +88,7 @@ defines a norm on $S^n$. Show that if $A$ = diag($a_{11}, ..., a_{nn}$) $\in \S^
 \partbreak
 \begin{solution}
 
-    As A quick reminder, a norm $\norm{\cdot}$ should satisfy the following properties for scalar $\alpha$ and matrices $A, B \in \R^{n\times n}$:
+    As A quick reminder, a norm $\norm{\cdot}$ should satisfy the following properties for scalar $\alpha \in \R$ and matrices $A, B \in \R^{n\times n}$:
     \jump
     \hrule
     \begin{enumerate}[(1)]
@@ -109,12 +109,103 @@ defines a norm on $S^n$. Show that if $A$ = diag($a_{11}, ..., a_{nn}$) $\in \S^
         \jump
         \item $\norm{A} = 0 \iff A = 0$.
 
-        The backward implication is straightforward, as if $A = 0$, the $AG = 0$, thus the trace is taken over the zero matrix, meaning we are taking the maximum over the set containing only zeros, thus $\norm{A}_G = 0$.
+        The backward implication is straightforward, as if $A = 0$, then $AG = 0$, thus the trace is taken over the zero matrix, meaning we are taking the maximum over the set containing only zeros, thus $\norm{A}_G = 0$.
 
-        The forward implication requires jumping through some extra hoops. We can note that by the symmetry of the inner product of the real numbers, $G$ is symmetric for all $G \in \G^n$. 
+        The forward implication requires jumping through some extra hoops. We first note if the max of a set is zero, and every element is positive, then all elements are equal to zero. Thus, $|$tr$(AG)| = 0$ for all $G$. Then the trace of $AG$, without the absolute value, is zero for all $G$. If we let $\textbf{x}_1 = [1, 0, ..., 0]$, and $\textbf{x}_2 = ... = \textbf{x}_n = 0$ (this can be done, since all vectors have norms $\leq 1$), then the only nonzero entry in $G$ is $g_{11} = 1$. This, when multiplied with $A$, will give us only the first column of $A$, with the rest zeros. In this case, $tr(AG) = a_{11} = 0$. This means $a_{11} = 0$ for all $G \in \G^n$, and repeating this for any choice of $\textbf{x}_i$ will result in $a_{ii} = 0$. Thus the diagonal elements are shown to be zero.  
 
+        \jump
+        Next, take any two vectors $\textbf{x}_i = \textbf{x}_j = [1, 0, ..., 0]$. Note if $i = j$, then it reduces to the previous case, so without loss of generality, choose $i \neq j$. This implies the only nonzero entries in $G$ are $g_{ji}$ and $g_{ij}$, which are both equal 1. Thus, $G = E_{ij} + E_{ji}$, where the $E$ matrices are from the first homework, problem 5. Note that the $E_{ij}$, when multiplied by A on the left $(AE_{ij})$ will retrieve the $i$-th column of $A$ and place it in the $j$-th column, with zero everywhere else. Thus, the following holds:
+
+        \alignbreak
+        \begin{align}
+            \text{tr}(AG) &= \text{tr}(A(E_{ij} + E_{ji})) &\text{(Explained above.)}\nonumber\\
+            &= \text{tr}(AE_{ij}) + \text{tr}(AE_{ji}) &\text{(Trace operator is linear.)}\nonumber\\
+            &= a_{ij} + a_{ji} &\text{(diagonal of $i$-th row is $a_{ii}$, when moved, diagonal is $a_{ji}$.)}\nonumber\\
+            \implies 2a_{ij} &= 2a_{ji} = 0 &\text{(A is symmetric.)}\nonumber\\
+            \implies a_{ij} &= a_{ji} = 0 &\text{(Simplifying.)}\nonumber
+        \end{align}
+        \alignbreak
+
+           Thus, the off diagonal entries of $A$ are zero for all $G \in \G^n$. This, when paired with the diagonal terms being zero, means $A$ = 0.
+
+           \item $\norm{\alpha A} = |\alpha| \norm{A}$.
             
+            \jump
+            We will go straight into calculations. 
+            
+            \alignbreak
+            \begin{align}
+                \norm{\alpha A}_G &= \max \{ |\text{tr}(\alpha AG)| : G \in \G^n \} &\text{(Given.)}\nonumber\\
+                &= \max \{ |\alpha\text{tr}(AG)| : G \in \G^n \} &\text{(Trace operator is linear.)}\nonumber\\
+                &= \max \{ |\alpha| |\text{tr}(AG)| : G \in \G^n \} &\text{(Property of absolute value.)}\nonumber\\
+                &= |\alpha|\max \{ |\text{tr}(AG)| : G \in \G^n \} &\text{($|\alpha|$ is independent of the max.)}\nonumber\\
+                &= |\alpha| \norm{A}_G &\text{(Definition.)}\nonumber
+            \end{align}
+            \alignbreak
+
+            \item $\norm{A + B} \leq \norm{A} + \norm{B}$.
+
+            \jump
+            We will go straight into calculations.
+
+            \alignbreak
+            \begin{align}
+                \norm{A+B}_G &= \max \{ |\text{tr}((A+B)G)| : G \in \G^n \} &\text{(Given.)}\nonumber\\
+                &= \max \{ |\text{tr}(AG + BG)|\} &\text{(Distribution of matrices.)}\nonumber\\
+                &= \max \{ |\text{tr}(AG) + \text{tr}(BG)|\} &\text{(Trace operator is linear.)}\nonumber\\
+                &\leq \max \{ |\text{tr}(AG)| + |\text{tr}(BG)|\} &\text{(Triangle inequality.)}\nonumber\\
+                &= \max \{ |\text{tr}(AG)|\} + \max \{|\text{tr}(BG)|\} &\text{(Arguments of max are real and positive.)}\nonumber\\
+                \implies \norm{A + B} &\leq \norm{A} + \norm{B} &\text{(Definition.)}\nonumber
+            \end{align}
+           \alignbreak
     \end{enumerate}
+
+    \jump
+    For the second part of part b, we need to show if $A$ is diagonal, then,
+\[
+\norm{A}_G = \max\bigg( \sum_{i = 1}^n \max (a_{ii}, 0), -\sum_{i = 1}^n \min (a_{ii}, 0)\bigg).
+\]
+
+
+We can first check the form of the absolute trace product, $|$tr$(AG)|$.
+    
+    \alignbreak
+    \begin{align}
+        |\text{tr}(AG)| &= \Big| \sum_{i = 1}^n\sum_{k = 1}^na_{ik}g_{ki} \Big| &\text{(Given.)}\nonumber\\
+        &= \Big| \sum_{i = 1}^n\sum_{k = 1}^na_{ik}\textbf{x}^t_i\textbf{x}_j \Big| &\text{(Definition of Gram Matrix.)}\nonumber\\
+        &= \Big| \sum_{i = 1}^na_{ii}\textbf{x}^t_i\textbf{x}_i \Big| &\text{(Only term that survives is $k = i$.)}\nonumber\\
+        &\leq \sum_{i = 1}^n|a_{ii}||\textbf{x}^t_i\textbf{x}_i| &\text{(Triangle Inequality.)}\nonumber\\
+        &\leq \sum_{i = 1}^n|a_{ii}| \norm{\textbf{x}_i}_2 &\text{Cauchy-Schwartz.)}\nonumber\\
+        &\leq \sum_{i = 1}^n|a_{ii}| &(\norm{\textbf{x}_i}_2 \leq 1.)\label{p1b: trag}
+    \end{align}
+    \alignbreak
+
+    Thus, $\norm{A}_G$ will have the form \ref{p1b: trag}. By the definition of the absolute value function,
+
+    \[
+    |a_{ii}| = 
+    \begin{cases}
+     a_{ii}, &\text{ if } a_{ii} \geq 0 \\
+    -a_{ii}, &\text{ if } a_{ii} < 0
+    \end{cases}
+    \]
+
+    Therefore, when taking the max of $a_{ii}$ and zero, it is equivalent to the absolute value function. We can then write $a_{ii} \leq \max(a_{ii}, 0)$ for all $a_{ii}$. When plugging this into \ref{p1b: trag}, we can immediately see that 
+
+    \begin{align}
+        \norm{A}_G &= \sum_{i = 1}^n |a_{ii}|\nonumber\\
+        \norm{A}_G &\geq \sum_{i = 1}^n |\max(a_{ii}, 0)|\nonumber\\
+        \norm{A}_G &\geq \sum_{i = 1}^n \max(a_{ii}, 0)\nonumber
+    \end{align}
+
+    Also, noting that $\min(a_{ii}, 0) \leq 0$, we can write
+        \begin{align}
+        \norm{A}_G &= \sum_{i = 1}^n |a_{ii}|\nonumber\\
+        \norm{A}_G &\geq \sum_{i = 1}^n |\min(a_{ii}, 0)|\nonumber\\
+        \norm{A}_G &\geq -\sum_{i = 1}^n \min(a_{ii}, 0)\nonumber
+    \end{align}
+
+    Therefore, $\norm{A}_G$ has been shown to be greater than or equal to both sums, so $\norm{A}_G$ is greater than or equal to the max of them, which is what we wanted to show. 
 \end{solution}
 \newpage
 \section{Problem 2}
