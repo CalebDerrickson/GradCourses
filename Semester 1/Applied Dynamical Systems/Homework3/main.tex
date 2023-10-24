@@ -9,7 +9,7 @@
 \onehalfspacing
 \maketitle
 
-{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, Alexander Cram, and Steven Lee.
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
 
 \tableofcontents
 
@@ -33,8 +33,8 @@ Find an $f(x)$ that shows that $x = 0$ may be unstable even though it appears to
     \vspace{-8mm}
     \alignbreak
 
-    Our equilibrium point will be at 0, i.e. $f(x^*) = f(0) = 0$, so our function should match accordingly. If we let $f(x) = x^3$, then our linearized problem about $x = 0$ is just 0. Thus, for any $x$ on which our function occupies will just be stationary, thus not attracted to the origin.
-    However, we can notice that the non-linear system will be unstable for all points $\neq 0$. 
+    Our equilibrium point will be at 0, i.e. $f(x^*) = f(0) = 0$, so our function should match accordingly. If we let $f(x) = x^3$, then our linearized problem about $x = 0$ is just $\hat{f}(x) = $ 0. Thus, for any $x$ on which our function occupies will just be stationary, thus not attracted to the origin.
+    However, we can notice that the non-linear system, $f(x) = x^3$ will be unstable for all points $\neq 0$, as solutions will be repelled from the origin. 
 \end{solution}
 
 \newpage
@@ -226,7 +226,35 @@ Which of the ODEs $\dot{x} = Ax$ with the following matrices are topologically c
 \partbreak
 \begin{solution}
 
-    Given on page 130 of our text book, Theorem 4.33 states that two flows corresponding to two linearized systems $A, B$ are diffeomorphic iff the matrices $A, B$ are similar. That is, $A$ and $B$ are the same linear mapping, just expressed in different bases. Therefore, all we are looking for is similarity between matrices. Thus, they will have the same trace, rank, determinant, and eigenvalues (this is not an exhaustive list). If one of these fails to hold, then we can say they are not similar.  
+    Given on page 130 of our text book, Theorem 4.33 states that two flows corresponding to two linearized systems $A, B$ are diffeomorphic iff the matrices $A, B$ are similar. That is, $A$ and $B$ are the same linear mapping, just expressed in different bases. Therefore, all we are looking for is similarity between matrices. One surefire way to check this is if we wrote the Jordan decomposition of all matrices, but there will be easier checks do do first. Two similar matrices will have the same trace, rank, determinant, and eigenvalues (this is not an exhaustive list). If one of these fails to hold, then we can say they are not similar. Thus, I will write out a table of these matrices and their respective values. I will label each matrix by its part letter
+
+\begin{table}[h]
+  \centering
+  \caption{Matrix Similarity}
+  \begin{tabularx}{\textwidth}{|>{\columncolor{gray!25}}X|X|X|X|X|X|}
+    \hline
+    \rowcolor{gray!25}Matrix & Trace & Rank & Determinant & Eigenvalues & Similar? \\
+    \hline
+    (a) & 0 & 2 & -1 & -1, 1 & h\\
+    \hline
+    (b) & 4 & 2 & 4 & 2, 2 &f?\\
+    \hline
+    (c) & -4 & 2 & 5 & $\sqrt{19} + 2, \sqrt{19} - 2$ &None \\
+    \hline
+    (d) & 4 & 2 & 2 & 3, 1 &None\\
+    \hline
+    (e) & -1 & 2 & -6 & -3, 2 &None\\
+    \hline
+    (f) & 4 & 2 & 4 & 2, 2 &b?\\
+    \hline
+    (g) & -5 & 2 & 6 & -3, -2 &None\\
+    \hline
+    (h) & 0 & 2 & -1 & -1, 1 &a\\
+    \hline
+  \end{tabularx}
+\end{table}
+
+Note that if two matrices share all same values, it doesn't necessarily mean they are similar. Only when both matrices are diagonalizable are they similar. Note that the pair (a) and (h) are similar, since they have equal trace, rank, determinant, eigenvalues, and are diagonalizable. The pair (b) and (f), although seem to be similar, are not since (f) is not diagonalizable. Thus the only pair which are topologically conjugate, diffeomorphic, and linearly conjugate are (a) and (h).  
 \end{solution}
 \newpage
 \section{Problem 5.7}
@@ -356,21 +384,21 @@ A = \begin{pmatrix}1 &-1\\ 1&1\end{pmatrix}, \hspace{5mm} B = \begin{pmatrix}2 &
         \ph_{t1}(\textbf{r}) &= \sqrt{\ph_{t1}^2(x) + \ph_{t2}^2(x)} = re^t\sqrt{\cos^2(\th + t) + \sin^2(\th + t)} = re^t \nonumber\\
         \ph_{t2}(\textbf{r}) &= \arctan\bigg( \frac{\ph_{t2}(x)}{\ph_{t1}(x)} \bigg) = \arctan\bigg( \frac{\sin(\th + t)}{\cos (\th + t)} \bigg) = \th + t\nonumber\\
         \psi_{t1}(\textbf{r}) &= \sqrt{\psi_{t1}^2(x) + \psi_{t2}^2(x)} = re^{2t}\sqrt{\cos^2(\th) + \sin^2(\th)} = re^{2t}\nonumber\\
-        \psi_{t2}(\textbf{r}) &= \arctan\bigg( \frac{\psi_{t2}(x)}{\psi_{t1}(x)} \bigg) = \arctan\bigg( \frac{\sin\th}{\cos \th} \bigg) = \th 
+        \psi_{t2}(\textbf{r}) &= \arctan\bigg( \frac{\psi_{t2}(x)}{\psi_{t1}(x)} \bigg) = \arctan\bigg( \frac{\sin\th}{\cos \th} \bigg) = \th \nonumber
     \end{align}
 
 
-    Therefore, in polar coordinates, we can write,
+    Note that I took the value of $\th \in [-\pi/2, \pi/2]$ implicitly. Therefore, in polar coordinates, we can write,
     \alignbreak
     \begin{align}
-            \ph_t(x)  =  
+            \ph_t(r)  =  
         \begin{pmatrix}
             re^t\\
             \th + t
         \end{pmatrix}
         ,
         \hspace{5mm}
-    \psi_t(x)   =   
+    \psi_t(r)   =   
         \begin{pmatrix}
             re^{2t}\\
             \th
@@ -408,6 +436,19 @@ A = \begin{pmatrix}1 &-1\\ 1&1\end{pmatrix}, \hspace{5mm} B = \begin{pmatrix}2 &
     \]
 
     As a sanity check, we will check explicitly that $\psi_t \circ H = H \circ \ph_t$.
+
+    \newpage
+    \alignbreak
+    \begin{align}
+        \psi_t(H(r)) &= \psi_t\begin{pmatrix}\sqrt{r}\\ \frac{1}{2}\ln r + \th\end{pmatrix}\nonumber\\
+                     &= \begin{pmatrix}\sqrt{r} e^t \\ \frac{1}{2}\ln r + t + \th \end{pmatrix}\nonumber\\
+        H(\ph_t(r))  &= H\begin{pmatrix}re^t\\ \th + t\end{pmatrix}\nonumber\\
+                     &= \begin{pmatrix}\sqrt{r}e^t\\ \frac{1}{2}\ln r + \th + t\end{pmatrix}\nonumber
+    \end{align}
+    \alignbreak
+
+    Thus we see that $H$ is a homeomorphism.
+
 \end{solution}
 
 \end{document}
