@@ -33,8 +33,8 @@ Find an $f(x)$ that shows that $x = 0$ may be unstable even though it appears to
     \vspace{-8mm}
     \alignbreak
 
-    Our equilibrium point will be at 0, i.e. $f(x^*) = f(0) = 0$, so our function should match accordingly. If we let $f(x) = -sin(x)$, then our linearized problem about $x = 0$ is $\dot{x} = -x$. Thus, for any $x$ on which our function occupies will be attracted to the origin (but never reach it, but we are not examining that in this part). 
-    However, we can notice that the non-linear system will have points not attracted to the origin, i.e., any points beyond $x = \pm\pi$. 
+    Our equilibrium point will be at 0, i.e. $f(x^*) = f(0) = 0$, so our function should match accordingly. If we let $f(x) = x^3$, then our linearized problem about $x = 0$ is just 0. Thus, for any $x$ on which our function occupies will just be stationary, thus not attracted to the origin.
+    However, we can notice that the non-linear system will be unstable for all points $\neq 0$. 
 \end{solution}
 
 \newpage
@@ -206,7 +206,208 @@ Solve these differential equations to obtain $\ph_t$ and $\psi_t$, where $\psi_t
         \end{pmatrix}\label{p4: linear flow}
     \end{align}
 
-    where $x = x_1, y = x_2$.
+    where $x = x_1, y = x_2$. Thus, by function composition, 
+
+    \alignbreak
+    \begin{align}
+        \psi_t(H(x)) &= \psi_t \begin{pmatrix} x\\ y - \frac{1}{3}x^2\end{pmatrix}\nonumber =  \begin{pmatrix}x_1e^t\\ x_2e^{-t} - \frac{1}{3}x_1^2e^{2t}\end{pmatrix}\nonumber\\
+        H(\ph_t(x)) &= H\begin{pmatrix}x_1e^t\\\frac{1}{3}x_1^2e^{2t} + \frac{1}{3}(3x_2 - x_1^2)e^{-t}\end{pmatrix} = \begin{pmatrix} x_1e^t\\ \frac{1}{3}x_1^2e^{2t} + \frac{1}{3}(3x_2 - x_1^2)e^{-t} - \frac{1}{3}x_1^2e^{2t}\end{pmatrix}\nonumber\\
+        &= \begin{pmatrix}x_1e^t\\ x_2e^{-t} - \frac{1}{3}x_1^2e^{2t}\end{pmatrix}\nonumber
+    \end{align}
+    \alignbreak
+
+    So we see that, indeed, $\psi_t \circ H = H \circ \ph_t$.
+\end{solution}
+
+\newpage
+\section{Problem 5.6}
+Which of the ODEs $\dot{x} = Ax$ with the following matrices are topologically conjugate? Which are diffeomorphic? Which are linearly conjugate?
+
+\partbreak
+\begin{solution}
+
+    Given on page 130 of our text book, Theorem 4.33 states that two flows corresponding to two linearized systems $A, B$ are diffeomorphic iff the matrices $A, B$ are similar. That is, $A$ and $B$ are the same linear mapping, just expressed in different bases. Therefore, all we are looking for is similarity between matrices. Thus, they will have the same trace, rank, determinant, and eigenvalues (this is not an exhaustive list). If one of these fails to hold, then we can say they are not similar.  
+\end{solution}
+\newpage
+\section{Problem 5.7}
+Construct a topological conjugacy between the linear systems with the matrices
+\[
+A = \begin{pmatrix}1 &-1\\ 1&1\end{pmatrix}, \hspace{5mm} B = \begin{pmatrix}2 &0\\ 0&2\end{pmatrix}
+\]
+\partbreak
+
+\begin{solution}
+
+    Solving the first system, we first note the eigenvalues and eigenvectors. By observation,
+
+    \begin{align}
+        &\lm_1 = 1 + i, &\textbf{v}_1 = \begin{pmatrix} \hspace{3mm} i  &1\end{pmatrix}^t\nonumber\\
+        &\lm_2 = 1 - i, &\textbf{v}_2 = \begin{pmatrix} -i &1\end{pmatrix}^t\nonumber
+    \end{align}
+
+
+    Thus, by the fundamental matrix, our general solution is the following: 
+    
+    \begin{align}
+        \begin{pmatrix} x \\ y\end{pmatrix} \hspace{3mm} = \hspace{3mm} 
+        \begin{pmatrix}
+            c_1e^t\cos t - c_2e^t\sin t\\
+            c_1e^t\sin t +\ c_2e^t\cos t
+        \end{pmatrix}\label{p5.7: general soln}
+    \end{align}
+
+    Thus, by our reasoning in problem 4, we can remove these constants $c_1, c_2$ via initial conditions to retrieve our flow $\ph$. 
+
+    \alignbreak
+    \begin{align}
+        x - y &= \frac{d}{dt}\ph_t \Big|_{t = 0}\nonumber\\
+        &= c_1( - e^t\sin t + \cos t e^t) - c_2(e^t \cos t + e^t \sin t) \Big|_{t = 0}\nonumber\\
+        x - y&= c_1 - c_2\nonumber\\
+        x + y&= \frac{d}{dt}\ph_t \Big|_{t = 0}\nonumber\\
+        &= c_1(e^t \cos t + e^t \sin t) + c_2 (-\sin t e^t + e^t \cos t)\Big|_{t = 0}\nonumber\\
+        x + y&= c_1 + c_2 \nonumber
+    \end{align}
+    \alignbreak
+
+
+    We can easily see that $c_1 = x, c_2 = y$. Thus our flow $\ph_t(x)$
+
+    \begin{align}
+        \ph_t(x)  \hspace{3mm} = \hspace{3mm} \begin{pmatrix} \ph_{t1}(x) \\ \ph_{t2}(x)\end{pmatrix} \hspace{3mm} = \hspace{3mm} 
+        \begin{pmatrix}
+            x_1e^t\cos t -  x_2e^t\sin t\\
+            x_1e^t\sin t +\ x_2e^t\cos t
+        \end{pmatrix}\label{p5.7: Aflow}
+    \end{align}
+
+    The second system is fortunately easier to find. Since the system is a multiple of the identity matrix, we can see the following:
+
+        \begin{align}
+        &\lm_1 = 2, &\textbf{v}_1 = \begin{pmatrix}  1  &0\end{pmatrix}^t\nonumber\\
+        &\lm_2 = 2, &\textbf{v}_2 = \begin{pmatrix} 0 &1\end{pmatrix}^t\nonumber
+    \end{align}
+
+    Thus our flow $\psi_t(x)$, with constants, equals
+
+    \begin{align}
+        \begin{pmatrix} x \\ y\end{pmatrix} \hspace{3mm} = \hspace{3mm} 
+        \begin{pmatrix}
+            c_1e^{2t}\\
+            c_2e^{2t}
+        \end{pmatrix}\label{p5.7: general soln psi}
+    \end{align}
+
+    Following the previous steps, we see that $x = c_1, y = c_2$. Thus, 
+
+        \begin{align}
+        \psi_t(x)  \hspace{3mm} = \hspace{3mm} \begin{pmatrix} \psi_{t1}(x) \\ \psi_{t2}(x)\end{pmatrix} \hspace{3mm} = \hspace{3mm} 
+        \begin{pmatrix}
+            x_1e^{2t}\\
+            x_2e^{2t}
+        \end{pmatrix}\label{p5.7: Bflow}
+    \end{align}
+
+    Then the two flows between which we wish to find a homeomorphism, are 
+
+    \alignbreak
+    \[
+    \ph_t(x)  =  
+        \begin{pmatrix}
+            x_1e^t\cos t -  x_2e^t\sin t\\
+            x_1e^t\sin t +\ x_2e^t\cos t
+        \end{pmatrix}\
+        ,
+        \hspace{5mm}
+    \psi_t(x)   =   
+        \begin{pmatrix}
+            x_1e^{2t}\\
+            x_2e^{2t}
+        \end{pmatrix}\
+    \]
+    \alignbreak
+
+\newpage
+    Transforming these into polar coordinates, the following steps are justified:
+
+    \alignbreak
+    \begin{align}
+        \ph_t(x) &= 
+        \begin{pmatrix}
+            r\cos \th e^t \cos t - r \sin \th e^t \sin t\\
+            r\cos \th e^t \sin t + r \sin \th e^t \cos t
+        \end{pmatrix} &\text{(Using $x_1 = r\cos \th, x_2 = r\sin \th$.)}\nonumber\\
+        &= \begin{pmatrix}
+            re^t(\cos \th  \cos t - \sin \th \sin t)\\
+            re^t(\cos \th  \sin t + \sin \th \cos t)
+        \end{pmatrix} &\text{(Rearranging.)}\nonumber\\
+        \ph_t(x) &= \begin{pmatrix}
+            re^t\cos(\th + t)\\
+            re^t\sin (\th  + t) 
+        \end{pmatrix} &\text{(Trig - Addition identities.)}\nonumber\\
+        \psi_t(x) &=   
+        \begin{pmatrix}
+            re^{2t}\cos \th \\
+            re^{2t}\sin \th 
+        \end{pmatrix}&\text{(Using $x_1 = r\cos \th, x_2 = r\sin \th.$)}\nonumber
+    \end{align}
+
+    These are still ``encoded" in cartesian coordinates, although written in terms of $r$ and $\th$. I.e., we want to rewrite these in terms of \textbf{r}, rather than \textbf{x}. If $\ph_t(r, \th) = \ph_t(x, y)$, then we can say the following:
+    \begin{align}
+        \ph_{t1}(\textbf{r}) &= \sqrt{\ph_{t1}^2(x) + \ph_{t2}^2(x)} = re^t\sqrt{\cos^2(\th + t) + \sin^2(\th + t)} = re^t \nonumber\\
+        \ph_{t2}(\textbf{r}) &= \arctan\bigg( \frac{\ph_{t2}(x)}{\ph_{t1}(x)} \bigg) = \arctan\bigg( \frac{\sin(\th + t)}{\cos (\th + t)} \bigg) = \th + t\nonumber\\
+        \psi_{t1}(\textbf{r}) &= \sqrt{\psi_{t1}^2(x) + \psi_{t2}^2(x)} = re^{2t}\sqrt{\cos^2(\th) + \sin^2(\th)} = re^{2t}\nonumber\\
+        \psi_{t2}(\textbf{r}) &= \arctan\bigg( \frac{\psi_{t2}(x)}{\psi_{t1}(x)} \bigg) = \arctan\bigg( \frac{\sin\th}{\cos \th} \bigg) = \th 
+    \end{align}
+
+
+    Therefore, in polar coordinates, we can write,
+    \alignbreak
+    \begin{align}
+            \ph_t(x)  =  
+        \begin{pmatrix}
+            re^t\\
+            \th + t
+        \end{pmatrix}
+        ,
+        \hspace{5mm}
+    \psi_t(x)   =   
+        \begin{pmatrix}
+            re^{2t}\\
+            \th
+        \end{pmatrix}\nonumber
+    \end{align}
+    \alignbreak
+
+    \newpage
+    Therefore, in order to find a homeomorphism $H$, it should satisfy $\psi_t \circ H = H \circ \ph_t$. Writing this out explicitly, 
+    \[
+    H(\psi_t(\textbf{r})) = \ph_t(H(\textbf{r})).
+    \]
+
+    Thus the following steps are justified:
+
+    \alignbreak
+    \begin{align}
+        \begin{pmatrix}H_r(re^{2t})\\ H_\th(re^{2t}, \th)\end{pmatrix} &= \begin{pmatrix}H_r(r)e^t\\H_\th(r, \th)+ t\end{pmatrix} &\text{(We were hinted $H$ is of this form.)}\nonumber\\
+        H_r(re^{2t}) &= H_r(r)e^t &\text{(First coordinate.)}\nonumber\\
+        H_r(re^{2t})^{-1}&= H^{-1}(H(r)e^t) &\text{(Taking inverse of $H$.)}\nonumber\\
+        \implies& H_r(r) = \sqrt{r} &\text{($H^{-1}$ should undo $H$, this will work.)}\nonumber\\
+        H_\th(re^{2t}, \th) &= H_\th(r, \th) + t &\text{(Second coordinate.)}\nonumber\\
+        \implies& H_\th(r, \th) = \frac{1}{2}\ln r + \th &\text{(Taking in $re^{2t}$, should output $\th$.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Therefore, our homeomorphism $H$ is found as 
+    \[
+    H = \begin{pmatrix}H_r(r)\\H_\th(r, \th)\end{pmatrix} = \begin{pmatrix}\sqrt{r}\\ \frac{1}{2}\ln r + \th\end{pmatrix}
+    \]
+
+    where it is understood that $r > 0$. On this region, both components of $H$ are one to one (square root is one to one, as well as natural log and the identity) and onto (there will be some value in $\R$ onto which each component will map). Thus, the mapping is bijective, with is inverse given by 
+    \[
+    H^{-1} = \begin{pmatrix}r^2\\ -\frac{1}{2}\ln r + \th\end{pmatrix}.
+    \]
+
+    As a sanity check, we will check explicitly that $\psi_t \circ H = H \circ \ph_t$.
 \end{solution}
 
 \end{document}
