@@ -1,0 +1,236 @@
+%---------
+% place your email id between the braces so that your homework has a name
+\def\yourname{}
+% -----------------------------------------------------
+\def\duedate{10/26/2023}
+\def\duelocation{via \href{https://www.gradescope.com/courses/635305}{Gradescope}}
+\def\hnumber{1}
+\def\prof{Lorenzo Orecchia}
+\def\course{\href{https://canvas.uchicago.edu/courses/52752}{CMSC 35410 - Autumn
+2023}}
+%-------------------------------------
+\documentclass[10pt]{article}
+\usepackage[colorlinks,urlcolor=blue]{hyperref}
+\usepackage[osf]{mathpazo}
+\usepackage{amsmath,amsfonts,graphicx}
+\usepackage{latexsym}
+\usepackage{subfig}
+\usepackage{algpseudocode}
+\usepackage[shortlabels]{enumitem}
+\usepackage{setspace}
+\usepackage{algorithm}
+\usepackage{listings}
+%\usepackage[top=1in,bottom=1.4in,left=1.5in,right=1.5in,centering]{geometry}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{bbm}
+\usepackage{pgffor}
+\foreach \x in {a,...,z}{%
+\expandafter\xdef\csname v\x\endcsname{\noexpand\ensuremath{\noexpand\mathbf{\x}}}
+}
+\foreach \x in {A,...,Z}{%
+\expandafter\xdef\csname v\x\endcsname{\noexpand\ensuremath{\noexpand\mathbf{\x}}}
+}
+\foreach \x in {A,...,Z}{%
+\expandafter\xdef\csname m\x\endcsname{\noexpand\ensuremath{\noexpand\mathbf{\x}}}
+}
+\newcommand{\1}{\vec{\mathbbm{1}}}
+\definecolor{mdb}{rgb}{0.3,0.02,0.02}
+\definecolor{cit}{rgb}{0.05,0.2,0.45}
+%\pagestyle{myheadings}
+\markboth{\yourname}{\yourname}
+\thispagestyle{empty}
+\newenvironment{proof}{\par\noindent{\it Proof.}\hspace*{1em}}{$\Box$\bigskip}
+\newcommand{\qed}{$\Box$}
+\newcommand{\alg}[1]{\mathsf{#1}}
+\newcommand{\handout}{
+\renewcommand{\thepage}{H\hnumber-\arabic{page}}
+\noindent
+\begin{center}
+\vbox{
+\hbox to \columnwidth {\sc{\course} --- \prof \hfill}
+\vspace{-2mm}
+\hbox to \columnwidth {\sc due \MakeLowercase{\duedate} \duelocation\hfill {\
+Huge\color{mdb}H\hnumber.\yourname}}
+}
+\end{center}
+\vspace*{2mm}
+}
+\newcommand{\solution}[1]{
+\vspace{2mm}
+\noindent Collaborators:
+\vspace{5mm}
+\medskip\noindent{\color{cit}\textbf{Solution:} #1}}
+\newcommand{\bit}[1]{\{0,1\}^{ #1 }}
+\newcommand{\extraspace}{\medskip\noindent{\color{cit} Extra space for your
+solution}\newpage}
+%\dontprintsemicolon
+%\linesnumbered
+\newtheorem{problem}{\sc\color{cit}Problem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{claim}{Claim}
+\begin{document}
+\handout
+\begin{itemize}
+\item The assignment is due at Gradescope on \duedate.
+\item A LaTex template will be provided for each homework. Type your homework into
+this template. This will help facilitate the grading.
+\item You are permitted to discuss the problems with up to 2 other students in the
+class (per problem); however, {\em you must write up your own solutions, in your
+own words}. Do not submit anything you cannot explain. If you do collaborate with
+any of the other students on any problem, please list all your collaborators in the
+appropriate spaces.
+\item Similarly, please list any other source you have used for each problem,
+including other textbooks or websites.
+\item {\em Show your work.} Answers without justification will be given little
+credit.
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\begin{problem}[Tracking convergence (6 points)]
+In order to show the convergence of the Heat Equation, we tracked the Dirichlet
+energy $\mathcal{U}(\vx_t) = \frac{1}{2}\|\vx_t - \bar{x} \1\|_{\mD_G}^2$, where $\bar{x} = \frac{\1^T\mD_G \vx_0}{vol(V)}$.
+\begin{enumerate}[(a)]
+\item Show that $\bar{x} = \arg \min_{u} \mathcal{U}(\vx_t)$.
+\item Show that $\mathcal{U}(\vx_t) = \frac{1}{2}\vx_t^T \mL_{K_G} \vx_t$,
+where $K_G$ is the complete graph with the same degrees as $G$, meaning $w_{ij}
+(K_G) = \frac{d_i d_j}{vol(V)}$.
+\end{enumerate}
+\end{problem}
+
+\solution{
+{\setstretch{1.5}
+
+\begin{enumerate}[(a)]
+    \item We first wish to show $U(\bar{x}) \in \min \Big\{ \frac{1}{2} \lVert x - \bar{x} \rVert^2_{D_G} \Big\}$. Note that we only need to look at the value $\min \Big\{ \lVert x - \bar{x} \rVert_{D_G} \Big \}$, since their minima is equivalent. By positive definiteness of the $D_G$ norm, its minimum is zero. Then, $U(\bar{x}) = \lVert \Bar{x} - \Bar{x} \rVert_{D_G} = 0$ for $\bar{x} \in \mathbb{R}^V$. Therefore $U( \bar{x}) \in \min U$, so $\bar{x} \in \arg \min U(x_t)$.
+    
+    \vspace{5mm}
+    Next we wish to show that \textit{only} $\bar{x}$ achieves the minimum of $U(x)$. Note also by positive definiteness of $\lVert \cdot \rVert_{D_G}$, $U$ is minimized if and only if $x = \bar{x}$. Then the only $x \in \mathbb{R}^V$ which achieves the minimum of $U$ is $\bar{x}$. Thus $ \bar{x} = \arg \min U(x_t)$.
+
+    \item 
+
+\end{enumerate}
+}
+
+}
+\newpage
+\begin{problem}[Graph Comparison (30 points)]
+For this problem we will define that $G \succeq c \cdot H \Leftrightarrow \forall
+k, \lambda_k(G) \geq c \cdot \lambda_k(H)$.
+\begin{enumerate}[(a)]
+\item Prove $(n - 1) \cdot P_n \succeq G_{1,n}$, where $P_n$ is the path from
+vertex $1$ to vertex $n$, and $G_{1, n}$ is the graph with just the edge $\{1, n\}
+$.
+\item Show that $\forall 2 \leq j \leq n, \lambda_j(K_n) = 1 + \frac{1}{n-1}$,
+where $K_n$ is the clique on $n$ vertices.
+\item The complete graph $K_n$ can be decomposed to all its edges. Notice that
+$K_n = \sum_{1 \leq i < j \leq n} G_{i,j}$. Prove that
+$$K_n \preceq \sum_{1 \leq i < j \leq n} (j - i) P_n$$
+\item Conclude that $P_n \succeq O(1/n^2) K_n \Rightarrow \lambda_2(P_n) \geq
+O(1/n^2)$
+\item Show that $\forall 2 \leq j \leq n, \lambda_j\left(L(K_G), \mD_G\right) =
+1$, where $K_G$ is the complete graph with the same degrees as $G$, meaning $w_{ij}
+(K_G) = \frac{d_i d_j}{vol(V)}$.
+\end{enumerate}
+Combining with the upper bound proof of $\lambda_2(P_n)$ we can conclude that
+$\lambda_2(P_n) = \Theta(1/n^2)$.
+\begin{enumerate}[(a),resume]
+\item Follow the same practice method to prove $\frac{2}{(n-1)} \leq \
+lambda_2(T_d) \geq \frac{1}{(n - 1) \log_2(n)}$, where $T_d$ is the {\bf complete
+binary} tree.
+\end{enumerate}
+\end{problem}
+\solution{
+Your solution goes here.
+}
+\newpage
+\begin{problem}[Spectrum of bipartite graphs (10 points)]
+Show that
+$$G\text{ is bipartite } \Leftrightarrow \forall \lambda \in \text{spec}(\mA_G) \rightarrow -\lambda \in \text{spec}(\mA_G)$$
+In words, you need to show that if the eigenvalues of the adjacency matrix $\mA_G$
+appear in pairs of $\lambda$ and $-\lambda$, then graph $G$ is bipartite and vice
+versa.
+\end{problem}
+\solution{
+
+We will first show the forward implication. That is, given $G$ is bipartite, we need to show that if $\lambda$ is an eigenvalue of the adjacency matrix $A$, then so is $-\lambda$. First, let $\textbf{v}$ be the associated eigenvector of $\lambda$. Since we are given $G$ is bipartite, we can orient the graph such that there are two sets of vertices $S$ and $T$ $\subset V$ which partition $V$. Let us then define a new vector $\textbf{x}$ as 
+\[
+\textbf{x}_a = 
+\begin{cases}
+\ \textbf{v}_a   &\text{If $a \in S$,}\\
+-\textbf{v}_a   &\text{If $a \in T$}
+\end{cases}
+\]
+
+for some vertex $a \in V$. I claim that $\textbf{x}$ is an eigenvector of $G$ with eigenvalue $-\lambda$. To show this, observe the following:
+
+\vspace{-15mm}
+{\setstretch{2}
+\begin{align}
+    (A\textbf{x})_a &= \sum_{(a, b)\in E} A_{ab}x_b &\text{(For some $a \in S, b \in T$.)}\nonumber\\
+    &= \sum_{(a, b)\in E} A_{ab}(-\textbf{v}_b) &\text{(Definition of $\textbf{x}$.)}\nonumber\\
+    &= -\lambda\textbf{v}_a &\text{(\textbf{v} is an eigenvalue of $A$.)}\nonumber\\
+    &= -\lambda\textbf{x}_a &\text{(Definition of \textbf{x}.)}\nonumber
+\end{align}
+}%
+
+Note if $a \in T$, a similar equality will be found. 
+
+\vspace{-15mm}
+{\setstretch{2}
+\begin{align}
+    (A\textbf{x})_a &= \sum_{(a, b)\in E} A_{ab}x_b &\text{(For some $a \in T, b \in S$.)}\nonumber\\
+    &= \sum_{(a, b)\in E} A_{ab}(\textbf{v}_b) &\text{(Definition of $\textbf{x}$.)}\nonumber\\
+    &= \lambda\textbf{v}_a &\text{(\textbf{v} is an eigenvalue of $A$.)}\nonumber\\
+    &= -\lambda\textbf{x}_a &\text{(Definition of \textbf{x}.)}\nonumber
+\end{align}
+}
+
+Thus, $\textbf{x}$ is an eigenvector of $A$ with eigenvalue $-\lambda$, proving the forward implication. \par
+
+\newpage
+For the backward implication, we are given that for every eigenvalue $\lambda$ of $A$, there will be a negative eigenvalue $-\lambda$ of $A$, and are tasked to show that the graph $G$ is bipartite. Assume that $\lambda$ is the largest eigenvalue of $A$. Thus by assumption let, $\mu = -\lambda$, so $\mu$ is the smallest eigenvalue of $A$. Let \textbf{v} be an eigenvector of $A$ with associated eigenvalue $\mu > 0$. Without loss of generality, assume that $\textbf{v}^t\textbf{v} = 1$, meaning it is a unit eigenvector, since if it wasn't we can choose $\alpha \in \mathbb{R}$ such that $(\alpha\textbf{v})^t\alpha\textbf{v} = |\alpha|^2 \textbf{v}^t\textbf{v} = 1$.  Define a new vector \textbf{u} $\in \mathbb{R}^V$ such that $u_a = |z_a|$ for all $a \in V$. Then by the Rayleigh quotient of \textbf{v}, the following can be justified:
+
+\vspace{-15mm}
+{\setstretch{2}
+\begin{align}
+    |\mu| &= |\textbf{v}^tA\textbf{v}| &\text{(Rayleigh quotient of \textbf{v}.)}\nonumber\\
+    &= |\sum_{(a, b) \in E} A_{ab}\textbf{v}_a\textbf{v}_b| &\text{(Matrix vector multiplication.)}\nonumber\\
+    &\leq \sum_{(a, b) \in E} |A_{ab}\textbf{v}_a\textbf{v}_b| &\text{(Triangle Inequality.)}\nonumber\\
+    &\leq \sum_{(a, b) \in E} A_{ab}|\textbf{v}_a||\textbf{v}_b| &\text{(Cauchy Schwartz.)}\nonumber\\
+    &= \sum_{(a, b) \in E} A_{ab}\textbf{u}_a\textbf{u}_b &\text{(Definition of \textbf{u}.)}\nonumber\\
+    &= \textbf{u}^tA\textbf{u} &\text{(Matrix vector multiplication.)}\nonumber\\
+    &\leq \max_x \frac{\textbf{x}^tA\textbf{x}}{\textbf{x}^t\textbf{x}} &\text{(Max definition.)}\nonumber\\
+    &= \lambda &\text{(Given.)}\nonumber
+\end{align}
+}
+
+Note that $|\mu| = \lambda$, thus equality holds for all intermediate steps. In particular, we can note that $\textbf{u}$ is an eigenvector of $A$ with eigenvalue $\lambda$, and $\textbf{v}^tA\textbf{v} \leq 0$. Observing the third and fifth steps above, we notice that the sum of \textbf{u} over all edges is equal to the absolute sum of \textbf{v} over all edges, we can say that $A_{ab}\textbf{v}_a \textbf{v}_b$ for all edges $(a, b)$, since if it weren't, then one edge would contribute positively to the sum, which this term could be replaced with zero to get an even smaller sum, which cannot happen, since \textbf{v} was chosen to correspond with the smallest eigenvalue of $A$. Thus, $\textbf{v}_a \textbf{v}_b \leq 0$ for all edges $(a, b) \in E$. Thus, at some nodes for each node we take either $\textbf{v}_a$ positive or $\textbf{v}_b$ positive, since they cannot have the same sign. We can then group these vertices into sets based on this classification, i.e.
+
+\[
+S = \{ a : \textbf{v}_a < 0\}, \hspace{5mm} T = \{ a : \textbf{v}_a > 0\}
+\]
+
+Therefore we have shown two disjoint sets can be constructed from the vertices of $V$, with edges appearing only between the two sets. Thus $G$ is bipartite. \hfill $\square$
+}
+\newpage
+\begin{problem}[{\tt NetworkX} and practical applications (40 points)]
+Download {\tt Homework 1 - Networkx, Heat Equation, Spectral Embedding.ipynb}
+Jupyter Notebook from Canvas and complete the instructions inside. In order to
+complete this question your choices are to
+\begin{enumerate}
+\item Install Jupyter Notebooks locally
+\item Use Google Colab
+\item Use one of the CSIL computers that already has Jupyter Notebooks
+installed
+\end{enumerate}
+If you are missing any libraries, install them using `pip install [library]`. You
+should upload the finished notebook on Gradescope {\bf in the separate programming
+assignment}.
+If you have any questions, come to Konstantinos' office hours or send an email to
+the instructors.
+\end{problem}
+\end{document}
