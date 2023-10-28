@@ -58,7 +58,8 @@
 }
 \newcommand{\solution}[1]{
 \vspace{2mm}
-\noindent Collaborators:
+\noindent Collaborators: I have Alex Sobczynski and Chad Schmurling to thank for their collaboration with this homework. The majority of collaboration was done under problem 4. The rest of the problems were discussed, but not directly aided by Alex or Chad. The materials I mainly used were the book by Daniel A. Spielman for problem 2 and 3, and various online exercises to help me wade through problem 4.
+
 \vspace{5mm}
 \medskip\noindent{\color{cit}\textbf{Solution:} #1}}
 \newcommand{\bit}[1]{\{0,1\}^{ #1 }}
@@ -112,7 +113,24 @@ Note for this problem, I will shorthand $\Bar{\textbf{x}} = \Bar{x} \1$ as $\bar
     \vspace{5mm}
     Next we wish to show that \textit{only} $\bar{x}$ achieves the minimum of $U(x)$. Note also by positive definiteness of $\lVert \cdot \rVert_{D_G}$, $U$ is minimized if and only if $x = \bar{x}$. Then the only $x \in \mathbb{R}^V$ which achieves the minimum of $U$ is $\bar{x}$. Thus $ \bar{x} = \arg \min U(x_t)$.
 
-    \item 
+    \item I do not exactly understand what it means for the complete graphs to have the same degrees as the original graph in this context. Even so, I will write out as far as I got. This is almost all algebra and examining terms appearing from the norm of the vector $(\textbf{x}_t - \Bar{x}\1)$.
+
+    \begin{align}
+        U(x_t) &= \frac{1}{2} \lVert \textbf{x}_t - \Bar{x}\1\rVert ^2_{D_G} &\text{(Given.)}\nonumber\\
+        &= \frac{1}{2} (\textbf{x}_t - \Bar{x}\1)^TD_G(\textbf{x}_t - \Bar{x}\1) &\text{(Definition of norm.)}\nonumber\\
+        &= \frac{1}{2} \Big[ \textbf{x}_t^TD\textbf{x}_t + \Bar{x}^2 \1^T D\1 - \Bar{x}\textbf{x}_t^TD\1 - \Bar{x} \1^TD\textbf{x}_t\Big] &\text{(Factoring out.)}\nonumber\\
+        &= \frac{1}{2}\Big[ (1) + (2) - (3)\Big] &\text{(Labelling terms.)}\nonumber\\
+        1): \ &\textbf{x}_t^T D \textbf{x}_t &\text{(Given.)}\nonumber\\
+        &= \sum_{i = 1}^nd_i \textbf{x}_{t, i}^2 &\text{(Working out terms.)}\nonumber\\
+        2): \ &\Bar{x}^2 \sum_{i \in V} d_i &\text{(By (2).)}\nonumber\\
+        &= \Bar{x}^2 Vol(V) &\text{(Definition.)}\nonumber\\
+        3): \ &\Bar{x}\textbf{x}_t^TD\1 - \Bar{x} \1^TD\textbf{x}_t &\text{(Given.)}\nonumber\\
+        &= \Bar{x}\Big( \sum_{i = 1}^n d_i \textbf{x}_{t, i} + \sum_{i = 1}^n d_i \textbf{x}_{t, i}\Big) &\text{(Working out terms.)}\nonumber\\
+        &= 2\Bar{x}\sum_{i = 1}^n d_i \textbf{x}_{t, i} &\text{(Simplifying.)}\nonumber\\
+        \implies U(\textbf{x}_t) &= \sum_{i = 1}^nd_i \textbf{x}_{t, i}^2 + \Bar{x}^2 Vol(V) - 2\Bar{x}\sum_{i = 1}^n d_i \textbf{x}_{t, i} &\text{(Gathering terms.)}\nonumber
+    \end{align}
+
+    \textit{If} we are to assume that the degrees of the graph are constant, then the $d_i's$ in the summation would be constant, thus each term would be a multiple of $Vol(V)$. I don't believe we can do that, and aside from applying the definition of $\Bar{x}$, I'm afraid this is as far as I could get. 
 
 \end{enumerate}
 }
@@ -250,25 +268,44 @@ binary} tree.
 
     Thus, if we can take $1/O(n^2) = O(1/n^2)$, then the statement has been proven. \hfill $\square$
 
-    \item Skip for now 
+    \item I'm not entirely sure on what it means for the clique $K_n$ to maintain the same degrees as the original graph. I unfortunately couldn't finish this part in time. 
 
     \item To construct these bounds on $\lambda_2(T_d)$, we need to construct some reasonable test vector on the tree. I tried my best to create a binary tree in Latex for a visual example. 
 
     \Tree [.1 [.2 4 5 ] [.3 6 7 ]   ] 
 
-    Let's construct our test vector $\textbf{v}(a)$ as \textbf{v}(1) = 0, \textbf{v}(2) = 1, and \textbf{v}(3) = -1 (I'm basically treading over what was done in Speilman). From this, we'll take every vertex which can be reached by 2 without going through 1 to have value 1, otherwise the node will have value zero. This is what our tree will look like for our text vector.
-
+    \vspace{5mm}
+    Let's construct our test vector $\textbf{v}(a)$ as \textbf{v}(1) = 0, \textbf{v}(2) = 1, and \textbf{v}(3) = -1. From this, we'll take every vertex which can be reached by 2 without going through 1 to have value 1, otherwise the node will have value zero. This is what our tree will look like for our text vector.
+    \vspace{5mm}
 
     \Tree [.$\textbf{v}(1)=0$ [.$\textbf{v}(2)=1$ $\textbf{v}(4)=1$ $\textbf{v}(5)=1$ ] [.$\textbf{v}(3)=-1$ $\textbf{v}(6)=-1$ $\textbf{v}(7)=-1$ ]   ] 
 
-    As it turns out, our test vector is symmetric, so when summing over all nodes in the tree, $\1^T\textbf{v} = 0$. Thus we can write
+    \vspace{5mm}
+    As it turns out, our test vector is symmetric, so when summing over all nodes in the tree, $\1^T\textbf{v} = 0$. Note the only term that survives in our ``energy" is are the edges connecting $\textbf{v}(1), \textbf{v}(2)$ and $\textbf{v}(3)$. Thus we can write
 
     \[
     \lambda_2 \leq \frac{\textbf{v}^TL\textbf{v}}{\textbf{v}^T\textbf{v}} = \frac{\sum_{a\sim b} (\textbf{v}(a) - \textbf{v}(b))^2}{\sum_a \textbf{v}(a)^2} = \frac{(\textbf{v}(1) - \textbf{v}(2))^2 + (\textbf{v}(1) - \textbf{v}(3))^2}{n - 1} = 2/(n - 1)
     \]
 
+which gives us the upper bound on $\lambda_2$. To get a lower bound, let us construct a path which will run from some vertex $a$ to another vertex $b$. This path will the be denoted by $T_d^{ab}$, and will have at most a length $2d$, since a max length in our example would be from vertex $4$ to vertex $7$. As we are working over a balanced binary tree, the depth $d$ is equal to $\log_2 n$. This will not necessarily hold, however, when the tree is not balanced. The depth will then be bounded by $\log_2 n$ in this case. Thus, th length of the longest path, $2d$, is bounded by $2 \log_2 n$. We can then write the following:
+
+\[
+K_n = \sum_{a < b}G_{a, b} \preceq \sum_{a < b} (2d)T_d^{ab} \preceq \sum_{a < b} (2\log_2 n)T_d = {n \choose 2}(2\log_2 n)T_d = n(n-1)(\log_2 n)T_d
+\]
 \end{enumerate}
 
+By part e, we showed for a complete graph, keeping the same degrees as the original graph, that $\lambda_2 = 1$. This then means 
+\[
+1 = \lambda_2(K_n) \leq n(n-1)(\log_2n)\lambda_2(T_d)
+\]
+
+The n can be discarded, since we know that $(n-1)(\log_2n)\lambda_2(T_d)\geq 1$ for $n > 1$. We then get, by rearranging,
+
+\[
+\frac{1}{(n-1)\log_2 n} \leq \lambda_2(T_d)
+\]
+
+which is what we wanted to find. \hfill $\square$
 }
 \newpage
 \begin{problem}[Spectrum of bipartite graphs (10 points)]
