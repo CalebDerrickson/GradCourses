@@ -13,6 +13,7 @@
 \usepackage[colorlinks,urlcolor=blue]{hyperref}
 \usepackage[osf]{mathpazo}
 \usepackage{amsmath,amsfonts,graphicx}
+\usepackage{qtree}
 \usepackage{latexsym}
 \usepackage{subfig}
 \usepackage{algpseudocode}
@@ -50,8 +51,7 @@
 \vbox{
 \hbox to \columnwidth {\sc{\course} --- \prof \hfill}
 \vspace{-2mm}
-\hbox to \columnwidth {\sc due \MakeLowercase{\duedate} \duelocation\hfill {\
-Huge\color{mdb}H\hnumber.\yourname}}
+\hbox to \columnwidth {\sc due \MakeLowercase{\duedate} \duelocation\hfill {\Huge\color{mdb}H\hnumber.\yourname}}
 }
 \end{center}
 \vspace*{2mm}
@@ -101,7 +101,9 @@ where $K_G$ is the complete graph with the same degrees as $G$, meaning $w_{ij}
 \end{enumerate}
 \end{problem}
 
-\solution{
+\solution{ 
+
+Note for this problem, I will shorthand $\Bar{\textbf{x}} = \Bar{x} \1$ as $\bar{x}$.
 {\setstretch{1.5}
 
 \begin{enumerate}[(a)]
@@ -138,13 +140,135 @@ O(1/n^2)$
 Combining with the upper bound proof of $\lambda_2(P_n)$ we can conclude that
 $\lambda_2(P_n) = \Theta(1/n^2)$.
 \begin{enumerate}[(a),resume]
-\item Follow the same practice method to prove $\frac{2}{(n-1)} \leq \
-lambda_2(T_d) \geq \frac{1}{(n - 1) \log_2(n)}$, where $T_d$ is the {\bf complete
+\item Follow the same practice method to prove $\frac{2}{(n-1)} \leq \lambda_2(T_d) \geq \frac{1}{(n - 1) \log_2(n)}$, where $T_d$ is the {\bf complete
 binary} tree.
 \end{enumerate}
 \end{problem}
 \solution{
-Your solution goes here.
+
+\begin{enumerate}[(a)]
+    \item The given statement is equivalent to showing for any $\textbf{x} \in \mathbb{R}^V, (n - 1)\textbf{x}^TL_{P_n}\textbf{x} \geq \textbf{x}^TL_{G_{1, n}}\textbf{x}$. Note the quadratic form of $\textbf{x}^TL_{G}\textbf{x}$, for any unweighted graph, is given by 
+    \[
+    \textbf{x}^TL_G\textbf{x} = \sum_{(u, v) \in E} (\textbf{x}(u) - \textbf{x}(v))^2.
+    \]
+
+    Thus, for our graphs in particular, 
+    \[
+    \textbf{x}^TL_{P_n}\textbf{x} = \sum_{(u, v) \in E} (\textbf{x}(u) - \textbf{x}(v))^2
+    \hspace{5mm}
+    \textbf{x}^TL_{G_{1, n}}\textbf{x} = \sum_{(u, v) \in E} (\textbf{x}(u) - \textbf{x}(v))^2
+    \]
+
+    Note that the edges we are summing over are different for both graphs. In the case for the path graph, edges come in the form $(i, i+1), (i+1, i)$ for $0 < i \leq n$. Note since each case will add the same amount to the sum, we can git rid of one of these edges and multiply the sum bay a factor of two. This also shows up in the $G_{1, n}$ graph, so we can just throw out the factor of two in both summations when comparing. Therefore, the given statement is equivalent to showing
+    \[
+    (n - 1)\sum_{u = 1}^{n - 1}(\textbf{x}(u+1) - \textbf{x}(u))^2 \geq (\textbf{x}(n) - \textbf{x}(1))^2.
+    \]
+
+    We can note that, via telescoping, we can rewrite the right hand side as
+    \[
+    (\textbf{x}(n) - \textbf{x}(1))^2 = (\textbf{x}(n) - \textbf{x}(n-1) + \textbf{x}(n-1) - \textbf{x}(n-2) + ... + \textbf{x}(2) - \textbf{x}(1))^2 = \Big(\sum_{u = 1}^{n-1} x(u+1) - x(u)\Big)^2  
+    \]
+
+    Let us then denote $\Delta(u) = \textbf{x}(u+1) - \textbf{x}(u) \in \mathbb{R}^{n-1}$. Then, the right hand side is equivalent to 
+    \[
+    \Big(\sum_{u = 1}^{n-1} x(u+1) - x(u)\Big)^2 = \Big(\sum_{u = 1}^{n-1}\Delta(u)\Big)^2. 
+    \]
+
+    An equivalent way to rewrite a summation is to multiply it by the $\1$ vector. Then, 
+    \[
+    \Big(\sum_{u = 1}^{n-1}\Delta(u)\Big)^2 = (\1_{n-1}^T\boldsymbol{\Delta})^2
+    \]
+
+    We can then apply Cauchy-Schwartz to write, 
+
+    \[(\1_{n-1}^T\boldsymbol{\Delta})^2 \leq (\lVert \1_{n-1} \rVert \lVert \boldsymbol{\Delta} \rVert)^2 = (n-1) (\lVert \boldsymbol{\Delta} \rVert)^2
+    \]
+
+    But the norm of $\boldsymbol{\Delta}$ squared is just the sum of the squares of the components of $\boldsymbol{\Delta}$. Thus, 
+
+    \[
+    (\textbf{x}(n) - \textbf{x}(1))^2 \leq (n-1)\sum_{u = 1}^{n - 1}(\textbf{x}(u+1) - \textbf{x}(u))^2
+    \]
+
+    which is what we wanted to show. \hfill $\square$
+
+    \item Note that the clique of a graph $K_n$ is a set of X vertices of a graph $G$ with the property that every pair of distinct vertices in $X$ are adjacent in $G$. By this definition, any clique is a complete subgraph of $G$. Consequences of being a complete graph are that (for unweighted graphs with no self-connecting nodes), its adjacency matrix equals the all-ones matrix $\mathbb{J}$ minus the identity matrix $\mathbb{I}$. Also, since every pair of nodes is connected, the degree of each node is equal to $(n - 1)$. Thus $D = (n-1)$ diag($\1$). Note that the form of the eigenvalues we are looking for are only found in the normalized Laplacian of $K_n$, Thus, we can write the following:
+
+    \begin{align}
+        \mathbb{L} &= D^{-1/2}(L)D^{-1/2} &\text{(Given.)}\nonumber\\
+        &= D^{-1/2}(D-A)D^{-1/2} &\text{(Another from of the Laplacian.)}\nonumber\\
+        &= D^{-1/2}(D)D^{-1/2} -D^{-1/2}(A)D^{-1/2} &\text{(Distributivity.)}\nonumber\\
+        &= \mathbb{I} - D^{-1/2}(A) D^{-1/2} &\text{(Diagonal matrices will cancel.)} \nonumber\\
+        &= \mathbb{I} - D^{-1/2}(\mathbb{J} - \mathbb{I}) D^{-1/2} &\text{(By above.)}\nonumber\\
+        &= (1 - \frac{1}{n-1})\mathbb{I} - D^{-1/2}(\mathbb{J})D^{-1/2} &\text{(Commutivity of $\mathbb{I}$ and grouping.)}\nonumber\\
+        &= (1 - \frac{1}{n-1})\mathbb{I} -\frac{1}{n-1}\mathbb{J} &\text{(Simplification.)}\nonumber\\
+        &= \mathbb{I} + \frac{1}{n-1}(\mathbb{J} - \mathbb{I}) &\text{(Rearranging.)}\nonumber\\
+        &= \mathbb{I} - \frac{1}{n-1}A &\text{(For complete graphs.)}\nonumber
+    \end{align}
+
+    Thus, we seek to find the eigenvalues of the following matrix
+    \[
+    \mathbb{L} = 
+    \begin{pmatrix}
+    1 &-\frac{1}{n-1} &\dots &-\frac{1}{n-1}\\
+    -\frac{1}{n-1} &1 &\dots &-\frac{1}{n-1}\\
+    \vdots &&\ddots &\vdots\\
+    -\frac{1}{n-1} &\dots &-\frac{1}{n-1} &1
+    \end{pmatrix}
+    \]
+
+    Instead of directly calculating the eigenvalues, we can seek to find them using some intuition. If we take into the consideration the all-ones vector $\1$, we can see, when this matrix is applied, each component of the resulting vector will equal $1  - \frac{1}{n-1}(n-1)$, which will equal $0$. Thus we will get the zero-vector, which means $\1$ is an eigenvector of $\mathbb{L}$ with eigenvalue 0. If we introduce a vector $\textbf{v}_j = [-1, 0, ..., 1, 0, ..., 0]$ (this is a vector with nonzero entries only in the first and $j-th$ component) and apply $\mathbb{L}$, we can notice the first component will equal $-1 - \frac{1}{n-1}$ for any choice $j$ and the $j$-th component will equal $\frac{1}{n-1} + 1$. \par 
+    
+    \vspace{5mm}
+    Thus we notice $\mathbb{L}\textbf{v}_j = (1 + \frac{1}{n-1})\textbf{v}_j$ for any $2 \leq j \leq n$. So $\textbf{v}_j$ is an eigenvector of $\mathbb{L}$ with eigenvalue $1 + \frac{1}{n-1}$. We can note that we have thus found $n$ linearly independent eigenvectors, so no additional eigenvalues can be observed. Thus, 0 is the smallest eigenvalue with all other eigenvalues equaling $1 + \frac{1}{n-1}$, which is what we wanted to find. \hfill $\square$  
+
+    \item Note that if we find $G_{ij} \preceq (j - i) P_n$, then by summing over $j, i$ with $j > i$, we can find the given statement to be true. Since a similar method was done in part a, we will take some queues from it. Thus, the following steps are justified:
+
+    \begin{align}
+        &\textbf{x}^TL_{G_{ij}}\textbf{x}\nonumber\\ &= \sum_{(u, v) \in E} (\textbf{x}(u) - \textbf{x}(v))^2 &\text{(Given.)}\nonumber\\
+        &= (\textbf{x}(i) - \textbf{x}(j))^2 &\text{($E = \{(i, j)\}$ for $G_{ij}, j > i$.)}\nonumber\\
+        &= (\textbf{x}(i) - \textbf{x}(i+1) + \textbf{x}(i+1) - \textbf{x}(i+2) + ... + \textbf{x}(j-1) + \textbf{x}(j))^2 &\text{(Adding zeros in form $\textbf{x}(k) - \textbf{x}(k)$.)}\nonumber\\
+        &\leq \Big( \sum_{k = i}^j\textbf{x}(k) - \textbf{x}(k+1)\Big)^2 &\text{(Triangle inequality.)}\nonumber\\
+        &= \Big( \sum_{k = i}^j \boldsymbol{\Delta}\Big)^2 &(\boldsymbol{\Delta} := \textbf{x}(k) - \textbf{x}(k+1).)\nonumber\\
+        &= (\1_{j - i}^T\boldsymbol{\Delta})^2 &\text{(Another way to sum over vector.)}\nonumber\\
+        &\leq \lVert \1_{j - i}^T\rVert^2 \lVert \boldsymbol{\Delta}\rVert ^2 &\text{(Cauchy-Schwartz.)}\nonumber\\
+        &= (j - i)\sum_{k = i}^j (\textbf{x}(k+1) - \textbf{x}(k))^2 &\text{(Taking 2-norm.)}\nonumber\\
+        &\leq (j - i)\sum_{k = 1}^{n-1} (\textbf{x}(k+1) - \textbf{x}(k))^2 &\text{(Adding positive terms.)}\nonumber\\
+        &= (j - i) \textbf{x}^TL_{P_n}\textbf{x} &\text{(Definition.)}\nonumber
+    \end{align}
+
+    Thus, by the given equality of complete paths, summing over $i, j$ with $j > i$ will yield the desired inequality. \hfill $\square$
+
+    \item We just showed in the previous part that $K_n \preceq \sum_{i < j} P_n$. So the largest eigenvalue of $K_n$ is less than or equal to the largest eigenvalue of $P_n$ times the summation. Note the summation will run over all of $1 \leq i < j \leq n$, thus the summation runs in $O(n^2)$ time. The following is then justified:
+
+    \begin{align}
+        \lambda_2(K_n) &\leq O(n^2)\lambda_2(P_n) &\text{(Reasoned above.)}\nonumber\\
+        1 +\frac{1}{n - 1} &\leq O(n^2)\lambda_2(P_n) &\text{(By part b.)}\nonumber\\
+        \implies \frac{1}{O(n^2)} + \frac{1}{(n - 1)O(n^2)}& \leq \lambda_2(P_n) &\text{(Dividing by $O(n^2)$.)}\nonumber\\
+        \implies \frac{1}{O(n^2)} & \leq \lambda_2(P_n) &\text{(Term dropped is positive, so is upper bound.)}\nonumber
+    \end{align}
+
+    Thus, if we can take $1/O(n^2) = O(1/n^2)$, then the statement has been proven. \hfill $\square$
+
+    \item Skip for now 
+
+    \item To construct these bounds on $\lambda_2(T_d)$, we need to construct some reasonable test vector on the tree. I tried my best to create a binary tree in Latex for a visual example. 
+
+    \Tree [.1 [.2 4 5 ] [.3 6 7 ]   ] 
+
+    Let's construct our test vector $\textbf{v}(a)$ as \textbf{v}(1) = 0, \textbf{v}(2) = 1, and \textbf{v}(3) = -1 (I'm basically treading over what was done in Speilman). From this, we'll take every vertex which can be reached by 2 without going through 1 to have value 1, otherwise the node will have value zero. This is what our tree will look like for our text vector.
+
+
+    \Tree [.$\textbf{v}(1)=0$ [.$\textbf{v}(2)=1$ $\textbf{v}(4)=1$ $\textbf{v}(5)=1$ ] [.$\textbf{v}(3)=-1$ $\textbf{v}(6)=-1$ $\textbf{v}(7)=-1$ ]   ] 
+
+    As it turns out, our test vector is symmetric, so when summing over all nodes in the tree, $\1^T\textbf{v} = 0$. Thus we can write
+
+    \[
+    \lambda_2 \leq \frac{\textbf{v}^TL\textbf{v}}{\textbf{v}^T\textbf{v}} = \frac{\sum_{a\sim b} (\textbf{v}(a) - \textbf{v}(b))^2}{\sum_a \textbf{v}(a)^2} = \frac{(\textbf{v}(1) - \textbf{v}(2))^2 + (\textbf{v}(1) - \textbf{v}(3))^2}{n - 1} = 2/(n - 1)
+    \]
+
+\end{enumerate}
+
 }
 \newpage
 \begin{problem}[Spectrum of bipartite graphs (10 points)]
