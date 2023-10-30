@@ -35,7 +35,7 @@ A
 then $a_{23}$ = -0.2743 is Austria’s population per square kilometers (row index 2 = Austria, column index 3 = population per square kilometers). As you probably notice, this matrix has been slightly preprocessed. If you want to see the raw data, you can find them in raw.txt (e.g. the actual value for Austria’s population per square kilometers is 84) but you don’t need the raw data for this problem.
 
 \subsection{Problem 1, part a}
-Show that to plot the projecions of the row vectors (i.e., samples) $\textbf{a}_1, ..., \textbf{a}_{49} \in \R^{7}$ onto the two-dimensional subspace span $\{ \textbf{v}_j, \textbf{v}_k \cong \R^2\}$, we may simply plot the $n$ points 
+Show that to plot the projections of the row vectors (i.e., samples) $\textbf{a}_1, ..., \textbf{a}_{49} \in \R^{7}$ onto the two-dimensional subspace span $\{ \textbf{v}_j, \textbf{v}_k \cong \R^2\}$, we may simply plot the $n$ points 
 \[
     \{(\sigma_ju_{ij}, \sigma_ku_{ik}) \in \R^2 : i = 1, ..., 49\}
 \]
@@ -43,7 +43,116 @@ where $U = [u_{ij}] \in \R^{49\times 49}$ and $\Sigma = $ diag$(\sigma_1, ..., \
 
 \partbreak
 \begin{solution}
+
+     Denote the Singular Value Decomposition of $A$ as $U\si V^t$, where $U, V$ are matrices constructed by orthonormal vectors. They are related to each other by $A\textbf{v}_k = \sigma_k\textbf{u}_k$, where $\textbf{u}_k, \textbf{v}_k$ is the $k-$th column vector of $U$ and $V$, respectively, and $\sigma_k$ is the $k$-th singular value of $A$. Similarly, $A^*\textbf{u} = \sigma_k\textbf{v}_k$. Thus, if there were some other $\textbf{u}_i$, such that $A^*\textbf{u}_i = \sigma_i\textbf{v}_k$, then 
+     \[
+     \textbf{v}_k^*\textbf{v}_k = (\frac{1}{\sigma_i}A^*\textbf{u}_i)^*A^*\textbf{u}_k = \frac{1}{\sigma_i}\textbf{u}_i^*AA^*\textbf{u}_k = \frac{\sigma_k^2}{\sigma_i}\textbf{u}_i^*\textbf{u}_k = 0
+     \]
+
+      since the set of \textbf{u} vectors are orthonormal Thus, no other $\textbf{u}$ contributes to $\textbf{v}_k$, meaning if we want to project onto the given subspace, we only need to plot $\{(\sigma_ju_{ij}, \sigma_ku_{ik}) \in \R^2 : i = 1, ..., 49\}$.
+\end{solution}
+
+\newpage
+\subsection{Problem 1, part b}
+Find the first two right singular vectors of $A, \textbf{v}_1, \textbf{v}_2 \in \R^7$ . Project the data onto the two-dimensional space span$\{\textbf{v}_1, \textbf{v}_2\} \cong \R^2$ . Plot this in a graph where the x- and y-axes correspond to $\textbf{v}_1$ and $\textbf{v}_2$ respectively and where the points correspond to the countries — label each point by the country it corresponds to. Identify the two obvious outliers.
+\partbreak
+\begin{solution}
+
+    I will provide the plot below, followed by the code. It seems the two countries I found as outliers are Singapore and Hong Kong.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width = 0.5\textwidth]{Images/problem 1b plot.png}
+        \label{fig:problem 1b}
+    \end{figure}
+
+\begin{lstlisting}    
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+#filepaths for country data, names
+filepathmat = 'datafiles/processed.txt'
+filepathcont = 'datafiles/row.txt'
+filepathdemvar = 'datafiles/column.txt'
+
+#read in country names, then data with index as names
+cont = pd.read_csv(filepathcont, header=None)
+demvar = pd.read_csv(filepathdemvar, header=None)
+df = pd.read_csv(filepathmat, header=None)
+df = df.set_axis(cont[0], axis='index')
+
+#Write to numpy array to do SVD
+df_arr = df.to_numpy()
+U, S, V = np.linalg.svd(df_arr)
+
+testpts = []
+
+j, k = 1, 2
+for pts in range(U.shape[0]):
+    testpts.append((S[j] *U[pts][j], S[k]*U[pts][k]))
+pts = np.array(testpts)
+
+#Finding outliers
+outlier1 = np.argmin(pts[:, 0])
+outpt1 = (outlier1, pts[outlier1, :])
+outlier2 = np.argmin(np.delete(pts[:, 0], outlier1))
+outpt2 = (outlier2, pts[outlier2, :])
+
+outliers = np.array([df.index[outlier1], df.index[outlier2]])
+
+for x, y in pts:
+    plt.scatter(x, y)
     
+plt.title("Country data")
+plt.style.use('fivethirtyeight')
+plt.gray
+plt.ylabel(f'Projection {j}')
+plt.xlabel(f'Projection {k}')
+#Labelling outliers on plot
+plt.annotate(f'{outliers[0]}', xy=(outpt1[1]) )
+plt.annotate(f'{outliers[1]}', xy=(outpt2[1]) )
+\end{lstlisting}
+\end{solution}
+
+
+\newpage
+\subsection{Problem 1, part c}
+Now do the same with the two left singular vectors of $A$, $\textbf{u}_1, \textbf{u}_2 \in \R^{49}$. Project the column vectors (i.e., variables) $\alpha_1, ..., \alpha_7 \in \R^{49}$ onto the two-dimensional space span$\{\textbf{u}_1, \textbf{u}_2\} \cong \R^2$ and plot this in a graph as before. Note that in this case, the points correspond to the demographic variables — label them accordingly.
+\partbreak
+\begin{solution}
+
+The plot will be provided below, as well as the code. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Images/problem 1c plot.png}
+    \label{fig:problem1c}
+\end{figure}
+
+\begin{lstlisting}
+#Doing the same except for demographic variables
+testpts = []
+
+j, k = 1, 2
+for pts in range(V.shape[0]):
+    testpts.append((S[j] *V[pts][j], S[k]*V[pts][k]))
+pts = np.array(testpts)
+
+
+# Create the scatter plot
+plt.scatter(pts[:, 0], pts[:, 1], c = [random.randint(0, x*10) for x in range(len(V))])
+
+#Finding outliers
+for i, (x, y) in enumerate(pts):
+    plt.annotate(f'{demvar[0][i]}', xy=(x, y), fontsize=10)
+
+plt.title("Country data")
+plt.style.use('fivethirtyeight')
+plt.gray
+plt.ylabel(f'{df.index[k]}')
+plt.xlabel(f'{df.index[j]}')
+\end{lstlisting}
 \end{solution}
 
 \newpage
