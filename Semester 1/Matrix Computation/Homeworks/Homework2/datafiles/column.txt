@@ -1,0 +1,7 @@
+InfantDeath/1000         
+#Inhab/physician         
+Population/sq.km         
+Population/1000HectarAgri
+%LiterateOver15          
+#Student/100.000         
+GNP
