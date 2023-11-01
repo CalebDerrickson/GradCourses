@@ -58,7 +58,7 @@ Find the first two right singular vectors of $A, \textbf{v}_1, \textbf{v}_2 \in 
 \partbreak
 \begin{solution}
 
-    I will provide the plot below, followed by the code. It seems the two countries I found as outliers are Singapore and Hong Kong.
+    I will provide the plot below, followed by the code. It seems the two countries I found as outliers are Singapore and Hong Kong. Note that I did not plot the names for other countries, since the plot would be barely legible.
 
     \begin{figure}[h]
         \centering
@@ -156,6 +156,49 @@ plt.xlabel(f'{df.index[j]}')
 \end{solution}
 
 \newpage
+\subsection{Problem 1, part d}
+Overlay the two graphs in (b) and (c). Identify the two demographic variables near the two outlier countries — these explain why the two countries are outliers.
+\partbreak
+\begin{solution}
+
+    Here is my plot. It seems like the two demographic variables very near to Singapore and Hong Kong are Population per 1000 Hectacr Agri and number of students per 100,000. These seem very reasonable, since these two countries are tightly packed, huge populations, and an emphasis on rigorous childhood education.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width = 0.9\textwidth]{Images/biplot.png}
+        \label{fig:p1c}
+    \end{figure}
+\end{solution}
+
+\newpage
+\subsection{Problem 1, part e}
+Remove the two outlier countries and redo (b) with this 47 × 7 matrix. This allows you to see features that were earlier obscured by the outliers. Which two European countries are most alike Japan?
+\partbreak
+\begin{solution}
+    Since you can't see the name too well on the map, I made some code to find the first few countries nearest to japan. Here's the code, then the plot. It seems that Portugal and Austria are most like japan in these projections (that are in Europe!).
+
+    \begin{lstlisting}
+dist = np.array([np.linalg.norm((x - pts[22][0], y - pts[22][1])) for x, y in pts])
+k = 5
+indices = np.argpartition(dist, k)[:k]
+
+# Get the 3 minimum values and their indices
+min_values = dist[indices]
+
+print("Closest countries to Japan:",  df.index[indices])
+
+Closest countries to Japan: Index(['Portugal      ', 'Japan         ', 'Austria       ', 'Mexico        ',
+       'Costa Rica    '],
+      dtype='object', name=0)
+    \end{lstlisting}
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width = 0.8\textwidth]{Images/japan.png}
+        \label{fig:p1e}
+    \end{figure}
+\end{solution}
+\newpage
 \section{Problem 2}
 Let $A, B \in \R^{m \times n}$ where $A$ has full column rank.
 
@@ -169,7 +212,7 @@ has a unique solution. What is the minimum length solution, i.e., where $\norm{X
 \begin{solution}
 
     Suppose false, that is, there exists $X, X' \in \R^{n \times m}$ with $X \neq X'$ that achieve minimum. Then, via SVD, we can deduce a contradiction. Note the norm we are working with is the Frobenius norm, i will omit this in writing. We can also write $\id_m = UU^T$.
-
+\newpage
 {\small
     \alignbreak
     \begin{align}
@@ -291,6 +334,12 @@ Now emulate the previous part to find the rank-$r$ matrix $X \in \R^{m \times n}
 \[
 \min_{\text{rank}(X) \leq r}\norm{AX - B}_F.
 \]
+
+\partbreak
+\begin{solution}
+
+    Sorry, I did not have time this week to get to this part.
+\end{solution}
 \newpage
 \section{Problem 3}
 Let $A \in \C^{m\times n}$ and $\textbf{b} \in \C^m$. We will discuss a variant of $A\textbf{x} \approx \textbf{b}$ where the error occurs only in $A$. Note that in ordinary least squares we assume that the error occurs only in \textbf{b} while in total least squares we assume that it occurs in both $A$ and \textbf{b}.
@@ -392,7 +441,11 @@ Given $\textbf{a} \in \C^n, \textbf{b} \in \C^m$, and $\delta > 0$. Show how to 
 \]
 \partbreak
 \begin{solution}
-    
+
+    Sorry, I didn't get to this part in time, but I will try to explain my thoughts. I would imagine you would want $E$ to map $\textbf{a}$ the closest to $\textbf{b}$ in the minimize problem, but $E$ can only stretch $\textbf{a}$ at most size $\delta$. If The distance from $\textbf{a}$ to $\textbf{b}$ is less than $\delta$, then the minimum can be achieved for some $E$, so our minimum value would be 0. If not, then you would just take the distance from zero to the origin. If this distance is smaller than the distance to $\textbf{b}$, then just let $E = 0$. \par
+
+    \vspace{5mm}
+    For the maximizer, you would just want $E$ to map $\textbf{a}$ the furthest away from $\textbf{b}$. If $\textbf{a}$ is greater than $\textbf{b}$ by distance $\delta$, then you would just map it further away. 
 \end{solution}
 \newpage
 \section{Problem 4}
@@ -509,6 +562,466 @@ Show that for nonsingular $A, B \in \C^{n\times n}$,
  \]
  \partbreak
  \begin{solution}
-     
+
+     We are given $\norm{\cdot}$ is submultiplicative, so we can note, by the hint, that
+     \[
+     \norm{AX - \id} = \norm{A(XA - \id)A^{-1}} \leq \norm{A} \norm{XA- \id} \norm{A^{-1}}
+     \]
+     By rearranging, we get 
+     \[
+     \frac{\norm{AX - \id}}{\norm{XA - \id}} \leq \norm{A}\norm{A^{-1}} = \kappa(A)
+     \]
+
+     This shows the first inequality. Next note that we could have also don't the same for $XA - \id$, that is, $A^{-1}(AX - \id) A = XA - \id$. We can then write the following
+
+     \[
+     \norm{XA - \id} = \norm{A^{-1}(AX - \id) A} \leq \norm{A^{-1}}\norm{AX - \id}\norm{A}.
+     \]
+
+     Which can then be rewritten as 
+     \[
+     \frac{\norm{XA - \id}}{\norm{AX - \id}} \leq \norm{A^{-1}} \norm{A} = \kappa(A),
+     \]
+
+     thus the second inequality has been shown, so $\kappa(A)$ is greater than both, so it is greater than the max. 
  \end{solution}
+\newpage
+\section{Problem 5}
+We will examine the effect of various parameters on the accuracy of a computed solution to a nonsingular linear system. Relevant commands in Matlab syntax are given in brackets.
+
+\subsection{Problem 5, part a}
+Generate $A = [a_{ij}] \in \R^{n\times n}$ as follows:
+\begin{enumerate}
+    \item $a_{ij}$ randomly generated from a standard normal distribution $[randn(n)]$. 
+    \item A Hilbert matrix, i.e. $a_{ij} = 1/(i + j - 1)$
+    \item A Pascal matrix
+    \item A magic square
+\end{enumerate}
+\partbreak
+\begin{solution}
+    I will provide my definitions below. Note that I had some external help creating the magic square.
+
+    \begin{lstlisting}
+import numpy as np
+import random
+import math
+def random_matrix(n: int):
+    """
+    Returns a numpy matrix of size n by n filled with random numbers 
+    """
+    res = np.zeros((n, n))
+    for i in range(res.shape[0]):
+        for j in range(res.shape[1]):
+            res[i][j] = random.gauss(0, 1)
+    return res
+
+def hilbert_matrix(n: int):
+    """
+    Returns a Hilbert matrix of size n by n where 
+    a_{ij} = 1/ (i + j - 1)
+    """
+    res = np.zeros((n , n))
+    for i in range(n):
+        for j in range(n):
+            if i== 0 and j ==0:
+                res[i][j] = 1
+            else:
+                res[i][j] = float(1 / ((i+1) + (j+1) - 1))
+    return res
+
+def pascal_matrix(n: int):
+    """
+    Returns a Pascal matrix of size n with entries 
+    a_{ij} = {i + j \choose i}
+    """
+    res = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            res[i][j] = math.comb(i+j, i)
+    return res
+
+def magic_matrix(N: int):
+    """
+    Returns a magic square of size N by N. 
+    Courtesy of https://scipython.com/book/chapter-6-numpy/examples/creating-a-magic-square/
+    """
+
+    magic_square = np.zeros((N,N), dtype=int)
+
+    n = 1
+    i, j = 0, N//2
+
+    while n <= N**2:
+        magic_square[i, j] = n
+        n += 1
+        newi, newj = (i-1) % N, (j+1)% N
+        if magic_square[newi, newj]:
+            i += 1
+        else:
+            i, j = newi, newj
+    
+    return magic_square
+    \end{lstlisting}
+\end{solution}
+\newpage
+\subsection{Problem 5, part b}
+Generate $\textbf{x}$ and $\textbf{b} \in \R^n$ as follows:
+\begin{enumerate}
+    \item $\textbf{x} = [1, ..., 1]^T$
+    \item $\textbf{b} = A\textbf{x}$
+\end{enumerate}
+\partbreak
+\begin{solution}
+    
+    Here is my code:
+    \begin{lstlisting}
+def one_vect(n: int):
+    """
+    Returns a column vector of size n x 1 filled with ones 
+    """
+    return np.ones((n, 1))
+
+def mat_vec_mult(A: np.ndarray, x: np.array):
+    """
+    Returns the multiplication of Ax. Has no protection on it
+    so be careful.
+    """
+    return np.matmul(A, x)
+    \end{lstlisting}
+\end{solution}
+\newpage
+\subsection{Problem 5, part c}
+ For each A generated as above, perform the following for $n = 5, 10, 15, . . . , 500$.
+ \begin{enumerate}
+     \item Solve $A\textbf{x} = \textbf{b}$  using your program to get $\hat{\textbf{x}}$. Note that in general the result computed by your program will not exactly be the true solution $\textbf{x} = A^{-1}\textbf{b}$ because of roundoff errors that occurred during computations.
+ 
+    \item Compute $\Delta b = A\hat{\textbf{x}} - \textbf{b}$ and record the values of $\norm{\textbf{x} - \hat{\textbf{x}}}/ \norm{\textbf{x}}, \kappa(A) and \kappa(A)\norm{\Delta \textbf{b}} / \norm{\textbf{b}}$ for $\norm{\cdot} = \norm{\cdot}_1, \norm{\cdot}_2, \norm{\cdot}_\infty$
+
+    \item Present everything for the $n = 5$ case but only tabulate the relevant trend for general $n > 5 in a graph.$
+ \end{enumerate}
+\partbreak
+ \begin{solution}
+     Here is my code (don't judge me, I only had like 2 days to work on this homework)
+
+     \begin{lstlisting}
+xhats = []
+deltab = []
+
+#x - xhat / mag x
+xmag1 = []
+xmag2 = []
+xmaginf = []
+
+#cond numbers
+con1 = []
+con2 = []
+coninf = []
+
+#max b * cond
+relcon1 = []
+relcon2 = []
+relconinf = []
+
+for inc in range(5, 505, 5):
+    vec = one_vect(inc)
+    ran = random_matrix(inc)
+    hil = hilbert_matrix(inc)
+    pas = pascal_matrix(inc)
+    mag = magic_matrix(inc)
+    
+    ransol = np.matmul(np.linalg.pinv(ran), vec)
+    hilsol = np.matmul(np.linalg.pinv(hil), vec)
+    passol = np.matmul(np.linalg.pinv(pas), vec)
+    magsol = np.matmul(np.linalg.pinv(mag), vec)
+    
+    dbran = np.matmul(ran, ransol) - mat_vec_mult(ran, vec) 
+    dbhil = np.matmul(hil, hilsol) - mat_vec_mult(hil, vec)
+    dbpas = np.matmul(pas, passol) - mat_vec_mult(pas, vec)
+    dbmag = np.matmul(mag, magsol) - mat_vec_mult(mag, vec)
+    
+    magran1 = np.linalg.norm(vec - ransol, ord= 1) / np.linalg.norm(vec, ord = 1)
+    maghil1 = np.linalg.norm(vec - hilsol, ord= 1) / np.linalg.norm(vec, ord = 1)
+    magpas1 = np.linalg.norm(vec - passol, ord= 1) / np.linalg.norm(vec, ord = 1)
+    magmag1 = np.linalg.norm(vec - magsol, ord= 1) / np.linalg.norm(vec, ord = 1)
+    
+    
+    magran2 = np.linalg.norm(vec - ransol, ord= 2) / np.linalg.norm(vec, ord = 2)
+    maghil2 = np.linalg.norm(vec - hilsol, ord= 2) / np.linalg.norm(vec, ord = 2)
+    magpas2 = np.linalg.norm(vec - passol, ord= 2) / np.linalg.norm(vec, ord = 2)
+    magmag2 = np.linalg.norm(vec - magsol, ord= 2) / np.linalg.norm(vec, ord = 2)
+    
+    
+    magraninf = np.linalg.norm(vec - ransol, ord= np.inf) / np.linalg.norm(vec, ord = np.inf)
+    maghilinf = np.linalg.norm(vec - hilsol, ord= np.inf) / np.linalg.norm(vec, ord = np.inf)
+    magpasinf = np.linalg.norm(vec - passol, ord= np.inf) / np.linalg.norm(vec, ord = np.inf)
+    magmaginf = np.linalg.norm(vec - magsol, ord= np.inf) / np.linalg.norm(vec, ord = np.inf)
+    
+    rancon1 = np.linalg.cond(ran, p=1)
+    hilcon1 = np.linalg.cond(hil, p=1)
+    pascon1 = np.linalg.cond(pas, p=1)
+    magcon1 = np.linalg.cond(mag, p=1)
+
+    rancon2 = np.linalg.cond(ran, p=2)
+    hilcon2 = np.linalg.cond(hil, p=2)
+    pascon2 = np.linalg.cond(pas, p=2)
+    magcon2 = np.linalg.cond(mag, p=2)
+
+    ranconinf = np.linalg.cond(ran, p=np.inf)
+    hilconinf = np.linalg.cond(hil, p=np.inf)
+    pasconinf = np.linalg.cond(pas, p=np.inf)
+    magconinf = np.linalg.cond(mag, p=np.inf)
+    
+    relconran1 = rancon1 * np.linalg.norm(dbran, ord = 1) / np.linalg.norm(vec, ord = 1)
+    relconhil1 = hilcon1 * np.linalg.norm(dbhil, ord = 1) / np.linalg.norm(vec, ord = 1)
+    relconpas1 = pascon1 * np.linalg.norm(dbpas, ord = 1) / np.linalg.norm(vec, ord = 1)
+    relconmag1 = magcon1 * np.linalg.norm(dbmag, ord = 1) / np.linalg.norm(vec, ord = 1)
+    
+    relconran2 = rancon2 * np.linalg.norm(dbran, ord = 2) / np.linalg.norm(vec, ord = 2)
+    relconhil2 = hilcon2 * np.linalg.norm(dbhil, ord = 2) / np.linalg.norm(vec, ord = 2)
+    relconpas2 = pascon2 * np.linalg.norm(dbpas, ord = 2) / np.linalg.norm(vec, ord = 2)
+    relconmag2 = magcon2 * np.linalg.norm(dbmag, ord = 2) / np.linalg.norm(vec, ord = 2)
+    
+    relconraninf = ranconinf * np.linalg.norm(dbran, ord = np.inf) / np.linalg.norm(vec, ord = np.inf)
+    relconhilinf = hilconinf * np.linalg.norm(dbhil, ord = np.inf) / np.linalg.norm(vec, ord = np.inf)
+    relconpasinf = pasconinf * np.linalg.norm(dbpas, ord = np.inf) / np.linalg.norm(vec, ord = np.inf)
+    relconmaginf = magconinf * np.linalg.norm(dbmag, ord = np.inf) / np.linalg.norm(vec, ord = np.inf)
+    
+    temp11 = [relconraninf, relconhilinf, relconpasinf, relconmaginf]
+    temp10 = [relconran2, relconhil2, relconpas2, relconmag2]
+    temp9 = [relconran1, relconhil1, relconpas1, relconmag1]
+    temp8 = [ranconinf, hilconinf, pasconinf, magconinf]
+    temp7 = [rancon2, hilcon2, pascon2, magcon2]
+    temp6 = [rancon1, hilcon1, pascon1, magcon1]
+    temp5 = [magran1, maghil1, magpas1, magmag1]
+    temp4 = [magran2, maghil2, magpas2, magmag2]
+    temp3 = [magraninf, maghilinf, magpasinf, magmaginf]
+    temp2 = [dbran, dbhil, dbpas, dbmag]
+    temp1 = [ransol, hilsol, passol, magsol]
+    
+    xhats.append(temp1)
+    deltab.append(temp2)
+    xmag1.append(temp5)
+    xmag2.append(temp4)
+    xmaginf.append(temp3)
+    con1.append(temp6)
+    con2.append(temp7)
+    coninf.append(temp8)
+    relcon1.append(temp9)
+    relcon2.append(temp10)
+    relconinf.append(temp11)
+     \end{lstlisting}
+
+ This disgusting abomination will record everything for us. Here is the $n = 5$ case wrapped in a numpy array:
+
+ \begin{figure}[h]
+     \centering
+     \includegraphics[width = \textwidth]{Images/dataframe.png}
+     \label{p5c: dataframe}
+ \end{figure}
+
+ Here are the trends for the three different values to consider:
+
+ \begin{figure}
+     \centering
+     \includegraphics{Images/mags.png}
+     \label{fig:xhats}
+ \end{figure}
+
+ \begin{figure}
+     \centering
+     \includegraphics{Images/kappas.png}
+     \label{fig:relcon}
+ \end{figure}
+
+ \begin{figure}
+     \centering
+     \includegraphics{Images/relb.png}
+     \label{fig:relmags}
+ \end{figure}
+ \end{solution}
+
+\newpage
+\subsection{Problem 5, part d}
+Discuss an explain the effects of different choices of $A$, $b$, $\norm{\cdot}$, and $n$ have on the accuracy of the computed solution $\hat{\textbf{x}}$.
+\partbreak
+\begin{solution}
+
+    For the relative magnitudes for $x_hat$, we see wildly different plots for the random matrix, the Hilbert matrix, and Pascal Matrix. It looks like the Magic matrix has nearly the same shape as the pascal matrix. There seems to be some periodicity in the Hilbert matrix, and the relative magnitude difference is quite massive compared to other plots. It also seems that the mags stayed relatively the same shape for each matrix, aside from the Hilbert matrix.\par 
+
+    For the condition number of these matrices, they seem relatively stable, aside from a few rogue points on the plot. Admittedly, I probably should have removed these points to get a far more interesting plot. \par
+
+    It seems as though the relative b suffered the same problem as the conditional number plots. The only ``clear" plot we have is the random matrix, which seems to show random spikes for any size of the matrix.
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part e}
+Instead of solving the linear system directly, compute $A^{-1}$ and then define $\hat{\textbf{x}} = A^{-1} \textbf{b}$. Comment on the accuracy of the approach. Provide numerical evidence to support your conclusion.
+\partbreak
+\begin{solution}
+
+    Since I was having issues solving the system for some sizes of the matrices (they were reported singular by numpy), I had to resort to computing the pseudo inverses for all systems, then solving it from there, as shown in my code. I would imagine my approach would incur more error in the result, as obtaining the pseudo inverses for these matrices are far more costly than solving the system directly. 
+\end{solution}
+
+\subsection{Problem 5, part f}
+ Write a program that computes the (1, 1)-entry of the matrix $A^{-1}$ that does not involve computing $A^{-1}$ , i.e., if $A^{-1}$= $b_{ij}$, you want the value $b_{11}$ but you are not allowed to compute $A^{-1}$.
+
+ \partbreak
+ \begin{solution}
+     I can imagine a solution would be to use the fact that the inverse $A^{-1}$ can be computed element wise, as the $b_{11}$ element would be $a_{11}$ times the determinant of the minor of $a_{11}$. There is no restriction on using determinants, so this solution is valid.  Here is my code:
+
+     \begin{lstlisting}
+def det_11 (A: np.array):
+    """
+    Computes the a_11 entry of the inverse of A, assuming A meets the 
+    conditions for being invertible.
+    This will take advantage of an element wise defintion of the inverse.
+    """
+    minor = A[1:, 1:]
+    detminor = np.linalg.det(minor)
+    return float(A[0][0] / detminor)
+     \end{lstlisting}
+ \end{solution}
+\newpage
+ \section{Problem 6}
+ Let $A \in \R^{n\times n}$ be nonsingular and let $\textbf{0} \neq \textbf{b} \in \R^n$. Let $\textbf{x} = A^{-1}\textbf{b} \in \R^n$. In the following, $\Delta A \in \R^{n\times n}$ and $\Delta \textbf{b} \in \R^n$ are some arbitrary matrix and vector. We assume that the norm on $A$ satisfies $\norm{A\textbf{x}} \leq \norm{A}\norm{\textbf{x}}$ for all $A \in \R^{n\times n}$ and all $\textbf{x} \in \R^n$. 
+
+ \subsection{Problem 6, part a}
+ 
+ Show that if $\Delta A \in \R^{n\times n}$ is any matrix satisfying
+ \[
+ \frac{\norm{\Delta A}}{\norm{A}} < \frac{1}{\kappa (A)},
+ \]
+ the $\Delta A + A$ must be nonsingular. 
+
+ \partbreak
+ \begin{solution}
+
+     Suppose false, that is, $\Delta A + A$ is singular. This means that there exists some nonzero $\textbf{v} \in \R^n$ where $(A + \Delta A)\textbf{v} = 0$. This would then mean $\norm{(A + \Delta A)\textbf{v}} = 0$. By the property of the norm given, this means $0 \leq \norm{A + \Delta A}\norm{\textbf{v}}$, which means $\norm{A + \Delta A} \geq 0$. Since this norm must satisfy the properties for being a norm, this means the triangle inequality can be applied, thus $0 \leq \norm{A} + \norm{\Delta A}$, so $-\norm{A} \leq \norm{\Delta A}$. This can then be plugged into the given inequality to get
+     \[
+     \frac{-\norm{A}}{\norm{A}} \leq \frac{\norm{\Delta A}}{\norm{A}} < \frac{1}{\kappa(A)} 
+     \]
+     After reciprocating both sides, we get $-1 > \kappa(A)$, which should never happen, since $\kappa(A)$ is the product of two positive numbers. Thus $A + \Delta A$ cannot be singular.
+ \end{solution}
+
+ \newpage
+ \subsection{Problem 6, part b}
+ Suppose $(A + \Delta A)(\textbf{x} + \Delta \textbf{x}) = \textbf{b}$ and $\hat{\textbf{x}} = \textbf{x} + \Delta \textbf{x}$. Show that 
+ \[
+ \frac{\norm{\Delta \textbf{x}}}{\norm{\hat{\textbf{x}}}} \leq \kappa(A) \frac{\norm{\Delta A}}{\norm{A}}
+ \]
+\partbreak
+\begin{solution}
+
+ We are given $(A + \Delta A) (\textbf{x} + \Delta \textbf{x}) = \textbf{b} = A\textbf{x}$. Cancelling out the $A\textbf{x}$ on each side gives us $A \Delta \textbf{x} + \Delta A(\textbf{x}+ \Delta\textbf{x} = 0$/ Thus the following steps can be justified:
+
+ \alignbreak
+ \begin{align}
+     -A\Delta \textbf{x} &= \Delta A(\textbf{x} + \Delta \textbf{x}) &\text{(Rearranging.)}\nonumber\\
+     \implies -\Delta \textbf{x} &= A^{-1}\Delta A \hat{\textbf{x}} &\text{(Inverting $A$.)}\nonumber\\
+     \implies \norm{\Delta \textbf{x}} &= \norm{A^{-1}\Delta A\hat{\textbf{x}}} &\text{(Negative lost in norm.)}\nonumber\\
+     \norm{\Delta \textbf{x}} &\leq \norm{A^{-1}\Delta A} \norm{\hat{\textbf{x}}} &\text{(Submultiplicating.)}\nonumber\\
+     \frac{\norm{\Delta \textbf{x}}}{\norm{\hat{\textbf{x}}}} &\leq \norm{A^{-1}\Delta A} &\text{(Simplifying.)}\nonumber\\
+     \implies \frac{\norm{\Delta \textbf{x}}}{\norm{\hat{\textbf{x}}}} &\leq \norm{A^{-1}}\norm{\Delta A} &\text{(Submultplicating.)}\nonumber\\
+     \iff \frac{\norm{\Delta \textbf{x}}}{\norm{\hat{\textbf{x}}}} &\leq \norm{A^{-1}}\norm{A}\frac{\norm{\Delta A}}{\norm{A}} &\text{(Multiplying by 1.)}\nonumber\\
+     \therefore \frac{\norm{\Delta \textbf{x}}}{\norm{\hat{\textbf{x}}}} &\leq \kappa(A)\frac{\norm{\Delta A}}{\norm{A}} &\text{(Definition of $\kappa(A)$.)}\nonumber   
+ \end{align}
+\end{solution}
+
+\newpage
+\subsection{Problem 6, part c}
+Suppose that $(A + \Delta A) (\textbf{x} + \Delta \textbf{x}) = \textbf{b}$ and $\hat{\textbf{x}} = \textbf{x} + \Delta \textbf{x}$ and the statement in the first part is satisfied. Show that 
+\[
+\frac{\norm{\Delta \textbf{x}}}{\norm{\textbf{x}}} \leq \frac{\kappa(A)\frac{\norm{\Delta A}}{\norm{A}}}{1 - \kappa(A)\frac{\norm{\Delta A}}{\norm{A}}}
+\]
+\partbreak
+\begin{solution}
+    
+We will follow the given steps:
+\begin{enumerate}
+    \item Note that $(A + \Delta A) (\textbf{x} + \Delta \textbf{x}) = \textbf{b} = A\textbf{x}$. We can see that $\Delta A (\textbf{x} + \Delta \textbf{x}) = -A \Delta \textbf{x}$, so $\Delta \textbf{x} = -A^{-1}\Delta A \hat{\textbf{x}}$. The second part can be found by bringing over the $\hat{\textbf{x}}$ on the last part, to get $\norm{\Delta \textbf{x}} \leq \kappa(A) \frac{\norm{\Delta A}}{\norm{A}} \norm{\hat{\textbf{x}}}$. By the triangle inequality, this is says $\norm{\Delta \textbf{x}} \leq \kappa(A) \frac{\norm{\Delta A}}{\norm{A}} (\norm{\textbf{x}} + \norm{\Delta\textbf{x}})$.
+    \item Rearranging, we see that $( 1 - \kappa(A)(\norm{\Delta A} / \norm{A}))\norm{\textbf{x}} \leq \kappa(A)(\norm{\Delta A} / \norm{A})\norm{\textbf{x}}$. Swapping the $\norm{\textbf{x}}$ and the factor of $\norm{\Delta \textbf{x}}$, we get
+    \[
+    \frac{\norm{\Delta \textbf{x}}}{\norm{\textbf{x}}} \leq \frac{\kappa(A)\frac{\norm{\Delta A}}{\norm{A}}}{1 - \kappa(A)\frac{\norm{\Delta A}}{\norm{A}}}
+    \]
+    which is what we wanted to find.
+\end{enumerate}
+
+\end{solution}
+
+\newpage
+\subsection{Problem 6, part d}
+Suppose $(A + \Delta A) \hat{\textbf{x}} = \textbf{b} + \Delta \textbf{b}$, where $\hat{\textbf{b}} \neq 0$ and $\hat{\textbf{x}} \neq 0$. Show that 
+\[
+\frac{\norm{\Delta \textbf{x}}}{\norm{\hat{\textbf{x}}}} \leq \kappa(A)\Big( \frac{\norm{\Delta A}}{\norm{A}} + \frac{\norm{\Delta \textbf{b}}}{\norm{\hat{\textbf{b}}}} + \frac{\norm{\Delta A}}{\norm{A}}\frac{\norm{\Delta \textbf{b}}}{\norm{\hat{\textbf{b}}}}\Big)
+\]
+\partbreak
+\begin{solution}
+
+We will follow the given steps:
+\begin{enumerate}
+    \item Since  $(A + \Delta A) \hat{\textbf{x}} = \textbf{b} + \Delta \textbf{b}$, and $A\textbf{x} = \textbf{b}$, we can eliminate the $A\textbf{x} = \textbf{b}$ on both sides to get $\Delta A \hat{\textbf{x}} + A\Delta \textbf{x} = \Delta \textbf{b}$. Then $\Delta \textbf{x} = A^{-1}(\Delta \textbf{b} - \Delta A \hat{\textbf{x}})$. The following steps can then be taken
+    \alignbreak
+    \begin{align}
+        \norm{\Delta \textbf{x}} &= \kappa(A)\frac{\norm{\Delta \textbf{b} - \Delta A \hat{\textbf{x}}}}{\norm{A}} &\text{(Multiplying through by $A$.)}\nonumber\\
+        \frac{\norm{\Delta \textbf{x}}}{\norm{\hat{\textbf{x}}}} &= \kappa(A)\frac{\norm{\Delta \textbf{b} - \Delta A \hat{\textbf{x}}}}{\norm{A}\norm{\hat{\textbf{x}}}} &\text{(Dividing through by $\norm{\hat{\textbf{x}}}.)$}\nonumber\\
+        \implies \frac{\norm{\Delta \textbf{x}}}{\norm{\hat{\textbf{x}}}} &\leq \kappa(A)\Bigg( \frac{\norm{\Delta \textbf{b}}}{\norm{A}\norm{\hat{\textbf{x}}}} + \frac{\norm{\Delta A}}{\norm{A}} \Bigg) &\text{(Triangle inequality and simplifying.)}\label{p6d:plug}
+    \end{align}
+    \alignbreak
+
+    \item By $(A + \Delta A) \hat{\textbf{x}} = \textbf{b} + \Delta \textbf{b}$, we can write the following:
+    \alignbreak
+    \begin{align}
+        (A + \Delta A) \hat{\textbf{x}} &= \hat{\textbf{b}} &\text{(Given.)}\nonumber\\
+        \norm{(A + \Delta A) \hat{\textbf{x}}} &= \norm{\hat{\textbf{b}}} &\text{(Taking norm.)}\nonumber\\
+        \norm{\hat{\textbf{b}}} & \leq (\norm{A} + \norm{\Delta A}) \hat{\textbf{x}} &\text{(Triangle Inequality.)}\nonumber\\
+        \frac{1}{\norm{\hat{\textbf{x}}}} &\leq \frac{\norm{A} + \norm{\Delta A}}{\norm{\hat{\textbf{b}}}} &\text{(Rearranging.)} \label{p6d:int}
+    \end{align}
+    \alignbreak
+    \newpage
+    \item Then we can take the result from \ref{p6d:int} and plug it into the right hand side of \ref{p6d:plug}.
+    \alignbreak
+    \begin{align}
+        \frac{\norm{\Delta \textbf{x}}}{\norm{\hat{\textbf{x}}}} &\leq \kappa(A)\Bigg( \frac{\norm{\Delta \textbf{b}}}{\norm{A}\norm{\hat{\textbf{x}}}} + \frac{\norm{\Delta A}}{\norm{A}} \Bigg) &\text{(Given, from \ref{p6d:plug}.)}\nonumber\\
+        &\leq \kappa(A)\Bigg( \frac{\norm{\Delta \textbf{b}}(\norm{A} + \norm{\Delta A})}{\norm{\hat{\textbf{b}}}\norm{A}} + \frac{\norm{\Delta A}}{\norm{A}}\Bigg) &\text{(From \ref{p6d:int}.)}\nonumber\\
+        &= \kappa(A)\Bigg( \frac{\norm{\Delta \textbf{b}}}{\norm{\hat{\textbf{b}}}} + \frac{\norm{\Delta \textbf{b}}\norm{\Delta A}}{\norm{\hat{\textbf{b}}}\norm{A}}+ \frac{\norm{\Delta A}}{\norm{A}}\Bigg)&\text{(Simplifying.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Thus, the statement above has been shown.  
+\end{enumerate}
+\end{solution}
+
+\subsection{Problem 6, part e}
+Suppose $(A + \Delta A) \hat{\textbf{x}} = \textbf{b} + \Delta \textbf{b}$ where $\hat{\textbf{b}}\neq 0$ and $\hat{\textbf{x}}\neq 0$ and the statement in part a is satisfied. Use the same ideas in part b to deduce that 
+\[
+\frac{\norm{\Delta \textbf{x}}}{\norm{\textbf{x}}} \leq \frac{\kappa(A)\Big( \frac{\norm{\Delta A}}{{\norm{A}}} + \frac{\norm{\Delta \textbf{b}}}{\norm{\textbf{b}}}\Big)}{1 - \kappa(A)\frac{\norm{\Delta A}}{\norm{A}}}.
+\]
+\partbreak
+\begin{solution}
+
+    To save some time, we can note that we will have the same $\Delta \textbf{x}$ as in the last part, so we can write
+    \[
+    \Delta \textbf{x} = -(A^{-1}\Delta A\hat{\textbf{x}} - A^{-1}\Delta \textbf{b})
+    \]
+
+    The following steps can then be justified:
+
+    \alignbreak
+    \begin{align}
+        \norm{\Delta \textbf{x}} &= \norm{A^{-1}\Delta A \hat{\textbf{x}} - \Delta \textbf{b}} &\text{(Taking Norm.)}\nonumber\\
+        &= \frac{\norm{A^{-1}\Delta A \hat{\textbf{x}} - \Delta \textbf{b}}}{\norm{A}} \norm{A} &\text{(Multiplying through by $\norm{A}$.)}\nonumber\\
+        &\leq \norm{A^{-1}} \frac{\Delta A \hat{\textbf{x}} - \Delta \textbf{b}}{\norm{A}}\norm{A} &\text{(Submultiplicity.)}\nonumber\\
+        &\leq \kappa(A)\Big( \frac{\norm{\Delta A \hat{\textbf{x}}}}{\norm{A}} + \frac{\norm{\Delta \textbf{b}}}{\norm{A}}\Big) &\text{(Triangle Inequality and definition of $\kappa(A).$)}\nonumber\\
+        &\leq \kappa(A)\Big( \frac{\norm{\Delta A}}{\norm{A}}\norm{\textbf{x}} + \frac{\norm{\Delta A}}{\norm{A}}\norm{\Delta \textbf{x}} + \frac{\norm{\Delta \textbf{b}}}{\norm{A}}\Big) &\text{(Triangle Inequality.)}\nonumber\\
+        \implies \Big(1 - \kappa(A) &\frac{\norm{\Delta A}}{\norm{A}}\Big)\norm{\Delta \textbf{x}} \leq \kappa(A)\Big( \frac{\norm{\Delta A}}{\norm{A}} \norm{\textbf{x}} + \frac{\norm{\Delta \textbf{b}}}{\norm{A}}\Big) &\text{(Grouping.)}\nonumber\\
+        \norm{\Delta \textbf{x}} &\leq \frac{\kappa(A)\Big( \frac{\norm{\Delta A}}{\norm{A}} \norm{\textbf{x}} + \frac{\norm{\Delta \textbf{b}}}{\norm{A}}\Big)}{1 - \kappa(A) \frac{\norm{\Delta A}}{\norm{A}}} &\text{(Rearranging.)}\nonumber\\
+        \norm{\Delta \textbf{x}} &\leq \frac{\kappa(A)\Big( \frac{\norm{\Delta A}}{\norm{A}} + \frac{\norm{\Delta \textbf{b}}}{\norm{A}\norm{\textbf{x}}}\Big)\norm{\textbf{x}}}{1 - \kappa(A) \frac{\norm{\Delta A}}{\norm{A}}} &\text{(Rearranging.)}\nonumber\\
+        \frac{\norm{\Delta \textbf{x}}}{\norm{\textbf{x}}} &\leq \frac{\kappa(A)\Big( \frac{\norm{\Delta A}}{\norm{A}} + \frac{\norm{\Delta \textbf{b}}}{\norm{A}\norm{\textbf{x}}}\Big)}{1 - \kappa(A) \frac{\norm{\Delta A}}{\norm{A}}} &\text{(Rearranging.)}\nonumber\\
+        \frac{\norm{\Delta \textbf{x}}}{\norm{\textbf{x}}} &\leq \frac{\kappa(A)\Big( \frac{\norm{\Delta A}}{\norm{A}} + \frac{\norm{\Delta \textbf{b}}}{\norm{A\textbf{x}}}\Big)}{1 - \kappa(A) \frac{\norm{\Delta A}}{\norm{A}}} &\text{($\norm{A\textbf{x}} \leq \norm{A}\norm{\textbf{x}}$.)}\nonumber\\
+        \frac{\norm{\Delta \textbf{x}}}{\norm{\textbf{x}}} &\leq \frac{\kappa(A)\Big( \frac{\norm{\Delta A}}{\norm{A}} + \frac{\norm{\Delta \textbf{b}}}{\norm{\textbf{b}}}\Big)}{1 - \kappa(A) \frac{\norm{\Delta A}}{\norm{A}}} &\text{($A\textbf{x} = \textbf{b}$.)}\nonumber
+    \end{align}
+    \alignbreak
+
+    Thus, the statement has been shown.
+\end{solution}
 \end{document}
