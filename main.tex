@@ -1,0 +1,29 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31410: Homework 4}
+\author{Caleb Derrickson}
+\date{November 3, 2023}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+
+\newpage
+\section{Problem 2}
+This is meant to be a simple problem in which you numerically computer a Poincar\'e return map, and use it to determine the Floquet multiplier associated with a limit cycle. Let
+
+\begin{align}
+    \xdot &= 2y\nonumber\\
+    \ydot &= -2x + \frac{1}{2}(1 - x^2)y\nonumber
+\end{align}
+
+Define a surface of section as $\Si = \{(x, y) : x \in [1, 3], y = 0\}$ for your return map, and numerically compute the Poincar\'e return map $P: \si \rightarrow \si $ by computing orbits for initial conditions in $(x_0, 0) \in \si$, and finding the $x$ values where they next return to $\si$, i.e. if the next point is $(x_1, 0) \in \si$, then the map should satisfy $x_1 = P(x_0)$ for each $x_0 \in [1, 3]$. You will find that the map has a fixed point $(P(x^*) = x^*)$, and the $x^*$ value associated with it gives a point $(x^*, 0)$ on a limit cycle for the flow. You can further obtain an estimate of the Floquet multipliers associated with the limit cycle by estimating $\mu = P'(x^*)$. How does this compare with what you obtain from the Monodromy matrix? (According to results proved in Meiss, you should find that the eigenvalues of the Monodromy matrix are exactly $\mu, 1$. You can either prove this for this 2-d example, or compute the Monodromy matrix numerically to confirm the claim.)
+\end{document}
