@@ -8,13 +8,181 @@
 \begin{document}
 \onehalfspacing
 \maketitle
-
+\allowdisplaybreaks
 {\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
 
 \tableofcontents
 
 \newpage
 \section{Problem 1}
+The aim of this problem, suggested by Adriaan, is to explicitly find the first value $\lm$ such that the logistic map $f(x) = \lm x(1 - x)$ possesses a period-3 orbit. First, we will show that any period-3 sequence can be written, uniquely, in the form
+\[
+x_n = \mu + \beta \omega^n + \Bar{\beta}\Bar{\omega}^n, \ n \in \N
+\]
+where $\mu$ is real, $\beta \neq 0$ is complex, and $\omega = e^{i2\pi / 3}$.
+\subsection{Problem 1, part a}
+Show that $\omega$ satisfies the following properties:
+
+\begin{gather}
+    \omega^3 = \Bar{\omega}^3 = 1\\
+    1 + \omega + \Bar{\omega} = 0\\
+    \omega^2 = \Bar{\omega}
+\end{gather}
+Then show that the sequence $x_k$ had (minimal) period 3, i.e. $x_{n+3} = x_n$, while $x_{n + k} \neq x_n, k = 1, 2$. Finally, construct a mapping from a given period-3 orbit $(x_1, x_2, x_3)$ to $(\mu, \beta, \Bar{\beta})$ to ensure that every period-3 orbit can be uniquely represented by specifying the real parameter $\mu$ and the complex parameter $\beta$.
+\partbreak
+\begin{solution}
+
+    We will first show that $\omega$ and its complex conjugate satisfy these properties. I will be using copious use of the complex expansion of $e^{ix}.$
+    \alignbreak
+    \begin{align*}
+        (1): \ \omega^3 &= (e^{i2\pi / 3})^3 &\text{(Given.)}\\ 
+        &= e^{i2\pi} &\text{(Exponential properties.)}\\
+        &= \cos (2\pi) + i\sin (2\pi) &\text{(Euler's Identity.)}\\
+        &= \cos (2\pi) + i\sin (-2\pi) &\text{(Periodicity of sine.)}\\
+        &= (e^{-i2\pi / 3})^3 &(\Bar{\omega}.)\\
+        &= 1 &\text{(Simplifying.)}\\
+        (2): \ \omega& + \Bar{\omega} = e^{i2\pi / 3} + e^{-i2\pi / 3} &\text{(Given.)}\\
+        &= \cos(2\pi/3) + i\sin(2\pi/3) + \cos(2\pi/3) - i\sin(2\pi / 3) &\text{(Euler's Identity.)}\\
+        &= 2\cos(2\pi / 3) &\text{(Simplifying.)}\\
+        &= -1 &\text{(Simplifying.)}\\
+        \implies &\omega + \Bar{\omega} + 1 = 0\\
+        (3) : \ \omega^2 &= e^{i4\pi / 3} &\text{(Given, Exponent properties.)}\\
+        &= e^{i(4\pi / 3 - 2\pi)} &\text{(Periodicity.)}\\
+        &= e^{-i2\pi / 3} &\text{(Simplifying.)}\\
+        &= \Bar{\omega} &\text{(Definition.)}
+    \end{align*}
+    \vspace{-15mm}
+\alignbreak
+
+We next wish to show that the sequence has a minimal period-3. This will be done somewhat crudely, observing the difference between steps of $x_n$ and $x_{n + k}$ for $k = 1, 2$.  
+\vspace{-5mm}
+\alignbreak
+\vspace{-5mm}
+\begin{align}
+    &\text{\underline{k = 1}:}\nonumber\\
+    &x_n - x_{n + 1} = \beta \omega^n(\omega - 1) + \Bar{\beta}\Bar{\omega}^n(\Bar{\omega} - 1) &\text{(Taking difference and grouping.)}\nonumber\\
+    &\neq 0 &(\omega \neq 1 \neq \Bar{\omega}.)\nonumber\\
+    &\text{\underline{k = 2}:}\nonumber\\
+    &x_n - x_{n + 2} = \beta \omega^n(\omega^2 - 1) + \Bar{\beta}\Bar{\omega}^n(\Bar{\omega}^2 - 1) &\text{(Taking difference and grouping.)}\nonumber\\
+    &\neq 0 &(\omega^2 \neq 1 \neq \Bar{\omega}^2.)\nonumber\\
+    &\text{\underline{k = 3}:}\nonumber\\
+    &x_n - x_{n + 3} = \beta \omega^n(\omega^3 - 1) + \Bar{\beta}\Bar{\omega}^n(\Bar{\omega}^3 - 1) &\text{(Taking difference and grouping.)}\nonumber\\
+    &= \beta \omega^n (1- 1) + \Bar{\beta}\Bar{\omega}^n (1- 1) &\text{(Property 1.)}\nonumber\\
+    &= 0 \nonumber
+\end{align}
+\vspace{-15mm}
+\alignbreak
+
+\newpage
+Next, we wish to find a mapping $T: (x_1, x_2, x_3) \rightarrow (\mu, \beta, \Bar{\beta})$. the approach will be straightforward, the computation however, will not. I will first explain my reasoning. From how I interpreted the problem, we need to find a bijection $T$ which will map us into the provided space from $\R^3$. Thus, $T$ must satisfy
+\[
+\begin{pmatrix}\mu\\ \beta\\ \Bar{\beta}\end{pmatrix}
+= 
+\begin{bmatrix}
+    T_{11} &T_{12} &T_{13}\\
+    T_{21} &T_{22} &T_{23}\\
+    T_{31} &T_{32} &T_{33}
+\end{bmatrix}
+\begin{pmatrix}x_1 \\ x_2 \\x_3\end{pmatrix}
+\]
+So we then need to find $T_{ij}$. From the first line we see that
+\[
+\mu = T_{11}(\mu + \beta\omega + \Bar{\omega}) + T_{12}(\mu + \beta\omega^2 + \Bar{\omega}^2) + T_{13}(\mu + \beta\omega^3 + \Bar{\omega}^3).
+\]
+When grouping for the various coordinates, we require
+\[
+\mu = (T_{11} + T_{12} + T_{13}) + \beta(\omega T_{11} + \omega^2 T_{12} + T_{13}) + \Bar{\beta}(\Bar{\omega} T_{11} + \Bar{\omega}^2 T_{12} + T_{13}).  
+\]
+Which then gets us a new system, which can be directly solved.
+\[
+\begin{bmatrix}
+    1 &1 &1 \\
+    \omega &\Bar{\omega} &1\\
+    \Bar{\omega} &\omega &1
+\end{bmatrix}
+\begin{pmatrix}T_{11} \\ T_{12} \\ T_{13}\end{pmatrix}
+=
+\begin{pmatrix}1 \\0 \\0 \end{pmatrix};
+\implies 
+\begin{pmatrix}T_{11} \\ T_{12} \\ T_{13}\end{pmatrix}
+= 
+\begin{pmatrix}\frac{-1}{\omega + \Bar{\omega} - 2} \\ \frac{-1}{\omega + \Bar{\omega} - 2} \\ \frac{\omega + \Bar{\omega}}{\omega + \Bar{\omega} - 2}\end{pmatrix}
+= 
+\begin{pmatrix}\frac{1}{3}\\ \frac{1}{3} \\ -\frac{1}{3}\end{pmatrix}
+\]
+The last step can be found by adding and subtracting 1 on each coordinate. This process can be repeated for each row of $T$ by just replacing what coordinate we need nonzero.
+\[
+\implies \begin{pmatrix}T_{21}\\ T_{22} \\ T_{23}\end{pmatrix}
+= 
+\begin{pmatrix}\frac{\omega - 1}{\omega^2 - 2\omega + \Bar{\omega}^2 + 2\Bar{\omega}} \\ \frac{-\Bar{\omega} + 1}{\omega^2 - 2\omega - \Bar{\omega}^2 + 2\Bar{\omega}}\\ -\frac{1}{\omega + \Bar{\omega} - 2} \end{pmatrix}
+=
+\begin{pmatrix}
+    \frac{1}{6} - \frac{\sqrt{3}}{6}i \\ -\frac{1}{6} + \frac{\sqrt{3}}{6}i \\ \frac{1}{3} 
+\end{pmatrix}
+\]
+\[
+\implies \begin{pmatrix}T_{31}\\ T_{32} \\ T_{33}\end{pmatrix}
+= 
+\begin{pmatrix} \frac{-\Bar{\omega} + 1}{\omega^2 - 2\omega - \Bar{\omega}^2 + 2\Bar{\omega}} \\ \frac{\omega - 1}{\omega^2 - 2\omega + \Bar{\omega}^2 + 2\Bar{\omega}} \\ -\frac{1}{\omega + \Bar{\omega} - 2} \end{pmatrix}
+=
+\begin{pmatrix}
+    -\frac{1}{6} + \frac{\sqrt{3}}{6}i \\ \frac{1}{6} - \frac{\sqrt{3}}{6}i \\ \frac{1}{3} 
+\end{pmatrix}
+\]
+Thus, our mapping $T$ is 
+\[
+T 
+= 
+\begin{bmatrix}
+    T_{11} &T_{12} &T_{13}\\
+    T_{21} &T_{22} &T_{23}\\
+    T_{31} &T_{32} &T_{33}
+\end{bmatrix}
+= 
+\begin{bmatrix}
+    \frac{1}{3} &\frac{1}{3} &-\frac{1}{3}\\
+    \frac{1}{6} - \frac{\sqrt{3}}{6}i &-\frac{1}{6} + \frac{\sqrt{3}}{6}i &\frac{1}{3}\\
+    -\frac{1}{6} + \frac{\sqrt{3}}{6}i &\frac{1}{6} - \frac{\sqrt{3}}{6}i &\frac{1}{3}
+\end{bmatrix}
+\]
+
+\jump
+We can now rejoice, since this matrix is invertible, thus a mapping between $\R^3 \rightarrow (\mu, \beta, \Bar{\beta})$. Also, the eigenvalues are $\lambda(T) \approx \{-0.475684 - 0.467086 i, 0.64235 + 0.178411i, 0.333333\}$. 
+\end{solution}
+
+\newpage
+\subsection{Problem 1, part b}
+Briefly discuss the connection between this representation of $x_n$ by $\mu + \beta\omega^n + \Bar{\beta}\Bar{\omega}^n$ the discrete Fourier transform for the periodic sequence $x_n$.
+\partbreak
+\begin{solution}
+
+    From what I can read from the Wikipedia page, it seems that we are taking the first three terms of the Fourier transformation of $f(x)$. We only need the first three terms, since this will catch the three periodic behavior we were seeking. This transformation into the frequency space is then perfectly mapped by the matrix found in part a. 
+\end{solution}
+
+\subsection{Problem 1, part c}
+Substitute $x_n$ into the relation $x_{n+1} = f(x_n)$, where $n \in \N$. We can write the left-hand-side as 
+\[
+x_{n+1} = \mu + (\beta\omega)\omega^n + (\Bar{\beta}\Bar{\omega})\Bar{\omega}^n.
+\]
+The right-hand-side, $f(x_n)$, can be similarly written as $c_1 + c_2\omega^n + c_3\Bar{\omega}^n$, where the coefficients $c_j$ are nonlinear functions of $\lm, \mu, \beta, \Bar{\beta}$ and do no depend on $n$. The vectors $(1, 1, 1), (1, \omega, \Bar{\omega})$, and $(1, \omega^2, \Bar{\omega}^2)$, which arise for different choices of $n$, are linearly independent, and you can use this to equate coefficients of your equation $x_{n+1} = f(x_n)$ to obtain three algebraic equations i.e. $c_1 = \mu, c_2 = \beta\omega, c_3 = \Bar{\beta}\Bar{\omega}$.
+\partbreak
+\begin{solution}
+
+    We will go straight into calculations:
+    \alignbreak
+    \begin{align}
+        f(x_n) &= \lm x_n(1 - x_n) &\text{(Given.)}\nonumber\\
+        &= \lm (x_n - x_n^2) &\text{(Rearranging.)}\nonumber\\
+        &= \lm\Big[ \mu + \beta\omega^n + \Bar{\beta}\Bar{\omega}^n - (\mu + \beta\omega^n + \Bar{\beta}\Bar{\omega}^n)^2\Big] &\text{(Plugging in $x_n$.)}\nonumber\\
+        &= \lm\Big[ \mu + \beta\omega^n + \Bar{\beta}\Bar{\omega}^n - \mu^2 - \beta^2\omega^{2n} - \Bar{\beta}^2\Bar{\omega}^{2n}\nonumber\\
+        & \hspace{10mm} - \mu\beta\omega^n - \mu\Bar{\beta}\Bar{\omega}^n - \mu\beta\omega^n - \Bar{\beta}\beta\omega^n \Bar{\omega}^n \nonumber\\
+        & \hspace{10mm} - \mu\Bar{\beta}\Bar{\omega}^n - \Bar{\beta}\Bar{\omega}^n\beta\omega^n \Big] &\text{(Expanding.)}\nonumber\\
+        &= (\mu - \mu^2 + 2\Bar{\beta}\beta) + (\beta - \Bar{\beta}^2 - 2\mu \beta)\omega^n + (\Bar{\beta}^2 - 2\mu\Bar{\beta})\bar{\omega}^n &\text{(Collecting terms.)}\nonumber\\
+        &= c_1 + c_2\omega^n + c_3\bar{\omega}^n
+    \end{align}
+
+\end{solution}
+
 
 \newpage
 \section{Problem 2}
@@ -26,4 +194,196 @@ This is meant to be a simple problem in which you numerically computer a Poincar
 \end{align}
 
 Define a surface of section as $\Si = \{(x, y) : x \in [1, 3], y = 0\}$ for your return map, and numerically compute the Poincar\'e return map $P: \si \rightarrow \si $ by computing orbits for initial conditions in $(x_0, 0) \in \si$, and finding the $x$ values where they next return to $\si$, i.e. if the next point is $(x_1, 0) \in \si$, then the map should satisfy $x_1 = P(x_0)$ for each $x_0 \in [1, 3]$. You will find that the map has a fixed point $(P(x^*) = x^*)$, and the $x^*$ value associated with it gives a point $(x^*, 0)$ on a limit cycle for the flow. You can further obtain an estimate of the Floquet multipliers associated with the limit cycle by estimating $\mu = P'(x^*)$. How does this compare with what you obtain from the Monodromy matrix? (According to results proved in Meiss, you should find that the eigenvalues of the Monodromy matrix are exactly $\mu, 1$. You can either prove this for this 2-d example, or compute the Monodromy matrix numerically to confirm the claim.)
+
+
+\newpage
+\section{Problem 3}
+
+
+\newpage
+\section{Problem 4}
+Consider the Lorenz equations
+\begin{align}
+    \xdot &= \sigma(y - x) \nonumber\\
+    \ydot &= rx - y - xz \nonumber\\
+    \dot{z} &= xy - bz, \nonumber    
+\end{align}
+where $r, b, \sigma$ are positive constants and $(x, y, z)\in \R^3$.
+
+\subsection{Problem 4, part a}
+Show that the origin is the only fixed point for $r \in (0, 1]$, and that the following is a strong Lyapunov function for it for $r < 1$:
+\[
+L = \frac{1}{2}\Big( \frac{x^2}{\sigma} + y^2 + z^2\Big)
+\]
+\partbreak
+\begin{solution}
+
+    By plugging in $(x, y, z) = (0, 0, 0)$ into the Lorenz equations, we see that the origin is a fixed point. Next we want to show it is the only fixed point for $r \in (0, 1]$. Suppose this were false, then there would be some $\textbf{x} = (x_1, x_2, x_3)$ such that $f(\textbf{x}) = \textbf{x}$, where $f$ is the right hand side of the Lorenz equations above. Then, we get the following system of equations
+
+\begin{align}
+    \sigma(x_2 - x_1) &= x_1 &(1)\nonumber\\
+    rx_1 - x_2 - x_1x_3 &= x_2 &(2)\nonumber\\
+    x_1x_2 - bx_3 &= x_3 &(3) \nonumber
+\end{align}
+
+Note that by observation, if any combination of $x_1, x_2, x_3 = 0$, then all are zero. More importantly, if any coordinate of our proposed fixed point is zero, then $\textbf{x} = 0$. I will demonstrate this below.\par
+
+\jump
+If $x_1 = 0$, then by (3), $x_3(1 + b) = 0$. Since we are given $b$ is a positive constant, $x_3 = 0$. Then by (1), $x_2 = 0$. So if $x_1 = 0, \textbf{x} = 0$. Similarly, if $x_2 = 0$, then by (3), $x_3(1 + b) = 0$, so $x_3 = 0$. Also, by (2), $rx_1 = 0$. Since $r \in (0, 1]$, then $x_1 = 0$, thus $\textbf{x} = 0$ when $x_2 = 0$. Finally, if $x_3 = 0$, then by (3), $x_1x_2 = 0$. Thus $x_1$ or $x_2$ = 0. We already showed if $x_1$ = 0, then $x_2 = 0$, as well as is converse. Thus $\textbf{x} = 0$ when $x_3 = 0$. Therefore if any coordinate of our proposed fixed point is zero, then our fixed point is zero. We want to show that our proposed fixed point is unique from the origin, so we can omit the cases where any coordinate equals zero in the below steps:
+
+\alignbreak
+\begin{align}
+    x_1 &= \frac{\sigma}{1 + \sigma} x_2  &\text{(From (1).)}\nonumber\\
+    0 &= \frac{r\sigma}{1 + \sigma}x_2 - x_2 - \frac{1}{1 + \sigma}x_2x_3 - x_2 &\text{((1) $\rightarrow$ (2).)}\nonumber\\
+    \implies 0 &= x_2(\frac{r\sigma}{1 + \sigma} - 2 - \frac{\sigma}{1 + \sigma}x_3) &\text{(Rearranging.)}\nonumber\\
+    \implies 0 &= \frac{r\sigma}{1 + \sigma} - 2 - \frac{\sigma}{1 + \sigma}x_3&\text{(Should hold for all $x_2$.)}\nonumber\\
+    \implies x_3 &= r - 2 - \frac{2}{\sigma} &\text{(Simplifying.)}\nonumber\\
+    3) : \ x_1x_2 &- b(r - 2 - \frac{2}{\sigma}) = r - 2 - \frac{2}{\sigma} &\text{(Plugging in $x_3$ to (3).)}\nonumber\\
+    \implies x_1x_2 &= (1 + b)(r - 2 - \frac{2}{\sigma}) &\text{(Simplifying.)}\nonumber\\
+    1) : \ x_1x_2 &= \sigma x_2^2 - \sigma x_1x_2 &\text{(Multiplying (1) by $x_2 \neq 0$.)}\nonumber\\
+    x_2^2 &= \frac{1+\sigma}{\sigma} x_1x_2 &\text{(Rearranging.)}\nonumber\\
+    \implies x_2 &= \sqrt{\Big(\frac{r\sigma - 2(1 + \sigma)}{\sigma}\Big)(1 + b)\Big(\frac{1+\sigma}{\sigma}\Big)} &\text{(Solving for $x_2$.)}\nonumber
+\end{align}
+\alignbreak
+
+Note that we want only real values for $x_2$, so each term under the square root should be positive. Each term above is guaranteed to be positive, except for the first, imposing $r\sigma - 2(1 + \sigma) \geq 0$. Rearranging for $r$, we get
+\[
+r \geq \frac{2}{\sigma} + 2
+\]
+
+Note that since $\sigma \geq 0$, then $\frac{2}{\sigma} \geq 0$. Thus $r$ has to be \textit{at least} 2, which is a contradiction, since we are restricting $r \in (0, 1]$. Thus there are no other fixed points of the Lorenz system aside from the origin for $r \in (0, 1]$.\par
+
+\newpage
+Next we want to show that the given Lyapunov function
+\[
+L = \frac{1}{2}\Big( \frac{x^2}{\sigma} + y^2 + z^2\Big)
+\]
+
+is a strong Lyapunov function for the Lorenz system. Note this is equivalent to showing $\frac{dL}{dt} < 0$ for all $t > 0$. Thus, the following steps hold:
+\alignbreak
+\begin{align}
+    \frac{dL}{dt} &= \frac{1}{2}\Big( \frac{2}{\sigma}x\xdot + 2y\ydot + 2z\dot{z} \Big)&\text{(Differentiation.)}\nonumber\\
+    &= (y - x)x + y(rx - y - xa) + z(xy - bz) &\text{(Plugging in Lorenz System.)}\nonumber\\
+    &= (1 + r) xy - x^2 - y^2 - bz^2 &\text{(Simplifying.)}\nonumber\\
+    &\leq 2xy - x^2 - y^2 - bz^2 &\text{(Restriction on $r$.)}\nonumber\\
+    &= -(x - y)^2 - bz^2 &\text{(Difference of squares.)}\nonumber\\
+    &= -((x - y)^2 + bz^2) &\text{(Grouping.)}\nonumber\\
+    &< -((x - y)^2 + z^2) &(b > 0.)\nonumber\\
+    &\leq 0 &\text{(argument inside is positive.)}\nonumber\\
+\implies \frac{dL}{dt} &< 0 &\text{(Summary.)}\nonumber
+\end{align}
+\alignbreak
+\end{solution}
+
+\newpage
+\subsection{Problem 4, part b}
+Show that $L$ is only a weak Lyapunov function if $r = 1$, but that you can use LaSalle's Invariance Principle to prove that the origin is asymptotically stable for $r = 1$ as well as for $r < 1$. Note that you did not have to restrict any of this to a particular neighborhood $U$ of the origin. The origin is globally attracting for the Lorenz equations when $r \in (0, 1]$.
+
+\partbreak
+\begin{solution}
+
+    For the sake of completeness, I will include LaSalle's Invariance Principle
+    \begin{quote}
+        \underline{\textbf{LaSalle's Invariance Principle:}} \\
+        Suppose $x^*$ is a fixed point of the equilibrium of $\ph_t(x)$ and $L$ is a weak Lyapunov function of $x^*$ on some compact forward invariant neighborhood $U$ of $x^*$. Let $Z = \{x \in U : dL/dt = 0\}$. If $\{x^*\}$ is the larges forward invariant subset of $Z$, then $X^*$ is asymptotically stable and attruacts every point in $U$.
+    \end{quote}
+\end{solution}
+
+\newpage
+\section{Problem 9}
+An asymptotically stable linear system always has a Lyapunov function of the form $L = \textbf{x}^TS\textbf{x}.$
+
+\subsection{Problem 9, part a}
+Show that when all the eigenvalues of $A$ have negative real parts, then the        Lyapunov equation" has the unique, positive definite, symmetric solution
+\[
+S = \int_0^\infty e^{\tau A^T}e^{\tau A}d\tau
+\]
+\partbreak
+\begin{solution}
+
+    Taking inspiration from the hint given, let us pre- and post- multiply the Lyapunov Equation by $e^{tA^T}$ and $e^{tA}$ respectively. 
+
+    \[
+    \implies e^{tA^T}(A^TS + SA)e^{tA} = -e^{tA^T}e^{tA}
+    \]
+
+    Note that the left hand side appears to be a total time derivative. With careful inspection, we can recover the function
+    \[
+    \frac{d}{dt}\Big[ e^{tA^T}Se^{tA} \Big] = -e^{tA^T}e^{tA}.
+    \]
+
+    Thus integrating both sides, and applying the Fundamental Theorem of Calculus to the left hand side gives
+    \[
+    \lim_{\tau \rightarrow \infty} \Big[ e^{\tau A^T}Se^{\tau A}\Big] - \lim_{t \rightarrow 0} \Big[ e^{\tau A^T}Se^{\tau A}\Big] = -\int_0^\infty e^{\tau A^T}e^{\tau A} d\tau
+    \]
+
+    The limit approaching zero is straightforward and does not depend on the eigenvalues of $A$, so the second limit equals $S$. The first limit however, relies on the real parts of the eigenvalues of $A$ being negative. This limit will equal zero, as can be recovered by eigenvalue decomposition of $A$, then applying the exponential. Thus we can write the following
+    \[
+    S = \int_0^\infty e^{\tau A^T}e^{\tau A} d\tau
+    \]
+
+    This is the equation we wanted to show, we just need to check the following:
+    \begin{enumerate}
+        \item \underline{Uniqueness:}
+
+        If there is an $S'$ with $S \neq S'$ such that $S' = \int_0^\infty e^{\tau A^T}e^{\tau A} d\tau$, then $S - S' = \int_0^\infty e^{\tau A^T}e^{\tau A} - e^{\tau A^T}e^{\tau A} d\tau = \int_0^\infty 0 d\tau = 0$. Thus $S = S'$.
+        \item \underline{Positive Definiteness:}
+
+        We just need to show $\textbf{x}^TS\textbf{x} > 0$ for all $\textbf{x} \neq 0$.
+        \[
+        \textbf{x}^TS\textbf{x} = \int_0^\infty \textbf{x}^T e^{\tau A^T}e^{\tau A} d\tau\textbf{x} =  \int_0^\infty \norm{e^{tA}\textbf{x}}^2 d\tau > 0
+        \]
+        Note we can say the integral is strictly positive since the norm function is itself strictly posiitve when its argument is nonzero.
+        \item \underline{Symmetry:}
+
+        This relies on the fact that $(e^{A})^T = e^{A^T}$. With this, we get
+
+        \[
+        S^T = \Big[ \int_0^\infty e^{\tau A^T}e^{\tau A} d\tau\Big]^T = \int_0^\infty (e^{\tau A^T}e^{\tau A})^T d\tau = \int_0^\infty e^{\tau A^T}e^{\tau A} d\tau = S
+        \]
+    \end{enumerate}
+\end{solution}
+
+\subsection{Problem 9, part b}
+Compute S for the matrix $A = \begin{pmatrix}-2 &1\\ 0 &-2\end{pmatrix}$ and demonstrate explicitly that $dL/dt > 0$.
+\partbreak
+\begin{solution}
+
+    Note that $A$ can be written as a scalar times the identity matrix plus a nilpotent matrix of degree 2, meaning
+    \[
+    A = \begin{bmatrix}-2 &0\\ 0 &-2\end{bmatrix} + \begin{bmatrix}0 &1\\ 0 &0\end{bmatrix}
+    \]
+
+    When exponentiating, we can then break these up into
+    \[
+    e^{tA} = e^{-2t\id} * e^N.
+    \]
+
+    When taking the matrix exponent of a diagonal matrix, the result is just the exponentiated diagonal elements. Note that by the definition of the matrix exponent, the only terms that survive in the case of the nilpotent matrix is when $k = 0, 1$. Thus,
+    \begin{align}
+            e^{tA} &= \begin{bmatrix}e^{-2t} &0\\0 &e^{-2t}\end{bmatrix}\Bigg( \begin{bmatrix}1 &0 \\0 &1\end{bmatrix} + \begin{bmatrix}0 &t\\ 0 &0\end{bmatrix}\Bigg)\nonumber\\
+            &= \begin{bmatrix}e^{-2t} &0\\0 &e^{-2t}\end{bmatrix}\begin{bmatrix}1 &t \\0 &1\end{bmatrix}\nonumber\\
+            &= \begin{bmatrix}e^{-2t} &te^{-2t}\\ 0 &e^{-2t}\end{bmatrix}\nonumber
+    \end{align}
+    We can note that $e^{tA^T}$ is just this matrix, just transposed, as noted above. Therefore, the following can be done:
+
+    \newpage
+    \alignbreak
+    \begin{align}
+        S &= \int_0^\infty \begin{bmatrix}e^{-2t} &0\\ te^{-2t} &e^{-2t}\end{bmatrix}\begin{bmatrix}e^{-2t} &te^{-2t}\\ 0 &e^{-2t}\end{bmatrix}dt&\text{(Explained above.)} \nonumber\\
+        &= \int_0^\infty \begin{bmatrix}e^{-4t} &te^{-4t} \\ te^{-4t} &t^2e^{-4t} + e^{-2t}\end{bmatrix} dt &\text{(Matrix multiplication.)}\nonumber\\
+        &=  \begin{bmatrix}\int_0^\infty e^{-4t} dt & \int_0^\infty te^{-4t} dt \\ \int_0^\infty te^{-4t} dt & \int_0^\infty t^2e^{-4t} + e^{-4t}dt\end{bmatrix} &\text{(Integration of a matrix.)}\nonumber\\
+        &= \begin{bmatrix}\frac{1}{4} &\frac{1}{16}\\\frac{1}{16} &\frac{9}{32}\end{bmatrix} &\text{(Integration.)}\nonumber
+    \end{align}
+    \alignbreak
+    Note that I used Wolfram Alpha to calculate these integrals for me. In order to show that $dL/dt < 0$, we just need to show this $S$ works in the Lyapunov equation. If so, then $dL/dt = -\norm{\textbf{x}}^2 < 0$ for nonzero $\textbf{x}$.
+    \alignbreak
+    \begin{align}
+        A^TS + SA &= \begin{bmatrix}-2 &0 \\1 &-2\end{bmatrix} \begin{bmatrix}\frac{1}{4} &\frac{1}{16}\\\frac{1}{16} &\frac{9}{32}\end{bmatrix} + \begin{bmatrix}\frac{1}{4} &\frac{1}{16}\\\frac{1}{16} &\frac{9}{32}\end{bmatrix}\begin{bmatrix}-2 &1 \\0 &-2\end{bmatrix}\nonumber\\
+        &= \begin{bmatrix}-\frac{1}{2} &-\frac{1}{8}\\ \frac{1}{8} & -\frac{1}{2}\end{bmatrix} + \begin{bmatrix}-\frac{1}{2} &\frac{1}{8}\\ -\frac{1}{8} & -\frac{1}{2}\end{bmatrix}\nonumber\\
+        &= \begin{bmatrix}-1 &0 \\0 &-1\end{bmatrix}\nonumber\\
+        &= -\id\nonumber
+    \end{align}
+    \alignbreak
+\end{solution}
 \end{document}
