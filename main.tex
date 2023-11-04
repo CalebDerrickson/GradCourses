@@ -9,7 +9,7 @@
 \onehalfspacing
 \maketitle
 \allowdisplaybreaks
-{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Steven Lee, Kevin Hefner, and Alexander Cram.
 
 \tableofcontents
 
@@ -177,13 +177,102 @@ The right-hand-side, $f(x_n)$, can be similarly written as $c_1 + c_2\omega^n + 
         &= \lm\Big[ \mu + \beta\omega^n + \Bar{\beta}\Bar{\omega}^n - \mu^2 - \beta^2\omega^{2n} - \Bar{\beta}^2\Bar{\omega}^{2n}\nonumber\\
         & \hspace{10mm} - \mu\beta\omega^n - \mu\Bar{\beta}\Bar{\omega}^n - \mu\beta\omega^n - \Bar{\beta}\beta\omega^n \Bar{\omega}^n \nonumber\\
         & \hspace{10mm} - \mu\Bar{\beta}\Bar{\omega}^n - \Bar{\beta}\Bar{\omega}^n\beta\omega^n \Big] &\text{(Expanding.)}\nonumber\\
-        &= (\mu - \mu^2 + 2\Bar{\beta}\beta) + (\beta - \Bar{\beta}^2 - 2\mu \beta)\omega^n + (\Bar{\beta}^2 - 2\mu\Bar{\beta})\bar{\omega}^n &\text{(Collecting terms.)}\nonumber\\
-        &= c_1 + c_2\omega^n + c_3\bar{\omega}^n
+        &= \lm (\mu - \mu^2 + 2\Bar{\beta}\beta) + \lm (\beta - \Bar{\beta}^2 - 2\mu \beta)\omega^n + \lm (\Bar{\beta} - \beta^2 - 2\mu\Bar{\beta})\bar{\omega}^n &\text{(Collecting terms.)}\nonumber\\
+        &= c_1 + c_2\omega^n + c_3\bar{\omega}^n\nonumber
     \end{align}
+    \alignbreak
 
+    So we see the following
+    \begin{gather}
+        c_1 = \lm(\mu - \mu^2 - 2\Bar{\beta}\beta) = \mu \label{p1c: eq1}\\ 
+        c_2 = \lm(\beta - \Bar{\beta}^2 - 2\mu\beta) = \Bar{\beta}\omega \label{p1c: eq2}\\
+        c_3 = \lm(\Bar{\beta} - \beta^2 - 2\mu\beta) = \Bar{\beta}\Bar{\omega} \label{p1c: eq3}
+    \end{gather}
+\end{solution}
+\newpage
+\subsection{Problem 1, part d}
+Eliminate $\beta$ from the equations you determined to get a quadratic equation in $\mu$.
+\partbreak
+\begin{solution}
+    
+    We will go straight into calculations:
+    \alignbreak
+    \begin{align*}
+        &\lm(\beta - \Bar{\beta}^2 - 2\mu\beta) = \Bar{\beta}\omega &\text{(\ref{p1c: eq2}.)}\\
+        &\lm(\Bar{\beta} - \beta^2 - 2\mu\beta) = \Bar{\beta}\Bar{\omega} &\text{(\ref{p1c: eq3}.)}\\
+        &\Bar{\beta}^2 = \beta(1 - 2\mu - \frac{\omega}{\lm}) &\text{(Rearranging first.)}\\
+        &\beta^2 = \Bar{\beta}(1 - 2\mu - \frac{\Bar{\omega}}{\lm}) &\text{(Rearranging second.)}\\
+        &\Bar{\beta}^2\beta^2 = \Bar{\beta}\beta(1 - 2\mu -\frac{\omega}{\lm}) (1 - 2\mu -\frac{\Bar{\omega}}{\lm}) &\text{(Multiplying together.)}\\
+        \implies &\frac{1}{2\lm}(\mu(\lm - 1) - \lm \mu^2) = (1 - 2\mu -\frac{\omega}{\lm}) (1 - 2\mu -\frac{\Bar{\omega}}{\lm}) &\text{(Substituting in $c_1$.)}\\
+        &\mu(\lm - 1) - \lm \mu^2 = 2\lm(1 - 2\mu -\frac{\omega}{\lm}) (1 - 2\mu -\frac{\Bar{\omega}}{\lm}) &\text{(Rearranging.)}\\
+        &\mu(\lm - 1) - \lm \mu^2 = 2\lm(1 - 4\mu + \frac{1}{\lm} +4\mu^2 - \frac{2\mu}{\lm} + \frac{1}{\lm^2} )&\text{(Expanding.)}\\
+        &9\lm\mu^2 + \mu(-3 + 9\lm) + (2\lm +1 +\frac{1}{\lm}) = 0
+    \end{align*}
+    \alignbreak
+    This is then a quadratic equation in $\mu$. I skipped a few parts where the $\omega$'s and $\Bar{\omega}$'s cancels but hopefully this should be fine.
 \end{solution}
 
+\newpage
+\subsection{Problem 1, part e}
+Solve for $\mu$ using the quadratic formula. Since the trajectories are real, we are looking for the real solutions for $\mu$. What does this imply about the values $\lm$ can take? What is the minimum such $\lm$?
+\partbreak
+\begin{solution}
 
+    Since we are looking for only real solutions for $\mu$, we only need to check when the discriminant is positive. So, we enforce 
+
+    \[
+    (3 + 9\lm)^2 - 36\lm(2\lm + 2 + \frac{2}{\lm}) \geq 0
+    \]
+
+    After factoring this out, and simplifying, we get
+    \[
+    \lm^2 - 2\lm - 7 \geq 0
+    \]
+
+    This would mean $\lm $ must take on the values in $(-\infty, 1 - 2\sqrt{2}] \cup [1 + 2\sqrt{2} , \infty)$. The logistic equation requires that $\lm \geq 0$, so we take $\lm \in [1 + 2\sqrt{2} , \infty)$. Thus the smallest $\lm$ is $1 + 2 \sqrt{2}$.
+\end{solution}
+\newpage
+\subsection{Problem 1, part f}
+For this part, set $\lm$ to its minimum value for the $3-$cycle, which you determined in part (e). Plot the function $f_3 = f \circ f \circ f$. Does the map have three fixed points? Do they agree with the values you obtained for $x_n$? Construct the cobweb diagram for an initial condition on the period three orbit. 
+\partbreak
+\begin{solution}
+
+    I took 100 initial conditions uniformly spread across the interval $[-1, 1]$ to investigate their convergence over time. The generated plots are below, ranging from $t = 75, 20000$. By rough estimation, it seems the solutions are converging onto three points: $x = -0.2403, -0.0197, 0.0139$. I'm not entirely sure how to check if these are the correct values. I will also provide a plot showing the best initial condition for the cobweb plot. I won't provide the code for this since I can't say I wrote it. 
+\end{solution}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Images/p1f1.png}
+    \caption{Out to $t = 75$.}
+    \label{fig:p1f1}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Images/p1f2.png}
+    \caption{Out to $t = 250$.}
+    \label{fig:p1f2}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Images/p1f3.png}
+    \caption{Out to $t = 1000$.}
+    \label{fig:p1f3}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Images/p1f4.png}
+    \caption{Out to $t = 20000$.}
+    \label{fig:p1f4}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Images/cobwek plot.png}
+    \caption{Cobweb plot for $x_0 = 0.5, \lm = 3.83$}
+    \label{fig:enter-label}
+\end{figure}
+
+\clearpage
 \newpage
 \section{Problem 2}
 This is meant to be a simple problem in which you numerically computer a Poincar\'e return map, and use it to determine the Floquet multiplier associated with a limit cycle. Let
@@ -195,11 +284,376 @@ This is meant to be a simple problem in which you numerically computer a Poincar
 
 Define a surface of section as $\Si = \{(x, y) : x \in [1, 3], y = 0\}$ for your return map, and numerically compute the Poincar\'e return map $P: \si \rightarrow \si $ by computing orbits for initial conditions in $(x_0, 0) \in \si$, and finding the $x$ values where they next return to $\si$, i.e. if the next point is $(x_1, 0) \in \si$, then the map should satisfy $x_1 = P(x_0)$ for each $x_0 \in [1, 3]$. You will find that the map has a fixed point $(P(x^*) = x^*)$, and the $x^*$ value associated with it gives a point $(x^*, 0)$ on a limit cycle for the flow. You can further obtain an estimate of the Floquet multipliers associated with the limit cycle by estimating $\mu = P'(x^*)$. How does this compare with what you obtain from the Monodromy matrix? (According to results proved in Meiss, you should find that the eigenvalues of the Monodromy matrix are exactly $\mu, 1$. You can either prove this for this 2-d example, or compute the Monodromy matrix numerically to confirm the claim.)
 
+\partbreak
+\begin{solution}
+
+    I have numerically computed solutions for this system for 40 different in ital conditions within the interval $[1, 3]$, I will provide my plots first, followed by the code. We can see the various solutions in Figure \ref{fig:p2 curves}. It seems that all initial conditions in $\si$ are captured by the equilibrium point at the origin, and follow an approximation of a circle. Figure \ref{fig:p2 return map} reveals the Poincar\'e Return map, which, when compared to the line $y = x$, can be used to approximate the fixed point $x^* = 2$. I have fitted a cubic polynomial to our curve to aid in the estimation of the Floquet Multiplier $\mu$. By what we are given, we can get this estimation via $\mu = P'(x^*)$, where $P$ is our fitted polynomial function. With this, we get that $\mu \approx 0.194$ at $x^* = 2$.\par
+
+    \jump
+    To compare this with the values we get for the Monodromy matrix, I will numerically estimate it. For this, we need to numerically solve the linear system, calculate its period, and evaluate the fundamental matrix at that point. I will omit the plot for the linear system, since it's not really important what it looks like, just that we get the period. I estimate the period to be $T = (3.1632 +- 0.0014)$ s. With this, we can get that the Monodromy matrix is
+    \begin{align}
+        M = \Phi(T) = 
+        \begin{bmatrix}
+            0.104477621435603 + 0.0299966220466678i, &0\\ 0 &-0.466072701884242 + 0.59323886946441i
+        \end{bmatrix}\nonumber\\
+    \implies \mu = \{0.104477621435603 + 0.0299966220466678i, -0.466072701884242 + 0.59323886946441i\}
+    \end{align}
+    These were calculated by the code below. This will result in an incorrect evaluation of the Floquet Multipliers, but the multipliers are the eigenvalues of the monodromy matrix, which is constructed by the eigenvectors of the Linear system multiplied by $e^{\lm_i t}$, then evaluated at the period. This was done, but gave either incorrect results, or is going to be off due to calculation errors. Either way, these two values for the Floquet Multiplier $\mu$ are not equivalent. 
+    
+    \begin{lstlisting}
+    #Finding Monodromy matrix Numerically
+    #using Sympy
+    t = sp.symbols('t')
+
+    linMat = sp.Matrix([[0, 2], 
+                    [-2, 0.5]])
+
+    eigvals, eigvects = linMat.diagonalize()
+    Mono = eigvects * sp.diag(sp.exp(eigvals[0] * t), sp.exp(eigvals[1] * t)) * eigvects.inv()
+    zeroMat = Mono.subs(t, 0)
+    zeroMat_inv = zeroMat.inv()
+    res = Mono * zeroMat_inv
+    res_at_t = res.subs(t, 3.1632)
+    eigenvalues_res = res_at_t.eigenvals()
+    
+    print(eigenvalues_res)  
+    \end{lstlisting}
+    
+    
+    \newpage
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width = 0.6\textwidth]{Images/problem 2 curves.png}
+        \caption{Curves obtained by 40 different initial conditions in $\si$. The vector field for the system is also shown. The image is not tilted, but it does appear to be.}
+        \label{fig:p2 curves}
+    \end{figure}
+    \begin{figure}[!ht]
+        \centering
+        \includegraphics[width = 0.6\textwidth]{Images/Problem 2 return map.png}
+        \caption{Poincar\'e Return map for the system. A cubic polynomial has been fit to it to determine the derivative.}
+        \label{fig:p2 return map}
+    \end{figure}
+
+\newpage
+\begin{lstlisting}
+#Block to get solutions
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+import matplotlib.cm as cm
+import sympy as sp
+
+#System definition
+def xdot(y, t):
+    x1, x2 = y
+    return [2*x2, -2*x1 + 0.5 * (1 - x1**2)*x2]
+
+#Linear System definition
+def linxdot(y, t):
+    x1, x2 = y
+    return [2*x2, -2*x1 + 0.5*x2]
+
+def get_sigma_intersection(x : np.ndarray, y : np.ndarray):
+    """
+    Returns the array of x values where the solution
+    hits the surface defined as the following
+    $\Si = \{(x, y) : x \in [1, 3], y = 0\}$
+    
+    Parameters
+    ----------
+    x : np.ndarray
+        The array of x positions for the solution
+    
+    y : np.ndarray
+        The array of y positions for the solution
+    """
+    
+    eps = 0.001 #Float tolerance
+    
+    arr = []
+    arr.append(x[0])
+    for i in range(len(y) - 1):
+        if y[i] > eps and y[i+1] < 0:
+            arr.append(x[i])
+    
+    return arr
+
+def get_period(sol):
+    """
+    Returns the minimal period of the solution
+    """
+    x0 = sol.y[0][0]
+    x, y = sol.y
+    
+    for i in range(len(x)):
+        if y[i] > 0 and y[i+1] < 0:
+            return sol.t[i]    
+
+#define time range
+timespan = (0., 500.)
+init = 40 #number of initial conditions
+
+#initial conditions
+x0s = np.linspace(1, 3, init)
+y0 = 0.0
+i = 0
+max_len = 0
+
+colors = np.linspace(0, 1 / max(max(x0s), 1), init)
+fig, axs = plt.subplots(1, 1, figsize =(12, 12))
+
+for x0 in x0s:
+    initial_conditions = [x0, y0]
+    #Getting numerical Solution
+
+    sol = solve_ivp(lambda t, y: xdot(y, t), t_span=timespan,
+                    y0=initial_conditions, max_step = 0.01)
+    #Picking coords of solution
+    x, y = sol.y
+    axs.plot(x, y, color = cm.hot(min(colors[i]**0.4, 0.7)), label = x0)
+    
+    i+=1
+    
+    
+#resizing xpts array
+xpts = xpts[:, :max_len]
+
+bounds = 3
+#Vector Field meshes
+xvect, yvect = np.meshgrid(np.linspace(-bounds, bounds, 20),
+                           np.linspace(-bounds, bounds, 20))
+
+#Update vector fields
+uvect = -1 + yvect
+vvect = yvect - xvect
+
+# Plotting Vector Field
+axs.quiver(xvect, yvect, uvect, vvect, color='g')
+
+axs.grid(True)
+
+axs.set_xlabel("x1")
+axs.set_ylabel("x2")
+axs.legend(bbox_to_anchor=(1.1, 1.05))
+
+# Show plot with grid
+plt.show()
+\end{lstlisting}
+
+\begin{lstlisting}
+#Block for Poincare Return map
+ret_map = []
+for curve in xpts:
+    for i in range(len(curve[:7])):
+        ret_map.append((curve[i], curve[i+1]))
+ret_map = np.array(ret_map)
+
+#sorting points 
+sorted_indices = np.argsort(ret_map[:, 0])
+sorted_data = ret_map[sorted_indices]
+
+#Obtaining a Polynomial fot to the curve
+coefficients = np.polyfit(sorted_data[:, 0], sorted_data[:, 1], 3)
+poly_function = np.poly1d(coefficients)
+x_curve = np.linspace(min(sorted_data[:, 0]), max(sorted_data[:, 0]), 100)
+y_curve = poly_function(x_curve)
+
+#Plotting
+plt.scatter(sorted_data[:, 0], sorted_data[:, 1], label='Data Points', c='lightblue')
+plt.plot(x_curve, y_curve, label=f'Polynomial (Degree {3})', color='red')
+plt.xlabel('Starting point')
+plt.ylabel('Return point')
+plt.scatter(np.linspace(1, 3, 20), np.linspace(1, 3, 20), label = "y = x", color = 'k', s=10)
+plt.title("Poincare Return Map")
+plt.legend()
+\end{lstlisting}
+
+\begin{lstlisting}
+#Estimating period of linear system and plotting
+#define time range
+timespan = (0., 50.)
+init = 4 #number of initial conditions
+
+#initial conditions
+x0s = np.linspace(1, 3, init)
+y0 = 0.0
+i = 0
+max_len = 0
+Periods = np.zeros((init, 1)) #Minimal periods for initial conditions
+colors = np.linspace(0, 1 / max(max(x0s), 1), init)
+fig, axs = plt.subplots(1, 1, figsize =(12, 12))
+
+for x0 in x0s:
+    initial_conditions = [x0, y0]
+#Getting numerical Solution
+
+    sol = solve_ivp(lambda t, y: linxdot(y, t), t_span=timespan,
+                    y0=initial_conditions, max_step = 0.01)
+    #Picking coords of solution
+    x, y = sol.y
+    axs.plot(x, y, color = cm.hot(min(colors[i]**0.4, 0.7)), label = x0)
+    period = get_period(sol)
+    Periods[i] = period
+    i+=1
+    
+    
+#resizing xpts array
+xpts = xpts[:, :max_len]
+
+axs.grid(True)
+
+axs.set_xlabel("x1")
+axs.set_ylabel("x2")
+axs.legend(bbox_to_anchor=(1.1, 1.05))
+
+print("Estimation of the Period: {:.4f} += {:.4f}".format(Periods.mean(), Periods.std()))
+# Show plot with grid
+plt.show()
+\end{lstlisting}
+\end{solution}
+
+\clearpage
 
 \newpage
 \section{Problem 3}
+Now consider the R\"ossler dynamical system in $\R^3$:
+\begin{gather*}
+    \xdot = -y - z\\
+    \ydot = x+ay\\
+    \dot{z} = b + z(x - c)
+\end{gather*}
+with $a = b = 0.2$.
+\subsection{Problem 3, part a}
+Let $c = 2.5$ and find, by numerical solution of the equations, a stable limit cycle. For this next, part, you will need to know a point $(x_0, y_0, z_0)$ on the limit cycle to good precision, and also the period $T$ for the limit cycle to good precision.
+\partbreak
+\begin{solution}
 
+    The initial conditions I found to give a good band were $(x_0, y_0, x_0) = (4.7, -1.1430, 0.85)$. With this I found the period to be roughly $T = 63.25$. The plot for this system, as well as the code to plot it and compute its period is given below.
 
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width = 0.5\textwidth]{Images/p3im.png}
+        \caption{R\"ossler System for given initial conditions. The period is given is $T\approx 63.25$.}
+        \label{fig:p3 system}
+    \end{figure}
+
+\newpage
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import solve_ivp
+import matplotlib.cm as cm
+import math
+from mpl_toolkits.mplot3d import Axes3D
+%matplotlib qt
+
+#System definition
+def xdot(y, t, a, b, c):
+    x1, x2, x3 = y
+    return [ - x2 - x3,
+               x1 + a * x2,
+               b + x3 * (x1 - c)]
+
+def get_period(sol):
+    """
+    Gets the Minimum period of the solution
+    """
+    x0, y0, z0 = sol.y[:, 0]
+    init = np.array([x0, y0, z0])
+    x, y, z = sol.y
+    dist = np.zeros(x.shape[0])
+    for i in range(len(dist)):
+        ipoint = np.array([x[i], y[i], z[i]])
+        dist[i] = math.dist(init, ipoint)
+
+    dist_arr = []
+    for i in range(len(dist[2:])):
+        if dist[i-1] > dist[i] and dist[i+1] > dist[i] and dist[i] != 0:
+            dist_arr.append((sol.t[i], dist[i]))
+    
+    sorted_tuples = sorted(dist_arr, key=lambda x: (x[1], x[0]))
+    
+    return sorted_tuples[0][0]
+
+#define time range
+timespan = (0., 100.)
+init = 1 #number of initial conditions
+
+#Paramters
+a = 0.2
+b = 0.2
+
+#initial conditions
+x0 = 4.7
+y0 = -1.1430
+z0 = 0.85
+i = 0
+
+colors = np.linspace(0, 1 / 1, 1)
+fig = plt.figure()
+axs = fig.add_subplot(111, projection='3d')
+
+initial_conditions = [x0, y0, z0]
+
+c = 2.5
+sol = solve_ivp(lambda t, y, a, b, c: xdot(y, t, a, b, c), t_span=timespan, y0=initial_conditions, max_step=0.01, args=(a, b, c))
+#Picking coords of solution
+x, y, z = sol.y
+axs.plot(x, y, z, color = cm.hot(min(colors[i]**0.4, 0.7)), label = x0)
+axs.view_init(elev=20, azim=45) 
+axs.set_xlabel('X-axis')
+axs.set_ylabel('Y-axis')
+axs.set_zlabel('Z-axis')
+
+print(f'Period: {get_period(sol)}')
+# Show the plot
+plt.show()
+
+\end{lstlisting}
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part b}
+Linearize the equations about the limit cycle and compute the Monodromy matrix $M$, together with its eigenvalues $\mu$, which are called Floquet multipliers. Meiss describes how to do this numerically using the point $(x_0, y_0, z_0)$ as an initial condition for the limit cycle $\gamma(t) = \gamma(T)$. Find the eigenvector associated with the eigenvalue $\mu = 1$. Show that it points in a direction that is is along the limit cycle at $(x_0, y_0, z_0)$.
+\partbreak
+\begin{solution}
+
+    To linearize the system, we denote our chosen $(x_0, y_0, z_0)$ from part a as such. Then, we take the Jacobian of our system, the evaluate it on our limit cycle. I will chose to evaluate the periodic cycle at my chosen initial conditions. Thus, 
+
+    \alignbreak
+    \begin{align}
+        f &= (-y - z, x + ay, b + z(x - c)) &\text{(Our system.)}\nonumber\\
+        \implies Df(\gamma(t)) &= \begin{bmatrix}0 &-1 &-1\\ 1 &a &0\\ z &0 &x - c\end{bmatrix} &\text{(Taking Jacobian.)}\nonumber\\
+        \implies Df(\gamma(0)) = Df(\textbf{x}_0) &=  \begin{bmatrix}0 &-1 &-1\\ 1 &a &0\\ z_0 &0 &x_0 - c\end{bmatrix} &\text{(Evaluating on limit cycle.)}\nonumber
+    \end{align}
+    \alignbreak
+    Note This was entirely independent on the stated values of the initial conditions. when plugging in $(x_0, y_0, x_0) = (4.7, -1.1430, 0.85)$, we get that the magnitudes of the eigenvalues are $(1.13053, 1.13053, 1.8543)$, which is admittedly not what we wanted to see. 
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part c}
+Starting with $c = 2.5$, find a stable limit cycle and investigate its stability properties
+as you gradually increase $c$. You should find that it loses stability when an eigenvalue of the
+Monodromy matrix crosses the unit circle at $\mu = -1$. What is the $c$ value associated with this? What happens to the limit cycle for $c$ increasing further?
+\partbreak
+\begin{solution}
+
+    Even though something appears to be incorrect in the previous part, I tried investigating what happened when we increase for various values of $c$. You can see how the eigenvalues change in the given plot below. It appears that when the solely real eigenvalue breaches -1, at roughly $c = 5.3$, we get see the plot take on a notably different shape, and the period somehow gets smaller, $T \approx 17.4099$.
+\end{solution}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Images/eigvals plot.png}
+    \caption{Eigenvalues for various $c$. Note there is one eigenvalue which is entirely positive, and two others that pivot around a certain point in the complex plane. Apologies for the terrible legend.}
+    \label{fig:p3shit}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics{Images/p3 bullshit.png}
+    \caption{The R\"ossler system for $c = 5.3$. Note the period has decreased to roughly 17.4, and the system seems to experience ``triple period doubling".}
+    \label{fig:p3 newplot}
+\end{figure}
 \newpage
 \section{Problem 4}
 Consider the Lorenz equations
@@ -265,10 +719,9 @@ is a strong Lyapunov function for the Lorenz system. Note this is equivalent to 
     \frac{dL}{dt} &= \frac{1}{2}\Big( \frac{2}{\sigma}x\xdot + 2y\ydot + 2z\dot{z} \Big)&\text{(Differentiation.)}\nonumber\\
     &= (y - x)x + y(rx - y - xa) + z(xy - bz) &\text{(Plugging in Lorenz System.)}\nonumber\\
     &= (1 + r) xy - x^2 - y^2 - bz^2 &\text{(Simplifying.)}\nonumber\\
-    &\leq 2xy - x^2 - y^2 - bz^2 &\text{(Restriction on $r$.)}\nonumber\\
+    &< 2xy - x^2 - y^2 - bz^2 &\text{(Restriction on $r$.)}\nonumber\\
     &= -(x - y)^2 - bz^2 &\text{(Difference of squares.)}\nonumber\\
     &= -((x - y)^2 + bz^2) &\text{(Grouping.)}\nonumber\\
-    &< -((x - y)^2 + z^2) &(b > 0.)\nonumber\\
     &\leq 0 &\text{(argument inside is positive.)}\nonumber\\
 \implies \frac{dL}{dt} &< 0 &\text{(Summary.)}\nonumber
 \end{align}
@@ -282,11 +735,20 @@ Show that $L$ is only a weak Lyapunov function if $r = 1$, but that you can use 
 \partbreak
 \begin{solution}
 
-    For the sake of completeness, I will include LaSalle's Invariance Principle
+    For the sake of completeness, I will include LaSalle's Invariance Principle.
     \begin{quote}
         \underline{\textbf{LaSalle's Invariance Principle:}} \\
-        Suppose $x^*$ is a fixed point of the equilibrium of $\ph_t(x)$ and $L$ is a weak Lyapunov function of $x^*$ on some compact forward invariant neighborhood $U$ of $x^*$. Let $Z = \{x \in U : dL/dt = 0\}$. If $\{x^*\}$ is the larges forward invariant subset of $Z$, then $X^*$ is asymptotically stable and attruacts every point in $U$.
+        Suppose $x^*$ is a fixed point of the equilibrium of $\ph_t(x)$ and $L$ is a weak Lyapunov function of $x^*$ on some compact forward invariant neighborhood $U$ of $x^*$. Let $Z = \{x \in U : dL/dt = 0\}$. If $\{x^*\}$ is the largest forward invariant subset of $Z$, then $x^*$ is asymptotically stable and attracts every point in $U$.
     \end{quote}
+
+    Note the only way we could have gotten a strong Lyapunov function on the previous part was on the restriction of $r$, i.e., $1 + r < 2$. Since $r = 1$, this bound becomes an equality, which implies that our Lyapunov function is now only weak. \par
+
+    \jump
+    Since the Lorenz system is globally attracted to the origin for $r \in (0, 1]$, we can just take the neighborhood $U$ to be the whole range of the system, thus making $U$ compact and forward invariant. Next, we just want to show that $\{(0, 0, 0)\}$ is the largest forward invariant subset of $Z$. Note that we found the derivative of our Lyapunov function in the previous part, 
+    \[
+    \frac{dL}{dt} = -((x - y)^2 + bx^2),
+    \]
+    where I implicitly took the restriction that $r = 1$. The function inside the outer parenthesis is a sum of two squares, thus positive. It only has one real root, namely at $x = y = z = 0$, thus $Z = \{(0, 0, 0)\}$, meaning aside from the empty set, the origin is the only point contained in $Z$. It is also a forward invariant subset, since the origin is a stable point of the Lorenz system for $r \in (0, 1]$. Thus by LaSalle's Invariance Principle, $x^* = (0, 0, 0)$ is asymptotically stable and attracts every point in our solution space $U$ for $r \in (0, 1]$.
 \end{solution}
 
 \newpage
@@ -385,5 +847,41 @@ Compute S for the matrix $A = \begin{pmatrix}-2 &1\\ 0 &-2\end{pmatrix}$ and dem
         &= -\id\nonumber
     \end{align}
     \alignbreak
+\end{solution}
+
+\newpage
+\section{Problem 10}
+The Lyapunov function defined in the previous problem also works when nonlinear terms are added to the ODE. Consider the system $\xdot = Ax + g(x)$, where $g(x) = o(x)$ and $A$ is a matrix whose eigenvalues have negative real parts. Show that there is a neighborhood $U$ of the origin for which the function $L = \textbf{x}^TS\textbf{x}$, where $S$ is given in the previous problem, is a strong Lyapunov function.
+\partbreak
+\begin{solution}
+
+    We must show the two conditions necessary for $L$ to be a strong Lyapunov function. 
+    \begin{enumerate}
+        \item \underline{$L(\textbf{x}^*) = 0$ for $x^* = 0$.}
+        
+        Note it was shown in the previous problem that $S$, when written as such, is positive definite. Thus $\textbf{x}^TS\textbf{x}$ is positive for $\textbf{x}\neq 0$. Thus, only when $\textbf{x}^* = \textbf{0}$ do we have that $L = 0$. 
+
+        \item \underline{$dL/dt < 0$}:
+
+        Note that by definition, since $g(x) = o(x)$, for any $\ep > 0$ we are guaranteed a $\delta > 0$ such that when $\norm{x} \leq \delta, \norm{g(x)} \leq \ep$. Therefore, the following steps can be taken:
+        \vspace{-5mm}
+        \alignbreak
+        \vspace{-5mm}
+        \begin{align}
+            \frac{dL}{dt} &= \dot{\textbf{x}}^T S \textbf{x} + \textbf{x}^TS\dot{\textbf{x}} &\text{(Differentiation.)}\nonumber\\
+            &= (\textbf{x}^TA^T + g^T(\textbf{x}))S\textbf{x} + \textbf{x}^TS(A\textbf{x} + g(\textbf{x}) &(\xdot = Ax + g(x).)\nonumber\\
+            &= \textbf{x}^T(A^TS + SA)\textbf{x} + g^T(\textbf{x})(SX) + \textbf{x}^TSg(\textbf{x}) &\text{(Rearranging.)}\nonumber\\
+            &= -\textbf{x}^T\textbf{x} + g^T(\textbf{x})S\textbf{x} + \textbf{x}^TSg(\textbf{x}) &\text{(Condition on $S$.)}\nonumber\\
+            &= \norm{\textbf{x}}_2^2 + 2g^T(\textbf{x})S\textbf{x} &(\textbf{x} \in \R^n.)\nonumber\\
+            &\leq -\norm{\textbf{x}}_2^2 + 2\norm{g(\textbf{x})}_2\norm{S\textbf{x}}_2 &\text{(Cauchy-Schwartz.)}\nonumber\\
+            &\leq -\norm{\textbf{x}}_2^2 + 2\ep \norm{\textbf{x}}_2\norm{S\textbf{x}}_2 &(g(x) = o(x).)\nonumber\\
+            &\leq -\norm{\textbf{x}}_2^2 + 2\ep \norm{\textbf{x}}_2^2\norm{S}_2 &\text{(Consistency of 2-norm.)}\nonumber\\
+            &= -\norm{\textbf{x}}_2^2 + \frac{1}{2}\norm{\textbf{x}}_2^2 &\text{(Let $\ep = \frac{1}{4\norm{S}_2} > 0.$)}\nonumber\\
+            &= -\frac{1}{2}\norm{x}_2^2 &\text{(Simplifying.)}\nonumber
+        \end{align}
+        \alignbreak
+
+        Note that $dL/dt = 0$ only when $\norm{\textbf{x}}_2^2 = 0$, which is only when $\textbf{x} = 0$. Since by definition all points in the neighborhood of $x^*$ minus $x^*$ itself can be chosen. Thus $dL/dt < 0$ for all $t > 0$ when $\norm{\textbf{x}}_2 \leq \delta$.  
+    \end{enumerate}
 \end{solution}
 \end{document}
