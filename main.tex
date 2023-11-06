@@ -1,0 +1,213 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{Class ?: Homework ?}
+\author{Caleb Derrickson}
+\date{November 11, 2023}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+
+
+\newpage
+\section{Problem 2}
+Let $A \in \R^{m \times n}$ and suppose the complete orthogonal decomposition is given by
+\[
+A = Q_1 \begin{bmatrix}L &0\\0&0\end{bmatrix}Q_2^T
+\]
+where $Q_1$ and $Q_2$ are orthogonal, and $L$ is a nonsingular lower triangular matrix. Recall that $X \in \R^{n \times m}$ is the unique pseudo-inverse of $A$ is the following Moore-Penrose conditions hold:
+\begin{enumerate}[(i)]
+    \item $AXA = A$ 
+    \item $XAX = X$ 
+    \item $(AX)^T = AX$ 
+    \item $(XA)^T = XA$
+\end{enumerate}
+and in which case we write $A^\dag = X$.
+\subsection{Problem 2, part a}
+Let 
+\[
+A^- = Q_2\begin{bmatrix}L^\inv &Y \\ 0 &0\end{bmatrix}Q_1^T, \hspace{5mm} Y\neq 0. 
+\]
+Which of the four conditions (i) - (iv) are satisfied?
+\partbreak
+\begin{solution}
+
+    We will go straight into calculations.
+    \alignbreak
+    \begin{align}
+        i) \ AXA &=  Q_1 \begin{bmatrix}L &0\\0&0\end{bmatrix}Q_2^T Q_2\begin{bmatrix}L^\inv &Y \\ 0 &0\end{bmatrix}Q_1^T Q_1 \begin{bmatrix}L &0\\0&0\end{bmatrix}Q_2^T &\text{(Given.)}\nonumber\\
+        &= Q_1 \begin{bmatrix}L &0\\0&0\end{bmatrix}\begin{bmatrix}L^\inv &Y \\ 0 &0\end{bmatrix}\begin{bmatrix}L &0\\0&0\end{bmatrix}Q_2^T &\text{($Q_1, Q_2$ are orthogonal.)}\nonumber\\
+        &=  Q_1 \begin{bmatrix}\id &LY\\0&0\end{bmatrix}\begin{bmatrix}L &0 \\ 0 &0\end{bmatrix}Q_2^T &\text{(Matrix Multiplication.)}\nonumber\\
+        &=  Q_1 \begin{bmatrix}L &0 \\ 0 &0\end{bmatrix}Q_2^T &\text{(Matrix Multiplication.)}\nonumber\\
+        &= A &\text{(By Definition.)}\nonumber\\
+        ii) \ XAX &= Q_2\begin{bmatrix}L^\inv &Y \\ 0 &0\end{bmatrix}Q_1^T Q_1 \begin{bmatrix}L &0\\0&0\end{bmatrix}Q_2^T Q_2\begin{bmatrix}L^\inv &Y \\ 0 &0\end{bmatrix}Q_1^T &\text{(Given.)}\nonumber\\
+        &= Q_2\begin{bmatrix}L^\inv &Y \\ 0 &0\end{bmatrix} \begin{bmatrix}L &0\\0&0\end{bmatrix}\begin{bmatrix}L^\inv &Y \\ 0 &0\end{bmatrix}Q_1^T &\text{($Q_1, Q_2$ are orthogonal.)}\nonumber\\
+        &= Q_2\begin{bmatrix}\id &0\\0 &0\end{bmatrix}\begin{bmatrix}L^\inv &Y \\0 &0\end{bmatrix}Q_1^T &\text{(Matrix Multiplication.)}\nonumber\\
+        &= Q_2\begin{bmatrix}L^\inv &Y \\0 &0\end{bmatrix}Q_1^T&\text{(Matrix Multiplication.)}\nonumber\\
+        &= X &\text{(By Definition.)}\nonumber\\
+        iii) \ (AX)^T &= \Bigg(Q_1 \begin{bmatrix}L &0\\0&0\end{bmatrix}Q_2^T Q_2\begin{bmatrix}L^\inv &Y \\ 0 &0\end{bmatrix}Q_1^T \Bigg)^T &\text{(Given.)}\nonumber\\
+        &= \Bigg(Q_1 \begin{bmatrix}L &0\\0&0\end{bmatrix}\begin{bmatrix}L^\inv &Y \\ 0 &0\end{bmatrix}Q_1^T \Bigg)^T &\text{($Q_2$ is orthogonal.)}\nonumber\\
+        &= \Bigg( Q_1\begin{bmatrix}\id &LY \\ 0 &0\end{bmatrix}Q_1^T\Bigg)^T &\text{(Matrix multiplication.)}\nonumber\\
+        &=  Q_1\begin{bmatrix}\id &0 \\ LY &0\end{bmatrix}Q_1^T &\text{(Transposition.)}\nonumber\\
+        &\neq AX &\text{(As can be seen.)}\nonumber\\
+        iv) \ (XA)^T &= \Bigg( Q_2 \begin{bmatrix}L^\inv &Y \\ 0&0\end{bmatrix}Q_1^TQ_1\begin{bmatrix}L &0\\0 &0\end{bmatrix}Q_2^T\Bigg)^T &\text{(Given.)}\nonumber\\
+        &= \Bigg( Q_2 \begin{bmatrix}L^\inv &Y \\ 0&0\end{bmatrix}\begin{bmatrix}L &0\\0 &0\end{bmatrix}Q_2^T\Bigg)^T &\text{($Q_1$ is orthogonal.)}\nonumber\\
+        &= \Bigg( Q_2 \begin{bmatrix}\id &0 \\ 0 &0\end{bmatrix}Q_2^T\Bigg)^T &\text{(Matrix Multiplication.)}\nonumber\\
+        &= Q_2 \begin{bmatrix}\id &0 \\ 0 &0\end{bmatrix}Q_2^T &\text{(Transposition.)}\nonumber\\
+        &= XA &\text{(As can be seen.)}\nonumber
+    \end{align}
+    \alignbreak
+    Thus, we see that $(i), (ii),$ and $(iv)$ hold, but not $(iii)$.
+\end{solution}
+
+\newpage
+\subsection{Problem 2, part b}
+Prove that 
+\[
+A^\dag = Q_2 \begin{bmatrix}L^\inv &0 \\ 0 &0\end{bmatrix}Q_1^T
+\]
+by letting 
+\[
+A^\dag = Q_2\begin{bmatrix}X_{11} &X_{12} \\ X_{21} &X_{22}\end{bmatrix}Q_1^T
+\]
+and by completing the following steps
+\begin{itemize}
+    \item Using $(i)$, prove that $X_{11} = L^\inv$.
+    \item Using the symmetry conditions $(iii)$ and $(iv)$, prove that $X_{12} = X_{21} = 0$. 
+    \item Using $(ii)$, prove that $X_{22} = 0$.
+\end{itemize}
+\partbreak
+\begin{solution}
+
+    Here we are letting the middle term take on any form (within reason), then arguing by the properties of the Moore-Penrose pseudo-inverse, that it must take this form. Then, let 
+    \[
+    A^\dag = Q_2\begin{bmatrix}X_{11} &X_{12} \\ X_{21} &X_{22}\end{bmatrix}Q_1^T
+    \]
+
+    We will then recover terms by the above properties in the suggested order.
+    \begin{itemize}
+        \item By the first property, $AXA = A$ must be obeyed. Then, 
+        \vspace{-5mm}
+        \alignbreak
+        \vspace{-5mm}
+        \begin{align}
+            AA^\dag A &= Q_1\begin{bmatrix}L &0\\0&0\end{bmatrix}Q_2^TQ_2\begin{bmatrix}X_{11} &x_{12}\\X_{21} &X_{22}\end{bmatrix}Q_1^TQ_1\begin{bmatrix}L &0\\0&0\end{bmatrix} &\text{(Given.)}\nonumber\\
+            &=  Q_1\begin{bmatrix}L &0\\0&0\end{bmatrix}\begin{bmatrix}X_{11} &x_{12}\\X_{21} &X_{22}\end{bmatrix}\begin{bmatrix}L &0\\0&0\end{bmatrix} &\text{($Q_1, Q_2$ are orthogonal.)}\nonumber\\
+            &= Q_1 \begin{bmatrix}LX_{11} &LX_{12}\\ 0&0\end{bmatrix}\begin{bmatrix}L &0\\0&0\end{bmatrix}Q_2^T &\text{(Matrix multiplication.)}\nonumber\\
+            &= Q_1\begin{bmatrix}LX_{11}L &0 \\0&0\end{bmatrix}Q_2^T &\text{(Matrix multiplication.)}\nonumber\\
+            \implies &LX_{11}L = L &(AA^\dag A = A.)\nonumber\\
+            \iff &X_{11} = L^\inv &\text{($L$ is nonsingular.)}\nonumber
+        \end{align}
+        \alignbreak
+        \vspace{-5mm}
+        \newpage
+        \item Next, we will take the symmetric properties of the Moore-Penrose pseudo inverse.
+        \alignbreak
+        \begin{align}
+        AA^\dag &= \Bigg( Q_1\begin{bmatrix}L &0\\0 &0\end{bmatrix}Q_2^TQ_2\begin{bmatrix}L^\inv &X_{12}\\ X_{21} &X_{22}\end{bmatrix}Q_1^T\Bigg)^T &\text{(Given.)}\nonumber\\
+        &= \Bigg( Q_1\begin{bmatrix}L &0\\0 &0\end{bmatrix}\begin{bmatrix}L^\inv &X_{12}\\ X_{21} &X_{22}\end{bmatrix}Q_1^T\Bigg)^T &\text{($Q_2$ is orthogonal.)}\nonumber\\
+        &= \Bigg( Q_1\begin{bmatrix}\id &LX_{12}\\0 &0\end{bmatrix}Q_1^T\Bigg)^T &\text{(Matrix multiplication.)}\nonumber\\
+        \implies LX_{12} &= L &\text{(Transposition and $(AA^\dag)^T = AA^\dag$.)}\nonumber\\
+        \implies \ \  X_{12} &= 0 &\text{($L$ is nonsingular, thus nonzero.)}\nonumber\\
+        (A^\dag A)^T &= \Bigg( Q_2 \begin{bmatrix}L^\inv &0 \\X_{21} &X_{22}\end{bmatrix}Q_1^TQ_1\begin{bmatrix}L &0\\0&0\end{bmatrix}Q_2^T\Bigg)^T &\text{(Given.)}\nonumber\\
+        &= \Bigg( Q_2 \begin{bmatrix}L^\inv &0 \\X_{21} &X_{22}\end{bmatrix}\begin{bmatrix}L &0\\0&0\end{bmatrix}Q_2^T\Bigg)^T &\text{($Q_1$ is orthogonal.)}\nonumber\\
+        &= \Bigg( Q_2 \begin{bmatrix}\id &0 \\X_{21}L &0\end{bmatrix}Q_2^T\Bigg)^T &\text{(Matrix multiplication.)}\nonumber\\
+        \implies X_{21}L &= 0 &\text{(Transposition and $(A^\dag A)^T = A^\dag A$.)}\nonumber\\
+        \implies \ \ X_{21} &= 0 &\text{(L is invertible thus nonzero.)}\nonumber
+        \end{align}
+        \alignbreak
+        
+        \item Finally, we will show $X_{22} = 0$.
+        \alignbreak
+        \begin{align}
+            A^\dag AA^\dag &= Q_2\begin{bmatrix}L^\inv &0 \\ 0 &X_{22}\end{bmatrix}Q_1^TQ_1 \begin{bmatrix}L &0\\ 0 &0\end{bmatrix}Q_2^TQ_2 \begin{bmatrix}L^\inv &0 \\0 &X_{22}\end{bmatrix}Q_1^T &\text{(Given.)}\nonumber\\
+            &= Q_2\begin{bmatrix}L^\inv &0 \\ 0 &X_{22}\end{bmatrix} \begin{bmatrix}L &0\\ 0&0\end{bmatrix} \begin{bmatrix}L^\inv &0 \\0 &X_{22}\end{bmatrix}Q_1^T &\text{($Q_1, Q_2$ are orthogonal.)}\nonumber\\
+            &= Q_2\begin{bmatrix}\id &0\\0&0\end{bmatrix}\begin{bmatrix}L^\inv &0 \\ 0&X_{22}\end{bmatrix}Q_1^T &\text{(Matrix multiplication.)}\nonumber\\
+            &= Q_2\begin{bmatrix}L^\inv &0 \\0&0\end{bmatrix}Q_1^T &\text{(Matrix multiplication.)}\nonumber\\
+            \implies X_{22} &= 0 &(A^\dag AA^\dag = A^\dag.) \nonumber
+        \end{align}
+        \alignbreak
+    \end{itemize}
+
+    Therefore, $A^\dag$ is of the given form. Note that I passed over some steps, including steps where I equated entries only in the block matrix, ignoring the factors which would appear when multiplied by $Q_i$ for its transpose. Since they are orthonormal however, these factors will cancel out, leaving us only with the entry in the block matrix. 
+\end{solution}
+
+\newpage
+\section{Problem 3}
+Let $A \in \R^{m \times n}, \textbf{b} \in \R^m,$ and $\textbf{c}\in \R^n$. We are interested in the least squares problem
+\begin{align}
+    \min_{\textbf{x}\in \R^n} \norm{A\textbf{x} - \textbf{b}}^2_2 \label{p3: min}
+\end{align}
+\subsection{Problem 3, part a}
+Show that \textbf{x} is a solution to (\ref{p3: min}) if and only if \textbf{x} is a solution to the \textit{augmented system}
+\begin{align}
+    \begin{bmatrix}\id &A\\A^T&0\end{bmatrix}\begin{bmatrix}\textbf{r}\\\textbf{x}\end{bmatrix} = \begin{bmatrix}\textbf{b}\\0\end{bmatrix} \label{p3: augmented soln}
+\end{align}
+\partbreak
+\begin{solution}
+
+    \begin{itemize}
+        \item $\underline{\implies}):$ Suppose (\ref{p3: min}) $\implies$ (\ref{p3: augmented soln}) were false, that is, $\textbf{x}$ is not a solution to the augmented system. Note that since $\textbf{x}$ is a solution to (\ref{p3: min}), then $A\textbf{x} - \textbf{b} = \textbf{d}$, for some $\textbf{d}$. Note that $\textbf{d}$ is in general nonzero. For simplicity, we will break this proof down into cases. 
+
+        \begin{itemize}
+            \item \underline{Case 1:} $\textbf{b} \in$ im $(A)$.
+
+            Then the minimum of $\norm{A\textbf{x} - \textbf{b}}$ would equal zero, since $\norm{A\textbf{x - \textbf{b}}} = \norm{A(\textbf{x} - \textbf{y})} = 0$, which attains minimum when $\textbf{x} = \textbf{y}$, meaning $A\textbf{x} = \textbf{b}$. Then $\textbf{d} = 0$. Then (\ref{p3: augmented soln}) simplifies to
+            \[
+            \begin{bmatrix}\id &A\\ A^T& 0\end{bmatrix}\begin{bmatrix}\textbf{0}\\ \textbf{x}\end{bmatrix} = \begin{bmatrix}\textbf{b}\\0\end{bmatrix}.
+            \]
+            This implies $A\textbf{x} = b$ and $A^T\textbf{0} = \textbf{0}$. Since these are both true, then we run into a contradiction.
+            \item \underline{Case 2:} $\textbf{b} \notin$ im $(A)$
+
+            Then $\norm{A\textbf{x} - b} \neq 0$. This would mean $\textbf{d} \neq 0$, and $\textbf{d} \neq $ im$(A)$ since if it were, then we can write $\textbf{d} = A\textbf{y}$, then $\norm{A(\textbf{x} - \textbf{y}) - b} = 0$, which means $\textbf{x} - \textbf{y}$ is a solution to (\ref{p3: min}), meaning $\textbf{x}$ is not a minimum, which is a contradiction. Since $\textbf{d} \notin$ im $(A)$, then $\textbf{d} \in \ker (A^T)$ by the Fredholm Alternative. Then (\ref{p3: augmented soln}) is equivalent to
+            \[
+            \begin{bmatrix}\id &A\\ A^T& 0\end{bmatrix}\begin{bmatrix}\textbf{d}\\ \textbf{x}\end{bmatrix} = \begin{bmatrix}\textbf{b}\\0\end{bmatrix}.
+            \]
+            This implies $A\textbf{x} + \textbf{d} = \textbf{b}$ and $A^T\textbf{d} = 0$. This is is true, since we only know $\textbf{d}$ up to sign. Thus (\ref{p3: augmented soln}) holds, giving us a contradiction. 
+        \end{itemize}
+
+        \item $\underline{\impliedby}):$
+
+        Note that (\ref{p3: augmented soln}) is equivalent to $A\textbf{x} + \textbf{b} = \textbf{r}$ and $A^T\textbf{r} = 0$. We will again break this down into cases. 
+
+        \begin{itemize}
+            \item \underline{Case 1:} $\textbf{b} \in $ im$(A)$. 
+
+            Then $\textbf{b} = A\textbf{y}$ for some $\textbf{y} \in \R^n$. Thus $\textbf{r}= A\textbf{x} + \textbf{b} = A(\textbf{x} - \textbf{y})$. Thus when taking the minimum over all $\textbf{x}$, we see that $\norm{A(\textbf{x} - \textbf{y})} = 0$, exactly when $\textbf{x} = \textbf{y}$. Since $\norm{\cdot}_2$ is positive, then $\textbf{x} \in \argmin (\norm{A\textbf{x} - \textbf{b}})$, which means $\textbf{x}$ is a solution to (\ref{p3: min}).
+
+            \item \underline{Case 2:} $\textbf{b}\notin$ im$(A)$.
+
+            Then, by the Fredholm Alternative, $\textbf{b} \in \ker(A^T)$. Thus, the following can be shown:
+            \alignbreak
+            \begin{align}
+                \norm{\textbf{r}}_2^2 &= \norm{A\textbf{x} - \textbf{b}}_2^2 = (A\textbf{x} - \textbf{b})^T(A\textbf{x} - \textbf{b}) &\text{(2-norm, given.)}\nonumber\\
+                &= \textbf{x}^TA^TA\textbf{x} - \textbf{x}^TA^T\textbf{b} - \textbf{b}^TA\textbf{x} + \textbf{b}^T\textbf{b} &\text{(Factoring out.)}\nonumber\\
+                &= \textbf{x}^TA^TA\textbf{x}  - \textbf{b}^TA\textbf{x} + \textbf{b}^T\textbf{b} &(\textbf{b} \in \ker(A^T).)\nonumber\\
+                &= \textbf{x}^TA^TA\textbf{x}  - (A^T\textbf{b})^T\textbf{x} + \textbf{b}^T\textbf{b} &\text{(Associativity.)}\nonumber\\
+                &= \textbf{x}^TA^TA\textbf{x} + \textbf{b}^T\textbf{b} &(\textbf{b} \in \ker(A^T).)\nonumber\\
+                &= \norm{A\textbf{x}}_2^2 + \norm{\textbf{b}}_2^2 &\text{(2-norm definition.)}\nonumber
+            \end{align}
+            \alignbreak
+
+            This then means that $\textbf{x}$ satisfies the Pythagorean Theorem, implying that $\textbf{x}$ is a solution to (\ref{p3: min}). 
+        \end{itemize}
+    \end{itemize}
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part b}
+Show that the $(m + n) \times (m + n)$ matrix in (\ref{p3: augmented soln}) is nonsingular if and only if $A$ has full column rank.
+\partbreak
+\begin{solution}
+
+    Denote $\A$ to be the $(m + n) \times (m + n)$ matrix in (\ref{p3: augmented soln}). Note that $\A$ is symmetric, that is, $\A = \A^T$.
+\end{solution}
+\end{document}
