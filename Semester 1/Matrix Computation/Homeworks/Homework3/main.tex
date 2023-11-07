@@ -1,7 +1,7 @@
 \input{definitions}
 
 % Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
-\title{Class ?: Homework ?}
+\title{STAT 30900: Homework 3}
 \author{Caleb Derrickson}
 \date{November 11, 2023}
 
@@ -208,6 +208,315 @@ Show that the $(m + n) \times (m + n)$ matrix in (\ref{p3: augmented soln}) is n
 \partbreak
 \begin{solution}
 
-    Denote $\A$ to be the $(m + n) \times (m + n)$ matrix in (\ref{p3: augmented soln}). Note that $\A$ is symmetric, that is, $\A = \A^T$.
+    Denote $\A$ to be the $(m + n) \times (m + n)$ matrix in (\ref{p3: augmented soln}). We will again break this down into cases. 
+
+    \begin{itemize}
+        \item $\underline{\implies}):$ 
+
+        Suppose false, that is, $\A$ is singular, but $A$ has full column rank. Note this means $A$ has full rank. Since $\A$ is singular, then $\exists \textbf{v} \in \R^{m + n} \setminus \{\textbf{0}\}$ which is mapped to $\textbf{0}$ under $\A$. Let $\textbf{v} = [\textbf{v}_\textbf{r}, \textbf{v}_\textbf{x}]^T$. This then means, by (\ref{p3: augmented soln}), that  $\textbf{v}_\textbf{r} + A\textbf{v}_\textbf{x} = 0$ and $A^T\textbf{v}_\textbf{r} = 0$. We can substitute the first equation into the second to get $A^TA\textbf{v}_\textbf{x} = 0$. Note that if $A$ is full rank, then $A^T$ is also full rank. This means that $A\textbf{v}_\textbf{x} \in \ker(A^T)$. Since $A^T$ has full rank, this means $\textbf{v}_\textbf{x} \in \ker(A)$, which means $\textbf{v}_\textbf{x} =0 $, since $A$ is full rank. Then, since $A\textbf{v}_\textbf{x} = -\textbf{v}_\textbf{r}, \implies \textbf{v}_\textbf{r} = 0$ as a result. Note we assumed that $\textbf{v} \neq 0$, which is a contradiction, since $\textbf{v}$ was found to only be zero. 
+
+        \item $\underline{\impliedby}):$
+
+        This is equivalent to showing $\det (\A) \neq 0$. Note that in general, a $2\times 2$ block matrix has determinant
+        \[
+        \det \Bigg( \begin{bmatrix}A &B\\C &D\end{bmatrix}\Bigg) = \det(A)\det(D - CA^\inv B)
+        \]
+
+        With $\A$, this then means $\det(\A) = \det(\id)\det(0 - A^T(\id)^\inv A) = det(-A^TA) = (-1)^n\det(A^TA)$. Note that $A^TA$ has full rank when $A$ has full rank. Furthermore, $A^TA$ is normal, thus its SVD decomposition coincides with an eigenvalue decomposition, with $\sigma^2 = \lm$. since $A$ has full rank, then all singular values of $A^TA$ are nonzero, thus all eigenvalues are nonzero, thus $\det(A^TA) \neq 0$. Therefore $\det(\A) \neq 0$ when $A$ has full column rank. 
+    \end{itemize}
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part c}
+Suppose $A$ has full column rank and the $QR$ decomposition of $A$ is 
+\[
+A = Q\begin{bmatrix}R\\0\end{bmatrix}.
+\]
+Show that he solution to the augmented system
+\[
+\begin{bmatrix}\id &A\\A^T &0\end{bmatrix}\begin{bmatrix}\textbf{y}\\\textbf{x}\end{bmatrix}
+=
+\begin{bmatrix}\textbf{b}\\\textbf{c}\end{bmatrix}
+\]
+can be computed from
+\[
+\textbf{x} = (R^\inv)^T \textbf{c}, \hspace{5mm} \begin{bmatrix}\textbf{d}_1\\\textbf{d}_2\end{bmatrix} = Q^T\textbf{b},
+\]
+
+and
+\[
+\textbf{x} = R^\inv(\textbf{d}_1 - \textbf{z}), \hspace{5mm }\textbf{y} = Q\begin{bmatrix}\textbf{z}\\\textbf{d}_2\end{bmatrix}.
+\]
+\partbreak
+\begin{solution}
+
+    This is just an exercise in reverse engineering, and computation. We can recover the first equation in the following steps:
+
+    \alignbreak
+    \begin{align*}
+        Q^T\textbf{b} &= \mqty[\textbf{d}_1\\\textbf{d}_2] &\text{(Given.)}\\
+        &= \mqty[\textbf{d}_1 + \textbf{z} - \textbf{z}\\\textbf{d}_1] &\text{(Adding a zero.)}\\
+        &= \mqty[\textbf{z}\\\textbf{d}_2] + \mqty[\textbf{d}_1 - \textbf{z}] &\text{(Separating.)}\\
+        &= \mqty[\textbf{z}\\\textbf{d}_2] + \mqty[R\\0] R^\inv(\textbf{d}_1 - \textbf{z}) &(R^\inv R = \id.)\\
+        &= Q^T\Bigg(Q\mqty[\textbf{z}\\\textbf{d}_2]\Bigg) + \mqty[R\\0] R^\inv(\textbf{d}_1 - \textbf{z}) &(Q^TQ = \id.)\\
+        \implies Q^T\textbf{b} &= Q^T\textbf{y} + \mqty[R\\0]\textbf{x} &\text{(Given definitions.)}\\
+        \implies \textbf{b} &= \textbf{y} + Q\mqty[R\\0] \textbf{x} &\text{(Multiplying by $Q$.)}\\
+        \implies \textbf{b} &= \textbf{y} + A\textbf{x} &\text{($QR$ of $A$.)}
+    \end{align*}
+    \alignbreak
+
+    The second equation can also be found similarly. 
+    \alignbreak
+    \begin{align*}
+        \textbf{z} &= (R^\inv)^T\textbf{c} &\text{(Given.)}\\
+        \implies \ \ \textbf{z}^T &= \textbf{c}^TR^\inv &\text{(Transposition.)}\\
+        \implies \ \ \textbf{c}^T &= \textbf{z}^TR &\text{(Multiplying by $R$.)}\\
+        \implies  \textbf{c} &= R^T\textbf{z} &\text{(Transposition.)}\\
+        &= \mqty[R^T&0] \mqty[\textbf{z}\\\textbf{d}_2] &\text{(Block Equivalence, element of $\textbf{d}_2$ could be anything.)}\\
+        &= \mqty[R^T&0] Q^TQ\mqty[\textbf{z}\\\textbf{d}_2] &(Q^TQ = \id.)\\
+        &= \Bigg( Q\mqty[R\\0]\Bigg)^TQ\mqty[\textbf{z}\\\textbf{d}_2] &\text{(Transposition.)}\\
+        \implies \textbf{y} &= A^T\textbf{y} &\text{(Given definitions.)}
+    \end{align*}
+    \alignbreak
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part d}
+Hence deduce that if $A$ has full column rank, then 
+\[
+A^\dag = R^\inv Q^T_1
+\]
+where $Q = [Q_1, Q_2]$ with $Q_1 \in \R^{m\times n}$ and $Q_2 \in \R^{m\times (m - n)}$. Check this agrees with the general formula derived for a rank-retaining factorization $A = GH$ in the lectures. 
+
+\partbreak
+\begin{solution}
+
+    We first show that the given $A^\dag$ satisfies the properties of the Moore-Penrose pseudo-inverse:
+
+    \alignbreak
+    \begin{align*}
+        i) \ AA^\dag A &= (Q\mqty[R\\0]R^\inv Q_1^T)A &\text{(Given.)}\\
+        &= \mqty[Q_1\\Q_2] \mqty[R\\0]R^\inv Q_1^T)A &\text{(Definitions.)}\\
+        &=  Q_1RR^\inv Q_1^T A &\text{(Matrix multiplication.)}\\
+        &= (Q_1Q_1^T)A &\text{($R^\inv R = \id$.)}\\
+        &= (Q_1Q_1^T)\mqty[Q_1&Q_2]\mqty[R\\0] &\text{(Writing out.)}\\
+        &= Q_1Q_1^TQ_1R &\text{(Matrix Multiplication.)}\\
+        &= Q_1R &\text{($Q_1$ has orthonormal columns.)}\\
+        ii) \ A^\dag A A^\dag &= R^\inv Q_1^T\mqty[Q_1\\Q_2]\mqty[R\\0]A^\dag &\text{(Given.)}\\
+        &= R^\inv Q_1^TQ_1R A^\dag &\text{(Matrix multiplication.)}\\
+        &= (\id)A^\dag &\text{($Q_1$ has orthonormal columns, $R^\inv R = \id$.)}\\
+        iii) \ (A^\dag A)^T &= \Bigg( R^\inv Q_1^T \mqty[Q_1 &Q_2]\mqty[R\\0]\Bigg)^T &\text{(By definition.)}\\
+        &= (R^\inv Q_1^TQ_1R)^T &\text{(Matrix multiplication.)}\\
+        &= (R^\inv R)^T &\text{($Q_1$ has orthonormal columns.)}\\
+        &= \id &\text{($R^\inv R = \id$)}\\
+        iv) \ (AA^\dag)^T &=\Bigg(\mqty[Q_1 &Q_2]\mqty[R\\0]R^\inv Q_1^T\Bigg)^T &\text{(Given.)}\\
+        &= \Bigg(Q_1RR^\inv Q_1^T\Bigg)^T &\text{(Matrix multiplication.)}\\
+        &= \Bigg(Q_1 Q_1^T\Bigg)^T  &(R^\inv R = \id.)\\
+    \end{align*}
+    \alignbreak
+
+    Note that I have to be careful in handling the $Q$ subspaces. Since $Q$ had orthonormal columns, $Q_1^T Q_1 = \id$, but $Q_1Q_1^T \neq \id$ in general. However, $(Q_1Q_1^T)^T = Q_1Q_1^T$, Thus $(iv)$ will hold. This issue also pops ups in $(i)$, but problems subside once we multiply on the right by $A$. Thus $(i) - (iv)$ hold. We need to show that this then agrees with the rank-retaining lectures as shown in class. That is, 
+    \[
+    A^\dag = H^T(HH^T)^\inv (G^TG)^\inv G^T
+    \]
+    We need to be careful in our choice of $G$ and $H$, since if $H = \mqty[R\\0]$, then 
+    \[
+    HH^T = \mqty[R\\0]\mqty[R^T&0] =\mqty[RR^T &0\\0&0],
+    \]
+    which is not invertible. Thus taking this with respect to the \textit{condensed} $QR$ decomposition, then take $H = R, G = Q_1$. Then the following steps are justified:
+
+    \alignbreak
+    \begin{align*}
+        A^\dag &= H^T(HH^T)^\inv (G^TG)^\inv G^T &\text{(Given.)}\\
+        &= R^T(RR^T)^\inv (Q_1^TQ_1)^\inv Q_1^T &\text{(Plugging in.)}\\
+        &= R^T(R^T)^\inv R^\inv (\id)^\inv Q_1^T &\text{($(AB)^\inv = B^\inv A^\inv$ if defined.)}\\
+        &= R^\inv Q_1^T &(R^T(R^T)^\inv = \id.)
+    \end{align*}
+    \alignbreak
+
+    Thus, we find our $A^\dag$ to coincide with the one found using the general formula for a rank-retaining factorization.
+\end{solution}
+
+\newpage
+\section{Problem 4}
+Let $A \in \R^{m \times n}$. Suppose we apply $QR$ factorization with column pivoting to obtain the decomposition
+\[
+A = Q\mqty[R&S\\0&0]\Pi^T
+\]
+where $Q$ is orthogonal and $R$ is upper triangular and invertible. Let $\textbf{x}_B$ be the \textit{basic solution}, i.e.,
+\[
+\textbf{x}_B = \Pi \mqty[R^\inv &0\\0&0]Q^T\textbf{b},
+\]
+and let $\hat{\textbf{x}} = A^\dag \textbf{b}.$ Show that 
+\[
+\frac{\norm{\textbf{x}_B - \hat{\textbf{x}}}_2}{\norm{\hat{\textbf{x}}}_2} \leq \norm{R^\inv S}_2.
+\]
+\partbreak
+\begin{solution}
+    
+\end{solution}
+
+
+\newpage
+\section{Problem 5}
+Let $\textbf{u} \in \R^n, \textbf{u}\neq \textbf{0}.$ A \textit{Householder} matrix $H_\textbf{u} \in \R^{n\times n}$ is defined by 
+\[
+H_\textbf{u} = \id - \frac{2\textbf{u}\textbf{u}^T}{\norm{\textbf{u}}_2^2}
+\]
+\subsection{Problem 5, part a}
+Show that $H_\textbf{u}$ is both symmetric and orthogonal.
+\partbreak
+\begin{solution}
+
+    \begin{itemize}
+        \item \underline{Symmetry:}
+
+        \begin{align*}
+            (H_\textbf{u})^T &= (\id - \frac{2}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T)^T &\text{(Given.)}\\
+            &= \id^T - \frac{2}{\norm{\textbf{u}}_2^2}(\textbf{u}\textbf{u}^T)^T &\text{(Transpose is linear.)}\\
+            &= \id - \frac{2}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T &\text{($\textbf{u}\textbf{u}^T$ and $\id$ are symmetric.)}\\
+            &= H_\textbf{u}
+        \end{align*}
+
+        \item \underline{Orthogonality:}
+            Note $H_\textbf{u}^T = H_\textbf{u}$, so we just need to show $H_\textbf{u}^2 = \id$.
+
+            \begin{align*}
+                H_\textbf{u}^2 &= (\id - \frac{2}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T)(\id - \frac{2}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T) &\text{(Given.)}\\
+                &= \id^2 +\frac{4}{\norm{\textbf{u}}_2^4}\textbf{u}\textbf{u}^T\textbf{u}\textbf{u}^T - \frac{4}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T &\text{(Expanding.)}\\
+                &= \id +\frac{4}{\norm{\textbf{u}}_2^4}\textbf{u}\norm{\textbf{u}}_2^2\textbf{u}^T - \frac{4}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T &\text{(Definition of 2-norm.)}\\
+                &= \id +\frac{4}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T - \frac{4}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T &\text{(Simplifying.)}\\
+                &= \id &\text{(Simplifying.)}
+            \end{align*}
+    \end{itemize}
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part b}
+Show that for any $\alpha \in \R, \alpha \neq 0$,
+\[
+H_{a\textbf{u}} = H_\textbf{u}
+\]
+In other words, $H_\textbf{u}$ only depends on the ``direction" of $\textbf{u}$ and not on its ``magnitude".
+\partbreak
+
+\begin{solution}
+
+    We will go straight into calculations:
+
+    \alignbreak
+    \begin{align*}
+        H_{\alpha\textbf{u}} &= \id - \frac{2}{\norm{\alpha\textbf{u}}_2^2}(\alpha\textbf{u})(\alpha\textbf{u})^T &\text{(Given.)}\\
+        &= \id - \frac{2}{|\alpha|^2\norm{\textbf{u}}_2^2}\alpha^2(\textbf{u})(\textbf{u})^T &\text{(Transpose is linear and norm definitions.)}\\
+        &= \id - \frac{2}{\norm{\textbf{u}}_2^2}(\textbf{u})(\textbf{u})^T &\text{($\alpha^2 = |\alpha|^2$.)}\\
+        &= H_\textbf{u} &\text{(Definition.)}
+    \end{align*}
+    \alignbreak
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part c}
+In general, given a matrix $M \in \R^{n\times n}$ and a vector $\textbf{x}\in \R^n$, computing the matrix-vector product $M\textbf{x}$ requires $n$ inner products - one for each row of $M$ with $\textbf{x}$. Show that $H_\textbf{u}\textbf{x}$ can be computed using only two inner products.
+\partbreak
+\begin{solution}
+
+    We will go straight into calculations:
+
+    \alignbreak
+    \begin{align*}
+        H_\textbf{u}\textbf{x} &= (\id - \frac{2}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T)\textbf{x} &\text{(Given.)}\\
+        &= \id\textbf{x} - \frac{2}{\braket{\textbf{u}}{\textbf{u}}}\textbf{u}\textbf{u}^T\textbf{x} &\text{(2-norm definition and distribution.)}\\
+        &= \textbf{x} - \frac{2}{\braket{\textbf{u}}{\textbf{u}}}\textbf{u}\braket{\textbf{u}}{\textbf{x}} &\text{(Inner product definition.)}
+    \end{align*}
+    \alignbreak
+
+    As we can see we need to just calculate two inner products when doing the matrix-vector product $H_\textbf{u}\textbf{x},$ appearing in the 2-norm of $\textbf{u}$ and the multiplication of the rank-1 matrix $\textbf{u}\textbf{u}^T$.
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part d}
+Given $\textbf{a}, \textbf{b} \in \R^n$ where $\textbf{a} \neq \textbf{b}$ and $\norm{\textbf{a}}_2 = \norm{\textbf{b}}_2.$ Find $\textbf{u} \in \R^n, \textbf{u} \neq 0$ such that
+\vspace{-5mm}
+\[
+H_\textbf{u}\textbf{a} = \textbf{b}.
+\]
+\vspace{-15mm}
+\partbreak
+\begin{solution}
+
+    After some guessing and checking, I found $\textbf{u} = \textbf{b} - \textbf{a}$ to work. Here is the proof:
+{\small
+    \alignbreak
+    \vspace{-5mm}
+    \begin{align*}
+        H_{\textbf{b} - \textbf{a}}\textbf{a} &= \Big(\id - \frac{2}{\norm{\textbf{a} - \textbf{b}}_2^2}(\textbf{b} - \textbf{a})(\textbf{b} - \textbf{a})^T\Big) &\text{(Given.)}\\
+        &= \textbf{a} - \frac{2}{\norm{\textbf{b} - \textbf{a}}_2^2}(\textbf{b}\textbf{b}^T\textbf{a} - \textbf{b}\textbf{a}^T\textbf{a} - \textbf{a}\textbf{b}^T\textbf{a} + \textbf{a}\textbf{a}^T\textbf{a}) &\text{(Factoring out.)}\\
+        &= \textbf{a}- \frac{2}{\norm{\textbf{b} - \textbf{a}}_2^2}(\textbf{b}\braket{\textbf{b}}{\textbf{a}} - \textbf{b}\norm{\textbf{a}}_2^2 - \textbf{a}\braket{\textbf{b}}{\textbf{a}} + \textbf{a}\norm{\textbf{a}}_2^2) &\text{(Inner product.)}\\
+        &= \textbf{a}- \frac{2}{\norm{\textbf{b} - \textbf{a}}_2^2}(\norm{\textbf{a}}_2^2 (\textbf{a} - \textbf{b}) + \braket{\textbf{b}}{\textbf{a}}(\textbf{b} - \textbf{a})) &\text{(Grouping.)}\\
+        &= \textbf{a}- \frac{2(\textbf{a} - \textbf{b})}{\norm{\textbf{b} - \textbf{a}}_2^2}(\norm{\textbf{a}}_2^2 - \norm{\textbf{a}}_2^2\cos(\theta_{ab})) &(\braket{\textbf{a}}{\textbf{b}} = \norm{\textbf{a}}\norm{\textbf{b}}\cos(\theta_{ab}).)\\
+        &= \textbf{a}- \frac{2\norm{\textbf{a}}_2^2(\textbf{a} - \textbf{b})}{\norm{\textbf{b} - \textbf{a}}_2^2}(1 - \cos(\theta_{ab})) &\text{(Grouping.)}\\
+        &= \textbf{a}- \frac{2\norm{\textbf{a}}_2^2 (1 - \cos(\theta_{ab}))(\textbf{a} - \textbf{b})}{\norm{\textbf{b}}_2^2 + \norm{\textbf{a}}_2^2 - 2\braket{\textbf{a}}{\textbf{b}}} &\text{(2-norm definition.)}\\
+        &= \textbf{a}- \frac{2\norm{\textbf{a}}_2^2 (1 - \cos(\theta_{ab}))(\textbf{a} - \textbf{b})}{\norm{\textbf{b}}_2^2 + \norm{\textbf{a}}_2^2 - 2\norm{\textbf{a}}_2^2\cos(\theta_{ab})} &(\braket{\textbf{a}}{\textbf{b}} = \norm{\textbf{a}}\norm{\textbf{b}}\cos(\theta_{ab}).)\\
+        &= \textbf{a}- \frac{2\norm{\textbf{a}}_2^2 (1 - \cos(\theta_{ab}))(\textbf{a} - \textbf{b})}{2\norm{\textbf{a}}_2^2 - 2\norm{\textbf{a}}_2^2\cos(\theta_{ab})} &(\braket{\textbf{a}}{\textbf{b}} = \norm{\textbf{a}}_2 = \norm{\textbf{b}}_2.)\\
+        &= \textbf{a}- \frac{2\norm{\textbf{a}}_2^2 (1 - \cos(\theta_{ab}))(\textbf{a} - \textbf{b})}{2\norm{\textbf{a}}_2^2(1 - \cos(\theta_{ab}))} &\text{(Grouping.)}\\
+        &= \textbf{a}- \frac{(1 - \cos(\theta_{ab}))(\textbf{a} - \textbf{b})}{1 - \cos(\theta_{ab})} &\text{(Simplifying.)}\\
+        &= \textbf{a} - (\textbf{a} - \textbf{b}) &\text{(Simplifying.)}\\
+        &= \textbf{b} &\text{(Simplifying.)}
+    \end{align*}
+    \vspace{-10mm}
+    \alignbreak
+}%
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part e}
+Show that \textbf{u} is an eigenvector of $H_\textbf{u}$. What is the corresponding eigenvalue?
+\partbreak
+\begin{solution}
+
+    We will go straight into calculations:
+    \alignbreak
+    \begin{align*}
+        H_\textbf{u}\textbf{u} &= \Big(\id - \frac{2}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T\Big)\textbf{u} &\text{(Given.)}\\
+        &= \textbf{u} - \frac{2}{\norm{\textbf{u}}_2^2}\textbf{u}\textbf{u}^T\textbf{u} &\text{(Distribution.)}\\
+        &= \textbf{u} - \frac{2}{\norm{\textbf{u}}_2^2}\textbf{u}\norm{\textbf{u}}_2^2 &\text{(2-norm definition.)}\\
+        &= \textbf{u} - 2\textbf{u} &\text{(Simplifying.)}\\
+        &= -\textbf{u} &\text{(Simplifying.)}
+    \end{align*}
+    \alignbreak
+
+    So \textbf{u} is an eigenvector of $H_\textbf{u}$ with eigenvalue -1.
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part f}
+Show that every $\textbf{v} \in $ span$\{ \textbf{u}\}^\perp$ is an eigenvector of $H_\textbf{u}$. What are the corresponding eigenvalues? What is dim(span$\{\textbf{u}\}^\perp$)?
+\partbreak
+\begin{solution}
+
+    We will go straight into calculations:
+
+    \alignbreak
+    \begin{align*}
+        H_\textbf{u}\textbf{v} &= \Big( \id - \frac{2}{\norm{\textbf{u}}_2^2} \textbf{u}\textbf{u}^T\Big)\textbf{v} &\text{(Given.)}\\
+        &= \textbf{v} - \frac{2}{\norm{\textbf{u}}_2^2} \textbf{u}\textbf{u}^T\textbf{v} &\text{(Distribution.)}\\
+        &= \textbf{v} - \frac{2}{\norm{\textbf{u}}_2^2} \textbf{u}(0) &(\textbf{v} \in \text{span} (\{ \textbf{u}\}^\perp).)
+        &= \textbf{v} &\text{(Simplifying.)}
+    \end{align*}
+    \alignbreak
+
+    So \textbf{v} is an eigenvector of $H_\textbf{u}$ with eigenvalue 1 for all $\textbf{v} \in $ span$\{ \textbf{u}\}^\perp$. Note since $\R^n =$ span$\{ \textbf{u}\}^\perp \oplus $ span$\{ \textbf{u}\}$, then dim($\R^n) =$ dim(span$\{ \textbf{u}\}^\perp$) + span$\{ \textbf{u}\}$. Then dim(span$\{ \textbf{u}\}^\perp$) = $n - 1$.
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part g}
+Find the eigenvalues decomposition of $H_\textbf{u}$, i.e., find an orthogonal matrix $Q$ and a diagonal matrix $\Lambda$ such that 
+\[
+H_\textbf{u} = Q\Lambda Q^T
+\]
+\partbreak
+\begin{solution}
+
+    Note that we found all eigenvalues and eigenvectors in the previous two parts. 
 \end{solution}
 \end{document}
