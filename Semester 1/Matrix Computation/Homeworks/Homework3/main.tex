@@ -15,7 +15,23 @@
 
 \newpage
 \section{Problem 1}
-
+Given a symmetric $A \in \R^{n\times n}, \textbf{0} \neq \textbf{x} \in \R^n$, and $\textbf{b} \in \R^n$. Let 
+\[
+\textbf{r} = \textbf{b} - A\textbf{x}
+\]
+Consider the $QR$ decomposition
+\[
+[\textbf{x}, \textbf{r}] = QR
+\]
+and observe that if $E\textbf{x} = \textbf{r}$, then
+\[
+(Q^TEQ)(Q^T\textbf{x}) = Q^T\textbf{r}.
+\]
+Show how to compute a symmetric $E \in \R^{n\times n}$ so that is attains 
+\[
+\min_{(A+E)\textbf{x} = \textbf{b}}\norm{E}_F
+\]
+where the minimum is taken over all symmetric $E$.
 
 \newpage
 \section{Problem 2}
@@ -500,7 +516,7 @@ Show that every $\textbf{v} \in $ span$\{ \textbf{u}\}^\perp$ is an eigenvector 
     \begin{align*}
         H_\textbf{u}\textbf{v} &= \Big( \id - \frac{2}{\norm{\textbf{u}}_2^2} \textbf{u}\textbf{u}^T\Big)\textbf{v} &\text{(Given.)}\\
         &= \textbf{v} - \frac{2}{\norm{\textbf{u}}_2^2} \textbf{u}\textbf{u}^T\textbf{v} &\text{(Distribution.)}\\
-        &= \textbf{v} - \frac{2}{\norm{\textbf{u}}_2^2} \textbf{u}(0) &(\textbf{v} \in \text{span} (\{ \textbf{u}\}^\perp).)
+        &= \textbf{v} - \frac{2}{\norm{\textbf{u}}_2^2} \textbf{u}(0) &(\textbf{v} \in \text{span} (\{ \textbf{u}\}^\perp).)\\
         &= \textbf{v} &\text{(Simplifying.)}
     \end{align*}
     \alignbreak
@@ -510,13 +526,209 @@ Show that every $\textbf{v} \in $ span$\{ \textbf{u}\}^\perp$ is an eigenvector 
 
 \newpage
 \subsection{Problem 5, part g}
-Find the eigenvalues decomposition of $H_\textbf{u}$, i.e., find an orthogonal matrix $Q$ and a diagonal matrix $\Lambda$ such that 
+Find the eigenvalue decomposition of $H_\textbf{u}$, i.e., find an orthogonal matrix $Q$ and a diagonal matrix $\Lambda$ such that 
 \[
 H_\textbf{u} = Q\Lambda Q^T
 \]
 \partbreak
 \begin{solution}
 
-    Note that we found all eigenvalues and eigenvectors in the previous two parts. 
+    Note that we found all eigenvalues and eigenvectors in the previous two parts. Thus $Q$ can be formed by the found eigenvectors of $H_\textbf{u}.$ Therefore, I claim that $Q$ is of the form 
+
+    \[
+    Q = \mqty[\vert &\vert &&\vert\\\textbf{u} &\textbf{v}_2&\cdots &\textbf{v}_n\\\vert &\vert &&\vert]
+    \]
+
+    We just need to show that $Q$ is orthogonal, that is, $Q$ is composed of orthogonal columns. Note since we showed that every vector in  span$\{ \textbf{u}\}^\perp$ is an eigenvector of $H_\textbf{u}$, we are free to chose any orthogonal basis of $\R^{n - 1}$ (the last dimension is reserved for \textbf{u}). Without loss of generality, choose $\textbf{e}_2, ..., \textbf{e}_{n}$, the set of canonical unit vectors of $\R^{n - 1}$ to be $\textbf{v}_2, ..., \textbf{v}_n$. Note these are all orthogonal to each other, and since they are chosen from span$\{ \textbf{u}\}^\perp$, they are all orthogonal to \textbf{u}. Thus, we can choose 
+    \[
+    Q = \mqty[\vert &\vert &&\vert\\\textbf{u} &\textbf{e}_2&\cdots &\textbf{e}_n\\\vert &\vert &&\vert]
+    \]
+
+    which will be orthogonal. Finally, we choose $\Lambda$ to be the diagonal matrix whose entries coincide with their corresponding eigenvector in $Q$, so $\Lambda = $ diag$(-1, 1, ..., 1) \in \R^{n\times n}$.
 \end{solution}
+
+\section{Problem 6}
+In this exercise, we will implement and compare Gram–Schmidt and Householder QR. Your implementation should be tailored to the program you are using for efficiency (e.g. vectorize your code in Matlab/Octave/Scilab). Assume in the following that the input is a matrix $A\in \R^{m \times n}$ with rank$(A) = n \leq m$ and we want to find its full $QR$ decomposition, $A = QR$, where $Q \in O(m)$ and $R\in \R^{m \times n}$ is upper triangular.
+
+\newpage
+\subsection{Problem 6, part a}
+Implement the (classical) Gram-Schmidt algorithm to obtain $Q$ and $R$.
+\partbreak
+\begin{solution}
+
+    Here is my implementation of Gram-Schmidt in python. I tried to vectorize my code as much as possible. Note that even though $A$ is not ``passed by reference" in python, I avoided doing so much in my code.  
+
+\begin{lstlisting}
+def my_qr(A: np.ndarray):
+        """
+        Returns the QR factorization of a nonsingular array
+        via (classical) Gram-Schmidt.
+
+        Parameters
+        ----------
+        A: np.ndarray
+            The matrix with which we find the QR factorization.
+            Must be nonsingular, sized n x n
+
+        Returns
+        -------
+        Q: np.ndarray
+            A set of orthonormal column vectors of size n x n
+
+        R: np.ndarray
+            An upper triangular matrix
+        """
+        m, n = A.shape
+        Q = np.zeros((m, m))
+        R = np.zeros((m, n))
+
+        for i in range(0, m): #Row Iter
+            prev = 0 # used to catch r_{jk}q_j in sum
+            for j in range(0, i+1): # maintain upper triangularity
+                if i != j:
+                    R[j, i] = np.dot(Q[:, j], A[:, i])
+                    prev += R[j, i] * Q[:, j]
+                else: #Diagonal term, take prev
+                    R[i, i] = np.linalg.norm(A[:, i] - prev, ord = 2)
+                    assert R[i, i] != 0, "Diagonal is zero, function cannot continue"
+                    Q[:, j] = (1/R[i, i]) * (A[:, i] - prev)
+        return (Q, R)
+\end{lstlisting}
+\end{solution}
+
+\newpage
+\subsection{Problem 6, part b}
+Implement the Householder $QR$ algorithm to obtain $Q$ and $R$. You should 
+\begin{enumerate}
+    \item Store $Q$ implicitly, taking advantage of the fact that it can be uniquely specified by a sequence of vectors of decreasing dimensions;
+    \item Choose $\alpha$ in your Householder matrices to have the opposite sign of $x_1$ to avoid cancellation in $v_1$ (cf. notations in lecture notes.)
+\end{enumerate}
+\partbreak
+
+\begin{solution}
+
+    Here is my code. I believe everything here is vectorized, so it should be suitably fast. I made a simple helper function to calculate the Hausholder matrix, since it seems we'll need to compute it a few times in the next parts.
+
+\begin{lstlisting}
+    def calculate_Hausholder(v: np.array):
+        """
+        Helper function to calculate the Hausholder matrix from v.
+        
+        Parameters
+        ----------
+        v : np.array
+            The given vector. Needs to be normalized prior to passing.
+            
+        Returns
+        -------
+        H : np.ndarray
+            The Hausholder matrix of v.
+        """
+        
+        H = np.identity(max(v.shape)) - 2*np.outer(v, v)
+        return H
+
+    def hausholder_qr(A: np.ndarray):
+    """
+        Returns the QR factorization obtained through 
+        the Hausholder Reflection method. 
+        
+        Elements belonging to and above diagonal are R, 
+        
+        Below the diagonal are the column vectors v_1, ..., v_n-1
+        which are used to get Q_1, ..., Q_n-1. 
+        
+        Last element of v_i is not stored. Can be recovered since 
+        v is a unit vector.
+    """
+    m, n = A.shape
+    v_mat = []
+    for i in range(m-1):
+        
+        # Obtaining v_i
+        u = A[i:, i].copy()
+        u[0] -= np.linalg.norm(u, ord = 2)
+        v = u/np.linalg.norm(u, ord = 2)
+        v_mat.append(v)
+        
+        #Calculating Q only to get next iteration
+        Q = np.identity(m)
+        Q[i:, i:] = calculate_Hausholder(v)
+        
+        A = np.matmul(Q, A)
+
+    #Storing v_i's
+    for i in range(m-1):
+        A[i+1:, i] = np.array(v_mat[i])[:-1]
+        
+    return A
+\end{lstlisting}
+\end{solution}
+
+\newpage
+\subsection{Problem 6, part c}
+Implement an algorithm for forming the product $Q\textbf{x}$ and another for forming the product $Q^T\textbf{y}$ when $Q$ is stored implicitly as in (b).
+\partbreak
+\begin{solution}
+
+    Here is my code. I tested it to make sure the returned matrix is indeed orthonomal. All you need to do to get $Q$ is just call $\textbf{calculate\_Q}$.
+
+\begin{lstlisting}
+def recover_Qis(A: np.ndarray):
+    """
+    Calculates all Q_is from a Hausholder applied matrix A.
+    
+    Parameters
+    ----------
+    
+    A : np.ndarray
+        The matrix on which Hausholder QR has been performed
+        
+    Returns
+    -------
+    Qis : list(np.ndarray)
+        A list containing all Q's 
+    """
+    Qis = []
+    
+    m, n = A.shape
+    
+    for i in range(n - 1):
+        v = np.zeros(m - i)
+        v[1:] = A[i+1:, i]
+        v[0] = np.sqrt(1 - np.linalg.norm(v, ord = 2)**2)
+        Q = np.identity(m)
+        Q[i:, i:] = calculate_Hausholder(v)
+        Qis.append(Q)
+    
+    return Qis
+
+def calculate_Q(A: np.ndarray):
+    """
+    Returns the orthonormal matrix Q from the matrix A after Hausholder QR 
+    is applied.
+    
+    Parameters
+    ----------
+    
+    A : np.ndarray
+        The matrix on which Hausholder QR has been performed
+
+    Returns
+    -------    
+    
+    Q: np.ndarray
+        The orthonormal matrix involved in QR
+    """
+    
+    Qis = recover_Qis(A)
+    Q = np.identity(Qis[0].shape[0])
+    for Qi in Qis:
+        Q = np.matmul(Q, Qi.T)
+        
+    return Q
+\end{lstlisting}
+\end{solution}
+
+
 \end{document}
