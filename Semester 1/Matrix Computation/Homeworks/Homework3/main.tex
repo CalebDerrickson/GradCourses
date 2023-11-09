@@ -32,6 +32,32 @@ Show how to compute a symmetric $E \in \R^{n\times n}$ so that is attains
 \min_{(A+E)\textbf{x} = \textbf{b}}\norm{E}_F
 \]
 where the minimum is taken over all symmetric $E$.
+\partbreak
+\begin{solution}
+
+    We are given $[\textbf{x}, \textbf{r}] = QR$, which when multiplied on the left by $Q^T$ implies $[Q^T\textbf{x}, Q^T\textbf{r}] = Q^TQR = R$. Note that $R$ is upper triangular, so $Q^T\textbf{x}$ and $ Q^T\textbf{r}$ will have one and at most two nonzero elements, respectively. We are given the relation between them in the form $ (Q^TEQ)(Q^T\textbf{x}) = Q^T\textbf{r}$ if $E\textbf{x} = \textbf{r}$. Then, we can break this into cases based on the number of elements in $Q^T\textbf{r}$.
+
+    \begin{enumerate}
+        \item \underline{Case 1:} $Q^T\textbf{r}$ has one nonzero element. 
+
+        Denote $\Gamma = Q^TEQ$. Then by the relation given, 
+        \[
+        \Gamma (Q^T\textbf{x}) = \mqty[\cdot &\cdots &\cdot\\ \vdots &\ddots &\vdots\\ \cdot &\cdots &\cdot]\mqty[\vert \\ Q^T\textbf{x} \\ \vert] = \mqty[\alpha \\ \vdots\\0] = \mqty [\Gamma_{11}(Q^T\textbf{x})_1 + \Gamma_{12}(Q^T\textbf{x})_2 + ...\\ \Gamma_{21}(Q^T\textbf{x})_1 + \Gamma_{22}(Q^T\textbf{x})_2 + ...\\ \vdots]
+        \]
+        Note that the only nonzero element in $Q^T\textbf{r}$ is the first element, so $\Gamma_{j1}(Q^T\textbf{x})_1 + \Gamma_{j2}(Q^T\textbf{x})_2 + ...$ = 0 for $j \neq 1$. The only nonzero element in  $Q^Tx$ is the first, so any terms not involving $Q^T\textbf{x})_1$ is zero. so $\Gamma_{j1}, \Gamma_{j2}, ..., \Gamma_{jn}$ are arbitrary for $j\neq 1$. Since $\gamma$ is symmetric, then $\Gamma_{12}, \Gamma_{13},  ...,\Gamma_{1n}$ are also arbitrary. Then the only non-arbitrary element in $\Gamma$ is $\Gamma_{11}$. Thus, $\min \norm{E}_F = \min \norm{Q^TEQ}_F = \abs{\Gamma_{11}}$ (since all other elements are arbitrary, the minimum is attained when they are 0). Note the second equality holds since the Frobenius norm is unitary invariant. 
+
+\newpage
+        \item \underline{Case 2:} $Q^T\textbf{r}$ has two nonzero elements.
+
+        By the same logic in the previous case, 
+        \[
+        \Gamma (Q^T\textbf{x}) = \mqty[\cdot &\cdots &\cdot\\ \vdots &\ddots &\vdots\\ \cdot &\cdots &\cdot]\mqty[\vert \\ Q^T\textbf{x} \\ \vert] = \mqty[\alpha \\ \beta\\\vdots\\0] = \mqty [\Gamma_{11}(Q^T\textbf{x})_1 + \Gamma_{12}(Q^T\textbf{x})_2 + ...\\ \Gamma_{21}(Q^T\textbf{x})_1 + \Gamma_{22}(Q^T\textbf{x})_2 + ...\\ \vdots]
+        \]
+        Then the only possible non arbitrary terms are $\Gamma_{11}(Q^T\textbf{x})_1, \Gamma_{12}(Q^T\textbf{x})_2, \Gamma_{21}(Q^T\textbf{x})_1, \Gamma_{22}(Q^T\textbf{x})_2$ by the same logic in the previous case. Note that $(Q^T\textbf{x})_j = 0$ for $j \neq 1$. Then, $\Gamma_{22}(Q^T\textbf{x})_2$ equals 0 for any value of $\Gamma_{22}$, making it arbitrary. Note that $(Q^T\textbf{r})_2$ is nonzero, so this must mean $\Gamma_{21}(Q^T\textbf{x})_1 \neq 0$, meaning $\Gamma_{21} \neq 0$. Since $\Gamma$ is symmetric, this means $\Gamma_{12} \neq 0$. Thus the only non arbitrary elements of $\Gamma$ are $\Gamma_{11}, \Gamma_{12}, \Gamma_{21}$. Therefore, $\min \norm{E}_F^2 = \min \norm{Q^TEQ}_F = |\Gamma_{11}| + |\Gamma_{12}| + |\Gamma_{21}|$.   
+        
+    \end{enumerate}
+\end{solution}
+
 
 \newpage
 \section{Problem 2}
@@ -395,6 +421,7 @@ Show that $H_\textbf{u}$ is both symmetric and orthogonal.
         \end{align*}
 
         \item \underline{Orthogonality:}
+        
             Note $H_\textbf{u}^T = H_\textbf{u}$, so we just need to show $H_\textbf{u}^2 = \id$.
 
             \begin{align*}
@@ -730,5 +757,316 @@ def calculate_Q(A: np.ndarray):
 \end{lstlisting}
 \end{solution}
 
+\newpage
+\subsection{Problem 6, part d}
+For increasing values of $n$, generate an upper triangular matrix $R\in \R^{n\times n}$ and a $B \in \R^{n\times n}$, both with random standard normal entries. Use your program's built-in function for $QR$ factorization to obtain a random $Q\in O(n)$ from the $QR$ factorization of $B$. Now form $A = QR$ and apply your algorithms in (a) and (b) to find the $QR$ factors of $A$ - let these be your $\hat{Q}$ and $\hat{R}$. Tabulate (using graphs with appropriate scales) the relative errors
+\[
+\frac{\norm{R - \hat{R}}_F}{\norm{R}_F}, \hspace{3mm} \frac{\norm{Q - \hat{Q}}_F}{\norm{Q}_F}, \hspace{3mm} \frac{\norm{A - \hat{Q}\hat{R}}_F}{\norm{A}_F}, \hspace{3mm} \frac{\norm{\id - \hat{Q}^T\hat{Q}}_F}{\norm{\id}_F} 
+\]
+for various values of $n$ and for each method. Scale $Q, R, \hat{Q}, \hat{R}$ appropriately so that $R$ and $\hat{R}$ have positive diagonal elements. Note that the denominators $\norm{Q}_F = \norm{\id}_F = \sqrt{n}$ cannot be omitted since they depend on $n$.
+\begin{enumerate}
+    \item Comment on the relative errors in $\hat{Q}$ and $\hat{R}$ (these are called forward errors) versus the relative error in $\hat{Q}\hat{R}$ and $\hat{Q}^T\hat{Q}$ (these are called backward error; note that the latter measures a loss of orthogonality).
 
+    \item Comment on the relative error in $\hat{Q}\hat{R}$ and $\hat{Q}^T\hat{Q}$ computed with Gram–Schmidt versus that computed with Householder QR.
+\end{enumerate}
+
+\partbreak
+\begin{solution}
+
+    I will provide my plots below, followed by my code. Note the size of the matrices I observed went up to 1000, with stepsize 10. It seems as though the Hausholder QR proved far more stable in all areas besides Forward Error QR. I would expect to see the Forward error for Gram Schmidt be more unstable, considering the the two Backward errors for GS are themselves unstable. One more interesting thing to note is the Backward Error Q plot, which the GS relative error is acting like it will asymptotically approach the error for the HausHolder Error. This is entirely a conjecture, as this is a numerical exercise and we couldn't expect to be plotting matrices of size, say $10^6$, to see a better asymptotic approach. 
+
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width = 0.9\textwidth]{Images/problem6d MC3.png}
+        \caption{Relative Errors for Gram Schmidt (GS) and Hausholder (HH) QR.}
+        \label{fig:enter-label}
+    \end{figure}
+
+\clearpage
+\begin{lstlisting}
+import numpy as np
+from IPython.display import display, clear_output
+import matplotlib.pyplot as plt
+def calculate_Hausholder(v: np.array):
+    """
+    Helper function to calculate the Hausholder matrix from v.
+    
+    Parameters
+    ----------
+    v : np.array
+        The given vector. Needs to be normalized prior to passing.
+        
+    Returns
+    -------
+    H : np.ndarray
+        The Hausholder matrix of v.
+    """
+    
+    H = np.identity(max(v.shape)) - 2*np.outer(v, v)
+    return H
+
+
+def my_qr(A: np.ndarray):
+        """
+        Returns the QR factorization of a nonsingular array
+        via (classical) Gram-Schmidt.
+
+        Parameters
+        ----------
+        A: np.ndarray
+            The matrix with which we find the QR factorization.
+            Must be nonsingular, sized n x n
+
+        Returns
+        -------
+        Q: np.ndarray
+            A set of orthonormal column vectors of size n x n
+
+        R: np.ndarray
+            An upper triangular matrix
+        """
+        m, n = A.shape
+        Q = np.zeros((m, m))
+        R = np.zeros((m, n))
+
+        for i in range(0, m): #Row Iter
+            prev = 0 # used to catch r_{jk}q_j in sum
+            for j in range(0, i+1): # maintain upper triangularity
+                if i != j:
+                    R[j, i] = np.dot(Q[:, j], A[:, i])
+                    prev += R[j, i] * Q[:, j]
+                else: #Diagonal term, take prev
+                    R[i, i] = np.linalg.norm(A[:, i] - prev, ord = 2)
+                    assert R[i, i] != 0, "Diagonal is zero, function cannot continue"
+                    Q[:, j] = (1/R[i, i]) * (A[:, i] - prev)
+    
+        return Q, R
+    
+def hausholder_qr(A: np.ndarray):
+    """
+        Returns the QR factorization obtained through 
+        the Hausholder Reflection method. 
+        
+        Elements belonging to and above diagonal are R, 
+        
+        Below the diagonal are the column vectors v_1, ..., v_n-1
+        which are used to get Q_1, ..., Q_n-1. 
+        
+        Last element of v_i is not stored. Can be recovered since 
+        v is a unit vector.
+    """
+    m, n = A.shape
+    v_mat = []
+    for i in range(m-1):
+        
+        # Obtaining v_i
+        u = A[i:, i].copy()
+        u[0] -= np.linalg.norm(u, ord = 2)
+        v = u/np.linalg.norm(u, ord = 2)
+        
+        v_mat.append(v)
+
+        #Calculating Q only to get next iteration
+        Q = np.identity(m)
+        Q[i:, i:] = calculate_Hausholder(v)
+        
+        A = np.matmul(Q, A)
+
+    #Storing v_i's
+    for i in range(m-1):
+        A[i+1:, i] = np.array(v_mat[i])[:-1]
+        
+    return A
+
+def recover_Qis(A: np.ndarray):
+    """
+    Calculates all Q_is from a Hausholder applied matrix A.
+    
+    Parameters
+    ----------
+    
+    A : np.ndarray
+        The matrix on which Hausholder QR has been performed
+        
+    Returns
+    -------
+    Qis : list(np.ndarray)
+        A list containing all Q's 
+    """
+    Qis = []
+    
+    m, n = A.shape
+    
+    for i in range(m - 1):
+        v = np.zeros(m - i)
+        v[1:] = A[i+1:, i].copy()
+        v[0] = np.sqrt(1 - np.linalg.norm(v, ord = 2)**2)
+        Q = np.identity(m)
+        Q[i:, i:] = calculate_Hausholder(v)
+        Qis.append(Q)
+    
+    return Qis
+
+def calculate_Q(A: np.ndarray):
+    """
+    Returns the orthonormal matrix Q from the matrix A after Hausholder QR 
+    is applied.
+    
+    Parameters
+    ----------
+    
+    A : np.ndarray
+        The matrix on which Hausholder QR has been performed
+
+    Returns
+    -------    
+    
+    Q: np.ndarray
+        The orthonormal matrix involved in QR
+    """
+    
+    Qis = recover_Qis(A.copy())
+    Q = np.identity(Qis[0].shape[0])
+    for Qi in Qis:
+        Q = np.matmul(Q, Qi.T)
+        
+    return Q
+
+def Rel_error(A : np.ndarray, B : np.ndarray) -> float:
+    """
+    Helper function to calculate the relative error of two matrices.
+    Relative error is taken with respect to A, and with the 
+    Frobenius norm
+    """
+    
+    num = np.linalg.norm(A - B, ord='fro')
+    den = np.linalg.norm(A, ord = 'fro')
+    return num * (1/den)
+\end{lstlisting}
+\begin{lstlisting}
+maxsize = 1000
+iterations = 100
+
+i = 0
+
+#Result array. 
+#Size Quantity x iterations x number of functions
+res = np.ndarray((4, iterations, 2))
+
+for n in range(int(maxsize/iterations), maxsize +1 , int(maxsize/iterations)):
+    
+    
+    #Temporary array to store quantities. 
+    #Only holds one set of Quants at a time. 
+    res_arr = np.zeros(4)
+    
+    #Get a random upper triangular matrix. Size will increase
+    R = np.triu(np.random.default_rng().normal(10, 2.5, size=(n, n)))
+
+    # Get a random matrix.
+    B = np.random.default_rng().normal(10, 2.5, size=(n, n))
+    Q = np.linalg.qr(B)[0]
+
+    #Form A = QR
+    A = np.matmul(Q, R)
+    
+    #Identity matrix
+    I = np.identity(n)
+    
+    #QR from the Gram schmidt QR
+    GS_Q, GS_R = my_qr(A)
+
+    #Forward Errors for GS
+    GS_A = np.matmul(GS_Q, GS_R)
+    GS_I = np.matmul(GS_Q.T, GS_Q)
+    
+    #QR from HausHolder QR
+    HH = hausholder_qr(A)
+    HH_Q = calculate_Q(HH)
+    HH_R = np.triu(HH)
+    
+    #Forward errors for HH
+    HH_A = np.matmul(HH_Q, HH_R)
+    HH_I = np.matmul(HH_Q.T, HH_Q)
+
+    #Calcualting relative error for GS
+    res_arr = np.array([Rel_error(R, GS_R), 
+                        Rel_error(Q, GS_Q), 
+                        Rel_error(A, GS_A), 
+                        Rel_error(I, GS_I) 
+                        ])
+    
+    #Storing GS results for iteration 
+    res[:, i, 0] = res_arr
+    
+    #Calculating relative error for HH
+    res_arr = np.array([Rel_error(R, HH_R),
+                        Rel_error(Q, HH_Q),
+                        Rel_error(A, HH_A),
+                        Rel_error(I, HH_I)])
+    
+    #Storing HH results for iteration
+    res[:, i, 1] = res_arr
+    
+    #Incrementing for next iteration
+    i+=1
+    
+    #Clearing output
+    clear_output(wait=True)
+    
+    print("Percentage done: {:.2f}%".format(100*n/maxsize))
+\end{lstlisting}
+\begin{lstlisting}
+Titles = ["Backward Error R", "Backward Error Q", "Forward Error QR", "Forward Error Q^TQ"]
+method = ["GS", "HH"]
+fig, ax = plt.subplots(2, 2, figsize=(10, 10))
+for i in range(2):
+    for j in range(2):
+        index = i * 2 + j
+        ax[i, j].set_title(Titles[index])
+        
+        for k in range(2):
+            ax[i, j].plot(res[index, :, k], label=method[k])
+            ax[i, j].legend()
+            
+        ax[i, j].set_xlabel(f'Iterations, n/{maxsize / iterations}')
+        ax[i, j].set_ylabel("Relative Error")
+
+plt.tight_layout(pad=5.0)
+plt.show()
+\end{lstlisting}
+\end{solution}
+
+\subsection{Problem 6, part e}
+Create a \textit{Vandermonde matrix} and a vector,
+\[
+A = \mqty[
+    1 &\alpha_0 &\alpha_0^2 &\dots &\alpha_0^{n-1} \\
+    1 &\alpha_1 &\alpha_1^2 &\dots &\alpha_1^{n-1} \\
+    1 &\alpha_2 &\alpha_2^2 &\dots &\alpha_2^{n-1} \\
+    \vdots &\vdots &\vdots &\ddots &\vdots\\
+    1 &\alpha_{m - 1} &\alpha_{m - 1}^2 &\dots &\alpha_{m - 1}^{n-1} 
+        ]
+        \in \R^{m\times n}, 
+        \hspace{5mm}
+        \textbf{b} = 
+        \mqty[
+        \exp (\sin 4\alpha_0)\\
+        \exp (\sin 4\alpha_1)\\
+        \exp (\sin 4\alpha_2)\\
+        \vdots \\
+        \exp (\sin 4\alpha_{m - 1})
+        ] \in \R^m,
+\]
+where $\alpha_i = i/(m-1), i = 0, ..., m-1$. This arises when we try to do polynomial fitting
+\[
+e^{\sin(4x)} \approx c_0 + c_1x + x_2x^2 + \dots + c_{n-1}x^{n-1}
+\]
+over the interval $[0, 1]$ at discrete points $x = 0, \frac{1}{m-1}, \dots, \frac{m - 2}{m - 1}, 1$. For $n = 15$ and $m = 100$, solve the least squares problem $\min \norm{A\textbf{x} - \textbf{b}}_2$ and state your value of $c_{14}$ using each of the following methods.
+\begin{enumerate}[(i)]
+    \item Applying $QR$ Factorization to $A$.
+    \item Applying $QR$ Factorization to the augmented matrix $[A, \textbf{b}] \in \R^{m \times (n+1)}$.
+    \item Solving the normal equations $A^TA\textbf{x} = A^T\textbf{b}.$
+\end{enumerate}
+For (i) and (ii), your code should show how the respective $QR$ factors are used in obtaining a solution of the least squares problem. Your are free to use your program's built-in functions for solving linear systems but for other things, use that you have implemented in (a), (b), (c). The true value of $c_{14}$ is 2006.787453080206....Comment on the accuracy of each method and algorithm.
 \end{document}
