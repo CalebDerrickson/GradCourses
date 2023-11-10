@@ -395,7 +395,109 @@ and let $\hat{\textbf{x}} = A^\dag \textbf{b}.$ Show that
 \]
 \partbreak
 \begin{solution}
-    
+
+    Note the form of $\norm{A\textbf{x} - \textbf{b}}_2^2$ is equal to:
+\alignbreak
+\begin{align*}
+    \norm{A\textbf{x} - \textbf{b}} &= \norm{Q\mqty[R &S\\0&0]\Pi^T\textbf{x} - \textbf{b}}_2^2 &\text{(Form given.)}\\
+    &= \norm{\mqty[R &S\\0&0]\mqty[\textbf{u} \\\textbf{v}] - Q^T\textbf{b}}_2 ^2&\text{(Definition of $\Pi^T\textbf{x}$ and unitary invariance.)}\\
+    &= \norm{\mqty[R\textbf{u} + S\textbf{v}\\0] - \mqty[\textbf{c}\\\textbf{d}]}_2^2 &\text{(Matrix multiplication.)}\\
+    &= \norm{R\textbf{u}+ S\textbf{v} - \textbf{c}}_2^2 + \norm{\textbf{d}}_2^2 &\text{(Simplifying, 2-norm definition.)}\\
+\end{align*}
+I claim that $\norm{A\textbf{x} - \textbf{b}}_2^2$ is equal to $\norm{\textbf{d}}_2^2$ for $\textbf{x}_B$. I will show this below:
+
+\alignbreak
+\begin{align*}
+    \norm{A\textbf{x}_B - \textbf{b}}_2^2 &= \norm{Q\mqty[R&S\\0&0]\Pi^T\Pi \mqty[R^\inv &0\\0&0]Q^T\textbf{b} - \textbf{b}}_2^2 &\text{(Plugging in $\textbf{x}_B$.)}\\
+    &= \norm{\mqty[R&S\\0&0]\mqty[R^\inv &0\\0&0]\mqty[\textbf{c}\\\textbf{c}] - \mqty[\textbf{c}\\\textbf{d}]} &\text{(Simplifying.)}\\
+    &=\norm{\mqty[\id_r&0\\0&0]\mqty[\textbf{c}\\\textbf{d}] - \mqty[\textbf{c}\\\textbf{d}]}_2^2 &\text{(Matrix multiplication.)}\\
+    &= \norm{\mqty[\textbf{c}\\0] - \mqty[\textbf{c}\\\textbf{d}]}_2^2 &\text{(Multiplication.)}\\
+    &= \norm{\textbf{d}}_2^2 &\text{(Simplification.)}
+\end{align*}
+\alignbreak
+Therefore, all minimizers have $R\textbf{u} + S\textbf{v} - c = 0$. Thus $\hat{\textbf{x}}$ has this property, since it is the minimum least squares solution to $\norm{A\textbf{x} - \textbf{b}}_2$. Also,  $\norm{\textbf{x}}_2^2 = \norm{\textbf{u}}_2^2 + \norm{\textbf{v}}_2^2$ for any $\textbf{x} = \Pi\mqty[\textbf{u}\\\textbf{v}]$. Thus 
+\[
+\hat{\textbf{x}} = \argmin \big(\norm{\textbf{u}}_2^2 + \norm{\textbf{v}}_2^2\big), \hspace{3mm} \text{For }R\textbf{u} + S\textbf{v} = \textbf{c}.
+\]
+
+Define $\textbf{y} = \mqty[\textbf{u}\\\textbf{v}]$. Consider the Lagrangian:
+\[
+L(\textbf{y}, \lambda) = \norm{\textbf{y}}_2^2 + 2\big(\mqty[R&S]\textbf{y} - \textbf{c}\big)^T\lm
+\]
+Note the transpose needs to be there in the constraint term due to $\lm$ being a vector, since the co-domain of the Lagrangian is the real numbers. The Lagrangian thus gives the solutions:
+
+\[
+\begin{cases}
+    \nabla_\textbf{y} L(\textbf{y}, \lm) = 2\textbf{y} + 2\mqty[R^T\\S^T]\lm = 0\\
+    \nabla_\lm L(\textbf{y}, \lm) = 2(\mqty[R&S]\textbf{y} - \textbf{c}) = 0
+\end{cases}
+\]
+Or, written more concisely,
+\[
+\begin{cases}
+    \textbf{y} + (\mqty[R&S])^T\lm = 0\\
+    \mqty[R&S]\textbf{y} = \textbf{c}
+\end{cases}
+\]
+This then flows naturally into the augmented system, in the spirit of Problem 3. 
+\[
+\mqty[\id &\mqty[R&S]^T\\\mqty[R&S] &0]\mqty[\textbf{y}\\\lm] = \mqty[0\\\textbf{c}]
+\]
+Here, $A = \mqty[R&S]^T$. We can then define the $QR$ decomposition of $A$ as
+\[
+\mqty[R^T\\S^T] = Q_C\mqty[R_c\\0] = Q_{1c}R_c
+\]
+Note that $\mqty[R&S]^T$ will have a full-rank $QR$ decomposition since $R^T$ is invertible, thus has full column rank. Then by Problem 3c,
+\[
+\Pi^T\hat{\textbf{x}} = \textbf{y} = Q_c\mqty[R_c^{-T}\textbf{c}\\0] = Q_{1c}R_c^{-T}\textbf{c},
+\]
+Where it is understood that $Q_{1c}$ has the first $r$ columns of $Q_c$. Note that $Q_{1c} = \mqty[R&S]^TR_c^\inv$, thus this can be placed into our definition for $\hat{\textbf{x}}$ to get:
+
+\[
+\Pi^T\hat{\textbf{x}} =  \mqty[R^T\\S^T]R^\inv _c R^{-T}_c\textbf{c}.
+\]
+Since $\Pi\hat{\textbf{x}} = \mqty[\textbf{u} \\\textbf{v}]$, we can rewrite this as:
+\alignbreak
+\begin{align*}
+    \Pi\hat{\textbf{x}} &= \mqty[R^T\\S^T]R_c^\inv R_c^{-T}\textbf{c} &\text{(Given.)}\\
+    \implies \mqty[\textbf{u}\\\textbf{v}] &= \mqty[R^T\\S^T]R_c^\inv R_c^{-T} &\text{(Definition of $\Pi \hat{\textbf{x}}.)$}\\
+    \implies \textbf{u} &= R^TR^\inv _c R^{-T}_c \textbf{c},\\ 
+     \textbf{v} &= S^TR^\inv _c R^{-T}_c\textbf{c} &\text{(Writing what we have.)}\\ 
+     \implies R^{-T}\textbf{u} &= R^\inv _c R^{-T}_c \textbf{c}\\
+     \iff \hat{\textbf{x}} &= \mqty[\textbf{u}\\S^TR^{-T}\textbf{u}] &\text{(Substitution of $R^{-T}\textbf{u}$.)}
+\end{align*}
+\alignbreak
+\newpage
+$\textbf{x}_B$ can also be written in a similar form, that is, 
+\alignbreak
+\begin{align*}
+    \textbf{x}_B &= \Pi\mqty[R^\inv &0\\0&0]Q^T\textbf{b} &\text{(Given.)}\\
+    &= \Pi\mqty[R^\inv &0\\0&0]\mqty[Q_1^T\\Q_2^T]\textbf{b} &\text{(Transpose of $Q$ into first $r$ columns.)}\\
+    &= \Pi \mqty[R^\inv Q_1^T\textbf{b}\\0] &\text{(Matrix Multiplication.)}\\
+    &= \Pi\mqty[R^\inv \textbf{c}\\0] &\text{(Definition of $\textbf{c}$.)}
+\end{align*}
+\alignbreak
+
+We can then write the difference between $\textbf{x}_B$ and $\hat{\textbf{x}}$ in the following manner:
+\alignbreak
+\begin{align*}
+    \Pi^T(\textbf{x}_B - \hat{\textbf{x}}) &= \mqty[R^\inv\textbf{c}\\0] - \mqty[\textbf{u}\\(R^\inv S)^T\textbf{u}] &\text{(Both found above.)}\\
+    &= \mqty[\textbf{u} + R^\inv S\textbf{v}\\0] - \mqty[\textbf{u}\\(R^\inv S)^T\textbf{u}] &\text{(From constraint, $R\textbf{u} + S\textbf{v} =\textbf{c}$.)}\\
+    &= \mqty[R^\inv S\textbf{v}\\(R^\inv S)^T\textbf{u}] &\text{(Simplifying.)}\\
+    \implies \norm{\textbf{x}_B - \hat{\textbf{x}}}_2^2 &= \norm{R^\inv S\textbf{v}}_2^2 + \norm{(R^\inv S)^T \textbf{u}}_2^2 &\text{(Taking norm, unitary invariance.)}\\
+    &\leq \norm{R^\inv S}_2^2 \big( \norm{\textbf{u}}_2^2 + \norm{\textbf{v}}_2^2\big) &\text{(2-norm consistency.)}\\
+    &= \norm{R^\inv S}_2^2\norm{\Pi\hat{\textbf{x}}}_2^2 &\text{(Norm equivalence of $\Pi \hat{\textbf{x}}$.)}\\
+    \iff \frac{\norm{\textbf{x}_B - \hat{\textbf{x}}}_2^2}{\norm{\Pi\hat{\textbf{x}}}_2^2} &\leq \norm{R^\inv S}_2^2 &\text{(Rearranging.)} 
+\end{align*}
+\alignbreak
+\newpage
+Thus, by square-rooting both sides, we get:
+
+\[
+\frac{\norm{\textbf{x}_B - \hat{\textbf{x}}}_2}{\norm{\hat{\textbf{x}}}_2} \leq \norm{R^\inv S}_2
+\]
+
+Which is what we wanted to show. Sorry for the messy formatting; this was a hairy proof, and I'm not the best at formatting in the first place.
 \end{solution}
 
 
