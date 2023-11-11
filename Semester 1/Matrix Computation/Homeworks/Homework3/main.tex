@@ -739,57 +739,42 @@ Implement the Householder $QR$ algorithm to obtain $Q$ and $R$. You should
     Here is my code. I believe everything here is vectorized, so it should be suitably fast. I made a simple helper function to calculate the Hausholder matrix, since it seems we'll need to compute it a few times in the next parts.
 
 \begin{lstlisting}
-    def calculate_Hausholder(v: np.array):
-        """
-        Helper function to calculate the Hausholder matrix from v.
-        
-        Parameters
-        ----------
-        v : np.array
-            The given vector. Needs to be normalized prior to passing.
-            
-        Returns
-        -------
-        H : np.ndarray
-            The Hausholder matrix of v.
-        """
-        
-        H = np.identity(max(v.shape)) - 2*np.outer(v, v)
-        return H
-
-    def hausholder_qr(A: np.ndarray):
+def haus(a, j, m):
     """
-        Returns the QR factorization obtained through 
-        the Hausholder Reflection method. 
-        
-        Elements belonging to and above diagonal are R, 
-        
-        Below the diagonal are the column vectors v_1, ..., v_n-1
-        which are used to get Q_1, ..., Q_n-1. 
-        
-        Last element of v_i is not stored. Can be recovered since 
-        v is a unit vector.
+    Calculates the HausHolder Iteration from given vector, index, 
+    and size of original matrix 
     """
-    m, n = A.shape
-    v_mat = []
-    for i in range(m-1):
-        
-        # Obtaining v_i
-        u = A[i:, i].copy()
-        u[0] -= np.linalg.norm(u, ord = 2)
-        v = u/np.linalg.norm(u, ord = 2)
-        v_mat.append(v)
-        
-        #Calculating Q only to get next iteration
-        Q = np.identity(m)
-        Q[i:, i:] = calculate_Hausholder(v)
-        
-        A = np.matmul(Q, A)
+    v = a / (a[0] + np.copysign(np.linalg.norm(a), a[0]))
+    v[0] = 1
 
-    #Storing v_i's
-    for i in range(m-1):
-        A[i+1:, i] = np.array(v_mat[i])[:-1]
+    H = np.identity(m)
+    H[j:, j:] -= (2 / np.linalg.norm(v, ord=2)**2) * np.outer(v, v)
+    return v, H
+
+def qr_decomposition_haus(A: np.ndarray) -> np.array:
+    """
+    Calcualtes the QR decomposition of the given matrix and 
+    returns the HausHolder vectors and R inside the given matrix.
+    """
+    m,n = A.shape
+    
+    R = A.copy()
+    Q = np.identity(m)
+    A = np.vstack((A, np.zeros(A.shape[1])))
+    
+    for j in range(n):
+        # Apply Householder transformation.
+        v, H = haus(R[j:, j, np.newaxis], j, m)
         
+        R = np.matmul(H, R)
+        Q = np.matmul(H, Q)
+        
+        A[j+1:, j] = v.T
+    
+    #Replace the Upper triangle of A with R
+    indices = np.triu_indices_from(A, k=0)
+    A[indices] = R[indices]
+    
     return A
 \end{lstlisting}
 \end{solution}
@@ -803,6 +788,23 @@ Implement an algorithm for forming the product $Q\textbf{x}$ and another for for
     Here is my code. I tested it to make sure the returned matrix is indeed orthonomal. All you need to do to get $Q$ is just call $\textbf{calculate\_Q}$.
 
 \begin{lstlisting}
+def calculate_Hausholder(v: np.array):
+    """
+    Helper function to calculate the Hausholder matrix from v.
+    
+    Parameters
+    ----------
+    v : np.array
+        The given vector. Needs to be normalized prior to passing.
+        
+    Returns
+    -------
+    H : np.ndarray
+        The Hausholder matrix of v.
+    """
+    H = np.identity(max(v.shape)) - 2*np.outer(v, v)
+    return H
+
 def recover_Qis(A: np.ndarray):
     """
     Calculates all Q_is from a Hausholder applied matrix A.
@@ -822,11 +824,9 @@ def recover_Qis(A: np.ndarray):
     
     m, n = A.shape
     
-    for i in range(n - 1):
-        v = np.zeros(m - i)
-        v[1:] = A[i+1:, i]
-        v[0] = np.sqrt(1 - np.linalg.norm(v, ord = 2)**2)
-        Q = np.identity(m)
+    for i in range(n):
+        v = A[i+1:, i].copy()
+        Q = np.identity(m-1)
         Q[i:, i:] = calculate_Hausholder(v)
         Qis.append(Q)
     
@@ -850,7 +850,7 @@ def calculate_Q(A: np.ndarray):
         The orthonormal matrix involved in QR
     """
     
-    Qis = recover_Qis(A)
+    Qis = recover_Qis(A.copy())
     Q = np.identity(Qis[0].shape[0])
     for Qi in Qis:
         Q = np.matmul(Q, Qi.T)
@@ -875,7 +875,7 @@ for various values of $n$ and for each method. Scale $Q, R, \hat{Q}, \hat{R}$ ap
 \partbreak
 \begin{solution}
 
-    I will provide my plots below, followed by my code. Note the size of the matrices I observed went up to 1000, with stepsize 10. It seems as though the Hausholder QR proved far more stable in all areas besides Forward Error QR. I would expect to see the Forward error for Gram Schmidt be more unstable, considering the the two Backward errors for GS are themselves unstable. One more interesting thing to note is the Backward Error Q plot, which the GS relative error is acting like it will asymptotically approach the error for the HausHolder Error. This is entirely a conjecture, as this is a numerical exercise and we couldn't expect to be plotting matrices of size, say $10^6$, to see a better asymptotic approach. 
+    I will provide my plots below, followed by my code. Note the size of the matrices I observed went up to 1000, with stepsize 10. It seems as though the Hausholder QR proved far more stable in all areas besides Forward Error QR. I would expect to see the Forward error for Gram Schmidt be more unstable, considering the the two Backward errors for GS are themselves unstable. There seems to be just one error in these plots: my backward Error in Q is, although stable, should be closer to zero. I suspect this to just be an error in my calculation of the HausHolder Q. Upon inspection of my $Q$, it seems to be both orthonormal and give the correct form of $QR$, so I suspect this to be a sign issue.
 
     \begin{figure}[ht]
         \centering
