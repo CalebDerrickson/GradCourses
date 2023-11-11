@@ -9,7 +9,7 @@
 \onehalfspacing
 \maketitle
 \allowdisplaybreaks
-{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, Alexander Cram, Zach Hempstead, and Daniel Chen.
 
 \tableofcontents
 
@@ -881,7 +881,7 @@ for various values of $n$ and for each method. Scale $Q, R, \hat{Q}, \hat{R}$ ap
         \centering
         \includegraphics[width = 0.9\textwidth]{Images/problem6d MC3.png}
         \caption{Relative Errors for Gram Schmidt (GS) and Hausholder (HH) QR.}
-        \label{fig:enter-label}
+        \label{fig:p6d rel err}
     \end{figure}
 
 \clearpage
@@ -1171,4 +1171,370 @@ over the interval $[0, 1]$ at discrete points $x = 0, \frac{1}{m-1}, \dots, \fra
     \item Solving the normal equations $A^TA\textbf{x} = A^T\textbf{b}.$
 \end{enumerate}
 For (i) and (ii), your code should show how the respective $QR$ factors are used in obtaining a solution of the least squares problem. Your are free to use your program's built-in functions for solving linear systems but for other things, use that you have implemented in (a), (b), (c). The true value of $c_{14}$ is 2006.787453080206....Comment on the accuracy of each method and algorithm.
+
+\partbreak
+\begin{solution}
+
+    In investigation of my code, it seems that there is something happening going test cases to the Vandermonde matrix itself. Before talking about this, I will provide my modified code so you can see that I actually tried to perform this calculation, but was getting wild results. Here I will report the result of my code as ``Reported solution to c\_14: -11722843.91526459", which is completely wrong. I will provide figures that show the discrepancies between my $QR$ decompositions and those found in numpy (Shown in Figures \ref{fig:p6e qr diff}, \ref{fig:p6d R_HH difference}, and \ref{fig:p6e Q_HH difference}). I will continue this and finish this problem with a $QR$ decompositions that work, $\textbf{but are not mine}$. I will disclose where I got them in their relative blocks.
+
+\newpage
+\begin{lstlisting}
+import numpy as np
+import math
+import sys
+import matplotlib.pyplot as plt
+def calculate_Hausholder(v: np.array):
+    """
+    Helper function to calculate the Hausholder matrix from v.
+    
+    Parameters
+    ----------
+    v : np.array
+        The given vector. Needs to be normalized prior to passing.
+        
+    Returns
+    -------
+    H : np.ndarray
+        The Hausholder matrix of v.
+    """
+    H = np.identity(max(v.shape)) - 2*np.outer(v, v)
+    return H
+
+def recover_Qis(A: np.ndarray):
+    """
+    Calculates all Q_is from a Hausholder applied matrix A.
+    
+    Parameters
+    ----------
+    
+    A : np.ndarray
+        The matrix on which Hausholder QR has been performed
+        
+    Returns
+    -------
+    Qis : list(np.ndarray)
+        A list containing all Q's 
+    """
+    Qis = []
+    
+    m, n = A.shape
+    
+    for i in range(n):
+        v = A[i+1:, i].copy()
+        Q = np.identity(m-1)
+        Q[i:, i:] = calculate_Hausholder(v)
+        Qis.append(Q)
+    
+    return Qis
+
+def calculate_Q(A: np.ndarray):
+    """
+    Returns the orthonormal matrix Q from the matrix A after Hausholder QR 
+    is applied.
+    
+    Parameters
+    ----------
+    
+    A : np.ndarray
+        The matrix on which Hausholder QR has been performed
+
+    Returns
+    -------    
+    
+    Q: np.ndarray
+        The orthonormal matrix involved in QR
+    """
+    
+    Qis = recover_Qis(A.copy())
+    Q = np.identity(Qis[0].shape[0])
+    for Qi in Qis:
+        Q = np.matmul(Q, Qi.T)
+        
+    return Q
+
+
+def haus(a, j, m):
+    """
+    Calculates the HausHolder Iteration from given vector, index, 
+    and size of original matrix 
+    """
+    v = a / (a[0] + np.copysign(np.linalg.norm(a), a[0]))
+    v[0] = 1
+
+    H = np.identity(m)
+    H[j:, j:] -= (2 / np.linalg.norm(v, ord=2)**2) * np.outer(v, v)
+    return v, H
+
+def qr_decomposition_haus(A: np.ndarray) -> np.array:
+    """
+    Calcualtes the QR decomposition of the given matrix and 
+    returns the HausHolder vectors and R inside the given matrix.
+    """
+    m,n = A.shape
+    
+    R = A.copy()
+    Q = np.identity(m)
+    A = np.vstack((A, np.zeros(A.shape[1])))
+    
+    for j in range(n):
+        # Apply Householder transformation.
+        v, H = haus(R[j:, j, np.newaxis], j, m)
+        
+        R = np.matmul(H, R)
+        Q = np.matmul(H, Q)
+        
+        A[j+1:, j] = v.T
+    
+    #Replace the Upper triangle of A with R
+    indices = np.triu_indices_from(A, k=0)
+    A[indices] = R[indices]
+    
+    return A
+
+def my_qr(A: np.ndarray):
+        """
+        Returns the QR factorization of a nonsingular array
+        via (classical) Gram-Schmidt.
+
+        Parameters
+        ----------
+        A: np.ndarray
+            The matrix with which we find the QR factorization.
+            Must be nonsingular, sized n x n
+
+        Returns
+        -------
+        Q: np.ndarray
+            A set of orthonormal column vectors of size n x n
+
+        R: np.ndarray
+            An upper triangular matrix
+        """
+        m, n = A.shape
+        Q = np.zeros((m, m))
+        R = np.zeros((m, n))
+
+        for i in range(0, n): #Row Iter
+            prev = 0 # used to catch r_{jk}q_j in sum
+            for j in range(0, i+1): # maintain upper triangularity
+                if i != j:
+                    R[j, i] = np.dot(Q[:, j], A[:, i])
+                    prev += R[j, i] * Q[:, j]
+                else: #Diagonal term, take prev
+                    R[i, i] = np.linalg.norm(A[:, i] - prev, ord = 2)
+                    assert R[i, i] != 0, "Diagonal is zero, function cannot continue"
+                    Q[:, j] = (1/R[i, i]) * (A[:, i] - prev)
+    
+        return (Q, R)
+def get_Van_b():
+    """
+    Gets the Vandermonde matrix and b we are considering.
+    
+    """
+    n = 15
+    m = 100
+
+    alphas = np.array([i/(m - 1) for i in range(m)])
+    
+    Van = np.ndarray((m, n))
+    for i in range(m):
+        for j in range(n):
+            Van[i, j] = alphas[i]**j
+    b = np.zeros(m)
+    for i in range(m):
+        b[i] = math.exp(math.sin(4 * alphas[i]))
+        
+    return Van, b
+Van, b = get_Van_b()
+
+def back_substitution(A: np.ndarray, b: np.ndarray) -> np.ndarray:
+    n = b.size
+    x = np.zeros_like(b)
+
+    if A[n-1, n-1] == 0:
+        raise ValueError
+
+
+    x[n-1] = b[n-1]/A[n-1, n-1]
+    C = np.zeros((n,n))
+    for i in range(n-2, -1, -1):
+        bb = 0
+        for j in range (i+1, n):
+            bb += A[i, j]*x[j]
+
+        C[i, i] = b[i] - bb
+        x[i] = C[i, i]/A[i, i]
+
+    return x
+n = 15
+m = 100
+
+HH = qr_decomposition_haus(Van)
+#HH = np.linalg.qr(Van)
+
+R = np.triu(HH) 
+
+#Take nonzero rows of R. Since Van is full rank, will be n rows
+R = np.array([x for x in R if x.any() != 0])
+#Check if I did it right
+assert R.shape == (n, n), "Oops"
+
+Q = calculate_Q(HH)
+
+#Q = HH[0]
+c = np.matmul(Q[:, :n].T, b)
+d = np.matmul(Q[:, n:].T, b) #Don't think I need to actually compute this
+
+#Solution to part i 
+x_soli = back_substitution(R, c)
+print("Reported solution to c_14: {}".format(x_soli[-1]))
+\end{lstlisting}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Images/QR Decomp problems.png}
+    \caption{The Absolute difference entry-wise between my HausHolder and Gram Schmidt $QR$ decompositions compared to numpy's $QR$ decomposition. The tolerance that I take each entry to be equal is 0.0001. Here I report an element to match if it is colored black, and white if it is not within floating point tolerance.}
+    \label{fig:p6e qr diff}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Images/R_C vs R_HH.png}
+    \caption{The element-wise difference between my HausHolder $QR$ versus the $QR$ decomposition found in numpy. Note the lines are the rows in $R$, where they span 15 elements each. It seems that the difference is within floating point precision. }
+    \label{fig:p6d R_HH difference}
+\end{figure}
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Images/Q_C vs Q_HH.png}
+    \caption{The element-wise difference between my HausHolder $QR$ versus the $QR$ decomposition found in numpy. Note the lines are the rows in $Q$, where they span 15 elements each. It seems that these results are completely off, but I am not entirely sure why.}
+    \label{fig:p6e Q_HH difference}
+\end{figure}
+
+\clearpage
+\begin{lstlisting}
+"""
+THIS IS NOT MY CODE. THIS IS TAKEN FROM A STACK-OVERFLOW POST ON HAUSHOLDER QR FACTORIZATION. 
+THE LINK IS 
+https://stackoverflow.com/questions/53489237/
+how-can-you-implement-householder-based-qr-decomposition-in-python
+"""
+def householder_vectorized(a):
+    """Use this version of householder to reproduce the output of np.linalg.qr 
+    exactly (specifically, to match the sign convention it uses)
+    
+    based on https://rosettacode.org/wiki/QR_decomposition#Python
+    """
+    v = a / (a[0] + np.copysign(np.linalg.norm(a), a[0]))
+    v[0] = 1
+    tau = 2 / (v.T @ v)
+    
+    return v,tau
+
+def qr_decomposition(A: np.ndarray) -> Union[np.ndarray, np.ndarray]:
+    m,n = A.shape
+    R = A.copy()
+    Q = np.identity(m)
+    
+    for j in range(0, n):
+        # Apply Householder transformation.
+        v, tau = householder_vectorized(R[j:, j, np.newaxis])
+        
+        H = np.identity(m)
+        H[j:, j:] -= tau * (v @ v.T)
+        R = H @ R
+        Q = H @ Q
+        
+    return Q[:n].T, np.triu(R[:n])
+\end{lstlisting}
+
+\newpage
+\subsection{Continue Problem 6, part e}
+Here I will continue problem 6, part e with the HausHolder $QR$ decomposition shown in the code block directly above this section. I will use the Gram Schmidt $QR$ that I wrote - I wanted to get accurate results with at least one of them. 
+\begin{enumerate}
+    \item since the Vandermonde matrix given is full rank (i.e. is full column rank), we can apply Full QR decomposition to get
+    \[
+    A = Q\mqty[R\\0].
+    \]
+    We can split $Q$ up into the first 15 columns as $Q_1$ and the rest as $Q_2$. When we plug this into the least squares problem, we see that
+    \[
+    \min\norm{A\textbf{x} - \textbf{b}}_2^2 = \min(\norm{R\textbf{x} - \textbf{c}}_2^2 +\norm{\textbf{d}}_2^2),
+    \]
+    where $\textbf{d} = Q_2^T\textbf{b}$ and $\textbf{c} = Q_1^T\textbf{b}$. Since $R$ is invertible, we get the solution to the least squares problem will be $\textbf{x} = R^\inv \textbf{c}$, which will have the minimum $\norm{\textbf{d}}_2$. with this approach, we report that the HausHolder $QR$ factorization gives a value for $c_{14} \approx 2006.7870665592704$. This is within 3 decimal places of the true value given. This is in contrast to my Gram Schmidt $QR$ factorization, where we report the value to be $c_{14} \approx 1.099680$, which is completely off. I will provide my code below. 
+\begin{lstlisting}
+n = 15
+m = 100
+
+#Calcualting QR
+Q_HH, R_HH = qr_decomposition(Van)
+Q_GS, R_GS = my_qr(Van)
+
+#Take nonzero rows of R. Since Van is full rank, will be n rows
+R_HH = np.array([x for x in R_HH if x.any() != 0])
+
+#Check if I did it right
+assert R_HH.shape == (n, n), "Oops"
+
+c = np.matmul(Q_HH[:, :n].T, b)
+
+#Solution to part i 
+x_soli = back_substitution(R_HH, c)
+print("HausHolder Approximate solution to c_14: {} ".format(x_soli[-1]))
+#Take nonzero rows of R. Since Van is full rank, will be n rows
+R_GS = np.array([x for x in R_GS if x.any() != 0])
+
+#Check if I did it right
+assert R_GS.shape == (n, n), "Oops"
+
+c = np.matmul(Q_GS[:, :n].T, b)
+x_soli = back_substitution(R_GS, c)
+print("Gram Schmidt Approximate solution to c_14: {}".format(x_soli[-1]))    
+\end{lstlisting}
+
+\item When we apply $QR$ factorization to the augmented matrix, we will get back a 100-by-16 size $Q$ and 16-by-16 size $R$. What this will do, since the first 15 columns of $R$ give us back $A$, is compute the residuals of $\textbf{b}$ has with $A$. That is, the minimum value any $\textbf{x}$ can attain will be given as the norm of the last column. We can then take $R_{aug}$ to be the first 15 columns of $R$, and $\textbf{c}$ to be the last column and first 15 rows $R$, since the last entry will be our minimum value. With this, we report the HausHolder $QR$ Factorization to give a $c_{14}$ value of $2006.7870664971297$, which is correct up to three decimal places of accuracy. The Gram Scmidt approximation gives $c_14 \approx 1.0996800275618466$, which is completely incorrect. I will provide my code below.
+
+\begin{lstlisting}
+n = 15
+m = 100
+aug_A = np.append(Van,b.reshape((b.shape[0],1)) ,1)
+
+#Calcualting QR
+Q_HH, R_HH = qr_decomposition(aug_A)
+Q_GS, R_GS = my_qr(aug_A)
+
+#Retrieving c and R_aug
+c = R_HH[:-1, -1]
+R_aug = R_HH[:-1, :-1]
+
+x_solii = back_substitution(R_aug, c)
+print("HausHolder Approximate solution to c_14: {} ".format(x_solii[-1]))
+
+#Redo for GS
+c = R_GS[:n, -1]
+R_aug = R_GS[:n, :-1]
+
+x_solii = back_substitution(R_aug, c)
+print("Gram Schmidt Approximate solution to c_14: {}".format(x_solii[-1]))
+\end{lstlisting}
+\newpage
+\item The solution to the least squares normal equation is just $\textbf{x} = A^\dag A^T\textbf{b}$, where $A^\dag = R^\inv Q_1^T$, given in Problem 3. I understand that I am computing the inverse of a matrix which means that I instantly fail the class. However, I will never actually do this in a non-academic setting, and I understand this is a horrible way to get the solution, namely since the normal equation's condition number squares with the condition number of A. I report the result of HausHolder $QR$ gives a value of $c_{14} \approx 5004.537912368087$, which is understandably incorrect, since the condition number of $A^TA$ is of order $10^{17}.$ The Gram schmidt $QR$ reports a value of $c_{14} \approx -73024.29641227845$, which is again wildly incorrect. Here is my code:
+
+\begin{lstlisting}
+A_n = Van.T @ Van
+b_n = Van.T @b
+
+Q_nHH, R_nHH = qr_decomposition(A_n)
+Q_nGS, R_nGS = my_qr(A_n)
+
+A_p = np.linalg.inv(R_nHH) @ Q_nHH[:n, :].T
+
+x_soliii = np.linalg.solve(A_p, b_n)
+print("HausHolder Approximate solution to c_14: {} ".format(x_soliii[-1]))
+A_p = np.linalg.inv(R_nGS) @ Q_nGS[:n, :].T
+
+x_soliii = np.linalg.solve(A_p, b_n)
+print("Gram Schmidt Approximate solution to c_14: {}".format(x_soliii[-1]))
+\end{lstlisting}
+\end{enumerate}
+\end{solution}
 \end{document}
