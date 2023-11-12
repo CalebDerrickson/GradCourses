@@ -1,5 +1,5 @@
 \input{definitions}
-
+\bibliography{citations}
 % Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
 \title{STAT 31410: Homework 4}
 \author{Caleb Derrickson}
@@ -24,9 +24,10 @@ This problem relates to the 2-d example at the end of section 5.4, where an appr
 Find an approximation for the local unstable manifold. Plot the phase portrait with the local stable and unstable manifolds superimposed on it. 
 \partbreak
 \begin{solution}
+
     When investigating the eigenspaces of the linear system, we see that $E^u = \{(x, 0):x \in \R\}$ (this was shown in class, as well as in the book, so I will omit its derivation). Then the local unstable manifold is of the form
     \[
-    W^u_{loc} = \{(x, h_u(x) : |x| < \delta\}
+    W^u_{loc} = \{(x, h_u(x)) : |x| < \delta\}
     \]
     Here, we will abuse some properties of the local unstable manifold, which include:
     \begin{enumerate}
@@ -70,60 +71,147 @@ Find an approximation for the local unstable manifold. Plot the phase portrait w
     \end{figure}
 
 \clearpage
-\begin{lstlisting}
-import numpy as np
-import matplotlib.pyplot as plt 
-from scipy.integrate import solve_ivp
-import matplotlib.cm as cm
-
-def stable_manifold(y):
-    return -(1/6)*y**2 -(1/24)*y**3 -(1/240)*y**4
-
-def unstable_manifold(x):
-    return (1/6)*x**2 + (1/360)*x**4 +(1/1296)*x**5 + (1/3024)*x**6
-
-fig, axs = plt.subplots(1, 1, figsize =(12, 12))
-#Vector field
-xvect, yvect= np.meshgrid(np.linspace(-2, 1, 20),  
-                   np.linspace(-0.75, 1.5, 10)) 
-
-#Update vector field
-u = 2*xvect + yvect**2
-v = -2*yvect + xvect**2 + yvect**2
-
-#Plotting Stream plot
-axs.streamplot(xvect,yvect,u,v, density=1.4, linewidth=None, color='#A23BEC' ) 
-
-#Plotting x any y axes
-axs.plot(np.linspace(0, 0, 20), np.linspace(-0.75, 1.5, 20), color='k')
-axs.plot(np.linspace(-2, 1, 20), np.linspace(0, 0, 20), color='k')
-axs.grid(True)
-axs.set_facecolor("#e1e2e3")
-#Getting stable manifold
-ypts = np.linspace(-0.75,1.5,50) 
-stable = list(map(stable_manifold, ypts))
-
-#Getting unstable manifold
-xpts = np.linspace(-2,1,50) 
-unstable = list(map(unstable_manifold, xpts))
-
-#Plotting manifolds
-axs.plot(stable, ypts, label = "Stable", color="#ff4534")
-axs.plot(xpts, unstable, label = "Unstable", color="#2ff754")
-
-axs.set_xlabel("x")
-axs.set_ylabel("y")
-plt.title("Phase Portrait with Stable/Unstable Manifolds")
-axs.legend()
-
-# Show plot with grid 
- 
-plt.show() 
-\end{lstlisting}
+\includepdf{Code/Problem 1a.pdf}
 \end{solution}
 
 \newpage
 \subsection{Problem 1, part b}
 How might you use your local stable manifold to approximate a global one for this problem? How well does your approach work?
+\partbreak
+\begin{solution}
 
+    One approach that I had involved stitching together the local stable manifold of all equilibrium points, but since our other equilibrium does not have a local stable manifold, we can't recover any true global stable manifold. Thus, I have come up with a far simpler idea: just take a point $(x_0, y_0)$ on our local stable manifold sufficiently close to the origin as initial conditions and run the system back in negative time. With some luck, I got it to work. I have provided my plot, where we take a point sufficiently close to our approximated equilibrium point and plot its trajectory in negative time (Here it's the yellow curve). The start and end points have been noted. It seems like the global stable manifold runs from the unstable equilibria to our saddle equilibrium. My solution seems to work perfectly fine, the problem being there is no well suited polynomial I can use to fit to this curve. This is only beneficial in a quantitative light however, so I believe this is fine. The code which plots this will follow. 
+
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width = 0.8\textwidth]{Images/Global Stable Manifold.png}
+        \caption{Approximation of the Global Stable Manifold. The yellow curve begins near the origin and travels in negative time to the unstable equilibrium.}
+        \label{fig:p1b GSM}
+    \end{figure}
+
+    \clearpage
+\includepdf{Code/Problem 1b.pdf}
+\end{solution}
+
+\newpage
+\section{Problem 2}
+consider the following predetor-prey model:
+
+\begin{align*}
+    \dot{X} &= rX\bigg(1 - \frac{c}{r}X\bigg)\bigg(\frac{X - \mu}{\nu + X}\bigg) - \bigg(\frac{\alpha XY}{\beta + X}\bigg)\\
+    \dot{Y} &= \gamma \bigg( \frac{\alpha XY}{\beta + X}\bigg) - \delta Y,
+\end{align*}
+where the population densities $X, Y \geq 0$ are treated as real variables. Let $c = 0.19, \mu = 0.03, \nu = 0.003, \newline  \alpha = 800, \beta = 1.5, \gamma = 0.004, \delta = 2.2$. We will explore what happens when we vary $r \in (0, 3).$
+
+\subsection{Problem 2, part a}
+First, which variable, $X$ or $Y$, represents the predator population and which represents the prey population? This model incorporates a ``strong Allee effect". What is that? what term encodes it?
+\partbreak
+\begin{solution}
+
+    It seems as though the prey population is represented here as $X(t)$, while the predator population is represented as $Y(T)$. This is only inferred from reading online about predator-prey models. The ``strong Allee effect" refers to there being a critical population point where, once it is hit, the species is doomed to extinction without any external forces. I have included a plot which represents this phenomena, taken from the Wikipedia page for the Allee Effect. Furthermore, it seems upon further reading \cite{ye2019dynamic}, the Allee Effect is encoded in the $\mu$ variable.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width = 0.6\textwidth, frame]{Images/Strong Allee Effect.png}
+    \caption{Strong Allee Effect. The critical point is denoted $K$. Once this has been breached from the left, there is no hope for the species.}
+    \label{fig:p2a strong allee effect}
+\end{figure}
+\end{solution}
+
+\newpage
+\subsection{Problem 2, part b}
+Show that there are 3 equilibrium solutions for $r < r_0$ and four for $r > r_0$ where you determine the values for $r_0$. In the phase plane, a periodic orbit must enclose at least one fixed point, according to Corollary 6.26 in Section 6.5 of Meiss. Use this, together with the dynamical invariance of the $X$ and $Y$ axes, to argue that there are no periodic solutions for $r \leq r_0$.
+
+
+
+\newpage
+\section{Problem 3}
+This problem relates to some parts of the proof of Theorem 5.9 (Local Stable Manifold) in the textbook. For full credit on this problem, you need to concisely summarize the relevant parts of the proof in your answer.  
+
+\subsection{Problem 3, part a}
+The proof relies on the contraction mapping theorem. Explain its role in the proof. What is the mapping? What is the origin of the three terms in $T(x)(t)$ given by equation 5.17? What is the bound on the contraction rate $c$ obtained in the proof, and how do we ensure $c < 1$?
+\partbreak
+\begin{solution}
+
+    The contraction mapping theorem, as well as its generalization (Theorem 5.11, the Uniform Contraction Principle) are applied within the first and third parts of the proof respectively. I will explain the role of the contraction mapping theorem - and not its generalization- here, since it was not explicitly mentioned. The contraction mapping theorem will imply that, once we show the mapping 
+    \[
+    T(x)(t) = e^{tA}\sigma + \int_0^t e^{(t - s)}\pi_sg(x(s))ds - \int_t^\infty e^{(t - s)A}\pi_ug(x(s))ds
+    \]
+    is indeed a contraction mapping, then we are guaranteed to have a unique fixed point in our set $V_\delta$, defined as
+    \[
+    V_\delta = \{ x \in C^0(\R^+, \R^n): \norm{x} \leq \delta\}.
+    \]
+    This gives justification to the fact that the unique solution $x(t;\sigma)$ evaluated at $t = 0$ is a graph over our stable eigenspace, $E^s$. This mapping is generated by evaluating projections of the general solution to the affine, nonautonomous initial value problem (5.12), given as
+    \[
+    x(t) = e^{(t - \tau)A}x(\tau) + \int_\tau^t e^{(t - s)A}\gamma(s)ds,
+    \]
+    for some initial condition $x(\tau)$ given at some arbitrary time $t = \tau$. This is presented as Lemma 5.8 in the text. Note that, evaluating $\tau = 0$ and $x(0) = \sigma \in E^s$, then we recover the first and second term in the mapping. The third term is similarly found by projection the general solution onto the unstable eigenspace, $E^u$ of A. 
+
+    \jump
+    The constant $c$ arises for $T$ being a uniform contraction. This constant will be restricted to the interval $(0, 1)$, however a tighter lower bound is found in Exercise 6, giving $\norm{D_xT} \leq c$ as a result. Note $D_xT$ is the partial derivative of T with respect to x. Furthermore, we can ensure $c < 1$ due to the mapping $T$ being a uniform contraction mapping, thus having Lipschitz constant $< 1$. Note that $c$ is the Lipschitz constant for $T$.
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part b}
+Show that any bounded fixed point of the map defined by (5.17) solves the differential equation (5.10).
+\partbreak
+\begin{solution}
+
+Note the map in (5.17) refers to 
+\[
+T(x)(t) = e^{tA}\sigma + \int_0^t e^{(t - s)A}\pi_sg(x(s))ds - \int_t^\infty e^{(t - s)A}\pi_ug(x(s))ds.
+\]
+Moreover the differential equation in (5.10) is the given as
+\[
+\xdot = Ax + g(x),
+\]
+where $g(x) = f(x - x^*) - Ax$ is given as the nonlinear terms in the equation, so $g(0) = 0$ and $Dg(0) = 0$. If $x$ is a fixed point of the mapping, then applying $T$ to $x$ will just return $x$. That is, $x = T(x)$. Differentiating both sides with respect to $t$ then gives the following:
+
+\alignbreak
+{\footnotesize
+\begin{align*}
+    \frac{d}{dt}T(x)(t) &= \frac{d}{dt}\Bigg[ e^{tA}\sigma + \int_0^t e^{(t - s)A}\pi_sg(x(s))ds - \int_t^\infty e^{(t - s)A}\pi_ug(x(s))ds\Bigg] &\text{(Given.)}\\
+    &= \frac{d}{dt}e^{tA}\sigma + \frac{d}{dt}\int_0^t e^{(t - s)A}\pi_sg(x(s))ds - \frac{d}{dt}\int_t^\infty e^{(t - s)A}\pi_ug(x(s))ds &\text{(Linearity.)}\\
+    &= Ae^{tA}\sigma + \frac{d}{dt}\int_0^t e^{(t - s)A}\pi_sg(x(s))ds - \frac{d}{dt}\int_t^\infty e^{(t - s)A}\pi_ug(x(s))ds &\text{(First term.)}\\
+    &= Ae^{tA}\sigma + \pi_sg(x(t)) + \pi_ug(x(t))\int_0^t \frac{\partial}{\partial t}e^{(t - s)A}\pi_sg(x(s))ds - \int_t^\infty \frac{\partial}{\partial t}e^{(t - s)A}\pi_ug(x(s))ds &\text{(Leibnitz rule.)}\\
+    &= Ae^{tA}\sigma + \pi_sg(x(t)) + \pi_ug(x(t))\int_0^t Ae^{(t - s)A}\pi_sg(x(s))ds - \int_t^\infty Ae^{(t - s)A}\pi_ug(x(s))ds &\text{(Differentiation.)}\\
+    &= A\Bigg(e^{tA}\sigma \int_0^t Ae^{(t - s)A}\pi_sg(x(s))ds - \int_t^\infty Ae^{(t - s)A}\pi_ug(x(s))ds \Bigg) + \pi_sg(x(t)) + \pi_ug(x(t)) &\text{{(Grouping.)}}\\
+    &=  A\Bigg(e^{tA}\sigma \int_0^t Ae^{(t - s)A}\pi_sg(x(s))ds - \int_t^\infty Ae^{(t - s)A}\pi_ug(x(s))ds \Bigg) + g(x(t)) &\text{(Direct sum.)}\\
+    &= AT(x) + g(x(t)) &\text{(T definition.)}\\
+    &= Ax + g(x(t)) &(Tx = x.)
+\end{align*}
+\alignbreak
+}
+\end{solution}
+
+
+\newpage
+\subsection{Problem 3, part c}
+The proof also uses a Gr\"onwall's inequality. What is its role in the proof?
+\partbreak
+\begin{solution}
+
+    The Gr\"onwall's inequality used in the proof of the generalized one given in Chapter 3. It is used in part 2 in the proof to show that our unique fixed point solution $x(t;\sigma)$ is a point on the stable manifold. That is, $|x(t;\sigma)| \rightarrow 0$ as $t \rightarrow \infty$. As a means for clarity, I will provide Lemma 5.10 (Generalized Gr\"onwall) here, but omit its proof. 
+    \begin{center}\rule{0.89\textwidth}{.4pt}\end{center}
+    \vspace{-8mm}
+    \begin{quote}
+    $\textbf{Lemma 5.10 (Generalized Gr\"onwall)}.$ Suppose $\alpha, M$ and $L$ are nonnegative, $L <\alpha /2$, and there is a nonnegative bounded continuous function $u: \R^+ \rightarrow \R^+$ satisfying
+    \[
+    u(t) \leq e^{-\alpha t}M + L\int_0^te^{-\alpha(t - s)}u(s)ds + L\int_t^\infty e^{\alpha(t - s)}u(s)ds;
+    \]
+    then $u(t) \leq \frac{M}{\beta} e^{-(\alpha - L/\beta)t}$, where $\beta = 1 - 2\frac{L}{\alpha}$.
+    \end{quote}
+    \vspace{-10mm}
+    \begin{center}\rule{0.89\textwidth}{.4pt}\end{center}
+    \jump
+    
+    Once the inequality is proven we get the following bound for $x(t;\sigma)$:
+
+    \[
+    \abs{x(t;\sigma)} \leq 2Ke^{-\alpha t/2}\abs{\sigma},
+    \]
+    which directly implies that $x(t; \sigma)$ belongs to the stable manifold for all $\sigma \in E^s.$
+\end{solution}
+\newpage
+\printbibliography
 \end{document}
