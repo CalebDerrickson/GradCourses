@@ -95,12 +95,13 @@ How might you use your local stable manifold to approximate a global one for thi
 
 \newpage
 \section{Problem 2}
-consider the following predetor-prey model:
+Consider the following predetor-prey model:
 
-\begin{align*}
-    \dot{X} &= rX\bigg(1 - \frac{c}{r}X\bigg)\bigg(\frac{X - \mu}{\nu + X}\bigg) - \bigg(\frac{\alpha XY}{\beta + X}\bigg)\\
+\begin{align}
+    \dot{X} &= rX\bigg(1 - \frac{c}{r}X\bigg)\bigg(\frac{X - \mu}{\nu + X}\bigg) - \bigg(\frac{\alpha XY}{\beta + X}\bigg)\label{P2: model}\\
     \dot{Y} &= \gamma \bigg( \frac{\alpha XY}{\beta + X}\bigg) - \delta Y,
-\end{align*}
+    \nonumber
+\end{align}
 where the population densities $X, Y \geq 0$ are treated as real variables. Let $c = 0.19, \mu = 0.03, \nu = 0.003, \newline  \alpha = 800, \beta = 1.5, \gamma = 0.004, \delta = 2.2$. We will explore what happens when we vary $r \in (0, 3).$
 
 \subsection{Problem 2, part a}
@@ -121,9 +122,98 @@ First, which variable, $X$ or $Y$, represents the predator population and which 
 \newpage
 \subsection{Problem 2, part b}
 Show that there are 3 equilibrium solutions for $r < r_0$ and four for $r > r_0$ where you determine the values for $r_0$. In the phase plane, a periodic orbit must enclose at least one fixed point, according to Corollary 6.26 in Section 6.5 of Meiss. Use this, together with the dynamical invariance of the $X$ and $Y$ axes, to argue that there are no periodic solutions for $r \leq r_0$.
+\partbreak
+\begin{solution}
 
+    Note for equilibrium solutions, we require $f(\textbf{x}) = 0$, where $f(\textbf{x})$ is the right hand side of (\ref{P2: model}). Then, the we notice:
+    \begin{align*}
+        0&= \gamma \bigg( \frac{\alpha xy}{\beta + x}\bigg) - \delta y &\text{(Second equation.)}\\
+       0 &= y\Bigg(\frac{\gamma \alpha x}{\beta + x} - \delta\Bigg) &\text{(Grouping.)}
+    \end{align*}
+    which will create two separate cases. 
+    \hrule
+    \begin{enumerate}
+        \item \underline{Case 1:} $y = 0$
 
+        Then by the first equation:
+        \tightalignbreak
+        \begin{align*}
+            0 &=(rx - cx^2)\bigg(\frac{x - \mu}{\nu + x}\bigg)\\
+            0 &= (rx - cx^2)(x - \mu) &(\nu + x > 0.)\\
+            \implies 0 &= x(r - cx)(x - \mu) &\text{(Factoring.)}
+        \end{align*}
+        \alignbreak
+        Therefore, this will permit three equilibrium solutions, namely at $(0, 0), (\frac{r}{c}, 0), (\mu, 0)$.
+        \newpage
+        \item \underline{Case 2:} $\frac{\gamma \alpha x}{\beta + x} - \delta = 0$
 
+        After rearranging, this gives $x = \frac{\delta \beta}{\gamma\alpha - \delta}$. Note that, since our parameters are fixed, we notice that $\gamma\alpha - \delta = 1$. So $x$ can be simplified to just $x = \delta \beta = 3.3$. If we plug this into the first equation, we can find what $y$ must then equal.
+        \tightalignbreak
+        \begin{align*}
+            0&= r\delta\beta(1 - \frac{c}{r}\delta\beta)\bigg(\frac{\delta \beta - \mu}{\nu + \delta\beta}\bigg) - \frac{\alpha\delta\beta y}{\beta(1 + \delta)} &\text{(After simplification.)}\\
+            &= \delta\beta(r - c\beta\delta)\bigg(\frac{\delta \beta - \mu}{\nu + \delta\beta}\bigg) - \frac{\alpha\delta\beta y}{\beta\gamma\alpha} &(\gamma\alpha - \delta = 1.)\\
+            &= \delta\beta(r - c\beta\delta)\bigg(\frac{\delta \beta - \mu}{\nu + \delta\beta}\bigg) - \frac{\delta y}{\gamma} &\text{(Simplifying.)}\\
+            \implies y &= \gamma\beta(r - c\delta\beta)\bigg(\frac{\delta \beta - \mu}{\nu + \delta\beta}\bigg) &\text{(Solving for $y$.)}
+        \end{align*}
+        \alignbreak
+        Since $y \geq 0$, this would imply $r \geq c\delta \beta$. Therefore $r_0 = c\delta \beta = 0.627$. Therefore, our fourth equilibrium point, at
+        \[
+        (x, y) = (\beta\delta, \gamma\beta(r - c\delta\beta)\bigg(\frac{\delta \beta - \mu}{\nu + \delta\beta}\bigg))
+        \]
+        is allowed only for $r > c\delta \beta$. If $r = c\delta\beta$, then our second equilibrium point found in case 1 would coincide with this one. 
+    \end{enumerate}
+    \hrule
+
+    \jump
+    Therefore we have shown there are three equilibrium, $(0, 0), (\frac{r}{c}, 0), (\mu, 0)$ for $r < r_0$, and an additional one which appears for $r > r_0$. Corollary 6.26 concisely states ``Any periodic orbit of f must enclose at least one equilibrium." The only equilibrium which could possibly be enclosed by a periodic orbit is the one given off the boundary (due to our restriction $X, Y \geq 0$), which is only allowed for $r > r_0$. Therefore, no periodic orbits exist for $r \leq r_0$.
+\end{solution}
+
+\newpage
+\subsection{Problem 2, part c}
+The interval of $r$ that admits limit cycles is $r \in (r_H, r_h)$; one end of the interval is associated with a Hopf bifurcation $r_H$ and the other with a heteroclinic orbit, $r_h$. Estimate both $r_H$ and $r_h$ numerically, and also plot the period of the oscillations as a function of $r$ on the interval between $r_H$ and $r_h$. 
+\partbreak
+\begin{solution}
+
+    The Hopf bifurcation will happen when orbits which previously limits to the stable equilibrium no longer do so, favoring a nonzero periodic orbit. The heteroclinic bifurcation will happen when an orbit intersects a saddle point, abruptly ending the orbit. We can numerically find the $r$ values which permit this behavior numerically. After choosing a random initial condition and observing its orbit for various values, I find that the Hopf bifurcation happens at around $ r_H = 1.46$ and the heteroclinic bifurcation at $r_h = 2.65$. The predator and prey population densities are recorded for $5$ different values of $r \in (r_H, r_h)$ in Figure \ref{fig:p2c orbits}. After this, we can investigate the timesteps taken to get to the next max of the populations, as shown in Figure \ref{fig:p2c Period timings}. Then, we investigate the divergence of these timings in Figure \ref{fig:p2c Period div}. Note that the timestep is not a general notion of time, it is just the step taken in the ode solver I used. The code to generate each plot follows their respective plot.
+
+    \begin{figure}
+        \centering
+        \includegraphics[width = 0.8\textwidth]{Images/Orbits for different r.png}
+        \caption{Orbits for various values of $r \in (r_H, r_h)$. Note the populations collapse st some finite time for $r = 2.65$, while the populations limit to the equilibrium for $r = 1.4.$}
+        \label{fig:p2c orbits}
+    \end{figure}
+
+    \clearpage
+    \includepdf{Code/Problem 2c.pdf}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width = 0.8\textwidth]{Images/Period timings.png}
+        \caption{The timesteps between max size populations for Predator and Prey. The ``limit period" is given in the title. The last plot can be safely ignored, since the entries zero out after the first three.}
+        \label{fig:p2c Period timings}
+    \end{figure}
+    \clearpage
+    \includepdf{Code/Problem 2c2.pdf}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width = 0.8\textwidth]{Images/Period Divergance.png}
+        \caption{Period times for $r \in (r_H, r_h)$. Note the period seems to diverge when $r \rightarrow r_h$.}
+        \label{fig:p2c Period div}
+    \end{figure}
+
+    \clearpage
+    \includepdf{Code/Problem 2c3.pdf}
+\end{solution}
+
+\newpage
+\subsection{Problem 2, part d}
+For the $r$ parameter range $r \in (r_H, r_h)$, estimate the Floquet multiplier associated with the limit cycle $\mu(r)$. 
+\partbreak
+\begin{solution}
+
+    Do the same analysis again to get the limit period of a limit cycle, for r in that range. Then integrate the trace of the Jacobian of the system evaluated at x(t), y(t) along one period to get the determinant of the fundamental matrix (Abel's theorem). 
+\end{solution}
 \newpage
 \section{Problem 3}
 This problem relates to some parts of the proof of Theorem 5.9 (Local Stable Manifold) in the textbook. For full credit on this problem, you need to concisely summarize the relevant parts of the proof in your answer.  
