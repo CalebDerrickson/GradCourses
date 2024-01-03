@@ -104,10 +104,58 @@ Suppose that $F$ and $G$ are closed and open subsets of $\R^n$, respectively, su
 \end{enumerate}
 \partbreak
 \begin{solution}
+
     Consider the function
     \[
     f(x) = \frac{d(x, G^c)}{d(x, G^c) + d(x, F)}
     \]
-    where $d(x, F) = \min \{ d(x, y) : y \in F \}$, similarly for $G^c$. 
+    where $d(x, F) = \min \{ d(x, y) : y \in F \}$, similarly for $G^c$. Explicitly showing this function is continuous, we would need to provide an $\ep -\delta$ proof. However, since $f(x)$ is a ratio of two continuous functions\footnote{Here I am taking for granted that $d$ is a continuous function. This follows from the definition of a metric.}, and the denominator is never zero, $f(x)$ does not limit to $\infty$ for any $x \in \R^n$, thus is continuous. Note that the denominator is never zero since, if it was, then there exists an $x \in \R^n$ where $x \in F\cap G^c$. However, since $F \subset G$, $F \not\subset G^c$, so $F\cap G^c = \phi$\footnote{I denote $\phi$ as the empty set.}. Therefore, $x \in \phi$, which is a contradiction. Therefore, the denominator is never zero. We just now need to show that $f$ obeys the enumerated properties.
+
+    \begin{itemize}[(a)]
+        \item Note that $f(x)$ can be rewritten as
+        \[
+        f(x) = 1 - \frac{d(x, F)}{d(x, G^c) + d(x, F)}.
+        \]
+        Since the second term is $\geq 0$ (the denominator is $>0$ and the numerator is $\geq 0$), this implies that $f(x) \leq 1$. Furthermore, we can also ration out that $f(x)$ is bounded below by zero, since $f(x)$ is a ratio of two functions which are positive. Therefore, $0 \leq f(x) \leq 1$.
+        \item Note that if $x \in F$, $d(x, F) = 0$. Therefore, $f(x)$ simplifies to 
+        \[
+        f(x \in F) = \frac{d(x, G^c)}{d(x, G^c)} = 1.
+        \]
+        \item If $x \in G^c$, $d(x, G^c) = 0$. Therefore, $f(x)$ simplifies to 
+        \[
+        f(x \in G^c) = \frac{0}{d(x, F)} = 0.
+        \]
+    \end{itemize}
+\end{solution}
+\newpage
+\section{Problem 1.20}
+Let $X$ be a normed linear space. A series $\sum x_n$ in $X$ is \textit{absolutely convergent} if $\sum \norm{x_n}$ converges to a finite value in $\R$. Prove that $X$ is a Banach space if and only if every absolutely convergent series converges.
+\partbreak
+
+\begin{solution}
+
+\begin{itemize}
+    \item [\underline{$\implies$}:] Suppose $X$ is a Banach space. Then $X$ is complete with respect to the metric $d(x, y) = \norm{x - y}.$ We wish to show that every absolutely convergent series converges.\par
+
+    Let $\sum x_n \in X$ be an absolutely convergent series. Denote $s_n = \sum_{i = 1}^n x_n$. Note that since $\sum \norm{x_n} < \infty$, there then exists $N \in \N$ such that for any $\ep > 0$, $\sum_{i = N}^\infty \norm{x_n} < \ep$. Notice that $\norm{s_n - s_m} = \norm{\sum_{i = m+1}^n x_i} \leq \sum_{i = m+1}^n\norm{x_i}$ for any $n, m$. If we choose $n, m \geq N$, then $\norm{s_n - s_m} < \ep$, by the bound shown above. Thus $s_n$ is a Cauchy sequence in $X$, which by assumption means that $s_n$ converges. Therefore, $\sum x_n$ is a convergent sum. 
+
+    \item [\underline{$\impliedby$}:] Here we assume that every absolutely convergent series converges in $X$, we then need to show that $X$ is a Banach space. Let $x_n$ be a Cauchy sequence in $X$, and a subsequence $x_{n_k}$ for $k \geq 1$. Since $x_n$ is Cauchy, we can find a subsequence for which $\norm{x_{n_{k+1}} - x_{n_k}} < \ep$, namely $\norm{x_{n_{k+1}} - x_{n_k}} \leq 2^{-k}$. Note that 
+    \[
+    \sum_{k \geq 1} \norm{x_{n_{k+1}} - x_{n_k}} \leq \sum_{k \geq 1} 2^{-k} = 1.
+    \]
+    Define a new sequence $y_k$ such that $y_1 = x_{n_1}$, $y_{k+1} = x_{n_{k+1}} - x_{n_k}$. Then by above, 
+    \[
+    \sum_{k \geq 1}\norm{y_k} = \norm{x_{n_1}} + \sum_{k \geq 1} \norm{x_{n_{k+1}} - x_{n_k}} \leq \norm{x_{n_1}} + 1.
+    \]
+    Thus $\sum y_k$ is an absolutely convergent series in $X$, thus is a convergent series. Since $x_n$ has a convergent subsequence ($y_k$), then $x_n$ converges in $X$, thus $X$ is a Banach space. 
+\end{itemize}
+\end{solution}
+
+\newpage
+\section{Problem 1.27}
+Suppose that $(x_n)$ is a sequence in a compact metric space with the property that every convergent subsequence has the same limit $x$. Prove that $x_n \rightarrow x$ as $n \rightarrow \infty$.
+\partbreak
+\begin{solution}
+    
 \end{solution}
 \end{document}
