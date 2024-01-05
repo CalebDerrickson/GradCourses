@@ -24,7 +24,7 @@ where $z_1 = (z_1, y_1)$ and $z_2 = (z_2, y_2)$.
 \begin{solution}
 
 To show $(Z, d)$ is a metric space, we just need to show that $d$ is indeed a metric. This requires $d$ to satisfy the three stated properties for a metric (Definition 1.1). These will be shown below. 
-\begin{itemize}[-]
+\begin{itemize}
     \item \underline{$d(z_1, z_2) \geq 0$ and $d(z_1, z_2) = 0 \iff z_1 = z_2$.}
 
     \jump
@@ -69,6 +69,9 @@ defined by $h(x) = g(f(x)),$ is also continuous.
 \begin{solution}
 
     We will follow Definition 1.26 in the book. Let $x_0 \in X, y_0 = f(x_0) \in Y$. Since $f$ is continuous, $\forall \ \ep_1 > 0 \ \exists \ \delta_1 > 0$ such that for $d_X(x, x_0) < \delta_1 \implies d_Y(f(x), f(x_0)) < \ep_1$. Furthermore, $g$ is continuous, so $\forall \ \ep_2 > 0 \ \exists \ \delta_2 > 0$ such that for $d_Y(y, y_0) < \delta_2 \implies d_Z(g(y), g(y_0)) < \ep_2$. If we let $\delta_2 = \ep_1$, then $d_Y(f(x), f(x_0)) < \ep_1 \implies d_Z(g(f(x)), g(f(x_0))) < \ep_2$. Letting $\delta_1 = \ep_1$, then $d_X(x, x_0) < \delta_1 \implies d_Y(f(x), f(x_0)) < \ep_1 \implies d_Z(g(f(x)), g(f(x_0))) < \ep_2$. Therefore, $h = g\circ f$ is continuous at $x_0$. Since $x_0$ was chosen arbitrarily, then $h$ is continuous. \hfill \square
+
+    \jump
+    An alternate proof\footnote{I am adding an alternate proof since my proof above was somewhat shaky, so I wanted to make sure I gave a convincing argument.} relies on the use of continuity in the topological sense. That is, $h$ is continuous if and only if the pre-image of open sets, $h\inv (K)$ is open. Since $h$ is given as a composition of two continuous functions, its inverse is defined as $h\inv = f\inv \circ g\inv = f\inv (g\inv(z))$ for $z \in K$, some open set $K \subseteq Z$. Since $g$ is continuous, the pre-image of $K$, $g\inv (K)$ will be open in $Y$. Furthermore, since $f$ is continuous, the open set $g\inv (K) \in Y$ will have an open pre-image $f\inv (g\inv (K)) \in X$. Since this set is open, $h$ is continuous. \hfill \square
 \end{solution}
 
 \newpage
@@ -109,7 +112,7 @@ Suppose that $F$ and $G$ are closed and open subsets of $\R^n$, respectively, su
     \[
     f(x) = \frac{d(x, G^c)}{d(x, G^c) + d(x, F)}
     \]
-    where $d(x, F) = \min \{ d(x, y) : y \in F \}$, similarly for $G^c$. Explicitly showing this function is continuous, we would need to provide an $\ep -\delta$ proof. However, since $f(x)$ is a ratio of two continuous functions\footnote{Here I am taking for granted that $d$ is a continuous function. This follows from the definition of a metric.}, and the denominator is never zero, $f(x)$ does not limit to $\infty$ for any $x \in \R^n$, thus is continuous. Note that the denominator is never zero since, if it was, then there exists an $x \in \R^n$ where $x \in F\cap G^c$. However, since $F \subset G$, $F \not\subset G^c$, so $F\cap G^c = \phi$\footnote{I denote $\phi$ as the empty set.}. Therefore, $x \in \phi$, which is a contradiction. Therefore, the denominator is never zero. We just now need to show that $f$ obeys the enumerated properties.
+    where $d(x, F) = \min \{ d(x, y) : y \in F \}$, similarly for $G^c$ \footnote{Note that since F and $G^c$ are closed, then the distance definition will ``upgrade" from an infimum to a minimum, since it can be achieved via a sequence in either set.}. Explicitly showing this function is continuous, we would need to provide an $\ep -\delta$ proof. However, since $f(x)$ is a ratio of two continuous functions\footnote{Here I am taking for granted that $d$ is a continuous function. This follows from the definition of a metric.}, and the denominator is never zero, $f(x)$ does not limit to $\infty$ for any $x \in \R^n$, thus is continuous. Note that the denominator is never zero since, if it was, then there exists an $x \in \R^n$ where $x \in F\cap G^c$. However, since $F \subset G$, $F \not\subset G^c$, so $F\cap G^c = \phi$\footnote{I denote $\phi$ as the empty set.}. Therefore, $x \in \phi$, which is a contradiction. Therefore, the denominator is never zero. We just now need to show that $f$ obeys the enumerated properties.
 
     \begin{itemize}[(a)]
         \item Note that $f(x)$ can be rewritten as
