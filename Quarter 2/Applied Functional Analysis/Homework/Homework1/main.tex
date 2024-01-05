@@ -116,7 +116,7 @@ Suppose that $F$ and $G$ are closed and open subsets of $\R^n$, respectively, su
         \[
         f(x) = 1 - \frac{d(x, F)}{d(x, G^c) + d(x, F)}.
         \]
-        Since the second term is $\geq 0$ (the denominator is $>0$ and the numerator is $\geq 0$), this implies that $f(x) \leq 1$. Furthermore, we can also ration out that $f(x)$ is bounded below by zero, since $f(x)$ is a ratio of two functions which are positive. Therefore, $0 \leq f(x) \leq 1$.
+        Since the second term is $\geq 0$ (the denominator is $>0$ and the numerator is $\geq 0$), this implies that $f(x) \leq 1$. Furthermore, we can also ration out that $f(x)$ is bounded below by zero, since $f(x)$ (before rewriting) is a ratio of two functions which are positive. Therefore, $0 \leq f(x) \leq 1$.
         \item Note that if $x \in F$, $d(x, F) = 0$. Therefore, $f(x)$ simplifies to 
         \[
         f(x \in F) = \frac{d(x, G^c)}{d(x, G^c)} = 1.
@@ -156,6 +156,10 @@ Let $X$ be a normed linear space. A series $\sum x_n$ in $X$ is \textit{absolute
 Suppose that $(x_n)$ is a sequence in a compact metric space with the property that every convergent subsequence has the same limit $x$. Prove that $x_n \rightarrow x$ as $n \rightarrow \infty$.
 \partbreak
 \begin{solution}
-    
+
+    Suppose False. That is, $x_n \not \rightarrow x$ as $n \rightarrow \infty$. Then there exists an $\ep > 0$ such that for any $N \in \N$ with $n \geq N \ \implies d(x_n, x) > \ep$. Define a sequence $y_m$ as the elements of $x_n$ where $m > n$. Then $m > N$, and inherits the property given by $x_n$ : $d(y_m, x) > \ep \ \forall \ N \in \N$. \par
+
+    \jump
+    Note that $y_m$ is a subsequence of $x_n$, thus by assumption there exists an $N' \in \N$ such that for $m \geq N'$ and $\ep' > 0$, $d(y_m, x) \leq \ep'$. This is then a contradiction, since we cannot choose any $N' \in \N$ with this property, by the inheritance of the requirement above. Thus, $x_n \rightarrow x$ as $n \rightarrow \infty$. 
 \end{solution}
 \end{document}
