@@ -1,0 +1,113 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31020: Homework 1}
+\author{Caleb Derrickson}
+\date{Wednesday, January 10, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+%{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+Let $f(x): \R \rightarrow \R$ be an infinitely differentiable function. Let $k(x)$ be the smallest integer that satisfies $f^{(j)}(x) = 0, 1 \leq k \leq k - 1, f^{(k)}(x) \neq 0$ (that is the smallest index of the derivative that is nonzero. Here, $f^{(l)}(x)$ is the $l$-th derivative of $f$ at $x$.
+
+\subsection{Problem 1, Part 1}
+Prove that, if $k(x)$ is odd, then $x$ is neither a local minimum nor a local maximum. 
+\partbreak
+
+\begin{solution}
+
+    Since $f$ is given as arbitrarily differentiable, Taylor's Theorem can be applied. I will provide the theorem below, for reference.
+    
+    \begin{center}\rule{17cm}{0.1mm}\end{center}
+    \begin{quote}
+        \vspace{-5mm}
+        \underline{Taylor's Theorem} \footnote{This theorem is taken from the Wikipedia page for Taylor's Theorem, directly under the section titled ``Taylor's theorem in one real variable."}
+        
+        Let $k \geq 1$ be an integer and let the function $f :\R \rightarrow \R$ be $k$ times differentiable at the point $a \in \R$. Then there exists a function $h_k : \R \rightarrow \R$ such that 
+        \[f(x) = f(a) + f'(a) + \frac{1}{2!}\frac{d^2f}{dx^2}\bigg|_{x = a}(x - a)^2 + ... + \frac{1}{k!}\frac{d^kf}{dx^k}\bigg|_{x = a}(x - a)^k + h_k(x)(x - a)^k,\]
+        where $\lim_{x \rightarrow a} h_k(x) = 0.$
+    \vspace{-5mm}
+    \end{quote}
+    \begin{center}\rule{17cm}{0.1mm}\end{center}
+    Supposing $k$ is odd, then $k = 2m+1$, for $m \in \N \cup \{ 0 \}$.\footnote{I am writing it like this to avoid ambiguity, since I take the natural numbers without 0.} Not also by assumption, all derivatives of $f$ evaluated at $a$ are zero, thus the Taylor expansion of $f(x)$ is simplified to
+    \[
+    f(x) = f(a) + f'(a) + \frac{1}{(2m+1)!}\frac{d^{(2m+1)}f}{dx^{(2m+1)}}\bigg|_{x = a}(x - a)^{(2m+1)} + h_{(2m+1)}(x)(x - a)^{(2m+1)}.
+    \]
+    Assuming we can truncate $f$ (i.e., discard the function $h(x)$) around a neighborhood $U_a$ of $a$, then we can approximate $f(x)$ for $x \in U_a$ as 
+    \[
+    f(x) \approx f(a) + \frac{1}{(2m+1)!}f^{(2m+1)}(x = a) (x - a)^{(2m+1)}.
+    \]
+    Thus, we can analyze $f$ according to the extremality of $f(a)$.
+    \newpage
+    \begin{itemize}[-]
+        \item \underline{\textbf{Case 1:}} $ \ f(a)$ is a local minimum.
+        
+        \hop
+        Then $f(x) - f(a) \geq 0$ should be true for all $x \in U_a$. This means $\frac{1}{(2m+1)!}f^{(2m+1)}(x = a) (x - a)^{(2m+1)} \geq 0$, so $(x - a)^{(2m+1)} \geq 0$. Note that this is an odd function, so for points less than $a$, this inequality cannot hold. Thus $f(a)$ cannot be a local minimum.
+        
+        \item \underline{\textbf{Case 2:}} $ \ f(a)$ is a local maximum.
+
+        \hop
+        Then the same argument can be made in the previous case, replacing the inequality with $f(x) - f(a) \leq 0$. Then $(x - a)^{(2m+1)} \leq 0$, and since this is an odd function, we cannot find a neighborhood around $a$ such that this inequality is satisfied for all points within the neighborhood. Thus $f(a)$ cannot be a local maximum.
+    \end{itemize}
+\end{solution}
+
+\newpage
+\subsection{Problem 1, part 2}
+Prove that if $k(a)$ is even, then $a$ is either a strict local minimum or a strict local maximum.  
+\partbreak
+\begin{solution}
+
+    Given we are in the same environment as in the previous part, we will truncate $f$ so that around a neighborhood $U_a$ of $a$, $f(x)$ can be reasonably approximated as 
+    \[f(x \in U_a) \approx f(a) + \frac{1}{(k)!}f^{(k)}(x = a) (x - a)^{(k)}.\]
+    Since $k$ is even, it can be expressed as $k = 2m$, for $m \in \N \cup \{0\}$. Then we can analyze $f(a)$ based on the value of $f(x) - f(a)$ Note that the case where $f(x) = f(a)$ is not considered, since this would imply $f^{(k)}(x = a) = 0$, which under our assumption of $k$ cannot happen.
+
+    \begin{itemize}[-]
+        \item \underline{\textbf{Case 1:}} $ \ f(x) - f(a) > 0 $. 
+
+        \hop
+         This implies $\frac{1}{(2m)!}f^{(2m)}(x = a) (x - a)^{(2m)} > 0$, so $f^{(2m)}(x = a) > 0$, since $\frac{1}{(2m)!}(x - a)^{(2m)} \geq 0$ for any $x \in U_a, m \in \N \cup \{0\}.$ Therefore, since $f^{(2m)}(x = a) > 0$, $a$ is a strict local minimum. 
+
+         \item \underline{\textbf{Case 2:}} $ \ f(x) - f(a) < 0$.
+
+         \hop
+         Then $\frac{1}{(2m)!}f^{(2m)}(x = a) (x - a)^{(2m)} < 0$, so $f^{(2m)}(x = a) < 0$, since $\frac{1}{(2m)!}(x - a)^{(2m)} \geq 0$ for any $x \in U_a, m \in \N \cup \{0\}.$ Therefore, since $f^{(2m)}(x = a) < 0$, $a$ is a strict local maximum. 
+    \end{itemize}
+
+    Therefore, $a$ can either be a strict local maximum or minimum, depending on the sign of $f(x) - f(a)$.  
+\end{solution}
+
+\newpage
+\subsection{Problem 1, part 3}
+In the same situation, prove that $a$ is an isolated extremum.
+\partbreak
+\begin{solution}
+
+    Assuming that $a$ is a local extremum of $f$, then we can apply the first order necessary conditions to get that $f'(a) = 0$. Applying Taylor's Theorem to $f'(x)$ then gives
+    \[
+    \deriv{f}{x}{1} (x) = \deriv{f}{x}{1} \bigg|_{x = a} + \deriv{f}{x}{2}\bigg|_{x = a} (x - a) + \frac{1}{2!}\deriv{f}{x}{3}\bigg|_{x = a} (x - a)^2 + ... + \frac{1}{(k-1)!}\deriv{f}{x}{k} \bigg|_{x = a} (x - a)^{(k-1)} + h_k(x) 
+    \]
+    This is allowed in some neighborhood $U_a$ of $a$. Note that all derivatives prior to the $k$-th are zero. Suppose further that $U_a$ also satisfies the approximation performed in the previous parts, such that
+    \[
+    \deriv{f}{x}{1} (x \in U_a) \approx \frac{1}{(k-1)!}\deriv{f}{x}{k} \bigg|_{x = a}(x - a)^{(k-1)} .
+    \]
+    Note that if $x' \in U_a$ is an extremum, then $\deriv{f}{x}{1}(x') = 0$. When evaluating $\deriv{f}{x}{1}$ at $x = x'$ and setting it equal to zero, we get
+    \[
+    \deriv{f}{x}{1}(x') = 0 = \frac{1}{(k-1)!}\deriv{f}{x}{k} \bigg|_{x = a}(x' - a)^{(k-1)}.
+    \]
+    By assumption, $\deriv{f}{x}{k} (x = a) \neq 0$. We can cancel this out, plus the factor of $(k-1)!$ to get $(x' - a)^{(k-1)} = 0$. This then implies $x' = a$. Thus there are no other extrema within the neighborhood $U_a$, meaning $a$ is an isolated extremum. 
+\end{solution}
+
+\newpage
+\section{Problem 2}
+ As we discussed in class, an important issue in comparing algorithms is the asymptotic order of convergence. This problems exposes several rates of convergence and examples concerning them. I suggest you also read the subsection ``Rates of Convergence” of the Appendix A2 of the textbook (pages 619 - 620 in the 2006 edition). The following points refer to the textbook problem numbering. 
+ \subsection{Problem 2.13}
+ 
+\end{document}
