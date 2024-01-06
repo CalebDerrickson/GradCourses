@@ -60,7 +60,7 @@ Prove that, if $k(x)$ is odd, then $x$ is neither a local minimum nor a local ma
 \end{solution}
 
 \newpage
-\subsection{Problem 1, part 2}
+\subsection{Problem 1, Part 2}
 Prove that if $k(a)$ is even, then $a$ is either a strict local minimum or a strict local maximum.  
 \partbreak
 \begin{solution}
@@ -85,7 +85,7 @@ Prove that if $k(a)$ is even, then $a$ is either a strict local minimum or a str
 \end{solution}
 
 \newpage
-\subsection{Problem 1, part 3}
+\subsection{Problem 1, Part 3}
 In the same situation, prove that $a$ is an isolated extremum.
 \partbreak
 \begin{solution}
@@ -106,8 +106,128 @@ In the same situation, prove that $a$ is an isolated extremum.
 \end{solution}
 
 \newpage
+\subsection{Problem 1, part 4}
+Give an example where $k(a) = \infty$, (i.e. all derivatives vanish at $a$), but $a$ is a strict isolated local minimum.
+\partbreak
+\begin{solution}
+exp$\big(\frac{1}{x^2}\big)$?    
+\end{solution}
+
+\newpage
 \section{Problem 2}
  As we discussed in class, an important issue in comparing algorithms is the asymptotic order of convergence. This problems exposes several rates of convergence and examples concerning them. I suggest you also read the subsection ``Rates of Convergence” of the Appendix A2 of the textbook (pages 619 - 620 in the 2006 edition). The following points refer to the textbook problem numbering. 
- \subsection{Problem 2.13}
  
+ \subsection{Problem 2.13}
+ Show that the sequence $x_k = 1/k$ is not Q-linearly convergent, though it does converge to zero. (This is called \textit{sublinear convergence}.)
+ \partbreak
+ \begin{solution}
+ 
+     Plugging in the sequence to the definition of Q-convergence, we get
+     \[
+     \frac{1/(k+1)}{1/k} = \frac{k}{k+1} = 1 - \frac{1}{k+1},
+     \]
+     where the limit $x^* = 0$. By definition also, we require the ratio to be bounded by a number $r \in (0, 1)$ for all $k$. Note the ratio found above limits to 1, for any $r \in (0, 1)$ we can always find a $k$ such that the ratio is larger than $r$, thus $x_k = 1/k$ is not Q-linearly convergent.
+ \end{solution}
+
+ \newpage
+ \subsection{Problem 2.14}
+ Show that the sequence $x_k = 1 + (0.5)^{2^k}$ is Q-quadratically convergent to 1.
+ \partbreak
+ \begin{solution}
+
+     If we consider the sequence $x_k$ to be a summation of two sequences, namely $y_k = 1, z_k = (0.5)^{2^k}$, then $y_k$ converges to 1. Note that $z_k$ is a subsequence of the sequence $z'_k = (0.5)^k$, which was shown in class to limit to zero, thus $z_k$ limits to zero. Since $x_k$ is a summation of converging sequences, then its limit is just the sum of the limits of the individual sequences, so $x_k \rightarrow 1$ as $k \rightarrow \infty$. \par 
+     
+     Plugging this into the definition for Q-quadratic convergence, we see
+     \[
+     \frac{|1 + (0.5)^{2^{(k+1)}} - 1|}{|1 + (0.5)^{2^k} - 1|^2} = \frac{(0.5)^{2^{(k+1)}}}{(0.5)^{2^{(k+1)}}} = 1.
+     \]
+     Note that the bound need to just be a positive constant, so setting $M = 1$, we see that the sequence $x_n$ is Q-quadratically convergent.
+ \end{solution}
+
+ \newpage
+ \subsection{Problem 2.15}
+ Does the sequence $x_k = 1/k!$ converge Q-superlinearly? Q-quadratically?
+ \partbreak
+ \begin{solution}
+
+     It's easy to see $x_k \rightarrow 0$ as $ k \rightarrow \infty$. Checking the sequential ratio gives
+     \[
+     \frac{x_{k+1}}{x_k} = \frac{1/(k+1)!}{1/k!} = \frac{k!}{(k+1)!} = \frac{1}{k+1}
+     \]
+     Therefore, the ratio limits to zero as $k \rightarrow \infty$ meaning $x_k$ is Q-superlinearly convergent. For Q-quadratic convergence,
+     \[
+     \frac{x_{k+1}}{x_k} = \frac{1/(k+1)!}{(1/k!)^2} = \frac{(k!)^2}{(k+1)!} = \frac{k!}{k+1}
+     \]
+     This is not bounded above by any $M > 0$, so the sequence is not Q-quadratic convergent.
+ \end{solution}
+
+ \newpage
+ \subsection{Problem 2.16}
+ Consider the sequence $x_k$ defined by 
+ \[
+ x_k = \begin{cases}
+     (\frac{1}{4})^{2^k}, &$k$ \text{ even},\\
+     (x_{k-1}) / k, &$k$ \text{ odd.}
+ \end{cases}
+ \]
+ Is the sequence Q-superlinearly convergent? Q-quadratically convergent? R-quadratically convergent?
+ \partbreak
+ \begin{solution}
+ 
+     It's easy to see that $x_k \rightarrow 0$ as $k \rightarrow \infty$. We just need to check each Q-convergence.
+
+     \begin{itemize}
+         \item \underline{Q-superlinear}:
+
+        \hop
+        For $k$ even,
+        \[
+        \frac{x_{k+1}}{x_{k}} = \frac{x_{k}/(k+1)}{x_k} = \frac{1}{k+1}.
+        \]
+        For $k$ odd, 
+        \[
+        \frac{x_{k+1}}{x_k} = k\frac{x_{k+1}}{x_{k-1}} = k\frac{(0.25)^{2^{k+1}}}{(0.25)^{2^{k-1}}} = k\frac{(1/256)^{2^{k-1}}}{(1/4)^{2^{k-1}}}.
+        \]
+        Although the odd ratio is not as simple as the even ratio, we can see it goes to zero rapidly, as the numerator decreases faster then the denominator, the multiple of $k$ does not change this much. Thus the sequence $x_k$ is Q-superlinear. 
+
+        \item \underline{Q-quadratic}:
+
+        \hop
+        For $k$ even,
+        \[
+        \frac{x_{k+1}}{(x_k)^2} = \frac{x_k / (k+1)}{(x_k)^2} = \frac{1}{x_k(k+1)}.
+        \]
+        Since the sequence limits to zero, there is no chance that there is a bound for the even sequences. Thus there is no need to check the odd sequences, since we cannot find a bound $M>0$ for the even sequences.
+
+        \item \underline{R-Quadratic}:
+
+        \hop
+        With inspiration form Problem 2.14, we notice that $y_k = (0.5)^{2^k} > x_k$ for all k. Note we don't have to worry about absolute values and limits since both sequences limit to zero. We can show this explicitly:
+
+        \hop
+        For $k$ even, 
+        \[
+        x_k = (0.25)^{2^k} = (0.5)^{2\cdot 2^k} = (0.5)^{2^{(k+1)}} < (0.5)^{2^k} = y_k
+        \]
+        
+        \hop
+        for $k$ odd, 
+        \[
+        x_k = \frac{(0.25)^{2^{(k-1)}}}{k} = \frac{(0.5)^{2\cdot 2^{(k-1)}}}{k} = \frac{(0.5)^{2^k}}{k} < (0.5)^{2^k} = y_k
+        \]
+        \newpage
+        We can then show that $y_k$ is Q-quadratically convergent.
+        \[
+        \frac{y_{k+1}}{y_k} = \frac{(0.5)^{2^{(k+1)}}}{((0.5)^{2^{k}})^2} = \frac{(0.5)^{2^{(k+1)}}}{(0.5)^{2^{(k+1)}}} = 1
+        \]
+        Therefore, setting $M = 1$, we see that $y_k$ is quadratically convergent, thus $x_k$ is R-quadratic.
+     \end{itemize}
+ \end{solution}
+
+\newpage
+ \section{Problem 3}
+ This problem shows an example of there Newton's method diverges.
+ 
+ \subsection{Problem 3, part 1}
+ Implement Newton's method. Allow the number of iterations to be a parameter.
 \end{document}
