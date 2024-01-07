@@ -16,8 +16,11 @@ function plotting(seq, stepsize)
     grid on
 
     subplot(1, 3, 3);
-    % Plot each step with a changing color
+    % Plot each step with a changing color. Also a Solid line for reference
+    hold on;
+    plot(seq(:, 1), seq(:, 2), 'Color', 'k', 'LineWidth', 1.5);
     scatter(seq(:, 1), seq(:, 2), 50, colorMap, 'filled');
+    hold off;
     
     clim([0, numsteps]);
     c = colorbar;
