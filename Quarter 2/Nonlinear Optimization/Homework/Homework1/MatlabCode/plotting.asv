@@ -1,0 +1,13 @@
+function plotting(seq)
+
+    subplot(1, 2, 1);
+    plot(1:length(seq(1, :)), seq(:, 1) );
+    xlabel('step'), ylabel('x - position'), title('X- Position of sequence')
+    grid on
+
+    subplot(1, 2, 2);
+    plot(1:length(seq(1, :)), seq(:, 2) );
+    xlabel('step'), ylabel('y - position'), title('X- Position of sequence')
+    grid on
+
+end
