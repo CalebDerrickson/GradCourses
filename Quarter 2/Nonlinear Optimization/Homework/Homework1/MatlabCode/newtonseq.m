@@ -20,7 +20,6 @@ function newtonseq = newtonseq(x0, k, stepsize)
         % Solving QRx = b => Rx = Q^T b
         b = Q' * g_step';
         x = fixed.backwardSubstitute(R, b);
-        %x = R \ b;
         
         newtonseq(i+1, :) = newtonseq(i, :) - stepsize * x';
     end
