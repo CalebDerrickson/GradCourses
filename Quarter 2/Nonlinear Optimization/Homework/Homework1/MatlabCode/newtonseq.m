@@ -12,7 +12,16 @@ function newtonseq = newtonseq(x0, k, stepsize)
 
     % Populate the array element-wise
     for i = 1:k-1
-        [~, g, H] = fentonfgH(newtonseq(i, :));
-        newtonseq(i+1, :) = newtonseq(i, :) - stepsize * (H\g')';
+        [~, g_step, H_step] = fentonfgH(newtonseq(i, :));
+
+        % Computing QR of H_step for inverse
+        [Q, R] = qr(H_step);
+        
+        % Solving QRx = b => Rx = Q^T b
+        b = Q' * g_step';
+        x = fixed.backwardSubstitute(R, b);
+        %x = R \ b;
+        
+        newtonseq(i+1, :) = newtonseq(i, :) - stepsize * x';
     end
 end
