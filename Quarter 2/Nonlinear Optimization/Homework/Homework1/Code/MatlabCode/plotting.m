@@ -28,5 +28,5 @@ function plotting(seq, stepsize)
     xlabel('x - position'), ylabel('y - position'), title(strcat('Convergence of Sequence, stepsize =  ',  num2str(stepsize)))
     grid on
 
-
+    
 end
