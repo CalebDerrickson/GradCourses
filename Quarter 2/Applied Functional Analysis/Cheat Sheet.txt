@@ -1,0 +1,167 @@
+Cheat sheet
+
+## Chapter 1
+
+Def 1.14:
+	A sequence (x_n) is a Cauchy sequence if for every $\ep > 0$ there is an $N \in \N$ such that $d(x_m, x_n) < \ep \forall m, n$
+
+Every convergent sequence is a Cquchy sequence. Only in the real numbers is the converse also true. 
+
+Absolute convergence of a series implies convergence, but not conversely. 
+
+Def 1.17:
+	A metric space (X, d) is complete if every Cauchy sequence in X converges to a limit in X. 
+	A normed linear space that is complete with respect to the metric d = \norm {x - y} is called a Banach Sapce
+
+Example 1.25: 
+	If \{x_{n\qlpha} \in \R | n \in \N, \alpha \in A\} is a set of real numbers indexed by the natural numbers \N and and arbutrary set A, then 
+\[
+\sup_{\alpha \in A} [\lim \inf _{n \rightarrow \infty} x_{n, \alpha}] \leq \lim \inf_{n \rightarrow \infty} [ \sup_{\alpha \in A} x_{n, \alpha}]
+\]
+	Analogous inequality tieh inf and limsup
+
+The set A is bounded if its diameter \sup \{ d(x, y) | x, y \in A \} is finite.
+
+d(x, A) = inf \{ d(x, y) | y \in A \}. d(x, A) = 0 implies x \in A ONLY when A is closed.
+
+Def 1.33: 
+	A function f: X \rightarrow Y is sequentially continuous at x \in X if for every sequence (x_n) that converges to X, the sequence (f(x_n)) converges to f(x) in Y.
+
+Prop 1.34: 
+	Let X, Y be metirc spaces. A function f: X \rightarrow Y is continuous at x if and only if it is sequentially continuous at x
+
+
+Example 1.42 A subset of a complete metric space is complete if and only if it is closed. 
+
+Def 1.43:
+	A subset A of a metric space X is dense in X if the closure of A equals X.
+
+Prop 1.46 Let X, Y be metric spaces and f: X \rightarrow Y. The function f is continouou on X if and only if F\inv (G) is open in X for every open set G in Y.
+
+Definition 1.54:
+	A subset K of a metric space X is sequentially compact if every sequence in K has a convergent subsequence whose limit belongs in K.
+
+Thm 1.56 (Heine-Borel):
+	A subset of \R^n is sequentially compact iff it is closed and bounded. 
+
+Thm 1.57 (Bolzano - Weierstrass): 
+	Every bounded sequence in \R^n has a convergent subsequence.
+
+Def 1.58"
+	A subset of a metric space is totally bounded if it has a finite \ep-net for every \ep > 0. An \ep net is \{B_\ep (x_a) | a \in A\}.
+
+Thm 1.59:
+	A subset of a metric space is sequentiall compact iff it is complete and totally bounded.
+
+Def 1.60:
+	A subset K of a metric space X is compact if every open cover of K has a finite subcover.
+
+Them 1.62:
+	A subset of a metric space is compact iff it is sequentially compact
+
+Thm 1.66:
+	Let f: K \rightarrow Y be continuous on K, where K is a compact metric space and Y is any metric space. Then f(K) is compact.
+
+thm 1.67:
+	Let f: K \rightarrow Y be a continuous function on a compact set K. Then f is uniformly continuous.
+
+Thm 1.68: 
+	Let K be a compact metric space and f: K \into \R be a continuous, real values function. Then f is bounded on K and attains its amximum and minimum. That is, there are points x, y such that f(x) = inf f(z), f(y) = sup f(z)
+
+Exercise 1.15:
+	Every compact subset of a metric space is closed and bounded. Also, any closed subset of a compact space is compact.
+
+## Chapter 2
+
+Def 2.2:
+	A sequence of bounded, real-values functions (f_n) on a metric space X converges uniformly to a function f if
+\[ \lim _{n \rightarrow \infty} \norm{f_n - f} = 0, where \norm{f} = \sup_{x \in X} |f(x)|
+
+Uniform convergence implies pointwise convergence. Unlike pointwise convergence, uniform convergence preserves continuity
+
+Thm 2.3:
+	Let (f_n) be a sequence of bounded, continuous, real-values functions on a metric space(X, d). If f_n \rigtharrow f uniformly, then f is continuous.
+
+Thm 2.4 LEt K be a compact metric space. The space C(K) is complete . C(K) equipped with the uniform norm is a normed linear space.
+
+DEf 2.6:
+	The support of f, supp f, of a function f: X \rightarrow \R (or \C) on a metric space X is the closure of the set on which f is nonzero. We say that f has compact support if the supposrt of f is a compact subset of X.
+
+Denote the space of bounded continuous functions on X as C_b(X) .This is a Banach space.
+Denote the space of continuous functions on X with compact support by C_c(X).
+
+C_c(X) may not be a Banach space of C_B(X) (if it is closed, then it is). 
+
+Denote the closure of C_C(X) in C_b(X) as C_0(x). Since C_0(X) is a closed linear subspace of a Banach space, it is also a Banach space.
+
+C(X) \contains C_b(X) \contains C_0(X) \contains C_c(X) (These are equal when the space X is compact.)
+
+Thm 2.9 (Weierstrass approximation): 
+	The set of polynomials is dense in C([a, b])
+
+The Weierstrass approximatino theorem differs from Taylor's Theorem, whihc states that a function with sufficiently many derivatives can be approximated loaclly by its Taylor polynomial. The Weierstrass approximation theorem applies to a continuous function, whihc need not be differentiable, and states that there is a globas polynomial approximation of the funtino on the whole interval [a, b]
+
+Def 2.10:
+	Let F be a family of functions from a metric space (X, d) to a metric space (Y, d). The family F is equicontinuous if for every x \in X and \ep > 0 there is a \delta > 0 such that d(x, y) < \delta implies d(f(x), f(y)) < \ep for all f \in F.
+
+Thm 2.11:
+	An equicontinuous family of functions from a compact metric space to a metric space is uniformly equicontinuous.
+ 
+Thm 2.13 (Arzela - Ascoli):
+	Let K be a compact metric space. A subset of C(K) is compact iff it is closed, bounded, and equicontinuous
+
+Def 2.15:
+	A function f: X \rightarrow \R on a metric space X is Lipschitz Continuous on X if there is a constant C \geq 0 such that |f(x) - f(y)| \leq Cd(x, y) \forall x, y \in X.
+
+Every Lipschitz continuous functino is unifromly continuous (let \delta = \ep/C), but there are uniformly continuous functions that are not Lipschitz.
+
+Lemma 2.18:
+	Suppose that f: C \rightarrow \R is a continuously differentiable function on an open convex subset C of \R^n, and that the partial derivatives of f are bounded on C. Then foar all x, y \in C, we have |f(x) - f(y)| \leq M\norm{x - y}, where this is the Euclidean norm and M = \sup_{z \in C} \norm{\Nabla f(z)}
+
+ODEs
+
+Thm 2.24:
+	Suppose that f(t, u) is a continuous function on \R^2. Then, for every (t_0, u_0), there is an open interval I\subset \R that contains t_0, and a continuously differentiable function u:I \rightarrow \R that satisfies the initial value problem. 
+
+Thm 2.25 (Gronwall's inequality):
+	Suppose that u(t) \geq 0 and \phi(t) \geq 0 are continuous, real valued functions defined on the interval 0 \leq t \leq T and u_0 \geq 0 is a constant. If u satisfies the inequality 
+\[ u(t) \leq u_0 + \int_0^t \phi(s)u(s)ds, 	quad for t \in [0, t], \]
+then
+\[ u(t) \leq u_0 exp(\int_0^t \phi(s)ds) \quad for t \in [0, T] \]
+
+## Chapter 3
+
+Def 3.1:
+	Let (X, d) be a metric space. A mapping T: X\rightarrow X is a contraction mapping, or contraction, if there exists a constant c, 0 \leq c < 1, such that d(T(x), T(y)) \leq cd(x, y) for any x, y \in X
+
+A contraction maps points closer together.
+
+theorem 3.2 :
+	If T: X\rightarrow X is a contraction mapping on a complete metric space (X, d), then there is exactly one solution x \in X such that T(x) = x
+
+Theorem 3.3:
+	Suppose that k: [a, b] x [a, b] \rightarrow \R is a continuous function such that 
+\[\sup _{a\leq x \leq b} {\int_a^b |k(x, y)|dy} < 1 \]
+and g:[a, b] \rightarrow \R is a continuous function. Then there is a unique continuous function f: [a, b] \rightarrow \R that satisfies \[ f(x) - \int^b_a k(x, y)f(y)dy = g(x) (this is A linear Fredholm integral equation of the second kind)\]
+
+Proposition 3.4:
+	Let f: [0, 1] \rightarrow \R be a continuous function. The unique solution v of the boundary value problem
+\[
+-v'' = f,\\
+v(0) = 0, v(1) = 0,
+\]
+is given by
+\[v(x) = \int_0^1 g(x, y)f(y)dy,\]
+
+where
+\[g(x, y) = {
+	x(1 - y), if 0 \leq x \leq y \leq 1,
+	y(1 - x), if 0 \leq y \leq x \leq 1
+}\]
+
+Def 3.6: 
+	Suppose that f: I x \R^n \rightarrow \R^n , where I is an interval in \R. We say that f(t, u) is a globally Lipschitx continuous function of u uniformly in t if there is a constant C > 0 such that
+\[\norm {f(t, y) - f(t, v)} \leq C \norm{u - v} for all u, v \in \R^n and all t \in I\]
+
+Thm 3.7:
+	Suppose that f: I x \R^n \rightarrow \R^n, where I is an interval in \R and t_0 is a point in the interior of I. If f(t, y), is a continuous function of (t, u) and a globally Lipschitz continuous function of u, uniformly in t, on I x \R^n, then there is a unique continuously differentiable function u: I \rightarrow \R^n that satisfies du/dt = f(t, u(t)), u(t_0) = u_0)
