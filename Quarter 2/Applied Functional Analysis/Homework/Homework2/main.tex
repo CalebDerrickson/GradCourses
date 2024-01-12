@@ -1,0 +1,63 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31210: Homework 2}
+\author{Caleb Derrickson}
+\date{PUT DATE HERE}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+Suppose that $f: G\rightarrow \R$ is a uniformly continuous function defined on an open subset $G$ of a metric space $X$. Prove that $f$ has a unique extension to a continuous function $\overline{f} : \Bar{G} \rightarrow \R$ defined on the closure $\Bar{G}$ of $G$. Show that such an extension need not exist if $f$ is continuous but not uniformly continuous on $G$.
+
+\newcommand{\fbar}{\Bar{f}}
+
+\partbreak
+\begin{solution}
+
+    Suppose we have a sequence $x_n \in \Bar{G}$. Since $\Bar{G}$ is closed, we can assume this sequence converges to the value $x \in \Bar{G}$. Define the extension $\fbar : \Bar{G} \rightarrow \R$ as $\fbar (x) = \lim_{n \rightarrow \infty} f(x_n)$. Note for all $n \in \N, x_n \in G$. And since $f$ is uniformly continuous on $G$, and also $x_n$ is Cauchy (it converges), $f(x_n)$ is then Cauchy. This is because for any sufficiently large $n, m \in \N$, we can make $d(x_n, x_m)$ arbitrarily small, i.e. less than some $\ep > 0$. $f$ is uniformly continuous, so for points close enough in the domain (take $x, y$), then their distance in the target space is also arbitrarily small. Therefore, for sufficiently large $N \in \N$ and $n, m \geq N$, we see that $d(x_n, x_m) < \ep$ for any $\ep > 0$. Therefore, $d(f(x_n), f(x_m)) < \ep$. \par
+
+    \jump
+    Note that the target space, $\R$, is complete, so stating $\fbar(x \in \Bar{G}) = \lim_{n\rightarrow \infty} f(x_n)$ is well defined. We need to show now that $\fbar$ is unique and uniformly continuous. 
+
+    \tightalignbreak
+    \begin{itemize}[-]
+        \item \underline{$\fbar$ is unique.}
+
+        \jump
+        Since $\R$ is complete and $f(x_n)$ is Cauchy, then the sequence has a limit, so this is well defined. If $a, b \in \R$, and $a = \lim_{n \rightarrow \infty} \fbar(x_n) = b$, then by the triangle inequality, 
+        \[d(a, b) \leq d(a, f(x_n)) + d(f(x_n), b).\]
+        Since $f(x_n) \rightarrow a$ and $f(x_n) \rightarrow b$, these two distances will approach zero in the limit as $\ep \rightarrow 0$. Therefore, $d(a, b) \leq \ep \rightarrow 0$, so $d(a, b) = 0 \iff a = b$. Therefore, $\fbar$ is unique.
+
+        \item \underline{$\fbar$ is uniformly continuous.}
+
+        \jump
+        Since $f$ is continuous, there exists a $\delta > 0$ such that for $d(x, y) < \delta / 3, \ d(f(x), f(y)) < \ep / 3$, for some $\ep > 0$, and for any $x, y \in \Bar{G}$. Since $\Bar{G}$ is closed, there exists sequences $x_n \in G, \ y_n \in G$ for which $x_n \rightarrow x$ and $y_n \rightarrow y$ as $n \rightarrow \infty$. Explicitly, we see when $n \geq N_1 \in \N$, we can have $d(x_n, x) < \delta / 3$ and $d(y_n, y) < \delta / 3$. \par
+
+        \jump
+        When $n \geq N_1$, we see $d(x_n, y_n) \leq d(x_n, x) + d(x, y) + d(y, y_n)$ by the triangle inequality. These can all be made less than $\delta / 3$, therefore $d(x_n, y_n) < \delta$. This will imply that their distances under the transformation can be made arbitrarily small. In this case, we let $d(f(x_n), f(y_n)) < \ep / 3$. \par
+
+        \jump
+        Since $f(x_n)$ and $f(y_n)$ are both Cauchy sequences in $\R$, we see that $f(x_n) \rightarrow \fbar(x)$ and $f(y_n) \rightarrow \fbar(y)$. Therefore, there exists an $\N_2 \in \N$ such that, when $n \geq N_2$, implies both $d(f(x_n), \fbar(x))$ and $d(f(y_n), \fbar(y)$ can be made less than $\delta / 3$. Choose $N = \max \{ N_1, N_2 \}$. Therefore, for any $n \geq N$, 
+        \[d(\fbar(x), \fbar(y)) \leq d(\fbar(x), f(x_n)) + d(f(x_n), f(y_n)) + d(f(y_n), \fbar(y)).\]
+        All terms on the right hand side were shown to be less than $\ep / 3$. Therefore, $d(\fbar(x), \fbar(y)) < \ep$, implying $\fbar$ is uniformly continuous.
+    \end{itemize}
+\end{solution}
+
+\newpage
+\section{Problem 2.6}
+Show that the space $C([a, b])$ equipped with the $L^1$-norm $\norm{\cdot}_1$ defined as 
+\[\norm{f}_1 = \int_a^b |f(x)| dx\]
+is incomplete. Show that if $f_n \rightarrow f$ with respect to the sup-norm, then $f_n \rightarrow f$ with respect to $\norm{\cdot}_1$. Give a counterexample to show the converse is not true.
+\partbreak
+\begin{solution}
+    
+\end{solution}
+\end{document}
