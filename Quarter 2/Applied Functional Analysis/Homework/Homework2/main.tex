@@ -54,10 +54,21 @@ Suppose that $f: G\rightarrow \R$ is a uniformly continuous function defined on 
 \newpage
 \section{Problem 2.6}
 Show that the space $C([a, b])$ equipped with the $L^1$-norm $\norm{\cdot}_1$ defined as 
-\[\norm{f}_1 = \int_a^b |f(x)| dx\]
+\[\norm{f}_1 = \int_a^b |f(x)| \ dx\]
 is incomplete. Show that if $f_n \rightarrow f$ with respect to the sup-norm, then $f_n \rightarrow f$ with respect to $\norm{\cdot}_1$. Give a counterexample to show the converse is not true.
 \partbreak
 \begin{solution}
-    
+
+    \begin{itemize}[-]
+        \item \underline{Incompleteness with respect to $\norm{\cdot}_1$.}
+        \item \underline{Convergence wrt sup-norm implies convergence wrt $\norm{\cdot}_1$.}
+
+        \jump
+        Let $[a, b] = I$. We are given that $f_n \rightarrow f$ as $n \rightarrow \infty$ with respect to the sup norm. Thus, there exists $N \in \N$ such that when $n \geq N$ implies $\sup_{x \in I} |f_n(x) - f(x)| < \ep / (b - a)$. Thus, for any $x \in I$, $|f_n(x) - f(x)| < \ep / (b - a)$. Integrating both sides over $I$ yields
+        \[\int_I |f_n(x) - f(x)| \ dx < \int_I \frac{\ep}{(b - a)} \ dx = \ep. \]
+        The above inequality gives us $\norm{f_n(x) - f(x)}_1 \rightarrow 0$ as $n \rightarrow \infty$. 
+
+        \item \underline{Counterexample of the converse.}
+    \end{itemize}
 \end{solution}
 \end{document}
