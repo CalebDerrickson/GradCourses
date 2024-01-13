@@ -14,7 +14,7 @@
 \tableofcontents
 
 \newpage
-\section{Problem 1}
+\section{Problem 2.3}
 Suppose that $f: G\rightarrow \R$ is a uniformly continuous function defined on an open subset $G$ of a metric space $X$. Prove that $f$ has a unique extension to a continuous function $\overline{f} : \Bar{G} \rightarrow \R$ defined on the closure $\Bar{G}$ of $G$. Show that such an extension need not exist if $f$ is continuous but not uniformly continuous on $G$.
 
 \newcommand{\fbar}{\Bar{f}}
@@ -61,6 +61,29 @@ is incomplete. Show that if $f_n \rightarrow f$ with respect to the sup-norm, th
 
     \begin{itemize}[-]
         \item \underline{Incompleteness with respect to $\norm{\cdot}_1$.}
+
+        \jump
+        For $n \in \N$, consider the sequence of functions:
+        \[
+        f_n(x) = \begin{cases}
+            1, & x \in [a, \frac{b - a}{2}]\\
+            1 - \frac{n}{b - a}(x - \frac{b - a}{2}), &x \in (\frac{b - a}{2},  \frac{b - a}{2} + \frac{b - a}{n}]\\
+            0, & x \in (\frac{b - a}{2} + \frac{b - a}{n}, b]
+        \end{cases}
+        \]
+        This sequence of funcitons converges to the step function, where we ``step down" from 1 to zero at the midpoint $\frac{b -a}{2}$. Figure \ref{fig:p2.6.1} shows the function sequence for the first few $n$ values, as well as $\norm{f_n - f}_1$, where $f$ is the sequence limit. More explicitly, we can evaluate the difference integral as 
+        \[
+        \int_a^b |f_n(x) - f(x)| \ dx = \int_{\frac{b - a}{2}}^{\frac{b - a}{2} + \frac{b - a}{n}} 1 - \frac{n}{b - a} \Big(x - \frac{b - a}{2}\Big) \ dx = \frac{b - a}{2n} \rightarrow 0 \text{ as } n \rightarrow \infty. 
+        \]
+        It's easy to see that $f_n$ is a cauchy sequence of continuous functions over $[a, b]$. However, since the limit $f$ is not continuous, $C([a, b])$ is incomplete with respect to $\norm{\cdot}_1$. 
+        
+
+        \begin{figure}[!ht]
+            \centering
+            \includegraphics[width = 0.8\textwidth]{Images/Problem2.6.1.png}
+            \caption{(Left) The sequence of functions $f_n$ described in Problem 2.6. The sequence ``steps down" from 1 to zero at the midpoint. (Right) The value of $\norm{f_n - f}_1$, where $\norm{\cdot}_1$ is the $L^1$ norm.}
+            \label{fig:p2.6.1}
+        \end{figure}
         \item \underline{Convergence wrt sup-norm implies convergence wrt $\norm{\cdot}_1$.}
 
         \jump
@@ -71,4 +94,72 @@ is incomplete. Show that if $f_n \rightarrow f$ with respect to the sup-norm, th
         \item \underline{Counterexample of the converse.}
     \end{itemize}
 \end{solution}
+\clearpage
+
+\newpage
+\section{Problem 2.9}
+Let $w : [0, 1] \rightarrow \R$ be a nonnegative, continuous function. For $f \in C([0, 1])$, define the weighted supremum norm by $\norm{f}_w = \sup_{0 \leq x \leq 1} \{ w(x)|f(x)|\}$.
+\subsection{Problem 2.9, part 1}
+If $w(x) > 0$ for $0 < x < 1$, show that $\norm{\cdot}_w$ is a norm on $C([0, 1])$.
+\partbreak
+\begin{solution}
+
+    We just need to show the conditions for a norm hold. I will suppress the supremum bounds for legibility.
+    \tightalignbreak
+    \begin{itemize}[-]
+        \item \underline{Absolute homogeneity.}
+
+        \jump
+        Suppose $\lm \in \R, f \in C([0, 1])$. Then, 
+        \[\norm{\lambda f}_w = \sup \{ w(x)|\lm f(x)| \} = \sup \{ w(x)|\lm| |f(x)| \} = |\lm|\sup \{ w(x)|f(x)| \} = |\lm| \norm{f}_w\]
+
+        \item \underline{Positive definiteness.}
+
+        \jump
+        If $\norm{f}_w = 0$, then $w(x)|f(x)| = 0$ for all $x \in [0, 1]$. Since $w(x) > 0$ for $0 < x < 1$, we can conclude $|f(x)| = 0$ for $x \in (0, 1)$. This can be extended to $[0, 1]$ since $f$ is continuous, so $f(0)$ and $f(1)$ cannot hold any nonzero value. Therefore, $f = 0$.  \par
+
+        \jump
+        If $f = 0$, then $\norm{f}_w = \sup \{ w(x) \cdot 0 \} = 0$ for all $x \in [0, 1]$. Therefore, $\norm{f}_1 = 0$. 
+
+        \item \underline{Triangle Inequality.}
+
+        \jump
+        If $f, g \in C([0, 1])$, Then by the triangle inequality over $\R$,
+        \begin{align*}
+            \norm{f + g}_w &= \sup \{ w(x)|f(x) + g(x)| \} \leq \sup \{ w(x) (|f(x) + g(x)|)\} \\
+            &\leq \sup \{w(x)|f(x)|\} + \sup\{w(x)|g(x)|\}\\ 
+            &= \norm{f}_w + \norm{g}_w \\ 
+            \implies \norm{f + g}_w &\leq \norm{f}_w + \norm{g}_w
+        \end{align*}
+    \end{itemize}
+\end{solution}
+
+\newpage
+\subsection{Problem 2.9, part 2}
+If $w(x) > 0$ for $x \in [0, 1]$, show that $\norm{\cdot}_w$ is equivalent to the usual sup-norm, corresponding to $w = 1$.
+\partbreak
+\begin{solution}
+
+    By the definition in Chapter 5, we wish to ind a $c_1, c_2 > 0$ for which
+    \[c_1\norm{f}_\infty \leq \norm{f}_w \leq c_2\norm{f}_\infty. \]
+    Notice that 
+    \[\norm{f}_w = \sup \{w(x)|f(x)|\} \leq \sup\{w(x)\}\sup\{|f(x)|\} = \sup\{w(x)\}\norm{f}_\infty\]
+    So take $c_2 = \sup \{w(x)\}$. Next, consider $\inf\{w(x)\}$. Note that, since $w$ is a continuous function over a closed interval, then $w$ attains it maximum and minimum. Since $w(x) > 0$ for $x \in[0, 1]$, then $\min \{w(x)\} > 0$. Notice then, by the definition of minimum, 
+    \[\inf\{w(x)\}\norm{f}_\infty = \sup\{\inf\{w(x)\}|f(x)|\} \leq \sup\{w(x)|f(x)|\} = \norm{f}_w\]
+    So then take $c_1 = \min\{w(x)\}$. We have thus found $c_1, c_2$ for which the chain of inequalities is satisfied.    
+\end{solution}
+
+\newpage
+\subsection{Problem 2.9, part 3}
+Show that the norm $\norm{\cdot}_x$ corresponding to $w(x) = x$ is not equivalent to the usual sup-norm.
+\partbreak
+\begin{solution}
+
+    From the argument I made in the previous part, since $w(0) = 0$, then $\min\{w(x): x \in [0, 1]\} = 0$. This then causes issues when passing into the supremum, so a similar argument cannot be made. \\
+    \textbf{COME BACK TO THIS ONE.}
+\end{solution}
+
+\newpage
+\subsection{Problem 2.13}
+Consider the scalar initial value problem $\Dot{u}(t) = |u(t)|^\alpha, \ u(0) = 0$. Show that the solution is unique if $\alpha \geq 1$, but not if $0 \leq \alpha < 1$.
 \end{document}
