@@ -253,7 +253,18 @@ What can you say about the rate of convergence?
         \implies & |a_{kk}| \leq \sum_{j \neq k}\left| a_{kj} \right| \left|\frac{u_j}{u_k}\right| &\text{(Rearranging.)}\\
         \implies & |a_{kk}| \leq \sum_{j \neq k}\left| a_{kj} \right| &\text{($u_k$ is max element of $u$.)}
         \end{align*}
-        We know that $A$ is strictly diagonally dominant, which means $|a_{ii}| > \sum_{i \neq j} |a_{ij}|$ for any $i \leq n$. We found the contrary, however, which is a contradiction. Therefore, $u = 0$.
+        We know that $A$ is strictly diagonally dominant, which means $|a_{ii}| > \sum_{i \neq j} |a_{ij}|$ for any $i \leq n$. We found the contrary, however, which is a contradiction. Therefore, $u = 0$. So $A$ is invertible.
+
+        \item \underline{Convergence of Schemes.}
+
+        \jump
+        Consider the iteration $x_{n+1} = D\inv (L + U)x_n + D\inv b$ and take $T(x) = D\inv (L + U)x + D\inv b$. We want to show that $T$ is a contraction map. Since $T$ is linear, we can say
+        \[|T(x) - T(y)| = |D\inv (L + U)(x - y)| \leq \norm{D\inv (L + U)}_\infty |x - y|.\]
+        We just need to show that $\norm{D\inv (L + U)}_\infty < 1$. Since $A$ is strictly diagonally dominant, we can see that
+        \[\norm{D\inv (L + U)}_\infty = \underset{i \leq n}{\max} \bigg\{ \frac{1}{|a_{ii}|}\sum_{j \leq n} |a_{ij}| \bigg\} < 1\]
+        Therefore, $T$ is a contraction mapping. By the contraction mapping theorem, there is a fixed point of the mapping $x$, such that $T(x) = x$. So
+        \[D\inv (L + U)x + D\inv b = x \implies (L+U)x + b = Dx \implies b = (D - L - U)x \implies Ax = b.\]
+        Next consider the mapping $T(x) = (D - L)\inv Ux + (D - L)\inv b$. We need to first show it is a contraction mapping. 
     \end{itemize}
 \end{solution}
 \end{document}
