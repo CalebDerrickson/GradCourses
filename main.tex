@@ -155,11 +155,105 @@ Show that the norm $\norm{\cdot}_x$ corresponding to $w(x) = x$ is not equivalen
 \partbreak
 \begin{solution}
 
-    From the argument I made in the previous part, since $w(0) = 0$, then $\min\{w(x): x \in [0, 1]\} = 0$. This then causes issues when passing into the supremum, so a similar argument cannot be made. \\
-    \textbf{COME BACK TO THIS ONE.}
+    From the argument I made in the previous part, since $w(0) = 0$, then $\min\{w(x): x \in [0, 1]\} = 0$. This then causes issues when passing into the supremum, so a similar argument cannot be made. Note that this equivalence should hold for all $f \in C([0, 1])$, so an example showing equivalence is broken is sufficient. In the spirit of the example from the previous problem, take
+    \[f_n(x) = \begin{cases}
+        1 - nx, &x \in [0, 1/n],\\
+        0,      &x \in (1/n, 1].
+    \end{cases}\]
+    We note that $f_n(x)$ is piece-wise continuous for any $n \in \N$. Furthermore, $\norm{f_n}_\infty = 1$. However, under the weighted supremum norm,
+\[\norm{f_n}_x = \underset{x \in [0, 1/n]}{\text{sup}} \big\{ x(1 - nx)\big\} = \underset{x \in [0, 1/n]}{\text{sup}} \big\{x - nx^2\big\} = \frac{1}{4n}\footnote{This was calculated using simple maxima rules of Calculus.} \rightarrow 0 \text{ as } n \rightarrow \infty.\]
+We require there existing $c_2 > 0$ for which $\norm{f}_\infty \leq c_2 \norm{f}_x$, but it can be shown that as $n \rightarrow \infty$, such a $c_2$ cannot be found. Thus, $\norm{\cdot}_x$ is not equivalent to the usual sup-norm. 
 \end{solution}
 
 \newpage
+\subsection{Problem 2.9, part 4}
+Is the space $C([0, 1])$ equipped with the weighted norm $\norm{\cdot}_x$ a Banach space?
+\partbreak
+\begin{solution}
+
+    Again, take the example function from the last part. We see that $f_n$ is cauchy under $\norm{\cdot}_x$, since for $m, n$ sufficiently large,
+    \[\norm{f_n - f_m}_x = \sup\big \{ x|1 - nx| \big \} = \sup\big \{ x - nx^2 \big \} = \frac{1}{4n}.\]
+    Without loss of generality, we assume $m > n$. So that for $x \in [0, 1/n]$, the difference will be maximized for $x \in (1/m, 1/n]$. This would imply $f_m = 0$, therefore will be discarded. This can be made arbitrarily small as $n, m \geq N$ for $N \in \N$, therefore justifying the claim. However, we see the limit, 
+    \[
+    f(x) = \begin{cases}
+        1, &x = 0\\
+        0, & x \in (0, 1]
+    \end{cases}
+    \]
+    is not continuous. Therefore, we have found a Cauchy sequence in $C([0, 1])$ which does not have a continuous limit under the weighted norm. Thus $C([0, 1])$ equipped with the weighted norm $\norm{\cdot}_x$ is not a Banach Space. 
+\end{solution}
+\newpage
 \subsection{Problem 2.13}
-Consider the scalar initial value problem $\Dot{u}(t) = |u(t)|^\alpha, \ u(0) = 0$. Show that the solution is unique if $\alpha \geq 1$, but not if $0 \leq \alpha < 1$.
+Consider the scalar initial value problem $\Dot{u}(t) = |u(t)|^\alpha, \ u(0) = 0$. Show that the solution is unique if $\alpha \geq 1$, but not if $0 \leq \alpha < 1$. 
+\partbreak
+\begin{solution}
+
+    Here we will be invoking the only test for uniqueness for ordinary differential equations found up until this part of the book, which is Theorem 2.26, which for clarity, I will give below. 
+    
+    \tightalignbreak
+    \begin{quote}
+        Suppose that $f(t, u)$ is continuous in the rectangle 
+        \[R = \{(t, u) : |t - t_0| \leq T, \ |u - u_0| \leq L \}, \]
+        and that 
+        \[|f(t, u)| \leq M \quad \text{ if } (t, u) \in R.\]
+        Let $\delta = \min (T, L / M)$. If $u(t)$ is any solution of the initial value problem, then
+        \[|u(t) - u(t_0)| \leq L \quad \text{ when } |t - t_0| \leq \delta.\]
+        Suppose, in addition, that $f$ is a Lipschitz continuous function of $u$, uniformly in $t$. Then the solution is unique in the interval $|t - t_0| \leq \delta$.  
+    \end{quote}
+    \vspace{-6mm}{\alignbreak}
+
+    Since $t_0 = 0$ and $u(t_0) = 0$, the rectangle $R = \{(t, u) : |t| \leq T, \ |u| \leq L \}$. Note that $f = |u|^\alpha$ is continuous for $\alpha \geq 0$. Therefore, by the Mean Value Theorem, there exists $\xi \in (u, v) \subset \R$ for $u, v \in \R$ such that 
+    \[f(u) - f(v) = f'(\xi)(u - v),\]
+    where
+    \[f'(\xi) = \Bigg[\alpha |x|^{(\alpha - 1)} \frac{x}{|x|} \Bigg]\Bigg| _{x = \xi} \leq \frac{\alpha}{|\xi|^{(1 - \alpha)}}\]
+    Therefore,
+    \[|f(u) - f(v)| \leq \frac{\alpha}{|\xi|^{(1 - \alpha)}}|u - v|, \quad \text{ for } u, v \in R.\]
+    Note that it is possible for $\xi = 0$, so the coefficient could be undefined. This inequality is guaranteed only when $\alpha \geq 1$ ($0 \leq \alpha < 1$ allows for undefined behavior). Therefore, $f$ is Lipschitz for $\alpha \geq 1$, and not for $0 \leq \alpha < 1$. Thus, by the theorem above, we have that the initial value problem has a unique solution for $\alpha \geq 1$. Since $f$ is not Lipschitz for $0\leq \alpha < 1$, then the initial value problem is not guaranteed unique solutions.     
+\end{solution}
+
+\newpage
+\section{Problem 3.5}
+An $n \times n$ matrix $A$ is said to be \textit{diagonally dominant} if for each row the sum of the absolute values of the off-diagonal terms is less than the absolute value of the diagonal term. We write $A = D - L - U$ where $D$ is the diagonal, $L$ is lower triangular, and $U$ is upper triangular. If $A$ is diagonally dominant, show that 
+\[\norm{L + U}_\infty < \norm{D}_\infty.\]
+Use the contraction mapping theorem to prove that if $A$ is diagonally dominant, then $A$ is invertible and that the following iteration schemes converge to a solution of the equation $Ax = b$:
+\begin{align}
+    &x_{n+1} = D\inv (L + U)x_n + D\inv b,\\
+    &x_{n+1} = (D - L)\inv Ux_n + (D - L)\inv b.
+\end{align}
+What can you say about the rate of convergence?
+\partbreak
+\begin{solution}
+
+    We will break this problem into sections.
+    \begin{itemize}[-]
+        \item \underline{$\norm{L + U}_\infty < \norm{D}_\infty.$}
+
+        \jump
+        \tightalignbreak
+        \begin{align*}
+            |a_{ii}| &> \sum_{j \neq i} |a_{ij}| &\text{(Given for all $ i \leq n$.)}\\
+            |a_{ii}| &> \sum_{j < i} |a_{ij}| + \sum_{j > i} |a_{ij}| &\text{(Breaking up sum.)}\\
+            \implies &\underset{i \leq n}{\max} \left\{ |a_{ii}| \right\} > \underset{i \leq n}{\max} \left \{ \sum_{j < i} |a_{ij}| + \sum_{j > i} |a_{ij}| \right\} &\text{(Taking max.)}\\
+            \iff & \norm{D}_\infty > \norm{L + U}_{\infty} &\text{(By definitions given.)}
+        \end{align*}
+        \vspace{-6mm}\alignbreak
+        
+        \item \underline{Strict diagonally dominant matrices are invertible.}
+
+        \jump
+        We will show that $Au = 0$ happens only for $u = 0$. Suppose this statement were false, and that $Au = 0$ for $u_i \neq 0$ for any $i \leq n$. Suppose that for $k \leq n, u_k \geq u_i$, that is $u_k$ is the largest element of $u$. Then,
+        \[ (Au)_k = \sum_{j \leq n} a_{kj}u_j = 0 \implies  a_{kk}u_k = -\sum_{j \neq k} a_{kj}u_j.\]
+        Taking absolute values gives the following:
+        \tightalignbreak
+        \begin{align*}
+        |a_{kk}u_k| &= \Big| \sum_{j \neq k} a_{kj}u_j\Big| &\text{(Taking absolute values.)}\\
+        &\leq \sum_{j \neq k}\left| a_{kj} u_j\right| &\text{(Triangle inequality.)}\\
+        &= \sum_{j \neq k}\left| a_{kj} \right| \left|u_j\right| &\text{(Over $\R$.)}\\
+        \implies & |a_{kk}| \leq \frac{1}{|u_k|}\sum_{j \neq k}\left| a_{kj} \right| \left|u_j\right| &\text{(Rearranging.)}\\
+        \implies & |a_{kk}| \leq \sum_{j \neq k}\left| a_{kj} \right| \left|\frac{u_j}{u_k}\right| &\text{(Rearranging.)}\\
+        \implies & |a_{kk}| \leq \sum_{j \neq k}\left| a_{kj} \right| &\text{($u_k$ is max element of $u$.)}
+        \end{align*}
+        We know that $A$ is strictly diagonally dominant, which means $|a_{ii}| > \sum_{i \neq j} |a_{ij}|$ for any $i \leq n$. We found the contrary, however, which is a contradiction. Therefore, $u = 0$.
+    \end{itemize}
+\end{solution}
 \end{document}
