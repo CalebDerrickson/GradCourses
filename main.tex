@@ -1,0 +1,129 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31020: Homework 2}
+\author{Caleb Derrickson}
+\date{Wednesday, January 17, 2022}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+We call an analytical function in the domain $D \subset \R$, $D$ and open set, an infinitely differentiable function for which the Taylor series at x converges at every point $y \in N(x) \subset D$ to the value of the function at $y$, $f(y)$.
+
+\subsection{Problem 1, part a}
+Prove that for an analytical function on $\R$ a necessary and sufficient condition for $x$ to be an isolated local minimum is for $k(x)$ in problem 1, homework 1, to be even, positive, and for $f$ to satisfy $f^{(k(x))}(x) > 0$.
+\partbreak
+\begin{solution}
+
+    I will assume necessary and sufficient conditions are impinged on showing $x$ is an isolated local minimum if and only if $k(x)$ is positive, even, and $f^{(k(x))}(x) > 0$. For simplicity, I will take $x^*$ to be the isolated local minimum, $k(x)$ to be expressed simply as $k$, and $N(x)$ to be expressed as $N$. \par
+
+    \jump 
+    For the forward direction, we will assume that $x^*$ is an isolated local minimum within a Neighborhood $N$ of $x^*$. Thus $f(x^*) < f(x)$ for all $x \in N$\footnote{Within the neighborhood, isolated local minimum implies strict local minimum.}. By Taylor's Theorem, and since $f$ is given as infinitely differentiable, we can express $f(y)$ for any $y \in N$ as
+    \[f(y) = f(x^*) + \sum_{j = 1}^\infty \frac{1}{j!}f^{(j)}(x^*)(y - x^*)^{(j)}\]
+    Note that $k$ is the first nonzero derivative of $f(x^*)$. Within this neighborhood, we can approximate the value of $f(y)$ by the investigation of two terms, 
+    \[f(y) \approx f(x^*) + \frac{1}{k!}f^{(k)}(x^*)(y - x^*)^{(k)}.\]
+    Since $x^*$ is a strict local minimum within the neighborhood, $f(y) - f(x^*) > 0$. This means
+    \[f^{(k)}(x^*)(y - x^*)^{(k)} > 0,\]
+     where the factor of $1 / k!$ was discarded. This statement implies the signs of both terms $f^{(k)}(x^*)$ and $(y - x^*)^{(k)}$ are equal. Thus, we can break this down into two cases:
+
+     \begin{itemize}
+         \item \underline{Case 1:} $f^{(k)}(x^*) < 0$ and $(y - x^*)^{(k)} < 0$.
+         
+         \jump
+         Considering the second term, we see that $(y - x^*)^{(k)} < 0$. This implies that $k$ is odd, since if $k$ were even, then $k = 2m$ for $m \in \N$, so $(y - x^*)^{(k)} = (y - x^*)^{(2m)}$, which is strictly positive. Note that $y \neq x^*$ by assumption. Thus $k$ is odd. Note that we are investigating around an open ball of $x^*$, so the expression $y - x^*$ could be either positive or negative. If we consider $y > x^*$, then $y - x^* > 0$, so $(y - x^*)^{(k)} > 0$. This is a contradiction, since $(y - x^*)^{(k)} < 0$. Thus $f^{(k)}(x^*) < 0$ and $(y - x^*)^{(k)} < 0$ cannot be true.
+
+         \item \underline{Case 2:} $f^{(k)}(x^*) > 0$ and $(y - x^*)^{(k)} > 0$.
+
+         \jump
+         We will again only consider the second term. Here, since we are investigating around an open ball of $x^*$ $y - x^*$ could be either positive or negative. In the previous case, we saw that the condition $(y - x^*)^{(k)} < 0$ restricted us to only considering $k$ odd. Since $(y - x^*)^{(k)} > 0$, this restricts to $k$ being even.\footnote{Or, we only restrict values for which $y > x^*$. This gives the contradiction from Case 1.} Therefore, by exhaustion of cases, and consideration of the two terms, we see that $f^{(k)}(x^*) > 0$ and $k$ even. We also have that $k$ is positive, by the Taylor series expansion. Thus the forward direction is shown.
+     \end{itemize}
+
+     \jump
+     For the backward direction, we have that $k$ is even, positive, and that $f^{(k)}(x^*) > 0$. We wish to show that $x^*$ is an isolated local minimum for $N$. We will again consider the Taylor series approximation for any $y$ within a local neighborhood $N$ of $x^*$ as 
+     \[f(y) \approx f(x^*) + \frac{1}{k!}f^{(k)}(x^*)(y - x^*)^{(k)}.\]
+     We are given that $f^{(k)}(x^*) > 0$. Furthermore, note that since $k$ is even (and positive), we note that $(y - x^*)^{(k)} > 0$ for $y \neq x^*$. We then see that  
+     \[f(y) - f(x^*) = \frac{1}{k!}f^{(k)}(x^*)(y - x^*)^{(k)} > 0.\]
+     Therefore, $f(y) > f(x^*)$ for $y \in N\setminus\{x^*\}$. Therefore, $x^*$ is an isolated local minimum. 
+\end{solution}
+\newpage
+\subsection{Problem 1, part b}
+What can you then say about the function that you used as an example at problem 1 homework 1, part 4?
+\partbreak
+\begin{solution}
+    
+\end{solution}
+
+\newpage
+\section{Problem 2}
+Prove Zoutendijk's Theorem (Theorem 3.2 stated in the book) for the case where the step length $\alpha_k$ is computed by backtracking, but starting at fixed $\Tilde{\alpha} > 0$. For this to work, assume in the following there exists some $c_3 > 0$ such that the search direction $p_k$ satisfies $\norm{p_k} \geq c_3 \norm{\nabla f(x_k)}$. Explain how the conclusion may fail if you do not impose this condition.
+\partbreak
+\begin{solution}
+
+    I will provide the Theorem below.
+    \tightalignbreak
+    \begin{quote}
+        Consider any iteration of the form $x_{k+1} = x_k + \alpha_k p_k$, where $p_k$ is a descent direction and $\alpha_k$ satisfies the Wolfe conditions. Suppose that $f$ is bounded below in $\R^n$ and that $f$ is continuously differentiable in an open set $N$ containing the level set $L \stackrel{\text{def}}{=} \{ x : f(x) \leq f(x_0)\}$, where $x_0$ is the starting point of the iteration. Assume also that the gradient $\nabla f$ is Lipschitz continuous on $N$, that is, there exists a constant $L > 0$ such that 
+        \[\norm{\nabla f(x) - \nabla f(\Tilde{x})} \leq L\norm{x - \Tilde{x}}, \quad \text{for all } x, \Tilde{x} \in N.\]
+        Then
+        \[\sum_{k \geq 0} \cos^2\theta_k \norm{\nabla f_k}^2 < \infty.\]
+    \end{quote}
+    \vspace{-6mm}\alignbreak
+
+    
+\end{solution}
+
+\newpage
+\section{Problem 3}
+Consider an optimization problem $\stackrel{\text{min}}{x \in \R^n} f(x)$ where $f$ is twice continuously differentiable. Assume that $x^*$ is a local solution that satisfies the first order necessary condition $\nabla f(x^*) = 0$ and the second-order sufficient condition $\nabla_{xx}^2f(x^*) \succ 0$.
+\subsection{Problem 3, part a}
+Prove that, there exists parameters $c_1, c_2 > 0$ such that for all $x$ sufficiently close to the local solution we have that $c_1 \norm{x - x^*} \leq \norm{\nabla f(x)} \leq c_2\norm{x - x^*}$ 
+
+\newpage
+\subsection{Problem 3, part b}
+Use this result to prove that under the sufficient conditions, not only is $x^*$ a strict local minima, but also an isolated local minimum. 
+\partbreak
+\begin{solution}
+
+    Suppose there is a neighborhood $N$ around $x^*$ such that the second order Taylor Expansion at $y \in N$ is a fine approximation. That is,
+    \[f(y) = f(x^*) + \grad f(x^*)(y - x^*) + \frac{1}{2}(y - x\star)\grad ^2f(x\star)(y - x\star).\]
+    Since $\grad f(x\star) = 0$, the second term is cancelled. After rearranging, 
+    \[f(y) - f(x) = \frac{1}{2}(y - x\star)\grad ^2f(x\star)(y - x\star)\]
+    Since $\grad^2 f(x\star) \succ 0$, we have that for any $z \in N, \ z^T \grad^2f(x\star)z > 0$. Thus the right side is greater than zero, meaning $f(y) - f(x\star) > 0$, which means $f(y) > f(x\star)$ for any $y \in N$. Thus, $x\star$ is an isolated local minima.
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part c}
+Assume now that you have an algorithm that produces a sequence $x_k \rightarrow x\star$ such that the gradient sequence $\norm{\grad f(x_k)}$ converges R-linearly to zero. What can you say about the convergence of the error sequence $\norm{x_k - x\star}$? 
+\partbreak
+\begin{solution}
+
+    We have that $\norm{\grad f(x_k)} \rightarrow 0$ R-linearly. By definition, there exists a sequence $\{v_k\}$ satisfying $\norm{\grad f(x_k)} \leq v_k$ for all $k$, where $v_k$ converges Q-linearly to zero. From part a, we have that there exists $c_1 > 0$ such that $c_1 \norm{x_k - x\star} \leq \norm{\grad f(x)}$. By transitivity, $\norm{x_k - x\star} \leq \frac{1}{c_1}v_k$ for all $k$. \footnote{If $x_k$ is does not start in a sufficient neighborhood, extract a subsequence that is then in the neighborhood.} Defining a new sequence $w_k = \frac{1}{c_1}v_k$, we can see that $w_k$ converges Q-linearly to zero as well, since 
+    \[\frac{w_{k+1}}{w_k} = \frac{(1/c_1)v_{k+1}}{(1/c_1)v_k)} = \frac{v_{k+1}}{v_k} < r < 1.\]
+    Therefore, we can say the sequence $x_k$ converges R-linearly to $x^*$, so $\norm{x_k - x\star}\rightarrow 0$.
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part d}
+Assume now that you have an algorithm that produces a sequence $x_k \rightarrow x\star$ such that the gradient sequence $\norm{\grad f(x_k)}$ converges R-superlinearly to zero. What can you say about the convergence of the error sequence $\norm{x_k - x\star}$?
+\partbreak
+\begin{solution}
+
+    In the same spirit as the last part, we have that $c_1\norm{x_k - x\star} \leq \norm{\grad f(x_k)} \leq v_k$ for some sequence $v_k$ which converges to zero Q-superlinearly. Then $x_k$ converges R-superlinearly as well, since it is bounded by a Q-superlinear sequence.  
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part e}
+Assume now that there is an optimization algorithm that is convergent to $x\star$. Propose a computable test to decide whether the sequence is superlinearly or quadratically convergent.
+\partbreak
+\begin{solution}
+
+    Since we have no knowledge of a limit, I would imagine that we could analyse the forward error of the sequence $x_k$. That is, we would expect the sequence $\norm{\grad f(x_k) - \grad f(x\star)}$ to converge to zero. Since $x\star$ would be a local minima, th first order necessary conditions would hold. So $\grad f(x\star) = 0$, meaning the forward error simplifies to $\norm{\grad f(x_k)}$. We see that this bounds the sequence $\norm{x_k - x\star}$, so $\norm{x_k - x\star}$ will converge when $\norm{\grad f(x_k)}$ converges to zero. Therefore, the rate of convergence of $x_k$ to $x\star$ depends entirely on the convergence of $\norm{\grad f(x_k)}$. So if $\norm{\grad f(x_k)}$ is R-quadratically convergent, then so is $x_k$, and the same for R-superlinear convergence.
+\end{solution}
+\end{document}
