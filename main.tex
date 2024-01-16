@@ -81,10 +81,28 @@ Prove Zoutendijk's Theorem (Theorem 3.2 stated in the book) for the case where t
 
 \newpage
 \section{Problem 3}
-Consider an optimization problem $\stackrel{\text{min}}{x \in \R^n} f(x)$ where $f$ is twice continuously differentiable. Assume that $x^*$ is a local solution that satisfies the first order necessary condition $\nabla f(x^*) = 0$ and the second-order sufficient condition $\nabla_{xx}^2f(x^*) \succ 0$.
+Consider an optimization problem $\min_{x \in \R^n} f(x)$ where $f$ is twice continuously differentiable. Assume that $x^*$ is a local solution that satisfies the first order necessary condition $\nabla f(x^*) = 0$ and the second-order sufficient condition $\nabla_{xx}^2f(x^*) \succ 0$.
 \subsection{Problem 3, part a}
 Prove that, there exists parameters $c_1, c_2 > 0$ such that for all $x$ sufficiently close to the local solution we have that $c_1 \norm{x - x^*} \leq \norm{\nabla f(x)} \leq c_2\norm{x - x^*}$ 
+\partbreak
+\begin{solution}
 
+    We first note that the Hessian $\grad ^2 f(x\star)$, so in a neighborhood $D$ around the critical point $x\star$, the function $f|_{D}$ is convex. Therefore, the gradient $\grad f(x)$ is Lipschitz in $D$. The right inequality is simple. Since $\grad f$ is lipschitz continuous, for some $L > 0$, we can say for any $x, y$ in a neighborhood of $x\star$
+    \[\norm{\grad f(x) - \grad f(y)} \leq L \norm{x - y}.\]
+    Setting $y = x\star$, and noting that $\grad f(x\star) = 0$, we get 
+    \[\norm{\grad f(x)} \leq L \norm{x - x\star}.\]
+    Therefore, setting $c_2 = L$ satisfies the right inequality for any $x$ in a neighborhood of our local minima. For the left hand side, we can first note by the Fundamental Theorem of Calculus, 
+    \[\int_x^{x\star} \grad f(x') \cdot \textbf{dx'} \leq \left | \int_x^{x\star} \grad f(x') \cdot \textbf{dx'} \right | \leq \int_x^{x\star} \norm{\grad f(x')} \norm{\textbf{dx'}}.\]
+    Since $\textbf{dx'}$ is a unit vector in the direction of integration, the integral is just the value $\norm{\grad f(x)}$. Relating this to the distance from $x$ to $x\star$, we can take a Taylor expansion of $f$.
+    \[f(x) = f(x\star) + \grad f(x\star)(x - x\star) + \frac{1}{2}(x - x\star)^\intercal \grad^2 f(x\star)(x - x\star).\]
+    $x\star$ is a local minimizer, so after simplification and rearranging,
+    \[f(x) - f(x\star) = \frac{1}{2}(x - x\star)^\intercal \grad^2 f(x\star)(x - x\star).\]
+    Therefore, 
+    \[|f(x) - f(x\star)| = \frac{1}{2}|(x - x\star)^\intercal \grad^2 f(x\star)(x - x\star)| \leq \norm{x - x\star}\norm{\grad^2 f(x)}.\]
+    Combining this with what we found before, we get
+    \[\frac{\norm{\grad^2f(x\star)}}{2}\norm{x - x\star} \leq \norm{\grad f(x)}.\]
+    Since $\grad^2f(x\star)$ is positive definite, its norm is positive. So setting $c_1 = \frac{1}{2}\norm{\grad^2f(x\star)}$ will satisify the inequalities. 
+\end{solution}
 \newpage
 \subsection{Problem 3, part b}
 Use this result to prove that under the sufficient conditions, not only is $x^*$ a strict local minima, but also an isolated local minimum. 
@@ -126,4 +144,125 @@ Assume now that there is an optimization algorithm that is convergent to $x\star
 
     Since we have no knowledge of a limit, I would imagine that we could analyse the forward error of the sequence $x_k$. That is, we would expect the sequence $\norm{\grad f(x_k) - \grad f(x\star)}$ to converge to zero. Since $x\star$ would be a local minima, th first order necessary conditions would hold. So $\grad f(x\star) = 0$, meaning the forward error simplifies to $\norm{\grad f(x_k)}$. We see that this bounds the sequence $\norm{x_k - x\star}$, so $\norm{x_k - x\star}$ will converge when $\norm{\grad f(x_k)}$ converges to zero. Therefore, the rate of convergence of $x_k$ to $x\star$ depends entirely on the convergence of $\norm{\grad f(x_k)}$. So if $\norm{\grad f(x_k)}$ is R-quadratically convergent, then so is $x_k$, and the same for R-superlinear convergence.
 \end{solution}
+
+
+\newpage
+\section{Problem 4}
+\subsection{Problem 4, part 1}
+Implement the steepest descent algorithm as discussed in the class using the backtracking (Armijo) algorithm 3.1 from the textbook. We will apply it to the quadratic function $f(x) = x_1^2 + cx_2^2, c > 0$ in various circumstances that I will describe below. The solution to its minimization is $(0, 0)$. 
+\partbreak
+\begin{solution}
+
+    I have implemented this, where all you need to do is call calebderrickson\_hw2p4(x0, c) when you are in the folder. It will output two plots, one showing the normed gradient sequence as described in problem 3, and the ratio of normed gradient sequences. The script will also print out the number of iterations, as well as the estimate on the minima.
+\end{solution}
+
+\newpage
+\subsection{Problem 4, part 2}
+There is a theorem (3.3) that tells you what a bound on the rate of convergence could be, though for a different line search type, but we will use it as a yardstick. What is that bound as a function of $c$?
+\partbreak
+\begin{solution}
+
+    The bound is given as 
+    \[\left ( \frac{\lm_n - \lm_1}{\lm_n + \lm_1}\right ),\]
+    where $0 < \lm_1 \leq \lm_2 \leq ... \leq \lm_n$ are the eigenvalues of $Q$, a symmetric positive definite matrix, where our $f$ is of the form $f(x) = \frac{1}{2}x^\intercal Qx - b^\intercal x$. Though not exactly similar, for all intensive purposes, we can assume $Q$ is the Hessian of our function. Therefore, we take $Q$ as
+    \[Q = \grad ^2 f = \mqty[2&0\\0&2c]\]
+    Therefore, the eigenvalues of $Q$ are 2 and $2c$. Although not explicitly told, for all parts of this problem, we take $c \geq 1$, so the ordering of eigenvalues are $\lm_1 = 2, \ \lm_2 = 2c$. This then gives our bound as 
+    \[\left ( \frac{c - 1}{c + 1}\right ).\]
+
+\end{solution}
+
+\newpage
+\subsection{Problem 4, part 3}
+Propose a method to track the convergence without making use of the information about where the minimum is. Can you think of ways to use this information to check the rate of convergence (and what rate can you hope to obtain)? Discuss your rationale.
+\partbreak
+\begin{solution}
+
+    From Problem 3, we can take convergence to a minimum when our sequence of points $x_k$ has the property that $\norm{\grad f(x_k)} \rightarrow 0$ as $k \rightarrow \infty$. Checking the rate of convergence, we can take it as the ratio of sequential values of the normed-gradient. We will encounter floating point / cancellation errors as we get closer to the minima, however. This will be ignored for the moment, and be assuaged if necessary. 
+\end{solution}
+
+\newpage
+\subsection{Problem 4, part 4}
+Propose a stopping criterion based on 2, that is, when would it seem it does not make sense to keep computing. Implement it in your code and stop when either it was triggered or when you have reached 1000 iterations. Discuss your rationale.
+\partbreak
+\begin{solution}
+
+    In the loop used to create the sequence $x_n$, we can have our while loop terminate when either condition mentioned above is invalid. I will provide some pseudocode that describes this:
+    \begin{lstlisting}
+    MAX_ITER = 1e4
+    seq = [x0]
+    epsilon = 1e-8
+    [f_eval, g_eval] = FunctionEvaluation(x0, c)
+    i = 1
+
+    while norm(g_eval) > epsilon and i < MAX_ITER
+        alpha = Backtracking(seq(i, :), c)
+        seq(i+1, :) = seq(i, :) - alpha * g_eval
+        [f_eval, g_eval] = FunctionEvaluation(seq(i+1, :), c) 
+        i = i + 1 
+    end while
+
+    \end{lstlisting}
+        
+\end{solution}
+
+\newpage
+\subsection{Problem 4, part 5}
+Apply now your method to $f(x)$ for $c = 3$ from 4 starting points : (1, 1), (-1, 1), (-1, -1), (1, -1). Report your convergence metric from step 3 as well as the true error. Does it match what you got at point $2$?
+\partbreak
+\begin{solution}
+
+    I have added the plots below. We can see in Figure \ref{fig:normedGradient} that the change in initial conditions does not change the curve significantly. \footnote{I checked it wasn't the same plot four times.} We do see that not only does each sequence of normed gradients converge to zero, it does so in a time well below the maximum allowed iterations. The reason that the plots are very similar is that the backtracking algorithm found a stepsize of 0.25 to be the best in almost all steps. It could be the case that my value for $\rho$, that is, the iterating factor in backtracking, was chosen too small. I did modify it to an increased value (0.5 $\rightarrow$ 0.9), but found worse results. In Figure \ref{fig:RatioSeq}, we can see that the ratio between sequential normed gradients is flat,\footnote{Aside from the last entry, which I will chalk that up to error.} with value 0.5. Note that in part 2, we found the bound between sequences to be roughly
+    \[
+    \left ( \frac{c-1}{c+1} \right).
+    \]
+    When we plug in $c = 3$, we get the bound to be 0.5. This is exactly the value we see as our ratio between sequences. 
+    
+\end{solution}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.9\textwidth]{Plots/NormGradient.png}
+    \caption{Sequence of Normed Gradients for all initial conditions. }
+    \label{fig:normedGradient}
+\end{figure}
+\clearpage
+\newpage
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.9\textwidth]{Plots/RatioSeq.png}
+    \caption{Ratio of Gradient Sequences.}
+    \label{fig:RatioSeq}
+\end{figure}
+\clearpage
+\newpage
+\subsection{Problem 4, part 6}
+Repeat part 5 for $c = 1000$.
+\partbreak
+\begin{solution}
+
+    I have included the plots below. It seems like we reach our tolerance in finite time \footnote{This is set to 1 x 10$^{-4}$ for all plots.} in Figure \ref{fig:NormGradient1000}. Figure \ref{fig:PlotSeq1000} is somewhat less assuring, however. When zooming in, there is one point that pops up, then it goes back down to a value roughly 0.96. It might be the case that backtracking gives us a stepsize too large, which might get in the say of correctly finding the minima nicely. Figure \ref{fig:Zoomin} is a zoom-in on one of the initial conditions. We can see that there is a ``zig-zag" pattern in the sequence. It is normal for steepest descent algorithms to have this, as discussed in class. 
+\end{solution}
+\vspace{2cm}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.9\textwidth]{Plots/NormGradient1000.png}
+    \caption{Sequence of Normed Gradients for all initial conditions with $c = 1000$.}
+    \label{fig:NormGradient1000}
+\end{figure}
+
+\clearpage
+\newpage
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.9\textwidth]{Plots/RatioSeq1000.png}
+    \caption{Ratio of Gradient Sequences with $c = 1000$.}
+    \label{fig:PlotSeq1000}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.9\textwidth]{Plots/NormGradient1000_zoomin.png}
+    \caption{A zoom in on the sequence of normed gradients. We can see the zig-zag pattern that steepest descent is known for.}
+    \label{fig:Zoomin}
+\end{figure}
 \end{document}
