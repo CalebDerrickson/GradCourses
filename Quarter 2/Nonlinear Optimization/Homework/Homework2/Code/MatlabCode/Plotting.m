@@ -1,7 +1,8 @@
 function  Plotting(x0, c, g_seq)
-    figure(1)
+    % Basic Plotting of outputs.
 
-    plot(g_seq)
+    figure(1)
+    loglog(g_seq)
     xlabel('step'), ylabel('$ || \nabla f(x_k) || $','Interpreter','latex') ;
     title(strcat('$ || \nabla f(x_k) || $ for Initial Condition  [',  num2str(x0), ']' ), 'Interpreter','latex')
     grid on;
@@ -17,7 +18,7 @@ function  Plotting(x0, c, g_seq)
     end
     plot(ratio)
     xlabel('step'), ylabel('Value') ;
-    ylim([0 0.75])
+    ylim([0 max(ratio) + 0.1])
     title(strcat('Ratio of Gradient Sequence for Initial Condition  [',  num2str(x0), ']' ), 'Interpreter','latex')
     grid on;
 end
