@@ -268,7 +268,48 @@ What can you say about the rate of convergence?
         \[\norm{D\inv (L + U)}_\infty = \underset{i \leq n}{\max} \bigg\{ \frac{1}{|a_{ii}|}\sum_{j \leq n} |a_{ij}| \bigg\} < 1\]
         Therefore, $T$ is a contraction mapping. By the contraction mapping theorem, there is a fixed point of the mapping $x$, such that $T(x) = x$. So
         \[D\inv (L + U)x + D\inv b = x \implies (L+U)x + b = Dx \implies b = (D - L - U)x \implies Ax = b.\]
-        Next consider the mapping $T(x) = (D - L)\inv Ux + (D - L)\inv b$. We need to first show it is a contraction mapping. Following the same logic as above, we need to show $\norm{(D - L)\inv U}_\infty < 1$.
+        Next consider the mapping $T(x) = (D - L)\inv Ux + (D - L)\inv b$. We need to first show it is a contraction mapping. Following the same logic as above, we need to show $\norm{(D - L)\inv U}_\infty < 1$. Suppose that $x$ is an eigenvector of $(D - L)\inv U$ with eigenvalue $\lm$. We need to show that $|\lm| < 1$. That is, 
+        \tightalignbreak
+        \begin{align*}
+            (D - L)\inv Ux &= \lm x &\text{(Given.)}\\
+            \lm (D - L)x &= Ux &\text{(Inverting.)}\\
+            \lm \Big ( \sum_{j \geq i} a_{ij} x_j\Big ) &= -\sum_{j < i} a_{ij}x_j &\text{(For all $i \leq n$.\footnote{$i$ and $j$ might be flipped in the summation indices, but this doesn't change the result.})}\\
+            \lm a_{ii}x_i &= -\Big( \sum_{j > i} a_{ij}x_j + \lm \sum_{j < i}a_{ij}x_j \Big) &\text{(Rearranging.)}\\
+            |\lm a_{ii}x_i| &= \Big| \sum_{j > i} a_{ij}x_j + \lm \sum_{j < i}a_{ij}x_j \Big| &\text{(Taking absolute vales.)}\\
+            |\lm a_{ii}x_i| &\leq \Big| \sum_{j > i} a_{ij}x_j\Big| + \Big|\lm \sum_{j < i}a_{ij}x_j \Big| &\text{(Triangle Inequality.)}\\
+            |a_{ii}| &\leq \frac{1}{|\lm x_i|} \Big| \sum_{j > i} a_{ij}x_j\Big| + \Big|\lm \sum_{j < i}a_{ij}x_j \Big| &\text{(Rearranging.)}\\
+            |a_{ii}| &\leq \frac{1}{|\lm x_i|} \Big( \sum_{j > i} |a_{ij}||x_j| + |\lm| \sum_{j < i}|a_{ij}||x_j| \Big) &\text{(Cauchy Schwartz.)}\\
+            |a_{ii}| &\leq \frac{1}{|\lm|} \sum_{j > i} |a_{ij}|\frac{|x_j|}{|x_i|} + \sum_{j < i}|a_{ij}|\frac{|x_j|}{|x_i|} &\text{(Rearranging.)}\\
+            |a_{ii}| &\leq \frac{1}{|\lm|} \sum_{j > i} |a_{ij}| +  \sum_{j < i}|a_{ij}| &(|x_i| \geq |x_j|.\footnote{\text{Assume without loss of generality this is true.}})\\
+            |a_{ii}| &\leq \frac{1}{|\lm|} \sum_{j > i} |a_{ij}| + \sum_{j < i}|a_{ij}| + \Big( \sum_{j > i}|a_{ij}| - \sum_{j > i}|a_{ij}|\Big) &\text{(Adding a zero.)}\\
+            |a_{ii}| &\leq \bigg(\frac{1}{|\lm|} - 1 \bigg) \sum_{j > i} |a_{ij}| + \sum_{j < i}|a_{ij}| + \sum_{j > i}|a_{ij}| &\text{(Rearranging.)}\\
+            |a_{ii}| &< \bigg(\frac{1}{|\lm|} - 1 \bigg) \sum_{j > i} |a_{ij}| + |a_{ii}| &\text{(A is strictly diagonal dominant.)}\\
+            0 &< \bigg(\frac{1}{|\lm|} - 1 \bigg) \sum_{j > i} |a_{ij}| &\text{(Simplifying.)}\\
+            \implies 0 &< \bigg(\frac{1}{|\lm|} - 1 \bigg) &\text{(Sum cannot be negative.)}\\
+            \implies 1 &< \frac{1}{|\lm|} &\text{(Rearranging.)}\\
+            \implies 1 &> |\lm| &\text{(Taking Reciprocal.)}
+        \end{align*}
+        \vspace{-6mm}\alignbreak
+        Thus, we have shown that all eigenvalues of $(D - L)\inv U$ have magnitude less than 1\footnote{The case where $\lm = 0$ implies that $x \in \ker U$. }, so $T$ is then a contraction mapping. Therefore by the Contraction Mapping theorem, there exists a fixed point $x$ of the mapping such that $Tx = x$. This then implies the following chain: 
+        \[(D - L)\inv Ux + (D - L)\inv b = x \implies Ux + b = (D - L)x \implies (D - L - U)x = b \implies Ax = b.\]
+
+        \item \underline{Rate of Convergence.}
     \end{itemize}
+\end{solution}
+
+\section{Problem 3.6}
+The follwoing integral equation for $f: [-a a] \rightarrow \R$ arises in a model of the motion of gas particles on a line:
+\[f(x) = 1 + \frac{1}{\pi} \int_{-a}^a \frac{1}{1 + (x - y)^2}f(y)dy \quad \text{(for $-a \leq x \leq a.$)}\]
+Prove that this equation has a unique bounded continuous solution for every $0 < a < \infty$. Prove that the solution is nonnegative. What can you say if $a = \infty$?
+\partbreak
+\begin{solution}
+
+    By theorem 3.3, we first need to show that $T$ defined as the integral above is a contraction mapping.
+    \tightalignbreak
+    \begin{align*}
+        \norm{T(f_1) - T(f_2)}_\infty &= \frac{1}{\pi}\norm{\int_{-a}^a \frac{f_1(y) - f_2(y)}{1 + (x - y)^2}\ dy}_\infty &\text{(To Show.)}\\
+        &= \frac{1}{\pi}\sup_{x \in [-a, a]} \Bigg|\int_{-a}^a \frac{f_1(y) - f_2(y)}{1 + (x - y)^2}\ dy \Bigg| &\text{(Definition of $\norm{\cdot}_\infty$}\\
+        &\leq \frac{1}{\pi}\sup_{x \in [-a, a]} \int_{-a}^a \frac{|f_1(y) - f_2(y)|}{1 + (x - y)^2}\ dy &\text{(Triangle Inequality.)}\\
+    \end{align*}
 \end{solution}
 \end{document}
