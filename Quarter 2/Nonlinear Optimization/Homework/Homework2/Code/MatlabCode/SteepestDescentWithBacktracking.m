@@ -1,16 +1,15 @@
 function [seq, g_seq] = SteepestDescentWithBacktracking(x0, c)
+    %Initializing variables / output
     MAX_SIZE = 1e4;
-
     seq = zeros(MAX_SIZE, 2);
     seq(1, :) = x0;
-    
-
     epsilon = 1e-4;
     [f_eval, g_eval] = FunctionEvaluation(x0, c); 
     g_seq = zeros(MAX_SIZE, 1);
 
    g_seq(1, :) = norm(g_eval);
 
+    % Main Loop
     i = 1;
     while (norm(g_eval) > epsilon && i < MAX_SIZE)
    
@@ -24,6 +23,9 @@ function [seq, g_seq] = SteepestDescentWithBacktracking(x0, c)
 
         i = i + 1;
     end
+
+    % Adjusting arrays so their sizes make sense. 
+    % Minimizing the number of memory allocation calls.
 
     if i < MAX_SIZE
         new_seq = zeros(i, 2);
