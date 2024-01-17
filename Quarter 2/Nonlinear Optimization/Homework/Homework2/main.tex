@@ -57,7 +57,15 @@ Prove that for an analytical function on $\R$ a necessary and sufficient conditi
 What can you then say about the function that you used as an example at problem 1 homework 1, part 4?
 \partbreak
 \begin{solution}
-    
+
+    The function I used in part 4 was 
+    \[
+    f(x) = \begin{cases}
+        \exp\Big( -\frac{1}{x^2}\Big), &x \neq 0\\
+        0, &x = 0.
+    \end{cases}
+    \]
+    This function was used as an example for $k = \infty$ (i.e., all derivatives of $f$ equal zero at the critical point $x = 0$), and the minimum $x = 0$ being a isolated local minimum. From the arguments made above, this would then mean that $f$ is even, positive, and that $f^{(k)}(x\star) > 0$. The last implication however is not satisfied, since $k = \infty$.  
 \end{solution}
 
 \newpage
@@ -75,8 +83,26 @@ Prove Zoutendijk's Theorem (Theorem 3.2 stated in the book) for the case where t
         \[\sum_{k \geq 0} \cos^2\theta_k \norm{\nabla f_k}^2 < \infty.\]
     \end{quote}
     \vspace{-6mm}\alignbreak
-
-    
+    There are a few things I should mention before going into calculations. First, we take the cosine of the angle $\theta_k$ as 
+    \[\cos \theta_k = -\frac{\grad f_k \T p_k}{\norm{\grad f_k}\norm{p_k}}\]
+    Furthermore, we can rewrite the condition on the length of the search direction as
+    \[\norm{p_k} \geq c_3 \norm{\grad f_k} \implies \norm{p_k}^2 \geq c_3\norm{\grad f_k}\norm{p_k} \geq c_3\norm{\grad f_k\T p_k} \implies \frac{c_3\norm{\grad f_k\T p_k}}{\norm{p_k}^2} \leq 1.\]
+    And, since we are given that the stepsize is taken from backtracking, starting at $\Tilde{\alpha}$, we can say that $\alpha_k \leq \rho \Tilde{\alpha}$ for some fixed $\rho \in (0, 1)$.
+    Then the steps below follow:
+    \tightalignbreak
+    \begin{align*}
+        f_{k+1} &\leq f_k + c_1\alpha_k\grad f_k\T p_k &\text{(Armijo Condition.)}\\
+        &\leq f_k + c_1\rho\Tilde{\alpha}\grad f_k\T p_k &\text{(Backtracking Results.)}\\
+        &\leq f_k - c_1\rho\Tilde{\alpha}\norm{\grad f_k\T p_k} &\text{(Absolute value definition.)}\\
+        &\leq f_k - c_1\rho\Tilde{\alpha}\frac{c_3 \norm{\grad f_k\T p_k}^2}{\norm{p_k}^2} &\text{(Search Direction Restriction.)}\\
+        &\leq f_k - c_1c_3\rho\Tilde{\alpha} \cos^2\theta_k \norm{\grad f_k}^2 &\text{(Cosine definition.)}\\
+        \implies f_{k+1} &\leq f_0 - c_1c_3\rho\Tilde{\alpha} \sum_{k > 0} \cos^2\theta_k \norm{\grad f_k}^2 &\text{(Iteration to initial.)}\\
+        \implies \sum_{k > 0}& \cos^2\theta_k \norm{\grad f_k}^2 \leq \frac{1}{\kappa}\left( f_0 - f_{k+1}\right) &\text{(Rearranging, $\kappa$ is all the constants.)} 
+    \end{align*}
+    \vspace{-6mm}\alignbreak
+    Since $f$ is bounded below, there exists some $B$ such that for any $k > 0$, $f(x_k) > B$. Thus, 
+    \[\kappa\sum_{k > 0} \cos^2\theta_k \norm{\grad f_k}^2 < f(x_0) - B < \infty.\]
+    The only counter I could provide to give justification to this condition is if you choose your sequence of angles $\theta_k$ to be exactly $\pi$. This would mean $\cos \theta_k = -1$, so $\norm{\grad f_k\T p_k} = \norm{\grad f_k}\norm{p_k}$. This is incompatible with the results above, since the condition implies there being some angle less than $\pi$ between $p_k$ and $\grad f_k$.
 \end{solution}
 
 \newpage
@@ -240,7 +266,7 @@ Repeat part 5 for $c = 1000$.
 \partbreak
 \begin{solution}
 
-    I have included the plots below. It seems like we reach our tolerance in finite time \footnote{This is set to 1 x 10$^{-4}$ for all plots.} in Figure \ref{fig:NormGradient1000}. Figure \ref{fig:PlotSeq1000} is somewhat less assuring, however. When zooming in, there is one point that pops up, then it goes back down to a value roughly 0.96. It might be the case that backtracking gives us a stepsize too large, which might get in the say of correctly finding the minima nicely. Figure \ref{fig:Zoomin} is a zoom-in on one of the initial conditions. We can see that there is a ``zig-zag" pattern in the sequence. It is normal for steepest descent algorithms to have this, as discussed in class. 
+    I have included the plots below. It seems like we reach our tolerance in finite time \footnote{This is set to 1 x 10$^{-4}$ for all plots.} in Figure \ref{fig:NormGradient1000}. Figure \ref{fig:PlotSeq1000} is somewhat less assuring, however. When zooming in, there is one point that pops up, then it goes back down to a value roughly 0.96. It might be the case that backtracking gives us a stepsize too large, which might get in the way of correctly finding the minima nicely. Figure \ref{fig:Zoomin} is a zoom-in on one of the initial conditions. We can see that there is a ``zig-zag" pattern in the sequence. It is normal for steepest descent algorithms to have this, as discussed in class. I have also included a log plot of one of the initial conditions, for legibility. 
 \end{solution}
 \vspace{2cm}
 \begin{figure}[!h]
@@ -264,5 +290,12 @@ Repeat part 5 for $c = 1000$.
     \includegraphics[width = 0.9\textwidth]{Plots/NormGradient1000_zoomin.png}
     \caption{A zoom in on the sequence of normed gradients. We can see the zig-zag pattern that steepest descent is known for.}
     \label{fig:Zoomin}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.9\textwidth]{Plots/loglogc_1000.png}
+    \caption{Log Plot of The sequence of normed gradients for $c = 1000$, with initial conditions $[1, 1]$.}
+    \label{fig:loglog}
 \end{figure}
 \end{document}
