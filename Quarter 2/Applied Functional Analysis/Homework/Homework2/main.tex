@@ -297,19 +297,38 @@ What can you say about the rate of convergence?
     \end{itemize}
 \end{solution}
 
+\newpage
 \section{Problem 3.6}
-The follwoing integral equation for $f: [-a a] \rightarrow \R$ arises in a model of the motion of gas particles on a line:
+The following integral equation for $f: [-a, a] \rightarrow \R$ arises in a model of the motion of gas particles on a line:
 \[f(x) = 1 + \frac{1}{\pi} \int_{-a}^a \frac{1}{1 + (x - y)^2}f(y)dy \quad \text{(for $-a \leq x \leq a.$)}\]
 Prove that this equation has a unique bounded continuous solution for every $0 < a < \infty$. Prove that the solution is nonnegative. What can you say if $a = \infty$?
 \partbreak
 \begin{solution}
 
-    By theorem 3.3, we first need to show that $T$ defined as the integral above is a contraction mapping.
+    By theorem 3.3, we first need to show that $T$ defined as the integral above is a contraction mapping. Take any continuous functions $f_1, f_2: [-a, a] \rightarrow \R$.
     \tightalignbreak
     \begin{align*}
         \norm{T(f_1) - T(f_2)}_\infty &= \frac{1}{\pi}\norm{\int_{-a}^a \frac{f_1(y) - f_2(y)}{1 + (x - y)^2}\ dy}_\infty &\text{(To Show.)}\\
         &= \frac{1}{\pi}\sup_{x \in [-a, a]} \Bigg|\int_{-a}^a \frac{f_1(y) - f_2(y)}{1 + (x - y)^2}\ dy \Bigg| &\text{(Definition of $\norm{\cdot}_\infty$}\\
         &\leq \frac{1}{\pi}\sup_{x \in [-a, a]} \int_{-a}^a \frac{|f_1(y) - f_2(y)|}{1 + (x - y)^2}\ dy &\text{(Triangle Inequality.)}\\
+        &\leq \frac{1}{\pi} \norm{f_1 - f_1}_\infty \sup_{x \in [-a, a]}\int_{-a}^a \frac{1}{1 + (x - y)^2} \ dy &\text{(Cauchy Schwartz.)}\\
+        & = \frac{1}{\pi}\norm{f_1 - f_1}_\infty \sup_{x \in [-a, a]} \big\{ \arctan(x + a) - \arctan(x - a)\big\} &\text{(Solving integral.)}\\
+        &\leq \frac{1}{\pi}\norm{f_1 - f_2}_\infty\sup_{x \in [-a, a]} \arctan \left( \frac{2a}{1 + x^2 - a^2}\right) &\text{(Trig Identity.)}\\
+        &\leq \frac{1}{\pi} \norm{f_1 - f_2}_\infty\left ( \frac{\pi}{2}\right) &\text{(Sup of arctan.)}\\
+        \implies \norm{T(f_1) - T(f_2)}_\infty &\leq  \frac{1}{2} \norm{f_1 - f_2}_\infty &\text{(Simplifying.)}
+    \end{align*}
+    \vspace{-6mm}\alignbreak
+    Note that $T: C[-a, a] \rightarrow C[-a, a]$ since the integral operation is a continuous mapping. Therefore, since $T$ is a contraction mapping with $c = 1/2$, by theorem 3.3, $f$ is unique an continuous on the interval. Note also that since the interval is closed, bounded and $f \in C[-a, a]$, $f$ is bounded. \par
+    \newpage
+    However, if we take $a = \infty$, everything up to applying the bounds on the integral solution holds. When we do apply the bounds, we see
+    \[\int_{-\infty}^\infty \frac{1}{1+(x - y)^2} \ dy = \Big[\arctan (x - y) \Big]_{y = -\infty}^{y = \infty} = \pi\]
+    Therefore, we see that $ \norm{T(f_1) - T(f_2)}_\infty \leq \norm{f_1 - f_2}_\infty$, which implies $c = 1$. This implies that $T$ is not a strict contraction mapping. Next we want to show that $f$ is nonnegative, which we will prove by contradiction. That is, suppose $f(z) < 0$ for some $z \in [-a, a]$. Suppose further that $f(z) = \min_{x \in [-a, a]} f(x)$. The following statements can then be made:
+    \tightalignbreak
+    \begin{align*}
+        f(z) &= 1 + \frac{1}{\pi}\int_{-a}^a \frac{1}{1 + (z - y)^2} f(y) \ dy &\text{(Given.)}\\
+        &\geq 1 + \frac{1}{\pi}\int_{-a}^a \frac{1}{1 + (z - y)^2} f(z) \ dy &\text{($f(z)$ is min.)}\\
+        &= 1 + \frac{ f(z)}{\pi} \arctan\left( \frac{2a}{1 + z^2 - a^2} \right) &\text{(Solving integral.)}\\
+        &\geq 1 + \frac{ f(z)}{2}  
     \end{align*}
 \end{solution}
 \end{document}
