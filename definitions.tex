@@ -4,8 +4,11 @@
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{mathtools}
-\usepackage[utf8]{inputenc}
-\usepackage{newtxtext, newtxmath}
+%\usepackage[utf8]{inputenc}
+%\usepackage{newtxtext, newtxmath}
+\usepackage{lmodern}     % set math font to Latin modern math
+\usepackage[T1]{fontenc}
+\renewcommand\rmdefault{ptm}
 %\usepackage{enumitem}
 \usepackage[shortlabels]{enumitem}
 \usepackage{titling}
@@ -79,7 +82,7 @@
 \newcommand{\bt}{\textbf}
 \newcommand{\xdot}{\dot{x}}
 \newcommand{\ydot}{\dot{y}}
-\newcommand{\lm}{\lambda}
+\newcommand{\lm}{\mathrm{\lambda}}
 \renewcommand{\th}{\theta}
 \newcommand{\id}{\mathbb{I}}
 \newcommand{\si}{\Sigma}
