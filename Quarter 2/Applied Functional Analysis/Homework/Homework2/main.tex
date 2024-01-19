@@ -3,7 +3,7 @@
 % Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
 \title{STAT 31210: Homework 2}
 \author{Caleb Derrickson}
-\date{PUT DATE HERE}
+\date{January 19, 2024}
 
 \begin{document}
 \onehalfspacing
@@ -78,12 +78,14 @@ is incomplete. Show that if $f_n \rightarrow f$ with respect to the sup-norm, th
         It's easy to see that $f_n$ is a cauchy sequence of continuous functions over $[a, b]$. However, since the limit $f$ is not continuous, $C([a, b])$ is incomplete with respect to $\norm{\cdot}_1$. 
         
 
-        \begin{figure}[!ht]
+        \begin{figure}[!h]
             \centering
-            \includegraphics[width = 0.8\textwidth]{Images/Problem2.6.1.png}
+            \includegraphics[width = 0.6\textwidth]{Images/Problem2.6.1.png}
             \caption{(Left) The sequence of functions $f_n$ described in Problem 2.6. The sequence ``steps down" from 1 to zero at the midpoint. (Right) The value of $\norm{f_n - f}_1$, where $\norm{\cdot}_1$ is the $L^1$ norm.}
             \label{fig:p2.6.1}
         \end{figure}
+
+        \clearpage
         \item \underline{Convergence wrt sup-norm implies convergence wrt $\norm{\cdot}_1$.}
 
         \jump
@@ -92,6 +94,8 @@ is incomplete. Show that if $f_n \rightarrow f$ with respect to the sup-norm, th
         The above inequality gives us $\norm{f_n(x) - f(x)}_1 \rightarrow 0$ as $n \rightarrow \infty$. 
 
         \item \underline{Counterexample of the converse.}
+        
+        Taking my example from part, 1, we can see that $f_n$ converges to zero with respect to $\norm{\cdot}_1$, but under the sup-norm, $|f_n(x) - f(x)| = 1$ for all finite $n$. This will not converge to zero in the sup norm, providing a sufficient counterexample.
     \end{itemize}
 \end{solution}
 \clearpage
@@ -286,14 +290,17 @@ What can you say about the rate of convergence?
             |a_{ii}| &< \bigg(\frac{1}{|\lm|} - 1 \bigg) \sum_{j > i} |a_{ij}| + |a_{ii}| &\text{(A is strictly diagonal dominant.)}\\
             0 &< \bigg(\frac{1}{|\lm|} - 1 \bigg) \sum_{j > i} |a_{ij}| &\text{(Simplifying.)}\\
             \implies 0 &< \bigg(\frac{1}{|\lm|} - 1 \bigg) &\text{(Sum cannot be negative.)}\\
-            \implies 1 &< \frac{1}{|\lm|} &\text{(Rearranging.)}\\
-            \implies 1 &> |\lm| &\text{(Taking Reciprocal.)}
+            \implies 1 &> |\lm| &\text{(Rarranging and Taking Reciprocal.)}
         \end{align*}
         \vspace{-6mm}\alignbreak
-        Thus, we have shown that all eigenvalues of $(D - L)\inv U$ have magnitude less than 1\footnote{The case where $\lm = 0$ implies that $x \in \ker U$. }, so $T$ is then a contraction mapping. Therefore by the Contraction Mapping theorem, there exists a fixed point $x$ of the mapping such that $Tx = x$. This then implies the following chain: 
+        Thus, we have shown that all eigenvalues of $(D - L)\inv U$ have magnitude less than 1\footnote{The case where $\lm = 0$ implies that $x \in \ker U$. Let's assume this is not the case.}, so $T$ is then a contraction mapping. Therefore by the Contraction Mapping theorem, there exists a fixed point $x$ of the mapping such that $Tx = x$. This then implies the following chain: 
         \[(D - L)\inv Ux + (D - L)\inv b = x \implies Ux + b = (D - L)x \implies (D - L - U)x = b \implies Ax = b.\]
 
         \item \underline{Rate of Convergence.}
+        
+        Since the two sequences converge, we can at least say they converge linearly. Furthermore, the two sequences are known only to converge when the matrix A is either strictly diagonally dominant, symmetric, or positive definite. In order to determine the rate of convergence, we would need to determine the ratio
+        \[\frac{\norm{x_{n+1} - x^*}}{\norm{x_n - x^*}}, \quad x^* = A\inv b.\]
+        It is likely the case that you can directly prove that this ratio is less than 1, since both matrices acting on the prior sequence have their max eigenvalue less than 1. This leads to some tricky algebra, which I wasn't successful in showing. 
     \end{itemize}
 \end{solution}
 
@@ -328,7 +335,27 @@ Prove that this equation has a unique bounded continuous solution for every $0 <
         f(z) &= 1 + \frac{1}{\pi}\int_{-a}^a \frac{1}{1 + (z - y)^2} f(y) \ dy &\text{(Given.)}\\
         &\geq 1 + \frac{1}{\pi}\int_{-a}^a \frac{1}{1 + (z - y)^2} f(z) \ dy &\text{($f(z)$ is min.)}\\
         &= 1 + \frac{ f(z)}{\pi} \arctan\left( \frac{2a}{1 + z^2 - a^2} \right) &\text{(Solving integral.)}\\
-        &\geq 1 + \frac{ f(z)}{2}  
+        &\geq 1 - \frac{f(z)}{2} &(-\frac{\pi}{2} \leq \arctan (x) \leq \frac{\pi}{2}.)\\
+        \implies f(z) &\geq 1 - \frac{1}{2}f(z) \\
+        f(z) &\geq \frac{2}{3} &\text{(Simplifying.)}
     \end{align*}
+    \vspace{-6mm}\alignbreak
+    We see then a contradiction, since we require $f(z)$ to be both positive and negative. Therefore, $f$ is a positive function. 
+\end{solution}
+
+\newpage
+
+
+\section{Problem 3.7}
+Prove that there exists a unique solution of the following nonlinear BVP when the constant $\lm$ is sufficiently small, 
+\begin{gather*}
+    -u'' + \lm \sin u = f(x),\\
+    u(0) = 0, \quad u(1) = 0.
+\end{gather*}
+Here, $f: [0, 1] \rightarrow \R$ is a given continuous function. Write out the first few iterates of a uniformly convergent sequence of approximations, beginning with $u_0 = 0$.
+\partbreak
+\begin{solution}
+
+
 \end{solution}
 \end{document}
