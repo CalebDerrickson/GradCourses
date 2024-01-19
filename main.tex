@@ -1,0 +1,89 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{CMSC 37000: Homework 1}
+\author{Caleb Derrickson}
+\date{January 25, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+We are given $2n$ equally spaced points on a line. Half the points are black, and half are white. The goal is to connect every black point to a distinct white point with a wire so as to minimize the total wire length. \par
+Below are two suggestions for greedy algorithms, which may or may not solve the problem correctly. For each suggested algorithm, if it is correct, prove its correctness. If it in incorrect, prove that by providing an input on which the algorithm does not find an optimal solution. \par
+Each of the suggested algorithms performs $n$ iterations. In every iteration, it selects a single pair of points to connect and the deletes these two points from the line. In order to define each algorithm, it is now enough to specify the greedy rule for selecting the pair of points to connect.
+\begin{enumerate}
+    \item Greedy Rule 1: Find any pair $(a, b)$ of points, where $a$ is black and $b$ is white, and no other point lies between the two. Connect $a$ to $b$ and delete both points from the line.
+    \item Greedy Rule 2: Let $a$ be the leftmost black point and let $b$ be the leftmost white point. Connect $a$ to $b$ and delete both points from the line. 
+\end{enumerate}
+\newpage
+\section{Problem 2}
+Construct the Huffman code for alphabet $\Sigma$ with 7 characters $\Sigma = \{ a, b, c, d, e, f, g\}$ that have frequencies $p(a) = 0.02, \ p(b) = 0.1, \ p(c) = 0.5, \ p(d) = 0.07, \ p(e) = 0.21, \ p(f) = 0.04,$ and $p(g) = 0.06$. Specifically, do the following:
+\begin{itemize}
+    \item Draw the Huffman tree for $\Sigma$.
+    \item Label the leaves of the tree with characters form $\Sigma$.
+    \item Write the codeword for each character. 
+\end{itemize}
+\partbreak
+\begin{solution}
+
+    The Problem mentions my answer need no explanations, so I will just give the tree and the codewords. Here the "$\bullet$" marker denotes an empty node. 
+\alignbreak
+\begin{center}
+    \begin{minipage}{0.45\textwidth}
+\usetikzlibrary {graphs,graphdrawing} \usegdlibrary {trees}
+\tikz \graph [tree layout, minimum number of children=2,
+               level distance=5mm, nodes={circle,draw, minimum size = 9mm}]
+  { /$\boldsymbol{\Lambda}$ -- 
+    { /\bullet -- 
+        { /\bullet -- 
+            {/\bullet -- 
+                {{/\bullet -- 
+                    {{a, f}}
+                }, g},        
+            { /\bullet -- {b, d}}}, 
+        e}, 
+    c}};
+\end{minipage}
+\vrule \hspace{2mm} %this is what draws the line between the minipages
+\begin{minipage}{0.3\textwidth}
+    \textcolor{red}{Code Words}
+    \vspace{-2mm}
+    \begin{itemize}[-]
+        \itemsep0em 
+        \item \textbf{a}: 00000
+        \item \textbf{b}: 0010
+        \item \textbf{c}: 1
+        \item \textbf{d}: 0011
+        \item \textbf{e}: 01
+        \item \textbf{f}: 00001
+        \item \textbf{g}: 0001
+    \end{itemize}
+\end{minipage}
+\end{center}
+\alignbreak
+\end{solution}
+
+\newpage
+\section{Problem 3}
+A freelance photographer prepares her schedule for the next $n$ days. She may work or rest on each of the days.
+\begin{itemize}
+    \item If she works on day $i$, she gets paid $p_i > 0$ dollars.
+    \item However, she is not paid on those days she rests.
+    \item She is not willing to work 3 days in a row.
+\end{itemize}
+Subject to these constraints, the photographer wants to maximize her pay.\par
+Design a polynomial-time dynamic programming algorithm that given a sequence of $p_1, ..., p_n$ finds an optimal schedule. Describe your algorithm in detail. Prove its correctness. Specifically, do the following:
+\begin{enumerate}
+    \item Define a dynamic-programming table and explain the meaning of its entries.
+    \item Write the initialization step of your algorithm.
+    \item Write the recurrence formula for computing entries of the table.
+    \item Explain the formula.
+    \item Find the running time of your algorithm.
+\end{enumerate}
+\end{document}
