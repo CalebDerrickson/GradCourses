@@ -356,6 +356,33 @@ Here, $f: [0, 1] \rightarrow \R$ is a given continuous function. Write out the f
 \partbreak
 \begin{solution}
 
-
+    We start by multiplying both sides by the Greens function, as used in proposition 3.3 in the text. Note that this is the same form of the operator as described in the book ($A = -d^2 /dx^2 $), so this is justified. Then integrating both sides on the given bounds by $y$ gives
+    \[-\int_0^1u''(y)G(x, y) \ dy = \int_0^1 (f(y) - \lm \sin(u(y))) G(x, y) \ dy.\]
+    Investigating the left hand side first, we can break this integration up by the case on $y$. In particular,
+    \[\int_0^1 y''(y)G(x, y) \ dy = \int_0^x u''(y)(y(1 - x)) \ dy + \int_x^1 u''(y)(x(1 - y)) \ dy.\]
+    Via Integration by parts, and noting that $x$ is a constant when differentiating by $y$, this is equivalent to just $u(x)$. Therefore, we have 
+    \[\Big[ u'(y)y(1 - x)\Big]_{y = 0}^{y = x} - (1 - x)\int_0^x u'(y) \ dy - \Big[ x(1 - y)u'(y)\Big]_{y = x}^{y = 1} - x\int_x^1 u'(y) \ dy,\]
+    \[-(1 - x)\int_0^x u'(y) \ dy - x\int_x^1 u'(y) \ dy\]
+    \[ -\int_0^x u'(y) \ dy - x\int_0^1 u'(y) \ dy\]
+    \[-u(x)\]
+    Reincorporating the right hand side, we get
+    \[u(x) = \int_0^1 (f(y) - \lm \sin(u(y))) G(x, y) \ dy.\]
+    Define the mapping $T$ as its action on $u$ as shown on the right hand side, i.e.,
+    \[T[u](x) = \int_0^1 (f(y) - \lm \sin(u(y)) G(x, y) \ dy.\]
+    Note that integration maps continuous functions to continuous functions. Furthermore, $T[u](0) = 0 = T[u](1)$ by the boundary conditions on the problem, as well as the definition of the Green's Function. Therefore, $T: C([0, 1]) \rightarrow C([0, 1])$. We will show this is a contraction mapping when $\lm$ is chosen sufficiently small. For $u, v \in C([0, 1])$,
+    \tightalignbreak
+    \begin{align*}
+        \norm{Tu - Tv}_\infty &= \norm{\int_0^1 \lm \sin(u(y)) G(x, y) \ dy - \int_0^1 \lm \sin(v(y)) G(x, y) \ dy} &\text{(Simplifying.)}\\
+        &= |\lm|\norm{\int_0^1 \lm (\sin(u(y)) - \sin(v(y))) G(x, y) \ dy}_\infty &\text{(Norm properties.)}\\
+        &\leq |\lm| \int_0^1 \norm{\sin(u) - \sin(v)}_\infty \norm{G(x, y)}_\infty \ dy &\text{(CS and $\triangle$-inequality.)}\\
+        &= |\lm| \norm{\sin(u) - \sin(v)}_\infty\int_0^1 \norm{G(x, y)}_\infty \ dy &\text{(Sines are constants.)}\\
+        &\leq |\lm| \norm{u - v}_\infty \int_0^1 \norm{G(x, y)}_\infty \ dy &\text{(Sine is Lipschitz with $L = 1$.)}\\
+        &\leq |\lm| \norm{u - v}_\infty \sup_{x \in [0, 1]}\int_0^1 |G(x, y)| \ dy &\text{(Norm Definition.)}\\
+        &= |\lm| \norm{u - v}_\infty \sup_{x \in [0, 1]}\left[ \int_0^x -y(1 - x) \ dy - \int_x^1 x(1 - y) \ dy \right] &\text{(Greens Function.)}\\
+        &= |\lm| \norm{u - v}_\infty \sup_{x \in [0, 1]} \left|\frac{x^2 - x}{2}\right|  &\text{(Evaluating.)}\\
+        \norm{Tu - Tv}_\infty&\leq \frac{|\lm|}{8} \norm{u - v}_\infty  &\text{(Check maxima.)}
+    \end{align*}
+    \vspace{-6mm}\alignbreak
+    Therefore, we see that $T$ will only be a contraction when $|\lm| < 8$, satisfying the contraction factor criteria. Since $T$ will be a contraction under that restriction, by the Contraction Mapping Theorem, there will be a fixed point $u$ satisfying $Tu = u$ of the map. We can see that the fixed point is a solution of the system, by taking the second derivative of the mapping. Therefore, the system has a unique solution. Writing the iterates of the mapping is quite tedious, so they will be shorthanded. They will be of the form $u_0 = u,\  u_1 = Tu,\ u_2 = T(T(u)) = T^2(u), \ ..., \ u_k = T^k(u).$ The map $T$ is of the form above.
 \end{solution}
 \end{document}
