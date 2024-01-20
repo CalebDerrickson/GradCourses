@@ -21,6 +21,73 @@ Each of the suggested algorithms performs $n$ iterations. In every iteration, it
     \item Greedy Rule 1: Find any pair $(a, b)$ of points, where $a$ is black and $b$ is white, and no other point lies between the two. Connect $a$ to $b$ and delete both points from the line.
     \item Greedy Rule 2: Let $a$ be the leftmost black point and let $b$ be the leftmost white point. Connect $a$ to $b$ and delete both points from the line. 
 \end{enumerate}
+\partbreak
+\begin{solution}
+
+    Greedy Rule number 1 mentions that $(a, b)$ can be \textit{any} pair of adjacent points. If this is the case, we can choose the pairings such that each successive pair tracks the distance of the previous. Figure \ref{fig:GR1 fail} showcases this, where the numbers according to each line correspond to the order in which they were chosen and subsequently deleted. For each iteration, the pairing scheme below does obey Greedy Rule number 1, since the prior iterations will be deleted before picking the next two points. It is also a feasible one, since each point is connected to one and only one other point. The length of wire used for this pairing is 16. We can compare this to Figure \ref{fig:GR1 better}, this pairing is feasible, and uses less wire, 8, than the one in Figure \ref{fig:GR1 fail}. Thus, the first pairing does not provide the optimal solution. Note that the pairing schema in Figure \ref{fig:GR1 better} just so happens to be Greedy Rule 2. This does not prove the optimality of Greedy Rule 2, I am just using it as a point of comparison.\par
+    
+    \vspace{10mm}
+    \renewcommand{\d}{1.5}
+    \begin{figure}[!h]
+        \centering
+        \begin{tikzpicture}
+            \node[shape=circle, draw=black, fill=white] (1) at (0, 0) {};
+            \node[shape=circle, draw=black, fill=white] (2) at (1*\d, 0) {};
+            \node[shape=circle, draw=black, fill=black] (3) at (2*\d, 0) {};
+            \node[shape=circle, draw=black, fill=black] (4) at (3*\d, 0) {};
+            \node[shape=circle, draw=black, fill=white] (5) at (4*\d, 0) {};
+            \node[shape=circle, draw=black, fill=white] (6) at (5*\d, 0) {};
+            \node[shape=circle, draw=black, fill=black] (7) at (6*\d, 0) {};
+            \node[shape=circle, draw=black, fill=black] (8) at (7*\d, 0) {};
+
+            \draw (4) to[out=30, in=150] node[below, font=\scriptsize, inner sep=2pt] {1} (5);
+            \draw (3) to[out=30, in=150] node[below, font=\scriptsize, inner sep=2pt] {2} (6);
+            \draw (2) to[out=-30, in=-150] node[above, font=\scriptsize, inner sep=2pt] {3} (7);
+            \draw (1) to[out=-30, in=-150] node[above, font=\scriptsize, inner sep=2pt] {4} (8);
+        \end{tikzpicture}        
+        \caption{A pairing of adjacent points which does not give an optimal solution.}
+        \label{fig:GR1 fail}
+    \end{figure}
+
+    \newpage
+    
+    \begin{figure}[!h]
+    \vspace{1.5cm}
+        \centering
+        \begin{tikzpicture}
+            \node[shape=circle, draw=black, fill=white] (1) at (0, 0) {};
+            \node[shape=circle, draw=black, fill=white] (2) at (1*\d, 0) {};
+            \node[shape=circle, draw=black, fill=black] (3) at (2*\d, 0) {};
+            \node[shape=circle, draw=black, fill=black] (4) at (3*\d, 0) {};
+            \node[shape=circle, draw=black, fill=white] (5) at (4*\d, 0) {};
+            \node[shape=circle, draw=black, fill=white] (6) at (5*\d, 0) {};
+            \node[shape=circle, draw=black, fill=black] (7) at (6*\d, 0) {};
+            \node[shape=circle, draw=black, fill=black] (8) at (7*\d, 0) {};
+
+            \draw (1) to[out=30, in=150] node[above, font=\scriptsize, inner sep=2pt] {1} (3);
+            \draw (2) to[out=-30, in=-150] node[below, font=\scriptsize, inner sep=2pt] {2} (4);
+            \draw (5) to[out=30, in=150] node[above, font=\scriptsize, inner sep=2pt] {3} (7);
+            \draw (6) to[out=-30, in=-150] node[below, font=\scriptsize, inner sep=2pt] {4} (8);
+        \end{tikzpicture}        
+        \caption{A more optimal pairing than above.}
+        \label{fig:GR1 better}
+    \end{figure}
+
+    We will now prove the optimality of the pairing set $S$ given by Greedy Rule number 2. Suppose $I_k$ is the $k$-th iteration, which has removed $k < n$ pairings on the interval. Then $|I_k| = 2n - 2k = 2(n - k)$. Define $a_k, b_k$ as the black and white points chosen on the $k$-th iteration, and $d: I \times I \rightarrow \N$ be some distance metric. Note that measuring distances will be a proxy for the length of the wire used to connect two points. We will prove via induction on $k$ that $S$ is an optimal pairing set. 
+    \begin{itemize}[-]
+        \item \underline{Base Case}: $k = 1$
+
+        \jump
+        Suppose that $b_j$ is some other white point in $I_1$. Note that $b_1$ is chosen to be the leftmost white point on the interval. Then $d(a_1, b_j) = d(a_1, b_1) + d(b_1, b_j)$ by the triangle inequality.\footnote{The triangle inequality gives an equality in this point since the interval in consideration is only one dimensional, and $b_j$ lies to the right of $b_1$.} This implies that $d(a_1, b_j) \geq d(a_1, b_1)$ for any point $b_j \in I_1$. Then Greedy Rule number 2 gives an optimal pairing.
+
+        \item \underline{Induction step}
+
+        Suppose that Greedy Rule 2 gives an optimal pairing for iterations up to $k < n$. We will show that $k+1$ iteration also gives an optimal pairing. Note that $d(a_k, b_k) \leq d(a_k, b_j)$ for the iteration $k$ and interval $I_k$. Note that $a_i, b_i$ points have been removed from $I_k$ for all $i < k$. Then the points $a_k$ and $b_k$ have been removed from $I_k$ to produce $I_{k+1}$. Choose $a_{k+1}$ and $b_{k+1}$ to then be the leftmost black and white points of $I_{k+1}$, respectively. Then, for any $b_{k+1}' \in I_{k+1}$, $d(a_{k+1}, b_{k+1}') = d(a_{k+1}, b_{k+1}) + d(b_{k+1}, b_{k+1}')$. This then implies that $d(a_{k+1}, b_{k+1}) \leq d(a_{k+1}, b_{k+1}')$, so the pairing $(a_{k+1}, b_{k+1})$ provides the optimal pairing on $I_{k+1}$.         
+    \end{itemize}
+
+        Since each step provides an optimal pairing of points on the respective iterated interval $I_i$, then their summation, $\sum_{i = 1}^n d(a_i, b_i)$ is less than (or equal to) any other pairing schema, therefore Greedy Rule 2 provides an optimal pairing sheme. 
+\end{solution}
+
 \newpage
 \section{Problem 2}
 Construct the Huffman code for alphabet $\Sigma$ with 7 characters $\Sigma = \{ a, b, c, d, e, f, g\}$ that have frequencies $p(a) = 0.02, \ p(b) = 0.1, \ p(c) = 0.5, \ p(d) = 0.07, \ p(e) = 0.21, \ p(f) = 0.04,$ and $p(g) = 0.06$. Specifically, do the following:
@@ -86,4 +153,9 @@ Design a polynomial-time dynamic programming algorithm that given a sequence of 
     \item Explain the formula.
     \item Find the running time of your algorithm.
 \end{enumerate}
+\partbreak
+\begin{solution}
+    
+Sliding window?
+\end{solution}
 \end{document}
