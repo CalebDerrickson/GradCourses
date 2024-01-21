@@ -1,0 +1,91 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31020: Homework 3}
+\author{Caleb Derrickson}
+\date{January 24, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+Let $f(x): \R^n \rightarrow \R$ be a three times continuously differentiable function and $x\star$ a local minimum of $f(x)$ that satisfies the sufficient second order-conditions. Consider the iteration
+\begin{align}
+    x_{k+1} = x_k - \left(\grad^2_{xx}f(x_k) + \norm{\grad_x f(x_k)}^p \ \id_n \right)\inv \grad f(x_k).\label{p1: first}
+\end{align}
+Here, $p > 0$ and $\id_n$ is the identity matrix of order $n$. Assume that you know that $x_k \rightarrow x\star$.
+\subsection{Problem 1, part 1}
+Show that the sequence $x_k$ converges to $x\star$ faster than superlinearly.
+\partbreak
+\begin{solution}
+
+    This will be given as a consequence to the next part. 
+\end{solution}
+\subsection{Problem 1, part 2}
+Determine the largest value $q$ such that 
+\[\limsup \frac{\norm{x_{k+1} - x\star}}{\norm{x_k - x\star}^q} < \infty\] 
+as a function of $p$ for $p > 0$.
+\partbreak
+\begin{solution}
+
+    I will break this derivation up into sections dedicated to simple steps (which will be bundled together) and other sections which describe a particular step in more detail Note that I will be occasionally short-handing arguments of functions (such as $\grad f(x_k)$ into $\grad f_k$) to condense lines. We first start by adding a $-x\star$ to both sides of \ref{p1: first}. 
+    \[\implies x_{k+1} - x\star = x_k - x\star - (\grad^2f_k + \norm{\grad f_k}^p\id_n)\inv \grad f_k.\]
+    We will then group up terms by bringing out the inverted matrix on the left hand side.
+    \[\implies x_{k+1} - x\star = \left ( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv\left[ \left(\grad^2f_k + \norm{\grad f_k}^p \id_n\right)(x_k - x\star) - \grad f_k\right]\]
+    Next, define a helper function $\psi$ as $\psi(t) = \grad f(x\star + t(x_k - x\star))$. Note that $\psi(1) = \grad f_k$ and $\psi(0) = \grad f(x\star)$. Since $x\star$ is a strict local minimum of $f$, $\grad f(x\star) = 0$, so we can include this in whenever we wish. We can therefore say that $\grad f_k = \psi(1) - \psi(0)$, which by the Fundamental Theorem of Calculus,\footnote{This is well defined since the derivative of $\psi(t)$ is well defined. } 
+    \[\grad f_k = \psi(1) - \psi(0) =\int_0^1 \psi '(t) \ dt = \int_0^1 \grad^2 f(x\star + t(x_k - x\star)) (x_k - x\star) \ dt.\]
+    We will then do some intermediate steps below.
+{\footnotesize
+    \begin{align*}
+        x_{k+1} - x\star &= \left ( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv\left[ \left(\grad^2f_k + \norm{\grad f_k}^p \id_n\right)(x_k - x\star) - \grad f_k\right] \\
+         &= \left ( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv\left[ \left(\grad^2f_k + \norm{\grad f_k}^p \id_n\right)(x_k - x\star) - \int_0^1 \grad^2 f(x\star + t(x_k - x\star)) (x_k - x\star) \ dt\right]\\ 
+         &= \left ( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv\left[ \int_0^1 \left[ \grad^2 f_k - \grad^2f(x\star + t(x_k - x\star)) + \norm{\grad f_k}^p\right](x_k - x\star) \ dt\right]\\ 
+    \end{align*}}
+    \vspace{-20mm}
+    
+    The steps above were just some simple rearranging and adding in the helper function. We can then take norms on both sides to get
+    \begin{align}
+        \norm{x_{k+1} - x\star} = \norm{\left ( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv\left[ \int_0^1 \left[ \grad^2 f_k - \grad^2f(x\star + t(x_k - x\star)) + \norm{\grad f_k}^p\right](x_k - x\star) \ dt\right]}.\label{p1:star}
+    \end{align}
+    From here we will be taking advantage of three notable things:
+    \begin{enumerate}[(a)]
+        \item We wish to find an upper bound to $\norm{\left ( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv}$. Note that for any neighborhood of the local minimum $x\star$, $\lm_{\min}(\grad^2f(x)) \geq \frac{1}{2} \lm_{\min}(\grad^2f(x\star))$ for any $x$ in that neighborhood. Furthermore, we can take $\left( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv \succ 0$, since its inverse is positive definite.\footnote{Or within the region such that It can be bounded below by $\grad^2f(x\star)$, which is positive definite by the second sufficient condition.} The norm of this matrix is then its largest eigenvalue (assuming we're in the $2$ norm). So that
+        \[\norm{\left( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv} = \frac{1}{\lm_{\min}(\grad^2f_k) + \norm{\grad f_k}^p}.\]
+        We can then again bound this ratio by removing the additional term, to get 
+        \[\norm{\left( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv} \leq \frac{1}{\lm_{\min}(\grad^2 f_k)}.\]
+        By the argument above, this can then be bounded again to get
+        \[\norm{\left( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv} \leq \frac{2}{\lm_{\min}(\grad^2f_k)} = 2\norm{\grad^2f(x\star)\inv}.\]
+        \item We can note that 
+        \[\norm{\int \psi \ dt} \leq \int \norm{\psi} \ dt\]
+        for any integrable function $\psi$. 
+        \item We will take the norm to be consistent. That is, for a matrix $A$ and suitable vector $b$, $\norm{Ab} \leq \norm{A}\norm{b}$.
+    \end{enumerate}
+    
+    \newpage
+    We will then apply $(c)$ to \ref{p1:star} to get 
+    \[\norm{x_{k+1} - x\star} \leq \norm{\left ( \grad^2f_k + \norm{\grad f_k}^p \id_n\right)\inv}\norm{\left[ \int_0^1 \left[ \grad^2 f_k - \grad^2f(x\star + t(x_k - x\star)) + \norm{\grad f_k}^p\id_n\right](x_k - x\star) \ dt\right]}.\]
+    Then, applying $(a)$ and $(b)$, 
+    \[\norm{x_{k+1} - x\star} \leq 2\norm{\grad^2f(x\star)\inv} \int_0^1 \left[ \norm{\grad^2 f_k - \grad^2f(x\star + t(x_k - x\star)) + \norm{\grad f_k}^p\id_n}\norm{(x_k - x\star)} \right] \ dt.\]
+    We can then successively bound $\norm{x_{k+1} - x\star}$ via the following steps.
+    \begin{align*}
+        \norm{x_{k+1} - x\star} &\leq 2\norm{\grad^2f(x\star)\inv}\int_0^1 \left[ \norm{\grad^2f_k + \norm{\grad f_k}^p\id_n - \grad^2 f(x\star + t(x_k - x\star))}\right]\norm{x_k - x\star} \ dt \\
+        &\leq 2\norm{\grad^2f(x\star)\inv}\int_0^1 \left[ \norm{\grad^2f_k - \grad^2 f(x\star + t(x_k - x\star))}  + \norm{\grad f_k}^p\right]\norm{x_k - x\star} \ dt \\
+        &\leq 2\norm{\grad^2f(x\star)\inv}\int_0^1 \left[ L(1 - t)\norm{x_k - x\star}  + \norm{\grad f_k}^p\right]\norm{x_k - x\star} \ dt \\
+        &= 2\norm{\grad^2f(x\star)\inv}\left[ \frac{L}{2}\norm{x_k - x\star}^2  + \norm{\grad f_k}^p\norm{x_k - x\star}\right] \\
+        &= 2\norm{\grad^2f(x\star)\inv}\left[ \frac{L}{2}\norm{x_k - x\star}^2  + \norm{\grad f(x_k) - \grad f(x\star)}^p\norm{x_k - x\star}\right] \\
+        &\leq 2\norm{\grad^2f(x\star)\inv}\left[ \frac{L}{2}\norm{x_k - x\star}^2  + (L')^p\norm{x_k - x\star}^{(1+p)}\right] \\
+        &=  L\norm{\grad^2f(x\star)\inv}\norm{x_k - x\star}^2  + 2(L')^p\norm{\grad^2f(x\star)\inv}\norm{x_k - x\star}^{(1+p)}
+    \end{align*}
+    Note that $\grad^2 f$ is deferentially continuous and its derivative is bounded, thus $\grad^2 f$ is continuously Lipschitz. This holds as well for $\grad f$. Denote their Lipschitz constants as $L$ and $L'$, respectively. To group the terms together, define a constant $C = \max \{ L, 2(L')^p\}$. We then get
+    \[\norm{x_{k+1} - x\star} \leq C\norm{\grad^2f(x\star)\inv}\left[ \norm{x_k - x\star}^2 + \norm{x_k - x\star}^{(1 + p)}\right].\]
+    
+    \newpage
+    This gives us a fair enough bound for lower values of $k$, but for sufficiently large $k$, we will see one of these terms dominate. In particular, we will see the term which is raised by the least exponent to dominate. Thus, we can effectively ignore the term being raised to the larger power for sufficiently large $k$. \footnote{This can also be interpreted as taking the limsup of the function.} If we define $q = \min \{ 2, 1 + p \}$, then we can see that 
+    \[\frac{\norm{x_{k+1} - x\star}}{\norm{x_k - x\star}^q} \leq C\norm{\grad^2f(x\star)\inv}\]
+    for all $k$. Then taking the limit as $k$ goes to $\infty$, we see that this ratio is bounded above by some constant. Thus, the iteration converges faster than superlinearly for any value $p > 0$ (satisfying part 1), and the largest $q$ value is 2.
+\end{solution}
+\end{document}
