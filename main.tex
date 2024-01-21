@@ -88,4 +88,50 @@ as a function of $p$ for $p > 0$.
     \[\frac{\norm{x_{k+1} - x\star}}{\norm{x_k - x\star}^q} \leq C\norm{\grad^2f(x\star)\inv}\]
     for all $k$. Then taking the limit as $k$ goes to $\infty$, we see that this ratio is bounded above by some constant. Thus, the iteration converges faster than superlinearly for any value $p > 0$ (satisfying part 1), and the largest $q$ value is 2.
 \end{solution}
+
+\newpage
+\subsection{Problem 1, part 3}
+Repeat now the problem for the iteration
+\[x_{k+1} = x_k - \left( \grad^2_{xx}f(x_k) + \grad f(x_k) \grad f(x_k)\T + \norm{\grad_x f(x_k)}^p \id_n\right)\inv \grad f(x_k)\]
+\partbreak
+\begin{solution}
+
+    This is almost the same derivation as above. I will stop when something is meaningfully changed below.
+{\footnotesize
+    \begin{align*}
+        &x_{k+1} = x_k - \left( \grad^2_{xx}f(x_k) + \grad f(x_k) \grad f(x_k)\T + \norm{\grad_x f(x_k)}^p \id_n\right)\inv \grad f(x_k)\\
+        &x_{k+1} - x\star = x_k -x\star - \left( \grad^2_{xx}f(x_k) + \grad f(x_k) \grad f(x_k)\T + \norm{\grad_x f(x_k)}^p \id_n\right)\inv \grad f(x_k)\\
+        &= \left( \grad^2_{xx}f(x_k) + \grad f(x_k) \grad f(x_k)\T + \norm{\grad_x f(x_k)}^p \id_n\right)\inv \left[\left( \grad^2_{xx}f(x_k) + \grad f(x_k) \grad f(x_k)\T + \norm{\grad_x f(x_k)}^p \id_n\right)(x_k -x\star) - \grad f(x_k)\right]\\
+        &= \left( A\right)\inv \left[\left( \grad^2_{xx}f(x_k) + \grad f(x_k) \grad f(x_k)\T + \norm{\grad_x f(x_k)}^p \id_n\right)(x_k -x\star) - \int_0^1\grad^2 f(x\star + t(x_k - x\star))(x_k - x\star) \ dt\right]\\
+        &= \left( A\right)\inv \left[ \int_0^1 \left( \grad^2_{xx}f(x_k) + \grad f(x_k) \grad f(x_k)\T + \norm{\grad_x f(x_k)}^p \id_n + \grad^2 f(x\star + t(x_k - x\star))\right)(x_k - x\star) \ dt\right]\\
+        &\implies \norm{x_{k+1} - x\star}=\\
+        &\norm{\left( A\right)\inv \left[ \int_0^1 \left( \grad^2_{xx}f(x_k) + \grad f(x_k) \grad f(x_k)\T + \norm{\grad_x f(x_k)}^p \id_n + \grad^2 f(x\star + t(x_k - x\star))\right)(x_k - x\star) \ dt\right]}\\
+        &\leq \norm{A\inv} \int_0^1 \left[ \norm{\grad^2f(x_k) - \grad^2f(x\star + t(x_k - x\star))} + \norm{\grad f_k \grad f_k\T} + \norm{\grad f_k}^p \ dt \right]\norm{x_k - x\star}\\
+        &\leq \norm{A\inv} \int_0^1 \left[ L \norm{x_k - x\star}(1 - t) + \norm{\grad f_k }\norm{\grad f_k } + \norm{\grad f_k}^p \ dt \right]\norm{x_k - x\star}\\
+        &\leq \norm{A\inv}  \left[ \frac{L}{2} \norm{x_k - x\star} + \norm{\grad f_k}^2 + \norm{\grad f_k}^p\right]\norm{x_k - x\star}\\
+        &= \norm{A\inv}  \left[ \frac{L}{2} \norm{x_k - x\star} + \norm{\grad f(x_k) - \grad f(x\star)}^2 + \norm{\grad f(x_k) - \grad f(x\star)}^p\right]\norm{x_k - x\star}\\
+        &\leq \norm{A\inv}  \left[ \frac{L}{2} \norm{x_k - x\star} + (L')^2\norm{x_k - x\star}^2 + (L')^p\norm{x_k - x\star}^p\right]\norm{x_k - x\star}\\
+        &= \norm{A\inv}  \left[ \frac{L}{2} \norm{x_k - x\star}^2 + (L')^2\norm{x_k - x\star}^3 + (L')^p\norm{x_k - x\star}^{(1+p)}\right]\\ 
+    \end{align*}
+}
+    \newpage
+    The derivation requires more than the width of the page to write in its entirety. Because of this, I substituted $A$ as the inverted norm on the left of the integral. This term will be considered below. By the same reasoning from the previous part, we will take
+    \[\norm{A\inv} = \frac{1}{\lm_{\min}(\grad^2f_k) + \lm_{\min} (\grad f_k \grad f_k\T ) + \norm{\grad f_k}^p}.\]
+    This \textit{might} not be the correct interpretation or the max eigenvalue of $\norm{A\inv}$, because It might not be the case that we are taking the smallest eigenvalues of both matrices. Either way, it doesn't matter since we will bound it like we did in the last part. Note that $\grad f_k \grad f_k\T$ is a rank one matrix, so its minimum eigenvalue is zero \footnote{If we are in two dimensions or higher.}, so this can be rewritten as 
+    \[\norm{A\inv} = \frac{1}{\lm_{\min}(\grad^2f_k) + \norm{\grad f_k}^p}.\]
+    This is the same as in the last part, which we found to be bounded by $2\norm{\grad f(x\star)\inv}$. Substituting this in, we get
+    \[\norm{x_{k+1} - x\star} \leq \norm{\grad f(x\star)\inv} \left[ L \norm{x_k - x\star}^2 + 2(L')^2\norm{x_k - x\star}^3 + 2(L')^p\norm{x_k - x\star}^{(1+p)}\right].\]
+    Take $C = \max \{ L, 2(L')^2, 2(L')^p \}$. Then,
+    \[\norm{x_{k+1} - x\star} \leq \norm{\grad f(x\star)\inv} C\left[ \norm{x_k - x\star}^2 + \norm{x_k - x\star}^3 + \norm{x_k - x\star}^{(1+p)}\right].\]
+    This will again be dominated by the least power term, so take $q = \min \{ 2, 3, 1 + p\} = \min \{ 2, 1 + p\}$. Note that $p > 0$, so the limit as $k$ goes to $\infty$ is zero, which means the sequence converges more than superlinearly. The fastest it can converge is superquadratically, or when $q = 2$.
+\end{solution}
+
+\newpage
+\section{Problem 2}
+I will try to "walk you" through a justification for the equations 4.8 in Theorem 4.1 that we will use when we characterize the solution of the trust region problem. The approach I used can be used to prove the optimality conditions for constrained optimization, using the barrier method- which is intrinsic to a class of algorithms called interior point methods. 
+
+\jump
+Under the conditions of Theorem 4.1 in the 2013 (?\footnote{This problem is written extremely poorly, some parts are vague and some are even incorrect, such as the 2013 textbook. I will try to explain what is wanted from me, and I will show it to the best of my ability. }) textbook edition, consider the problem $ \\ \min_{p \in \R^n} m(p, \mu) := m(p) - \mu \log (\Delta^2 - p\T p),$ where $m(p) := f + g\T p + \frac{1}{2}p\T Bp$ is a quadratic function model. Observe that the domain of $m(p, \mu)$ is the interior of the trust region.
+\subsection{Problem 2, part a}
+Show that, for any $\mu > 0$, you have that $m(p, \mu)$ is bounded below in its domain, uniformly with respect to $\mu > 0$.
 \end{document}
