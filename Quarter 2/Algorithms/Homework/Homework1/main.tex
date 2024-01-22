@@ -155,7 +155,66 @@ Design a polynomial-time dynamic programming algorithm that given a sequence of 
 \end{enumerate}
 \partbreak
 \begin{solution}
+    I have written some pseudocode below after the list for reference.     
+    \begin{enumerate}
+        \item I will define and keep track of two tables: T and W. Table T will keep track of the max amount of money for the iteration and Table W is a binary list that will keep track of the days to work. Note that the way T is defined, it is monotonic. Since the question asks for a schedule that returns the maximum amount of money, we return only W. If you want the maximum amount of money as well, we can return T[n].
+
+        \item We initialize the two arrays with locally optimal values, meaning if we are considering only one day, we should work that day. Then the first entry of T would be p[0], and W[0] = 1. Note that the tables are initialized with zero in all entries. 
+
+        \item The recurrence formulas for T and W are different, and should be handled separately. The formula for T is akin to those done in class, with T[k+1] = T[k] + max\{0, p[k-1] - p[k+1]\}. The modification to W is slightly different. Since the max number of days she is willing to work in a three day window is 2, we need to check the day two days prior. If p[k+1] is larger than p[k-1], we update the entry in W[k-1] to zero. Else, we reject it, setting W[k+1] = 0. If we have that W[k-1] = 0, then we can freely set W[k+1] = 1, regardless of T. 
+
+        \newpage
+        \item I will prove the algorithm's feasibility and optimality here.
+        \alignbreak
+        \begin{enumerate}[-]
+            \item \underline{Feasibility}:
+            
+            \jump
+            We will show this via induction on $|T| = n = |W|$. 
+            \begin{enumerate}[-]
+                \item \underline{Base Case}: $n = 1$
+                
+                \hop
+                Then the array $p$ will consist of only 1 element. Thus, the optimal schedule is $T = \{p_1\}$\\ and $W = \{ 1\}$. This is handled accordingly in my algorithm.
+
+                \item \underline{Induction Step}
+
+                \hop
+                Next, assume the algorithm provides a feasible schedule for some $k < n$ iteration. We will show the $k+1$ iteration holds. Note that since all cases before the $k+1$ case give a feasible schedule, we only need to consider three elements, that being $p_{k-1}, p_k,$ and $p_{k+1}$. Furthermore, since all cases before the $k+1$ cases are feasible, we can say that if $W[k-1] = 0$, then $W[k] = 1$ by the algorithm. This will 
+            \end{enumerate}
+        \end{enumerate}
+        \alignbreak
+        \item Since we are only looping over p once, and for each iteration of the for loop we are only doing O(1) operations, the overall running time of the algorithm is O(n). The memory complexity of our algorithm is slightly higher: since we are allocating memory for two arrays of length n, the memory complexity is O(2n), which in all intensive purposes, is O(n).
+    \end{enumerate}
+    \newpage
+\begin{lstlisting}
+THIS ISNT RIGHT. THINK BETTER!!
+    function MaxMoney(array p)
+        Let n = p.size
+        Initialize T[n]
+        Initialize W[n]
+
+        set T[0] = p[0]
+        set W[0] = 1
+
+        for int k = 0...n-1 
+            int value = max{0, p[k+1] - p[k-1]}
+            T[k+1] = T[k] + value
+
+            if W[k-1] == 1
+                if value != 0
+                    W[k-1] = 0
+                    W[k+1] = 1
+                else // value == 0
+                    W[k+1] = 0
+                endif
+            else    // W[k-1] == 0
+                W[k+1] = 1
+            endif
+        end for
+        return W
+    end function
+\end{lstlisting}
     
-Sliding window?
 \end{solution}
 \end{document}
