@@ -1,0 +1,62 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31210: Homework 3}
+\author{Caleb Derrickson}
+\date{January 26, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Problem 5.3}
+Let $\delta: C([0, 1]) \rightarrow \R$ be the linear functional that evaluated an function at the origin: $\delta(f) = f(0)$. If $C([0, 1])$ is equipped with the sup-norm,
+\[\norm{f}_1 = \int_0^1 |f(x)| \ dx,\]
+show that $\delta$ is unbounded.
+\partbreak
+\begin{solution}
+    
+    Note that $\delta f \in \R$, so $|\delta f| = |f(0)|$. By definition, $|f(0)| \leq \sup_{x \in [0, 1]} |f(x)| = \norm{f}_\infty$. Then 
+    \[
+   \norm{\delta} = \sup \frac{\norm{\delta f}}{\norm{f}_\infty} = \sup \frac{|f(0)|}{\norm{f}_\infty} = \sup \frac{|f(0)|}{\sup |f(x)|} \leq 1
+    \]
+    This implies that $\delta$ is bounded. To compute the norm, we just need to find a function that achieves its max value at $x = 0$. The simplest case is to take $f$ be a nonzero constant function, i.e. $f(x) = 2$ for all $x \in [0, 1]$. Then $|f(0)| = 2$, and $\sup |f(x)| = |f(0)| = 2$. Then $\norm{\delta} = 1$.
+    \par
+    
+    \jump
+    To show that when $C([0, 1])$ equipped with the one-norm makes $\norm{\delta}$ unbounded, we can consider the family of functions 
+    \[\mathbb{O} = \{ \{1 - nx : x \in \left[0, \frac{1}{n}\right], \text{else } 0\}, n \in \N\}.\]
+    Taking a memeber of that family, we can note that $\norm{\delta f} = |f(0)| = 1$, and
+    \[\norm{f}_1 = \int_0^1 |f(x)| = \int_0^\frac{1}{n} 1 - nx \ dx = \frac{1}{2n}\]
+    This implies $\norm{\delta} = \sup \{2n\} = \infty$, which is unbounded. 
+\end{solution}
+
+\newpage
+\section{Problem 5.7}
+Find the kernel and range of the linear operator $K: C([0, 1]) \rightarrow C([0, 1])$ defined by 
+\[ Kf(x) = \int_0^1 \sin\left( \pi (x - y)\right)f(y) \ dy.\]
+\partbreak
+\begin{solution}
+
+    In finding the kernel of this functional, we need to find all functions such that
+    \[-\int_0^1 e^{-\pi(x - y)} f(y) \ dy = \int_0^1 e^{-i\pi(x - y)}f(y) \ dy\]
+    As a first suggestion, since the transformation $y \rightarrow -y$ in the right integral transforms it to the first integral with the upper bound being -1, we can first try an even function on $[0, 1]$. As a first guess, we can try $f(y) = \cos(\pi y)$. But when checking this, we see that 
+    \[\int_0^1 \sin \left( \pi(x - y)\right)\cos(\pi y) \ dy = \frac{1}{2}\sin(\pi x)\]
+    This is obviously not zero. the kernel is a functions orthogonal to cosine (pi x) and sine (pi x).
+\end{solution}
+
+\newpage
+\section{Problem 5.8}
+
+\newpage
+\section{Problem 5.14}
+
+\newpage
+\section{Problem 5.15}
+
+\end{document}
