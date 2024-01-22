@@ -131,7 +131,41 @@ Repeat now the problem for the iteration
 I will try to "walk you" through a justification for the equations 4.8 in Theorem 4.1 that we will use when we characterize the solution of the trust region problem. The approach I used can be used to prove the optimality conditions for constrained optimization, using the barrier method- which is intrinsic to a class of algorithms called interior point methods. 
 
 \jump
-Under the conditions of Theorem 4.1 in the 2013 (?\footnote{This problem is written extremely poorly, some parts are vague and some are even incorrect, such as the 2013 textbook. I will try to explain what is wanted from me, and I will show it to the best of my ability. }) textbook edition, consider the problem $ \\ \min_{p \in \R^n} m(p, \mu) := m(p) - \mu \log (\Delta^2 - p\T p),$ where $m(p) := f + g\T p + \frac{1}{2}p\T Bp$ is a quadratic function model. Observe that the domain of $m(p, \mu)$ is the interior of the trust region.
+Under the conditions of Theorem 4.1 in the 2013 (?) textbook edition, consider the problem $ \\ \min_{p \in \R^n} m(p, \mu) := m(p) - \mu \log (\Delta^2 - p\T p),$ where $m(p) := f + g\T p + \frac{1}{2}p\T Bp$ is a quadratic function model. Observe that the domain of $m(p, \mu)$ is the interior of the trust region.
 \subsection{Problem 2, part a}
-Show that, for any $\mu > 0$, you have that $m(p, \mu)$ is bounded below in its domain, uniformly with respect to $\mu > 0$.
+Show that, for any $0 < \mu \leq 1$, you have that $m(p, \mu)$ is bounded below in its domain, uniformly with respect to $\mu$.
+\partbreak
+\begin{solution}
+
+    Note the domain of $m(p, \mu)$ is restricted on the values taken by $\Delta ^2 - p\T p$. In particular, since we don't want the log to blow up, we want $\Delta^2 - p\T p > 0$, in particular, we want $\norm{p} < \Delta$. FINISH THIS ONE.
+\end{solution}
+
+\newpage
+\subsection{Problem 2, part b}
+Conclude that $m(p, \mu)$ must have a global minimum. denote that point by $p(\mu)$ if there is more than one such point, choose one of them at random.
+\partbreak
+\begin{solution}
+    
+    Since $p(p, \mu)$ is bounded below on its domain, we have that there must be some finite minimum value of $m$ achieved by some $p\star$. Since the additional log term is strictly increasing, this would not affect the number of minimums achieved by the function $m(p)$. Since $m(p)$ is given as convex, there is only one global minimum, which we will denote by $p\star$. Therefore, the global minimum is unique. 
+\end{solution}
+\subsection{Problem 2, part c}
+Prove the following lemma: If A is a matrix of full column rank, then $b = A\lm \implies \norm{\lm} \leq \frac{\norm{b}}{\si_m}$, where $\sigma_m$ is the smallest singular value of A, and the norms used are 2 norms.
+\partbreak
+\begin{solution}
+
+    By consistency of the 2-norm, we have that $\norm{A\lm}_2 \leq \norm{A}_2\norm{\lm}_2$. Thus $\norm{b}_2 = \norm{A\lm}_2 \leq \norm{A}_2 \norm{\lm}_2$. This implies $\norm{\lm}_2 \leq \frac{\norm{b}_2}{\norm{A}_2}$. Note that $\norm{A}_2$ is the largest singular value of $A$, which has reciprocal less than or equal to the smallest singular value (assuming it is nonzero). Therefore,  $\norm{\lm}_2 \leq \frac{\norm{b}_2}{\sigma_m}$, which is what we wanted. 
+\end{solution}
+\subsection{Problem 2, part d}
+Conclude that, when writing the optimality conditions of the problem stated, you must have $\grad_p m(p) + \lm(\mu)p = 0$ at the global minimum. Use part $(c)$ to chow that $\lm(\mu)$ must be uniformly bounded in $\mu$ (above).
+\partbreak
+\begin{solution}
+
+    By the first optimality condition, $\lm(\mu)p = -g - Bp$. By taking the gradient of $m(p)$, we can see that the right hand side is equal to $-\grad_p m(p)$. Then $\lm(\mu)p = -\grad_p m(p)$. Therefore, $\lm(\mu)p + \grad_p m(p)= 0$. To show that $\lm$ is bounded above, we take norms on the first optimality condition, and rewrite it in the same form as in part $(c)$ to get
+    \[\norm{p} \leq \frac{\norm{g}}{\sigma_{m}(B + \lm(\mu)\id )}\]
+    By the third optimality condition, we have that the matrix $B + \lm(\mu)\id$ is positive semidefinite. If the smallest singular value is zero, then we have a problem. So we will just look at the case when the smallest singular value is not zero. Note that $\lm \geq 0$, so when evaluating the smallest singular value of $B + \lm \id$, we can look at them individually. This means
+    \[\norm{p} \leq \frac{\norm{g}}{\sigma_{m}(B) + \lm(\mu) }\]
+    Then rearranging for $\lm$, we get
+    \[\lm(\mu) \leq \frac{\norm{g}}{\norm{p}}\]
+    So $\lm$ is bounded above. Note that if $\norm{p} = 0$, then $\grad_p m(p = 0) + 0 = 0$. This means the gradient is zero, which is a contradiction.
+\end{solution}
 \end{document}
