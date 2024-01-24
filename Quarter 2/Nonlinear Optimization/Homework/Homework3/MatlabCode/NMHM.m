@@ -7,11 +7,14 @@ function NMHM_seq = NMHM(funcfgH, x0, niter, n, eps)
 %   niter - number of iterations
 %   n - Value for Rosenbrock order function
 
+sz = size(x0);
 % Initialize sequence with zeros
-NMHM_seq = zeros(niter, 2);
+NMHM_seq = zeros(niter, sz(2));
 
 % Assigning initial step
 NMHM_seq(1, :) = x0;
+
+max_size = 1;
 
 % Main Loop
 for i = 1:niter - 1
@@ -29,19 +32,22 @@ for i = 1:niter - 1
     % Getting step size from backtracking.
     % Satisfies Armijo, Curvature
     alpha = Backtracking(funcfgH, NMHM_seq(i, :), n);
-
+    
      % Updating sequence
     NMHM_seq(i+1, :) = NMHM_seq(i, :) + alpha * p_k';
 
     %Used to resize the matrix
     max_size = i;
-
+    disp(norm(g))
     % Quick Stopping Criterion
     if norm(g) < eps
         break
     end
 end
 
-% Only want to return nonzero entries
-NMHM_seq = NMHM_seq(1:max_size, :);
+if max_size ~= 1
+    % Only want to return nonzero entries
+    NMHM_seq = NMHM_seq(1:max_size, :);
+end
+
 end
