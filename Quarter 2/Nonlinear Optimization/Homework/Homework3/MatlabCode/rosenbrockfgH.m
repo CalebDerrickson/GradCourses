@@ -1,6 +1,6 @@
 function [f, g, H] = rosenbrockfgH(x, n)
 
-% Function to evaluate the order n Rosenbrock function,
+% Function to evaluate the order n RosenbrockrosenbrockfgH function,
 %   its gradient, and its hessian at the given x. 
 
 % Parameters 
