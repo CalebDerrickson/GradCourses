@@ -31,7 +31,7 @@ show that $\delta$ is unbounded.
     \jump
     To show that when $C([0, 1])$ equipped with the one-norm makes $\norm{\delta}$ unbounded, we can consider the family of functions 
     \[\mathbb{O} = \{ \{1 - nx : x \in \left[0, \frac{1}{n}\right], \text{else } 0\}, n \in \N\}.\]
-    Taking a memeber of that family, we can note that $\norm{\delta f} = |f(0)| = 1$, and
+    Taking a member of that family, we can note that $\norm{\delta f} = |f(0)| = 1$, and
     \[\norm{f}_1 = \int_0^1 |f(x)| = \int_0^\frac{1}{n} 1 - nx \ dx = \frac{1}{2n}\]
     This implies $\norm{\delta} = \sup \{2n\} = \infty$, which is unbounded. 
 \end{solution}
@@ -42,21 +42,191 @@ Find the kernel and range of the linear operator $K: C([0, 1]) \rightarrow C([0,
 \[ Kf(x) = \int_0^1 \sin\left( \pi (x - y)\right)f(y) \ dy.\]
 \partbreak
 \begin{solution}
-
-    In finding the kernel of this functional, we need to find all functions such that
-    \[-\int_0^1 e^{-\pi(x - y)} f(y) \ dy = \int_0^1 e^{-i\pi(x - y)}f(y) \ dy\]
-    As a first suggestion, since the transformation $y \rightarrow -y$ in the right integral transforms it to the first integral with the upper bound being -1, we can first try an even function on $[0, 1]$. As a first guess, we can try $f(y) = \cos(\pi y)$. But when checking this, we see that 
-    \[\int_0^1 \sin \left( \pi(x - y)\right)\cos(\pi y) \ dy = \frac{1}{2}\sin(\pi x)\]
-    This is obviously not zero. the kernel is a functions orthogonal to cosine (pi x) and sine (pi x).
+    we can use an trigonometric identity to expand the operator to
+    \[Kf(x) = \int_0^2 \left[\sin(\pi x) \cos(\pi y) - \cos(\pi x) \sin(\pi y) \right]f(y) \ dy.\]
+    The kernel of $K$ would then be functions $f(x)$ such that 
+    \[\int_0^1 \cos(\pi y)f(y) \ dy = \int_0^1 \sin (\pi y) f(y) \ dy.\]
+    I have removed the $x$-term, since this should hold for any $x$. Since the sine and cosine functions are orthogonal to each-other, we need to fund functions which are orthogonal to both. As a means of testing, we can see that $\cos(2n\pi x)$ is orthogonal to $\cos(\pi x)$ and $\sin(2n\pi x)$ is orthogonal to $\sin(\pi x)$. If we multiply these two functions together, i.e., taking $f(x) = \cos(2n\pi) \sin(2m \pi)$ with $m \neq n$, we can integrate both sides and see this function is orthogonal to both $\sin(\pi x)$ and $\cos(\pi y)$. Then the kernel of the linear operator $K$ is the family of functions of the form  $\{ \cos(2n\pi) \sin(2m \pi) : n \neq m \}$. The range of this linear operator are functions which are orthogonal to this family, which was found to be $\sin(\pi x)$ and $\cos(\pi x)$. Then taking functions of the form $\{ \cos(2n\pi) \sin(2n\pi) : n \in \N\}$ gives you a value for both integrals. 
 \end{solution}
 
 \newpage
 \section{Problem 5.8}
+Prove that equivalent norms on a normed linear space $X$ lead to equivalent norms on the space $\mathfrak{B}(X)$ of bounded linear operators on $X$.
+\partbreak
+\begin{solution}
 
+    Suppose we have two norms $\norm{\cdot}_1, \ \norm{\cdot}_2$ on $X$. We are given these are equivalent norms, so there exists $c_1, c_2 > 0$ such that 
+    \[c_1\norm{x}_1 \leq \norm{x}_2 \leq c_2\norm{x}_2 \quad \forall x \in X.\]
+    Take $T \in \mathfrak{B}(X)$, and suppose we have two norms $\norm{\cdot}_1', \ \norm{\cdot}_2'$ on $\mathfrak{B}(X)$. We have that $T$ is bounded, so $\norm{T}_1'$ and $\norm{T}_2'$ are defined. We can then write
+    \[\norm{Tx}_1 \leq \norm{T}_1' \norm{x}_1 \leq \norm{T}_1' \frac{1}{c_1}\norm{x}_2 = \frac{1}{c_1}\norm{T}_1' \leq \sup_{\norm{x} = 1}\norm{Tx} = \norm{T}_2'.\]
+    I've condensed some steps in the above lines. I've assumed that $\norm{x}_2 = 1$, and from the first inequality, I substituted in $\norm{T}_1'$ for any norm on $T$. We now have $\norm{T}_1' \leq c_1\norm{T}_2'$. In the other direction, we can write
+    \[\norm{Tx}_2 \leq \norm{T}_2'\norm{x}_2 \leq \norm{T}_2' c_2\norm{x}_1 = c_2\norm{T}_2' \leq \sup_{\norm{x} = 1}\norm{Tx} = \norm{T}_1'.\]
+    I have condensed the steps above in the same way as I did in the previous. From this, we have $c_2\norm{T}_2' \leq \norm{T}_2'$, therefore, we have 
+    \[c_2\norm{T}_2' \leq \norm{T}_1' \leq c_1\norm{T}_2',\]
+    this shows the equivalence of norms on $\mathfrak{B}(X)$.
+\end{solution}
 \newpage
 \section{Problem 5.14}
+Suppose that $A$ is an $n \times n$ matrix. For $t \in \R$ we define $f(t) = \det e^{tA}$.
+\subsection{Problem 5.14, part a}
+Show that
+\[\lim_{t \rightarrow 0} \frac{f(t) - 1}{t} = \tr A\]
+\partbreak
+\begin{solution}
+
+    Since the latter parts of this problem are true only for $A$ being a diagonalizable matrix, I will assume it here as well. Then $A$ can be expressed as $A = Q\Lambda Q\inv $, where $Q$ is a change of basis matrix, and $\Lambda$ is a diagonal matrix whose entries consists of the eigenvalues of $A$. If we assume this, we can rewrite $f(t)$ as
+    \[f(t) = \det e^{tA} = \det e^{tQ\Lambda Q\inv} = \det \sum_{k = 0}^\infty \frac{(tQ\Lambda Q\inv )^k}{k!} = \det Q\left(\sum_{k = 0}^\infty \frac{(t\Lambda)^k}{k!}\right) Q\inv = \det \left( Qe^{t\Lambda}Q\inv \right)\]
+    By the properties of the determinant, this is just equal to $f(t) = \det \left( e^{t\Lambda}\right)$, since the determinant of the product is the product of the determinants. Also, the determinant of the inverse is the inverse of the determinant. The limit is then,
+    \[\lim_{t \rightarrow 0} \frac{\det e^{t\Lambda} - 1}{t}\]
+    There is some further simplification to be done to $f(t)$. Since $\Lambda$ is a diagonal matrix, when we take its matrix exponential, it will just exponentiate  each element of $\Lambda$ . Then taking the determinant of a diagonal matrix is just the product of the elements. Therefore, $f(t) = e^{t(\lm_1 + \lm_2 + \dots + \lm_n)} = e^{t\Tr A}$. Rewriting $1$ as $e^0$, and taking the series definition of $e^x$, we get that the limit turns into
+    \[\lim_{t\rightarrow 0}\frac{e^{t\Tr A} - e^0}{t} = \lim_{t\rightarrow 0}\frac{1}{t} \sum_{k = 1}^\infty \frac{t^k (\tr A)^k}{k!} = \lim_{t\rightarrow 0} \left [\tr A + \sum_{k = 2}^\infty \frac{t^k (\tr A)^k}{k!}\right ] = \tr A\]
+
+\end{solution}
+\newpage
+\subsection{Problem 5.14, part b}
+Deduce that $f: \R \rightarrow \R$ is differentiable, and is a solution of the ODE $\Dot{f} = (\tr A)f$.
+\partbreak
+\begin{solution}
+
+    By the definition of the derivative, we can write the following:
+    \tightalignbreak
+    \begin{align*}
+        \Dot{f} &= \lim_{h \rightarrow 0} \left [\frac{f(t+h) - f(t)}{h} \right ] &\text{(By definition.)}\\
+        &= \lim_{h \rightarrow 0} \left [\frac{\det e^{(t+h)A} - \det e^{tA}}{h} \right ] &\text{(Substitution.)}\\
+        &= \lim_{h \rightarrow 0} \left [\frac{\det e^{tA + hA} - \det e^{tA}}{h} \right ] &\text{(Rearranging.)}\\
+        &= \lim_{h \rightarrow 0} \left [\frac{\det (e^{tA}e^{hA}) - \det e^{tA}}{h} \right ] &\text{($A$ commutes with itself.)}\\
+        &= \lim_{h \rightarrow 0} \left [\frac{\det e^{tA} \det e^{hA} - \det e^{tA}}{h} \right ] &\text{(Determinant property.)}\\
+        &= \lim_{h \rightarrow 0} \left [\frac{ \det e^{tA}(\det e^{hA} - 1)}{h} \right ] &\text{(Grouping.)}\\
+        &= \det e^{tA} \lim_{h \rightarrow 0} \left [\frac{ \det e^{hA} - 1}{h} \right ] &\text{(Independent of limit.)}\\
+        &= \det e^{tA} \tr A &\text{(By part a.)}\\
+        \Dot {f} &= (\tr A)f  &\text{(Substitution.)}
+    \end{align*}
+    \vspace{-6mm}\alignbreak
+\end{solution}
 
 \newpage
-\section{Problem 5.15}
+\subsection{Problem 5.14, part c}
+Show that 
+\[\det e^A = e^{\tr A}\]
+\partbreak
+\begin{solution}
 
+    This was derived \textit{in spirit} in the above parts, but was not explicitly shown. I will do this here. Note that this is only valid for diagonalizable matrices, since if $A$ were not diagonalizable, then by Jordan Canonical Transformation, we would have 
+    \[\det e^{tA} = \det \left(e^{D}\right)\det \left( e^{N}\right),\]
+    where $D$ is akin to $\Lambda$ in the previous parts, and $N$ is a nilpotent matrix which contains the "non-diagonalizability" of $A$. This cannot be removed, but will terminate in finite iterations of the summation. \par
+
+    \hop
+    We will now prove the statement. Since $A$ is diagonalizable, $A = Q\Lambda Q\inv$ for some change of basis matrix $Q$ and $\Lambda$ as described above. Note that taking any integer power of $A$ will give back
+    \[A^k = (Q\Lambda Q\inv )^k = (Q\Lambda Q\inv ) \underset{\text{k-times}}{\dots} (Q\Lambda Q\inv )\]
+    Via association, this can be written as $A^k = Q \Lambda^k Q\inv$. Therefore, when taking the matrix exponential, 
+    \[e^A = \sum_{k = 0}^\infty \frac{A^k}{k!} = \sum_{k = 0}^\infty \frac{(Q\Lambda Q\inv)^k}{k!} = Q\left(\sum_{k = 0}^\infty \frac{\Lambda^k}{k!}\right) Q\inv = Qe^\Lambda Q\inv.\]
+    When taking the determinant, the determinant of the product is the product of the determinants, as well as the determinant of the inverse is the inverse of the determinants.\footnote{I like the way these sound, don't judge me.} Therefore, the determinant of the matrix exponential will simplify to $e^\Lambda$. One property of exponentiating a diagonal matrix is that its entries are raised. We can then write 
+    \[e^\Lambda = e^{(\lm_1 + \lm_2 + \cdots + \lm_n)}.\]
+    Finally, the sum of the eigenvalues of $A$ is equal to its trace. We then end with $e^\Lambda = e^{\tr A}$, which is what we wanted to show.
+\end{solution}
+\newpage
+\section{Problem 5.15}
+Suppose that $A$ and $B$ are bounded linear operators on a Banach space. 
+\subsection{Problem 5.15, part a}
+If $A$ and $B$ commute, then prove that $e^{A}e^{B} = e^{A+B}$.
+\partbreak
+\begin{solution}
+    
+    We will go straight into calculations. 
+    \tightalignbreak
+    \begin{align*}
+        e^Ae^B &= \sum_{i = 0}^\infty \frac{A^i}{i!} \sum_{j = 0}^\infty \frac{B^j}{j!} &\text{(Given.)}\\
+        &= \sum_{i = 0}^\infty\sum_{j = 0}^\infty \frac{A^i B^j}{i! j!}  &\text{(Limit exists for both summations.)}\\
+        &= \sum_{k = 0}^\infty \sum_{i = 0}^k \frac{A^i B^{(k - i)}}{i! (k - i)!} &\text{(Substituting $k = i + j$.)}\\
+        &= \sum_{k = 0}^\infty \frac{1}{k!}\sum_{i = 0}^k k!\frac{A^i B^{(k - i)}}{i! (k - i)!} &\text{(Multiplying by a 1.)}\\
+        &= \sum_{k = 0}^\infty \frac{1}{k!}\sum_{i = 0}^k \frac{k!}{i! (k - i)!}A^i B^{(k - i)} &\text{(Rearranging.)}\\
+        &= \sum_{k = 0}^\infty \frac{1}{k!}\sum_{i = 0}^k (A + B)^k &\text{(Binomial Theorem, $[A, B] = 0$.)}\\
+        &= e^{(A + B)} &\text{(By definition.)}
+    \end{align*}
+    \vspace{-6mm}\alignbreak
+\end{solution}
+
+
+\newpage
+\subsection{Problem 5.15, part b}
+If $[A, [A, B]] = [B, [A, B]] = 0$, then prove that
+\[e^Ae^B = e^{A + B + [A, B] / 2}\]
+\partbreak
+\begin{solution}
+
+    Note that since $A$ and $B$ commute with $[A, B]$, $e^{A + B + [A, B] / 2} = e^{A + B} e^{[A, B] / 2}$. Then showing $e^Ae^Be^{-[A, B]/2}$ equals $e^{A + B}$ is equivalent to showing the given statement. Define
+
+    \begin{align*}
+        X(t) &= e^{tA}e^{tB}e^{-t^2[A, B]/2}\\
+        Y(t) &= e^{t(A + B)}
+    \end{align*}
+
+    Note that $X(t = 0) = \id = Y(t = 0)$, thus if we show that $X(t)$ and $Y(t)$ solve the same differential equation, then by uniqueness of solutions of ODE's with defined initial conditions, $X(t) = Y(t)$. The right side is simple to differentiate:
+    \[\frac{dY}{dt} = \frac{d}{dt}e^{t(A + B)} = e^{t(A + B)}(A + B) = Y(t)(A + B).\]
+    The right hand side however is more involved. We can first apply the product rule to get
+    \[\frac{dX}{dt} = \frac{d}{dt}\left[e^{tA}e^{tB}e^{-t^2[A, B]/2}\right] = \left[\frac{d}{dt}e^{tA}\right]e^{tB}e^{-t^2[A, B]/2} + e^{tA}\left[\frac{d}{dt}e^{tB}\right]e^{-t^2[A, B]/2} + e^{tA}e^{tB}\left[\frac{d}{dt}e^{-t^2[A, B]/2}\right]\]
+    Since any matrix $C$ commutes with its matrix exponential, differentiating the first two terms are an equivalent process. We will then handle the third term separately.
+    \tightalignbreak
+    \begin{align*}
+        \frac{d}{dt}e^{-t^2[A, B]/2} &= \frac{d}{dt}\sum_{k = 0}^\infty \left( \frac{-t^2}{2}\right)^k \frac{1}{k!} ([A, B])^k &\text{(Given.)}\\
+        &= \sum_{k = 0}^\infty \frac{d}{dt}\left( \frac{-t^2}{2}\right)^k \frac{1}{k!} ([A, B])^k &\text{(Sum independent of differentiation.)}\\
+        &= \sum_{k = 0}^\infty \frac{(-1)^k (2k)(t^{2k - 1})}{2^k k!} ([A, B])^k &\text{(Differentiating.)}\\
+        &= \sum_{k = 0}^\infty \frac{(-1)^k (t^{2k - 1})}{2^{(k-1)} (k-1)!} ([A, B])^k &\text{(Simplifying.)}\\
+        &= (-t[A, B])\sum_{k = 0}^\infty \frac{(-1)^{(k-1)} t^{2(k - 1)}}{2^{(k-1)} (k-1)!} ([A, B])^{(k-1)} &\text{(Pulling out extra terms.)}\\
+        &= (-t[A, B])\sum_{k = 0}^\infty \left(\frac{-t^{2}}{2}\right)^k\frac{1}{k!} ([A, B])^{k} &\text{($k - 1 \rightarrow k$.)}\\
+        &= (-t[A, B])e^{-t^2[A, B]/2} &\text{(By definition.)}
+    \end{align*}
+    \vspace{-6mm}\alignbreak
+    Therefore, we can write 
+    \[\frac{dX}{dt} =  e^{tA}Ae^{tB}e^{-t^2[A, B]/2} + e^{tA}e^{tB}Be^{-t^2[A, B]/2} + e^{tA}e^{tB}e^{-t^2[A, B]/2}(-t[A, B])\]
+    I claim that if $B$ commutes with $[A, B]$, then $B$ commutes with the matrix exponential of $[A, B]$. I will show this below. Note that 
+    \[Be^{(-t^2[A, B]/2)} = B\left( \sum_{k=0}^\infty \left(\frac{-t^2}{2}\right)^k\frac{1}{k!}([A, B])^k \right) = \lim_{n \rightarrow \infty}\left(B \sum_{k=0}^n \left(\frac{-t^2}{2}\right)^k\frac{1}{k!}([A, B])^k\right)\]
+    I will then show that, by induction on $n$, that the partial sums and $B$ commute. 
+    \tightalignbreak
+    \begin{enumerate}[-]
+        \item \underline{Base case}: $n = 0$
+
+        \hop
+        Then the partial summation is just the term evaluated at $k = 0$, so 
+        \[B \sum_{k=0}^n \left(\frac{-t^2}{2}\right)^k\frac{1}{k!}([A, B])^k = B \left(\frac{-t^2}{2}\right)^0\frac{1}{0!}([A, B])^0 = B\id = \id B =  \sum_{k=0}^n \left(\frac{-t^2}{2}\right)^k\frac{1}{k!}([A, B])^kB\]
+
+        \item \underline{Induction Step}: 
+
+        \hop We will next suppose this property holds up to some $j< n$ case. We will then show that the $j+1$ case follows. Then 
+        \[B \sum_{k=0}^{j+1} \left(\frac{-t^2}{2}\right)^k\frac{1}{k!}([A, B])^k = B\left( \text{J - case} + \frac{-t^2}{2}([A, B])\right) = \left( \text{J - case} + \frac{-t^2}{2}([A, B])\right)B \]
+        Note that the last equality is allowed since $B$ commutes with both terms - the first term from the induction hypothesis, and the second term is by assumption of the problem. Therefore, the claim has been shown by induction.
+    \end{enumerate}
+    \vspace{-6mm}\alignbreak
+
+    We now have that 
+    \[\frac{dX}{dt} =  e^{tA}Ae^{tB}e^{-t^2[A, B]/2} + e^{tA}e^{tB}e^{-t^2[A, B]/2}B + e^{tA}e^{tB}e^{-t^2[A, B]/2}(-t[A, B])\]
+    We ideally want to rewrite the first term in the same form as the last two. Investigating the first few terms of $Ae^{tB}$, we can see the following:
+    \tightalignbreak
+    \begin{align*}
+        Ae^{tB} &= e^{tB}e^{-tB}Ae^{tB} &\text{(Multiplying by $\id$.)}\\
+        &= e^{tB}\left[\left( \sum_{k = 0}^\infty \frac{(-tB)^k}{k!}\right) A \left( \sum_{j = 0}^\infty \frac{(tB)^j}{j!}\right)\right] &\text{(Expanding.)}\\
+        &= e^{tB}\left[ (\id - tB + \frac{t^2}{2}b^2 - \dots)A(\id + tB + \frac{t^2}{2}B^2 + \dots)\right] &\text{(First terms.)}\\
+        &= e^{tB}\left[ (\id - tB + \frac{t^2}{2}b^2 - \dots) (A + tAB + \frac{t^2}{2} AB^2 + \dots)\right] &\text{(Multiplying.)}\\
+        &= e^{tB}\left[ A + tAB + \frac{t^2}{2}AB^2 - tBA - t^2BAB - \frac{t^3}{2}BAB^2 + \frac{t^2}{2}B^2A + \dots\right] &\text{(Expanding.)}\\
+        &= e^{tB}\left[ A + t(AB - BA) + \frac{t^2}{2}(AB^2 - 2BAB + B^2A) + \dots\right] &\text{(Grouping.)}
+    \end{align*}
+    \vspace{-6mm}\alignbreak
+    Expanding $[B, [A, B]]$, we see that 
+    \[[B, [A, B]] = B(AB - BA) - (AB - BA)B = -(AB^2 - 2BAB + B^2A)\]
+    This is equivalent to the third term in the expansion. Since we are assuming this term equals zero, the expansion equals zero after the second term\footnote{This doesn't \textit{immediately} prove that, but terms further in the expansion has this term nested in it, so all higher terms equal zero.}. We see that 
+    \[Ae^{tB} = e^{tB}\left[ A + t(AB - BA)\right],\]
+    so we can finally rewrite the first term as 
+    \[e^{tA}Ae^{tB}e^{-t^2[A, B]/2} = e^{tA}e^{tB}\left[ A + t[A, B]\right]e^{-t^2[A, B]/2} = e^{tA}e^{tB}e^{-t^2[A, B]/2}\left[ A + t[A, B]\right]\]
+    The last equality holds via my argument above. We have that 
+    \begin{align*}
+      \frac{dX}{dt} &= e^{tA}e^{tB}e^{-t^2[A, B]/2}\left[ A + t[A, B]\right] + e^{tA}e^{tB}e^{-t^2[A, B]/2}B + e^{tA}e^{tB}e^{-t^2[A, B]/2}(-t[A, B])\\
+      &= X(t) \left[ A + t[A, B] + B - t[A, B]\right]\\
+      &= X(t) \left[ A + B\right]
+    \end{align*}
+    \newpage
+
+    We can now rejoice, since $X(t)$ and $Y(t)$ solve the same differential equation with the same initial condition. Thus by uniqueness of the solution, $X(t) = Y(t)$, which, when setting $t = 1$, we have that 
+    \[e^{A}e^{B}e^{-[A, B]/2} = e^{A + B} \implies e^{A}e^{B} = e^{A + B}e^{[A, B]/2} = e^{A + B + [A, B]/2}\]
+    Which is what we wanted to show.
+\end{solution}
 \end{document}
