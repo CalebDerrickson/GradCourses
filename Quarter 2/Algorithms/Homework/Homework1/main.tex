@@ -154,67 +154,40 @@ Design a polynomial-time dynamic programming algorithm that given a sequence of 
     \item Find the running time of your algorithm.
 \end{enumerate}
 \partbreak
-\begin{solution}
-    I have written some pseudocode below after the list for reference.     
+\begin{solution}     
+
     \begin{enumerate}
-        \item I will define and keep track of two tables: T and W. Table T will keep track of the max amount of money for the iteration and Table W is a binary list that will keep track of the days to work. Note that the way T is defined, it is monotonic. Since the question asks for a schedule that returns the maximum amount of money, we return only W. If you want the maximum amount of money as well, we can return T[n].
+        \item I will define and keep track of two tables: T and W. Table T will keep track of the max amount of money for the iteration and Table W is a binary list that will keep track of the days to work. Note that the way T is defined, it is monotonic. Since the question asks for a schedule that returns the maximum amount of money, we return only W. If you want the maximum amount of money as well, we can return T[end].
 
-        \item We initialize the two arrays with locally optimal values, meaning if we are considering only one day, we should work that day. Then the first entry of T would be p[0], and W[0] = 1. Note that the tables are initialized with zero in all entries. 
+        \item We initialize the two arrays with locally optimal values, where the first 2 days are set to working. Thus T[0] = p[0] + p[1] and W[0] = 1, W[1] = 1. All other entries in W are set to zero.
 
-        \item The recurrence formulas for T and W are different, and should be handled separately. The formula for T is akin to those done in class, with T[k+1] = T[k] + max\{0, p[k-1] - p[k+1]\}. The modification to W is slightly different. Since the max number of days she is willing to work in a three day window is 2, we need to check the day two days prior. If p[k+1] is larger than p[k-1], we update the entry in W[k-1] to zero. Else, we reject it, setting W[k+1] = 0. If we have that W[k-1] = 0, then we can freely set W[k+1] = 1, regardless of T. 
+        \item The recurrence formulas for T and W are different, and should be handled separately. For each iterated window, we need to optimize over that window. If there are not already two working days in a three day window, we accept days until this is true, modifying T and W accordingly. When we have that the past two days are considered working, we then need to compare the incoming day's profit with the previous two day's profits. Then T[k+1] = T[k] + max \{0, p[k+1] - p[k], p[k+1] - p[k-1]\}. If p[k+1] is less than both p[k] and p[k-1], then we add zero and set W[k+1] = 0. Else we swap the working day according to the maximum.
 
         \newpage
-        \item I will prove the algorithm's feasibility and optimality here.
-        \alignbreak
-        \begin{enumerate}[-]
-            \item \underline{Feasibility}:
-            
-            \jump
-            We will show this via induction on $|T| = n = |W|$. 
+        \item I will prove the feasibility and optimality here. We will prove both of these via induction on the iteration of the window. 
+        \begin{enumerate}[\bullet]
+            \item \underline{Feasibility}
             \begin{enumerate}[-]
-                \item \underline{Base Case}: $n = 1$
-                
-                \hop
-                Then the array $p$ will consist of only 1 element. Thus, the optimal schedule is $T = \{p_1\}$\\ and $W = \{ 1\}$. This is handled accordingly in my algorithm.
-
-                \item \underline{Induction Step}
+                \item \underline{Base Case}: k = 1
 
                 \hop
-                Next, assume the algorithm provides a feasible schedule for some $k < n$ iteration. We will show the $k+1$ iteration holds. Note that since all cases before the $k+1$ case give a feasible schedule, we only need to consider three elements, that being $p_{k-1}, p_k,$ and $p_{k+1}$. Furthermore, since all cases before the $k+1$ cases are feasible, we can say that if $W[k-1] = 0$, then $W[k] = 1$ by the algorithm. This will 
+                Here we are considering the feasibility of the initialization. Since we are not working more than two days in a row in W, then this holds. 
+
+                \item \underline{Induction hypothesis}
+
+                \hop
+                Next we assume that for cases up to j, the algorithm has provided a feasible scheduling of days. We will now show the next case, j+1, is also feasible\footnote{Note that the j+1 case window has its center on the j-th day.}. We will consider only the three days associated with j-1, j, and j+1. If either the two previous days, j-1 and j, are set to zero in W, then we can set W[j+1] = 1 and T[j+1] = T[j] + p[k+1], as discussed above. If both j-1 and j have their indices set to 1 in W, we then consider the value max \{0, p[j+1] - p[j], p[j+1] - p[j-1]\}. If this value is zero, then we set W[j+1] = 0 and T[k+1] = T[k], since it is not considered worth working on that day. If this value is not zero, then we work the j+1 day over the day which takes the least from p[j+1]. Thus, the algorithm will select the best two days to work within the window centered at j, implying the j+1 case gives a feasible schedule. 
             \end{enumerate}
+            \item \underline{Optimality}
+
+            \hop
+            Note that by the way I wrote the above proof, it also argues that the algorithm produces an optimal schedule. Since T is a monotone array, we would argue that if the algorithm didn't produce an optimal schedule, then there would be another array T' such that T'[end] > T[end]. We would then have two cases to decide: if T' has more elements than T, i.e. we are working more days, or T' has chosen to work more lucrative days. Note that the first case cannot be true, since adding another day to our schedule would make it unfeasible. Thus, for the second case, suppose W and W', the associated working days, are identical up to two contiguous days. Thus, there is some window centered at j such that T' has chosen a more optimal solution than our T, and each window prior has been chosen identically (both are optimal). By our algorithm, we are choosing to work over the most lucrative two days, thus this window should be chosen identically for T and T', giving a contradiction. 
         \end{enumerate}
-        \alignbreak
+        
         \item Since we are only looping over p once, and for each iteration of the for loop we are only doing O(1) operations, the overall running time of the algorithm is O(n). The memory complexity of our algorithm is slightly higher: since we are allocating memory for two arrays of length n, the memory complexity is O(2n), which in all intensive purposes, is O(n).
     \end{enumerate}
     \newpage
-\begin{lstlisting}
-THIS ISNT RIGHT. THINK BETTER!!
-    function MaxMoney(array p)
-        Let n = p.size
-        Initialize T[n]
-        Initialize W[n]
 
-        set T[0] = p[0]
-        set W[0] = 1
-
-        for int k = 0...n-1 
-            int value = max{0, p[k+1] - p[k-1]}
-            T[k+1] = T[k] + value
-
-            if W[k-1] == 1
-                if value != 0
-                    W[k-1] = 0
-                    W[k+1] = 1
-                else // value == 0
-                    W[k+1] = 0
-                endif
-            else    // W[k-1] == 0
-                W[k+1] = 1
-            endif
-        end for
-        return W
-    end function
-\end{lstlisting}
     
 \end{solution}
 \end{document}
