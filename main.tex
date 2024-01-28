@@ -1,0 +1,57 @@
+\input{definitions}
+\addbibresource{citations.bib}
+
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31020: Homework 4}
+\author{Caleb Derrickson}
+\date{January 31, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+
+
+\newpage
+\section{Problem 2}
+
+\newpage
+\section{Problem 3}
+\newcommand{\alphabar}{\overline{\alpha}}
+We will show that steepest descent with backtracking has asymptotic linear convergence. Let $x_k$ be a sequence produced by steepest descent with line search and backtracking when applied to the nonlinear optimization problem $\min_{x} f(x)$, where the function $f(x)$ is three times continuously differentiable. This is the algorithm you implemented in the second homework except you will apply it to a general function. In particular, we will assume that backtracking is initialized at a fixed stepsize $\alphabar$ as we did in problem 2 in homework 2. Assume that $x_k \rightarrow x\star$ where $x\star$ satisfies the second order sufficient conditions. 
+
+\subsection{Problem 3, part a}
+Prove that there exists a neighborhood of $x\star$ and parameters $0 < c_1 < c_2$ such that $c_1 \norm{\grad f(x)}^2 \leq f(x) - f(x\star) \leq \norm{\grad f(x)}^2$ for any $x$ within the neighborhood $N(x\star)$.
+\partbreak
+
+\begin{solution}
+
+    The first inequality can be shown as follows. We first note that the neighborhood $N(x\star)$ can be chosen around $x\star$ such that $f(x \in N(x\star))$ is convex, as well as the gradient $\grad f(x)$ is Lipshchitz. Note that \cite{zhou2018fenchel} gives\footnote{This result is [5] on page 4. I have two choices concerning this: I can either give my own, sloppier version of the proof; or I can cite the reference itself. I feel it is more transparent that I cite it.}. 
+    \[f(y) \geq f(x) + \grad f(x)\T (y - x) + \frac{1}{2L}\norm{\grad f(y) - f(x)}^2, \quad \forall x, y.\]
+    This result is directly applicable when we restrict $x, y \in N(x\star)$, so that we can assure convevity of $f$ and Lipschitzness of $\grad f$. Substituting $y \mapsto x$ and $x \mapsto x\star$ gives,
+    \[f(x) \geq f(x\star) + \grad f(x\star)\T (x - x\star) + \frac{1}{2L}\norm{\grad f(x) - \grad f(x\star)}^2.\]
+    By the second order sufficient conditions, we have that $\grad f(x\star) = 0$, so we get 
+    \[\frac{1}{2L}\norm{\grad f(x)}^2 \leq f(x) - f(x\star).\]
+    So we have $c_1 = \frac{1}{2L}$. To find the second inequality, we can approximate the function $f(x)$ for some $x \in N(x\star)$, 
+    \[f(x) = f(x\star) + \grad f(x\star)(x - x\star) + \frac{1}{2}(x - x\star)\T \grad^2 f(x\star)(x - x\star).\]
+    By the second order sufficient conditions we have $\grad f(x\star) = 0$, so with rearranging, we have
+    \[f(x) - f(x\star) = \frac{1}{2}(x - x\star)\T \grad^2 f(x\star)(x - x\star)\]
+    The right hand side can be bounded by Cauchy Schwartz to give
+    \[f(x) - f(x\star) \leq \norm{x - x\star}^2 \norm{\grad^2f(x\star)}.\]
+    By problem 3 part a of Homework 2 we found 
+    \[c'\norm{x - x\star} \leq \norm{\grad f(x)},\]
+    for some $c' > 0.$ We can substitute this into our inequality to get
+    \[f(x) - f(x\star) \leq \frac{1}{2(c')^2} \norm{\grad^2f(x\star)}\norm{\grad f(x)}^2.\]
+    Therefore, setting $c_2 = \frac{1}{2(c')^2}\norm{\grad^2 f(x\star)}$, we have found the following chain of inequalities to be found.  
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part b}
+In the case where $f(x)$ is quadratic,
+$f(x) = f + g\T x + \frac{1}{2}x\T Bx,$ $ B\succ 0$ find the sharpest values of $c_1, c_2$ as a function of the eigenvalues of $B$. Prove that they are the sharpest by finding $x \neq x\star$, where the inequalities above are, in effect, equalities.
+\end{document}
