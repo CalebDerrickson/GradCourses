@@ -12,8 +12,8 @@ eval = 2.*b;
 for i = 1:niter
     
  
-    [~, ~, H_dense] = rosenbrockfgH(eval(1:i+199), i+199, 'dense');
-    [~, ~, H_sparse] = rosenbrockfgH(eval(1:i+199), i+199, 'sparse');
+    [~, ~, H_dense] = rosenbrockfgH(eval(1:i+199), i+199, 'dense', 'H');
+    [~, ~, H_sparse] = rosenbrockfgH(eval(1:i+199), i+199, 'sparse', 'H');
     tic;
     x = H_dense \ b(1:i+199)';
     a_n(i) = toc;
