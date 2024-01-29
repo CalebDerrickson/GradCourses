@@ -7,7 +7,7 @@ function alpha = Backtracking(func_eval, x, p_k , n)
     
 %Constants for the backtracking
 rho = 0.5;
-c1 = 1e-4;
+c1 = 1e-3;
 alpha = 1;
 
 %Priming for while loop

@@ -7,7 +7,7 @@ function Chol = ModifiedCholesky(A)
 %   tau * I makes A "Sufficiently Positive Definite"
 
 % Setting parameters
-beta = 1e-3;
+beta = 1e-2;
 min_diag_element = min(diag(A));
 Id = eye(size(A));
 
