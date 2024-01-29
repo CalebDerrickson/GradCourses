@@ -11,6 +11,8 @@ sz = size(x0);
 % Initialize array with zeros
 VN_seq = zeros(niter, sz(2));
 
+VN_grad = zeros(niter, sz(2));
+
 VN_seq(1, :) = x0;
 
 %Populate the array element-wise
@@ -26,16 +28,17 @@ for i = 1:niter-1
 
     % Update sequence
     VN_seq(i+1, :) = VN_seq(i, :) - x';
+    VN_grad(i+1, :) = norm(g);
 
     %Used to resize the matrix
     max_size = i;
-
     % Quick Stopping Criterion
     if norm(g) < eps
         break
     end
 end
-
+figure(2)
+semilogy(VN_grad);
 % Only want to return nonzero entries
 VN_seq = VN_seq(1:max_size, :);
 end
