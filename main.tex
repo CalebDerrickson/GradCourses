@@ -15,7 +15,36 @@
 
 \newpage
 \section{Problem 1}
+We aim to understand both trust-region approaches and sparsity of matrices. 
+\subsection{Problem 1, part 1}
+For the Rosenbrock function of order n we used in last homework,\\
+$f(x) = \sum_{i = 1}^{n - 1} \left[ 100 (x_{i+1} - x_i^2)^2 + (x_i - 1)^2\right]$
+implement a function to return the sparse Hessian.
+\partbreak
+\begin{solution}
 
+    I have just added the condition that the returned hessian is sparse. I passed the dense matrix to the sparse() function provided by Matlab.
+\end{solution}
+
+\newpage
+\subsection{Problem 1, part 2}
+We will experiment with sparse and dense linear algebra. Let $b \in \R^n$ be a vector of ones of dimension n. Compute the Hessian $H$ at the point of all entries being equal to 2. Solve the equation $Hx = b$ and time it for $H$ being sparse format and denote the time by a(n) with dense format and denote the time by b(n) using the backslash operator. Plot a(n) and b(n) as functions of n. what seems to be the rough behavior of a(n) and b(n)? 
+\partbreak
+\begin{solution}
+
+    The plot is given as Figure \ref{fig:MatMult}. I tried fitting polynomials to both plots and I got that the dense matrix time scales roughly by $n^2$ (the coefficient of $n^3$ is of the order $10^{-11}$; for $n^2$, $10^{-8}$), while the sparse matrix scales roughly by $n$ (the coefficient of $n^2$ is of order $10^{-10}$; for $n$, $10^{-7}$). 
+\end{solution}
+\vspace{4cm}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Plots/MatrixMultiplicationTimings.png}
+    \caption{Solving $Ax = b$ for $A$ dense vs sparse and the given Hessian.}
+    \label{fig:MatMult}
+\end{figure}
+
+\newpage
+\subsection{Problem 1, part 3}
+Write a program that implements the dogleg trust-region approach. Experiment with the parameters or by designing your own rules. Report the total number of linear systems solved and the total number of funciton evaluations.
 
 \newpage
 \section{Problem 2}
