@@ -48,14 +48,45 @@ Write a program that implements the dogleg trust-region approach. Experiment wit
 
 \newpage
 \section{Problem 2}
+This problem we will carry out what I mentioned in class when I realized my insight was incorrect. Assume that you try to solve the trust-region problem approximately, as I did in class with the dogleg. In other words you aim to solve the problem \\
+$\min_{p} := f + g\T p + \frac{1}{2}p\T Bp, \quad \norm{p} \leq \Delta$.\\
+Assume now that (a) $B$ is invertible and has at least one negative eigenvalue, (b) $p^N$ is a solution of the Newton system $Bp^N = -g$ and (c) $\norm{p^N} < \Delta$ (that is, the Newton point is interior to the trust region, the situation I was implementing in class). Prove now that there exists a direction $p^D$ such that $m(p^N + \ep p^D) < m(p^N)$ for $\ep$ sufficiently small. In other words, $p^N$ cannot be a solution of the trust region method even if it is a solution of the Newton equation.
+\partbreak
+\begin{solution}
 
+    We will begin by expanding $m(p^n + \ep p^D)$
+    \tightalignbreak
+    \begin{align*}
+        m(p^n + \ep p^D) &= f + g\T (p^N + \ep p^D) + \frac{1}{2}(p^N + \ep p^D)\T B(p^N + \ep p^D)\\
+        &= f + g\T p^n + \ep g\T p^d + \frac{1}{2}\left[(p^N)\T Bp^N + \ep(p^n)\T Bp^D + \ep (p^D)\T Bp^n + \ep^2 (p^D)\T Bp^D \right]\\
+        &= f + g\T p^N + \frac{1}{2} (p^N)\T Bp^N + \ep g\T p^D + \frac{1}{2}\left[ \ep((p^N)\T Bp^D + (p^D)\T Bp^N + \ep (p^D)\T Bp^D\right]\\
+        &= m(p^N) + \ep \left( g\T p^D + \frac{1}{2}(p^N)\T Bp^D + \frac{1}{2}(p^D)\T Bp^N + \frac{\ep}{2}(p^D)\T Bp^D\right) 
+    \end{align*}
+    \vspace{-6mm} \alignbreak
+    By the calculations above, we just need to show that the quantity in parenthesis can be negative for some choice of search direction $p^D$. If we show this, then we will show that $p^N$ cannot be a solution. Note that from (b) we have $Bp^N = -g$. Plugging this into the quantity in parenthesis, we have
+    \[ -(p^N)\T B\T p^D + \frac{1}{2}(p^N)\T Bp^D + \frac{1}{2}(p^D)\T Bp^N + \frac{\ep}{2}(p^D)\T Bp^D\]
+    By transposition, we can rewrite every suitable instance of $p^D$ being pre-multiplied by $B$. Then, 
+    \[ -(p^N)\T  Bp^D + \frac{1}{2}(p^N)\T Bp^D + \frac{1}{2}(B\T p^D)\T p^N + \frac{\ep}{2}(p^D)\T Bp^D\]
+    Since we have that $B$ has one negative eigenvalue, suppose that $p^D$ is the eigenvector associated with this eigenvalue. We can then write $Bp^D = -\lm p^D$, for $\lm > 0$. By the properties of linear algebra, $\lm$ is also an eigenvalue of $B\T$ since we are over the real numbers. Thus, the following can be written:\\
+    \tightalignbreak
+    \begin{align*}
+        &-(p^N)\T B p^D + \frac{1}{2}(p^N)\T Bp^D + \frac{1}{2}(B\T p^D)\T p^N + \frac{\ep}{2}(p^D)\T Bp^D &\text{(Given.)}\\
+        &-(p^N)\T (-\lm) p^D + \frac{1}{2}(p^N)\T (-\lm)p^D + \frac{1}{2}(-\lm p^D)\T p^N + \frac{\ep}{2}(p^D)\T (-\lm)p^D &(Bp^D = -\lm p^D.)\\
+        &\lm (p^N)\T p^D - \frac{\lm}{2}(p^N)\T p^D - \frac{\lm}{2}(p^D)\T p^N - \frac{\lm \ep}{2}(p^D)\T p^D &\text{(Rearranging.)}\\
+        &\lm (p^N)\T p^D - \frac{\lm}{2}(p^N)\T p^D - \frac{\lm}{2}(p^N)\T p^D - \frac{\lm \ep}{2}(p^D)\T p^D &\text{(Inner product symmetry.)}\\
+        &= - \frac{\lm \ep}{2}(p^D)\T p^D &\text{(Cancelling.)}\\
+        &= -\frac{\lm\ep}{2}\norm{p^D}^2 &\text{(Definition.)}
+    \end{align*}
+    \vspace{-6mm}\alignbreak
+    Since $\lm,  \ep > 0$, we have that the above term is overall negative. Therefore, an additional direction $p^D$ has been obtained which minimizes the approximate solution.
+\end{solution}
 \newpage
 \section{Problem 3}
 \newcommand{\alphabar}{\overline{\alpha}}
 We will show that steepest descent with backtracking has asymptotic linear convergence. Let $x_k$ be a sequence produced by steepest descent with line search and backtracking when applied to the nonlinear optimization problem $\min_{x} f(x)$, where the function $f(x)$ is three times continuously differentiable. This is the algorithm you implemented in the second homework except you will apply it to a general function. In particular, we will assume that backtracking is initialized at a fixed stepsize $\alphabar$ as we did in problem 2 in homework 2. Assume that $x_k \rightarrow x\star$ where $x\star$ satisfies the second order sufficient conditions. 
 
 \subsection{Problem 3, part a}
-Prove that there exists a neighborhood of $x\star$ and parameters $0 < c_1 < c_2$ such that $c_1 \norm{\grad f(x)}^2 \leq f(x) - f(x\star) \leq \norm{\grad f(x)}^2$ for any $x$ within the neighborhood $N(x\star)$.
+Prove that there exists a neighborhood of $x\star$ and parameters $0 < c_1 < c_2$ such that $c_1 \norm{\grad f(x)}^2 \leq f(x) - f(x\star) \leq c_2\norm{\grad f(x)}^2$ for any $x$ within the neighborhood $N(x\star)$.
 \partbreak
 
 \begin{solution}
@@ -83,4 +114,19 @@ Prove that there exists a neighborhood of $x\star$ and parameters $0 < c_1 < c_2
 \subsection{Problem 3, part b}
 In the case where $f(x)$ is quadratic,
 $f(x) = f + g\T x + \frac{1}{2}x\T Bx,$ $ B\succ 0$ find the sharpest values of $c_1, c_2$ as a function of the eigenvalues of $B$. Prove that they are the sharpest by finding $x \neq x\star$, where the inequalities above are, in effect, equalities.
+\partbreak
+\begin{solution}
+
+    For the case of the quadratic, we can take some shortcuts in the calculation of $c_1$ and $c_2$ in the previous part. Define $\psi(x) = f(x) - f$. We note that analyzing $\psi$ over $f(x)$ will return equivalent bounds. Note that 
+    \[\psi(x) = \frac{1}{2}\braket{x - x\star}{B(x - x\star)} \leq \frac{\norm{B}}{2}\norm{x - x\star}^2 = \frac{\lm_{\max}}{2}\norm{x - x\star}^2.\]
+    From the previous homework, we found that $\norm{x - x\star} \leq \frac{1}{\lm_{\max}}\norm{\grad f(x)}^2$, so substituting this in, we find 
+    \[\psi(x) = f(x) - f \leq \frac{1}{2\lm_{\max}}\norm{\grad f(x)}^2.\]
+    This then settles the upper bound. We can then find the lower bound in the following manner:\\
+
+    \quad 
+    DO THIS ONE.
+    \quad
+
+    We now have $c_1 = \frac{1}{2\lm_{\min}},\ c_2 = \frac{1}{2\lm_{\max}}$.
+\end{solution}
 \end{document}
