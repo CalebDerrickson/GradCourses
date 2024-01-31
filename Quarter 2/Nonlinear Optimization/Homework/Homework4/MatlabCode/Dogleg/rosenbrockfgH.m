@@ -55,46 +55,38 @@ end
 
 if bitand(eval_code, GRADIENT_FLAG)
     % Construct the gradient
-    for i = 1:n
-        if i == 1
-            g(i) = -400 * x(1) * (x(2) - x(1)^2) + 2*(x(1) - 1);
-        elseif i == n
-            g(i) = 200*(x(i) - x(i-1)^2);
-        else
-            g(i) = 200 * (x(i) - x(i-1)^2) - 400 * x(i) * (x(i+1) - x(i)^2) + 2*(x(i) - 1);
-        end
+    g(1) = -400 * x(1) * (x(2) - x(1)^2) - 2*(1 - x(1));
+    g(n) = 200 * (x(n) - x(n-1)^2);
+    
+    for i = 2:n-1
+        g(i) = 200 * (x(i) - x(i-1)^2) - 400 * x(i) * (x(i+1) - x(i)^2) - 2*(1 - x(i) );
     end
 end
 
 if bitand(eval_code, HESSIAN_FLAG)
-    % Construct the Hessian
-    for i = 2:n-1
-        for j = 2:n-1
-            if j == i
-                H(i, j) = 202 + 1200 * x(i)^2 - 400 * x(i+1);
-            elseif j == i+1
-                H(i, j) = -400 * x(i);
-            elseif j == i-1
-                H(i, j) = -400 * x(i-1);
-            end
-        end
-    end
-    
-    % Special cases
-    H(1, 1) = 1200 * x(1)^2 - 400 * x(2) + 2;
-    H(1, 2) = -400 * x(1);
-    H(2, 1) = H(1, 2);
-    H(end, end) = 200;
-    H(end, end-1) = -400 * x(end-1);
-    H(end-1, end) = H(end, end-1);
-    
+% Construct the Hessian
+for i = 2:n-1
+    H(i, i) = 202 + 1200 * x(i)^2 - 400 * x(i+1);
+    H(i, i+1) = -400 * x(i);
+    H(i, i-1) = -400 * x(i-1);
+end
+
+% Special cases
+H(1, 1) = 1200 * x(1)^2 - 400 * x(2) + 2;
+H(1, 2) = -400 * x(1);
+H(2, 1) = H(1, 2);
+
+H(end, end-1) = -400 * x(end-1);
+H(end-1, end) = H(end, end-1);
+H(end, end) = 200;
+
     switch HessianType
         case 'sparse'
             H = sparse(H);
         case 'dense'
             % Empty
         otherwise
-            fprintf("Invalid parameter for Hessian storage type, returning as dense")
+            fprintf("Invalid parameter for Hessian storage type, returning as dense\n");
     end
 end
 

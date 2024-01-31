@@ -1,11 +1,19 @@
-function Dogleg_search = Dogleg(function_handle, x, delta)
+function [time, Dogleg_search] = Dogleg(function_handle, x, delta)
+global func_counter
+global lin_systems_counter
 
-func = @(x, varargin) func_handle(x, varargin{:});
+
+func = @(x, varargin) function_handle(x, varargin{:});
 
 % Funciton evaluation, gradient, and sparse Hessian
 [f, g, H] = func(x, max(size(x)), 'sparse', 'everything');
+
+func_counter = func_counter + 1;
+
 % Change g to a column vector
-g = g';
+if max(size(g)) ~= size(g, 1)
+    g = g';
+end
 
 % Get the Cholesky factorization of H
 Chol = ModifiedCholesky(H);
@@ -15,9 +23,15 @@ Chol = ModifiedCholesky(H);
 % Ax = b => Ly = b (Backward), L^T x = y (Forward)
 % A = LL^T
 
+% time it
+tic 
+
 y = fixed.backwardSubstitute(Chol, -g);
 p_B = fixed.forwardSubstitute(Chol', y);
 
+time = toc;
+
+lin_systems_counter = lin_systems_counter + 1;
 % Is newton step sufficient
 if norm(p_B) <= delta
     Dogleg_search = p_B;
@@ -32,6 +46,7 @@ else % Preform the Stanky Leg
             Dogleg_search = tau * p_U;
         elseif  (1 <tau) && (tau <= 2)
             Dogleg_search = p_U + (tau - 1)*(p_B - p_U);
+        end
     end
 
 end

@@ -1,9 +1,5 @@
-function hw4p1 = hw4p1(niter, x)
-    arguments
-        niter
-        x = 0
-    end
+function [x] = hw4p1(x0,niter, eps)
 
-    hw4p1p2(niter);
-
+clc
+[x] = hw4p1p5(x0, niter, eps);
 end
