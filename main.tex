@@ -32,7 +32,7 @@ We will experiment with sparse and dense linear algebra. Let $b \in \R^n$ be a v
 \partbreak
 \begin{solution}
 
-    The plot is given as Figure \ref{fig:MatMult}. I tried fitting polynomials to both plots and I got that the dense matrix time scales roughly by $n^2$ (the coefficient of $n^3$ is of the order $10^{-11}$; for $n^2$, $10^{-8}$), while the sparse matrix scales roughly by $n$ (the coefficient of $n^2$ is of order $10^{-10}$; for $n$, $10^{-7}$). 
+    The plot is given as Figure \ref{fig:MatMult}. I tried fitting polynomials to both plots and I got that the dense matrix time scales roughly by $n^2$ (the coefficient of $n^3$ is of the order $10^{-11}$; for $n^2$, $10^{-8}$), while the sparse matrix scales roughly by $n$ (the coefficient of $n^2$ is of order $10^{-10}$; for $n$, $10^{-7}$). I have been told that I will not see the $n^3$ dominance come into play for such small dimension values in the case of the dense matrix. The way I was constructing my Hessian, I had a nested for loop which really dropped computation time. 
 \end{solution}
 \vspace{4cm}
 \begin{figure}[!h]
@@ -44,8 +44,45 @@ We will experiment with sparse and dense linear algebra. Let $b \in \R^n$ be a v
 
 \newpage
 \subsection{Problem 1, part 3}
-Write a program that implements the dogleg trust-region approach. Experiment with the parameters or by designing your own rules. Report the total number of linear systems solved and the total number of funciton evaluations.
+Write a program that implements the dogleg trust-region approach. Experiment with the parameters or by designing your own rules. Report the total number of linear systems solved and the total number of function evaluations.
+\partbreak
+\begin{solution}
 
+    I have (hopefully) implemented the Dogleg method correctly. Using max 500 steps, initial point $x_0 = $ [7 7 7 7 7 7], and epsilon = 0.8 \footnote{I know it's bad, I don't know what's wrong in my code and I have spent too much time arguing with my code, running it line by line over 200 iterations to see where it went wrong. I had the same issue for NMHM as well in last homework.}, I get the normed gradient plot below. Fixing all other parameters (tolerance = 0.75, eta = 0.9 * tolerance), I found that the convergence of the sequence to a respectable value is highly sensitive to the value of $\hat{\Delta}$. The reported plot is the best value I could find. The number of iterations in this plot is 103, with the number of function evaluations being 309 (two for calculating $\rho_k$, one in Dogleg proper) and the number of linear systems solved being 103 (only one per loop, in finding the newton step). Note that I am defining the number of function evaluations as the number of times the literal state function is being evaluated: not counting the Hessian or the gradient. 
+\end{solution}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.5\textwidth]{Plots/Figure_p4p1p3_NG.png}
+    \caption{Dog Leg Method for initial condition described above, with $\hat{\Delta}$ = 4.25.}
+    \label{fig:hw4p1p3}
+\end{figure}
+
+\newpage
+\subsection{Problem 1, part 4}
+ Compare NMHM (with dense linear algebra) from the previous homework and dogleg in terms of (a) number of systems solved (b) total computation time of their linear systems by starting them at the point of all 2's using the same stopping criterion for the gradient for both. Plot the two as a function of problem size for some ranges of n. Note that the n range need not be the same for both as the timings may be different. Discuss your findings and explain why the results may behave as you observe. 
+ \partbreak
+ \begin{solution}
+
+     I have included the two relevant plots below. For the NMHM plot, I know there is something wrong with the normed gradient converging to zero. I can say that after a weekend's worth of debugging, that it \textit{does} converge, just not to zero. I honestly don't know why. We can see that the average time to solve the linear system is greater for Dogleg, but there are overall fewer linear systems calculated. To somehow rationalize my findings, I would say that the say that sparse matrices are stored in memory isn't contiguous, unlike the case for dense matrices. And as such, for lower dimensions as what I have here, we see this difference. PLEASE BE IN THE MATLABCODE FOLDER WHEN RUNNING ALL CODE. IF YOU ARE NOT, YOU WILL GET AN ERROR. I wanted to separate the two methods via folders, so I change the current directory when calling the two methods. 
+ \end{solution}
+
+\vspace{1cm}
+ \begin{figure*}[!htb]
+  \centering
+  \begin{minipage}{0.4\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Plots/timings_diff.png}
+    \caption{ The average time to solve the linear system for NMHM and Dogleg methods.}
+    \label{fig:img1}
+  \end{minipage}\hfill
+  \begin{minipage}{0.4\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Plots/num_lin_sys.png}
+    \caption{The number of linear systems calculated up to 150 dimensions.}
+    \label{fig:img2}
+  \end{minipage}
+\end{figure*}
 \newpage
 \section{Problem 2}
 This problem we will carry out what I mentioned in class when I realized my insight was incorrect. Assume that you try to solve the trust-region problem approximately, as I did in class with the dogleg. In other words you aim to solve the problem \\
@@ -119,7 +156,7 @@ $f(x) = f + g\T x + \frac{1}{2}x\T Bx,$ $ B\succ 0$ find the sharpest values of 
 
     For the case of the quadratic, we can take some shortcuts in the calculation of $c_1$ and $c_2$ in the previous part. Define $\psi(x) = f(x) - f$. We note that analyzing $\psi$ over $f(x)$ will return equivalent bounds. Note that 
     \[\psi(x) = \frac{1}{2}\braket{x - x\star}{B(x - x\star)} \leq \frac{\norm{B}}{2}\norm{x - x\star}^2 = \frac{\lm_{\max}}{2}\norm{x - x\star}^2.\]
-    From the previous homework, we found that $\norm{x - x\star} \leq \frac{1}{\lm_{\max}}\norm{\grad f(x)}^2$, so substituting this in, we find 
+    From the previous homework, we found that $\norm{x - x\star} \leq \frac{1}{\lm_{\max}^2}\norm{\grad f(x)}^2$, so substituting this in, we find 
     \[\psi(x) = f(x) - f \leq \frac{1}{2\lm_{\max}}\norm{\grad f(x)}^2.\]
     This then settles the upper bound. We can then find the lower bound in the following manner:\\
 
@@ -128,5 +165,58 @@ $f(x) = f + g\T x + \frac{1}{2}x\T Bx,$ $ B\succ 0$ find the sharpest values of 
     \quad
 
     We now have $c_1 = \frac{1}{2\lm_{\min}},\ c_2 = \frac{1}{2\lm_{\max}}$.
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part c}
+Use point (a) to show that one our iteration stays in that neighborhood of $x\star$, we will have
+\[f(x^{k+1}) - f(x\star) \leq ( 1 - \eta_k)(f(x^k) - f(x\star)\]
+for some $\eta_k > 0$. I suggest you to start form the analysis you did at Problem 2, homework 2 and obtain $\eta_k$ from there. Note that via the iteration, we can rewrite $\norm{p_k}$ in terms of $\norm{\grad f_k}$. This is found from $x_{k+1} = x_k + \alpha_k p_k$. which can be rewritten as $\norm{p_k} \geq \norm{x_k - x\star}$. Then we can apply part a from last homework to this to get an inequality to $\norm{\grad f_k}$
+\partbreak
+\begin{solution}
+
+    Note that the given inequality can be rewritten in the following form:
+    \[f(x^{k+1} \leq f(x^k) + \eta^k (f(x\star) - f(x^k)\]
+    From Homework 2, part 2, we were analyzing a sequence which was of the form $x^{k+1} = \alpha^k + p^k$. We will start in a similar manner as in that problem. Note I will be shorthanding $f(x^i) = f_i$. 
+    \tightalignbreak
+    \begin{align*}
+        f_{k+1} &\leq f_k + c_1\alpha_k \grad f_k\T p_k &\text{(Start.)}\\
+        &\leq f_k + c_1\rho \Bar{\alpha} \grad f_k\T p_k &\text{(Backtracking bound.)}\\
+        &\leq f_k - x_1\rho\Bar{\alpha} \norm{\grad f_k\T p_k} &\text{(Norm of negative value.)}\\
+        &\leq f_k - c_1 \rho\Bar{\alpha}\norm{\grad f_k} \norm{p_k} &\text{(Cauchy Schwartz.}\\
+        &\leq f_k - c_1 \rho \Bar{\alpha} \norm{\grad f_k}^2 &\text{(Iteration.)}\\
+        &\leq f_k - c_1 \rho\Bar{\alpha}(2\lm_{\max})(f(x_k) - f(x\star)) &\text{(From part a.)}\\
+        \implies& \eta_k = 2c_1\rho\Bar{\alpha}\lm_{\max} &\text{(Comparing.)} 
+    \end{align*}
+    \vspace{-12mm}\alignbreak
+    Note that $\lm_{\max}$ is the max eigenvalue of $B_k$, which is $\eta$'s dependence on $k$.
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part d}
+Show now that $\eta_k$ is uniformly bounded below away from zero, and concluded that $f(x^k) - f(x\star)$ converges Q-linearly to zero.
+\partbreak
+\begin{solution}
+
+    Note that $B_k$ is an approximation to the Hessian $\grad^2f(x_k)$. As $k\rightarrow \infty$, we have that $\norm{B_k} \rightarrow \norm{\grad^2f(x\star)}$. Since $x\star$ satisfies the second order sufficient conditions, we have that $\grad^2(fx\star) \succ 0$, which implies that $\lm_{\max}$ is bounded away from zero. Due to this reason, taking norms on each side of the inequality in part c, we get
+    \[\norm{f_{k+1} - f(x\star)} \leq |1 - \eta_k|\norm{f_k - f(x\star)}.\]
+    Dividing through by $\norm{f_k - f(x\star)}$ tells us that the ratio between function evaluations is bounded by $|1 - \eta_k|$, which we showed was bounded away from zero. Therefore, $f(x^k) - f(x\star)$ converges Q-linearly to zero.  
+\end{solution}
+
+\subsection{Problem 3, part e}
+Show that the sequence $\norm{x_k - x\star}, \ \norm{\grad f(x^k)}$ converge R-linearly to zero. 
+\partbreak
+\begin{solution}
+
+    To show these two sequences converge R-linearly to zero, we just need to show that there is some other sequence $r_k$ which bounds the sequence and converges Q-linearly to zero. Note that by part a, $\norm{\grad f(x)}^2$ is bounded by $\frac{1}{c_1} (f(x) - f(x\star))$. Since we showed the sequence $f(x_k) - f(x\star)$ converges Q-linearly to zero, and it bounds $\norm{\grad f(x)}^2$ for any $x$ in our neighborhood of $x\star$, then $\norm{\grad f(x_k)}$ converges R-linearly to zero. Doing the same procedure with the relationship we found between $\norm{x - x\star}$ and $\norm{\grad f(x)}$ in Homework 2, Problem 3, we have that $\norm{x^k - x\star}$ converges R-linearly to zero. Note that we are free to apply this result from problem 3, since we satisfy the same conditions. 
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part f}
+Is it possible for the convergence rate to be quadratic?
+\partbreak
+\begin{solution}
+
+    Note that we are only using information about the gradient, not the Hessian. Only Newton's method converges quadratically, which requires the exact hessian of the function to work. Thus, we are only guaranteed at most superlinear convergence.  
 \end{solution}
 \end{document}
