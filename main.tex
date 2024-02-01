@@ -1,0 +1,61 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31210: Homework 4}
+\author{Caleb Derrickson}
+\date{February 2, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Problem 5.2}
+Suppose that $\{ e_1, e_2, ..., e_n\}$ and $\{\Bar{e}_1, \Bar{e}_2, ..., \Bar{e}_n\}$ are two bases of the n-dimensional linear space $X$, with
+\[\Bar{e}_i = \sum_{j = 1}^nL_{ij}e_j, \quad e_i = \sum_{j = 1}^n \Bar{L}_{ij}\Bar{e}_j\]
+where $L$ is an invertible matrix with inverse $\Bar{L}$, i.e., $\sum_{j = 1}^n L_{ij}\Bar{L}_{jk} = \delta_{ik}$. Let $\{\omega_1, \omega_2, ..., \omega_n\}$ and $\{ \Bar{\omega}_1, \Bar{\omega}_2, ..., \Bar{\omega}_n\}$ be the associated dual bases of $X\star$.
+\subsection{Problem 5.2, part a}
+If $x = \sum x_ie_i = \sum \Bar{x}_i \Bar{e}_i \in X$, then prove that the components of $x$ transform under a change of basis according to 
+\[\Bar{x}_i = \Bar{L}_{ji}x_j, \quad \forall \ i = 1, ..., n\]
+\partbreak
+\begin{solution}
+
+    If we start with the first expansion of $x$ in the basis $\{ e_1, e_2, ..., e_n\}$ and rewrite $e_i$ into the given form, we have 
+    \[x = \sum_{i = 1}^n x_i e_i = \sum_{i = 1}^n x_i \sum_{j = 1}^n \Bar{L}_{ij}\Bar{e}_j.\]
+    After some rearranging, we have
+    \[x = \sum_{i = 1}^n \left(\sum_{j = 1}^n \Bar{L}_{ij}x_i \right)\Bar{e}_j.\]
+    Note that the summation indices can be freely interchanged, so swapping the two indices, we have,
+    \[x = \sum_{i = 1}^n \left(\sum_{j = 1}^n \Bar{L}_{ji}x_j \right)\Bar{e}_i.\]
+    By the other expansion for $x$ in the basis $\{\Bar{e}_1, \Bar{e}_2, ..., \Bar{e}_n\}$, we can compare the coefficients in each expansion to get 
+    \[\Bar{x}_i = \Bar{L}_{ji}x_j. \]
+    Note that this holds for all $i = 1, ..., n$, which is what we wanted to show.
+\end{solution}
+
+\newpage
+\subsection{Problem 5.2, part b}
+If $\ph = \sum_{i = 1}^n \ph_i \omega_i = \sum_{i = 1}^n \Bar{\ph}_i \Bar{\omega}_i \in X\star$, then prove that the components of $\ph$ transform under a change of basis according to
+\[\Bar{\ph}_i = \sum_{j  =1}^n L_{ij}\ph_j, \quad \forall \ i = 1, ..., n\]
+\partbreak
+\begin{solution}
+
+    Investigating the action of $\ph$ onto the basis vector $\Bar{e_i}$, by the given mapping from $\Bar{e} \mapsto e$, we have 
+    \[\ph(\Bar{e}_i) = \ph \left( \sum_{j = 1}^n L_{ij} e_j\right).\]
+    Since $\ph$ is a linear operator, which only acts on coordinates, we have that 
+    \[\ph(\Bar{e}_i) = \sum_{j = 1}^n L_{ij} \ph (e_j).\]
+    By our notation, we write $\ph(\Bar{e}_i) = \Bar{\ph}$ and $\ph (e_j) = \ph_j$, thus we can write
+    \[\Bar{\ph}_i = \sum_{j = 1}^n L_{ij} \ph_j.\]
+    This formula will hold for any chosen $i \leq n$, since its choice was arbitrary. Thus, we have proven the statement. 
+\end{solution}
+
+\newpage
+\section{Problem 5.6}
+Let $X$ be a normed linear space. Use the Hahn-Banach Theorem to prove the following statements:
+\begin{itemize}[a)]
+    \item For any $x \in X$, there is a bounded linear functional $\ph \in X\star$ such that $\norm{\ph} = 1$ and $\ph (x) = \norm{x}$.
+    \item[b)] If $x, y \in X$ and $\ph(x) = \ph(y) $ for any $\ph \in X\star$, then $x = y$.
+\end{itemize}
+\end{document}
