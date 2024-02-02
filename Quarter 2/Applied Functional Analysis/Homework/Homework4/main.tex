@@ -84,7 +84,42 @@ Let $X$ be a normed linear space. Use the Hahn-Banach Theorem to prove the follo
 \section{Problem 5.10}
 Suppose that $k: [0, 1]\times [0, 1] \rightarrow \R$ is a continuous function. Prove that the integral operator $K : C([0, 1]) \rightarrow C([0, 1])$ defined by 
 \[Kf(x) = \int_0^1 k(x, y) f(y) \ dy \quad \text{is compact.}\]
+\partbreak
+\begin{solution}
 
+    By Definition 5.42, we need to show that for any bounded subset in $C([0, 1])$, $K(B)$ is a precompact subset of $C([0, 1])$. By Theorem 2.12 (Arzel\'a-Ascoli), we need to show that $\overline{K(B)}$ is bounded, closed, and equicontinuous in $C([0, 1])$. Define $A = [0, 1]$, which is a compact subset of $\R$.
+    \begin{itemize}[-]
+        \item \underline{Closed}: 
+
+        \hop
+        This is by definition of the closure of a set. Thus, $\overline{K(B)}$ is closed. 
+        \item \underline{Bounded}: 
+
+        \hop
+        Take $f \in B \subseteq C([0, 1])$, then $\norm{f} = \sup_{x \in A} |f(x)|$. Thus we have
+        \[\norm{Kf} = \norm{\int_0^1 k(x, y)f(y) \ dy} \leq \sup_{x \in A} \int_0^1 |k(x, y)f(y)| \ dy \leq \sup_{x \in A}\int_0^1 |k(x, y)||f(y)| \ dy\]
+        Note that by definition, $|f(y)| \leq \sup_{y \in A} |f(y)| = \norm{f}$. This will add another inequality, as well as taking the norm outside of the integral (it is constant with respect to $y$). We then have that 
+        \[\norm{Kf} \leq \norm{f}\sup_{x \in A}\left\{\int_0^1 |k(x, y)| \ dy\right\}.\]
+        We are given in Example 5.17 that the sup on the right hand side is the norm of the integral operator. Thus we have that $\norm{Kf} \leq \norm{K}\norm{f}$, which implies that $\overline{K(B)}$ is bounded.
+        \item \underline{Equicontinuity}:
+
+        \hop
+        Let $f_1, f_2 \in B$. To show equicontinuity, we need to find a $\delta$ such that, for any $\ep > 0$, when $d(f_1, f_2 < \delta$, we have that $d(Kf_1, Kf_2) < \ep$. Note the metric we are working under is the sup-norm, so $d(f_1, f_2) = \sup_{x \in A} |f_1(x) - f_2(x)|$, and similar for $d(Kf_1, Kf_2)$. Set $\delta = \frac{\ep}{\norm{K}}$. Then, we see the following:
+        \newpage
+        \tightalignbreak
+        \begin{align*}
+            &\norm{Kf_1 - Kf_2} =\sup_{x \in A}\left|Kf_1(x) - Kf_2(x)\right| &\text{(Given.)}\\
+            &= \sup_{x \in A}\left|K(f_1(x) - f_2(x))\right| &\text{(Grouping.)}\\
+            &\leq \sup_{x \in A}\left\{ \norm{K}|(f_1(x) - f_2(x))|\right\} &\text{(Cauchy-Schwartz.)}\\
+            &= \norm{K} \sup_{x \in A}\left\{ |f_1(x) - f_2(x)|\right\} &\text{(Rearranging.)}\\
+            &< \norm{K}\left( \frac{\ep}{\norm{K}}\right) &\left(\delta = \frac{\ep}{\norm{K}}.\right)\\
+            &= \ep &\text{(Simplifying.)}
+        \end{align*}
+        \vspace{-12mm}\alignbreak
+        Therefore, $K$ is an equicontinuous linear mapping. Thus by Arzel\'a - Ascoli, $\overline{K(B)}$ is a compact subset of $C([0, 1])$, which means that $K$ is a compact operator. 
+        
+    \end{itemize}
+\end{solution}
 \newpage
 \section{Problem 5.11}
 Prove that if $T_n \rightarrow T$ uniformly, then $\norm{T_n} \rightarrow \norm{T}$.
