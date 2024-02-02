@@ -58,4 +58,75 @@ Let $X$ be a normed linear space. Use the Hahn-Banach Theorem to prove the follo
     \item For any $x \in X$, there is a bounded linear functional $\ph \in X\star$ such that $\norm{\ph} = 1$ and $\ph (x) = \norm{x}$.
     \item[b)] If $x, y \in X$ and $\ph(x) = \ph(y) $ for any $\ph \in X\star$, then $x = y$.
 \end{itemize}
+\partbreak
+\begin{solution}
+
+    I will include the Hahn-Banach Theorem here for completeness.
+    
+    \begin{center}\rule{16.5cm}{0.5pt}\end{center}
+    \begin{quote}
+    \vspace{-6mm}
+        \textbf{Hahn-Banach Theorem}: If $Y$ is a linear subspace of a normed linear space $X$ and $\psi: Y \rightarrow \R$ is a bounded linear functional on $Y$ with $\norm{\psi} = M$, then there is a bounded linear functional $\ph : X \rightarrow \R$ such that $\ph$ restricted to $Y$ is equal to $\psi$ and $\norm{\ph} = M$.  
+    \end{quote}
+    \vspace{-12mm}
+    \begin{center}\rule{16.5cm}{0.5pt}\end{center}
+    \begin{itemize}
+    \item [a)] Let $x \in X$, and define the subspace $Y$ as any scaling of $x$. That is, $Y = \{ \lm x : \lm \in \R\}$. $Y$ is then a linear subspace of $X$, since it is closed under addition and scalar multiplication $(\mu y_1 + \gamma y_2 = \lm(\mu + \gamma)x \in Y)$. Define the functional $\psi: Y \rightarrow \R$ as $\psi (y \in Y) = \norm{y}_X = |\lm|\norm{x}_X$. We can note that $\psi$ is bounded, since 
+    \[\norm{\psi} = \sup \frac{|\psi(y)|}{\norm{y}} = \sup\frac{|\lm \norm{x}}{\norm{\lm x}} = \sup \frac{|\lm|\norm{x}}{|\lm| \norm{x}} = 1.\]
+    Therefore, $\norm{\psi} = 1$ for any $x \in X$. By the Hahn-Banach Theorem, there exists a bounded linear functional $\ph: X \rightarrow \R$ where $\ph|_{Y} = \psi$ and $\norm{\ph} = 1$. Therefore, $\norm{\ph} = 1$ and $\ph(x) = \norm{x}$ for any $x \in X$. 
+    \item[b)] Suppose that $x \neq y \in X$, but $\ph (y) = \ph(x)$. Define $z = x - y \neq 0$. Note that $z \in X$, so by part a there is a linear functional $\ph'$ such that $\ph'(z) = \norm{z}$ and $\norm{\ph'} = 1$. The latter is notable, since we have that $\ph' \neq 0$. Thus, we have that 
+    \[\ph'(z) = \norm{z} = \norm{x - y} \neq 0\]
+    This then implies that $\ph'(x) \neq \ph'(y)$. Therefore, a linear functional has been found such that for $x \neq y, \ph(x) \neq \ph(y)$. Note that we suppose that $\ph(x) = \ph(y)$ should hold for all $\ph \in X\star$, thus $x = y$.
+    \end{itemize}
+\end{solution}
+
+\newpage
+\section{Problem 5.10}
+Suppose that $k: [0, 1]\times [0, 1] \rightarrow \R$ is a continuous function. Prove that the integral operator $K : C([0, 1]) \rightarrow C([0, 1])$ defined by 
+\[Kf(x) = \int_0^1 k(x, y) f(y) \ dy \quad \text{is compact.}\]
+
+\newpage
+\section{Problem 5.11}
+Prove that if $T_n \rightarrow T$ uniformly, then $\norm{T_n} \rightarrow \norm{T}$.
+\partbreak
+\begin{solution}
+
+    We have that $T_n \rightarrow T$ uniformly, that is, $\lim_{n \rightarrow 0} \norm{T_n - T} = 0$. Let $\ep > 0$. Since $T_n \rightarrow T$, there exists some $N \in \N$ such that when $n \geq N \implies \norm{T_n - T} < \ep$. A quick shortcut can be made via the reverse triangle inequality, but I will explain it slightly more. Consider $\norm{T_n}$. This is equivalent to $\norm{T_n - T + T}$, that is, adding and subtracting the same number such that we maintain equality. By the triangle inequality, we have that 
+    \[\norm{T_n - T + T} \leq \norm{T_n - T} + \norm{T}.\]
+    Therefore, we have that $\norm{T_n} - \norm{T} \leq \norm{T_n - T}$. By symmetry of the argument, we have that 
+    \[\big|\norm{T_n} - \norm{T}\big| \leq \norm{T_n - T}.\]
+    Since $\norm{T_n - T} < \ep$ for sufficiently large $n$, then by the reverse triangle inequality explained above, we have that 
+    \[\big| \norm{T_n} - \norm{T} \big| < \ep, \quad \text{For sufficiently large $n$.}\]
+    Therefore, $\lim_{n\rightarrow\infty} \big|\norm{T_n} - \norm{T}\big| = 0$, or equivalently, $\norm{T_n} \rightarrow \norm{T}$.
+\end{solution}
+\newpage
+\section{Problem 5.17}
+Suppose that $K : X \rightarrow X$ is a bounded linear operator on a Banach space $X$ with $\norm{K} < 1$. Prove that $\id - K$ is invertible and 
+\[(\id - K)\inv  = \id + K + K^2 + K^3 + ...,\]
+where the series on the right hand side converges uniformly in $\mathfrak{B}(X)$.
+\partbreak
+\begin{solution}
+
+    We will first show that $\id - K$ is invertible. Note that this is equivalent to showing $\norm{\id - K} > 0$, since if it were, then $\id  - K$ would have a nonzero kernel. By the reverse triangle inequality, we can write
+    \[\big| \norm{\id} - \norm{K} \big| \leq \norm{\id - K}\]
+    We have that $\norm{K} < 1$, and $\norm{\id} = 1$. Therefore, $\norm{ \id} - \norm{K} > 0$, implying that $\norm{\id - K} > 0$, thus $\id - K$ is invertible. Next, we need to show that its inverse is of the given form. Define $A_n$ as the $n$-th iterate of the sequence on the right hand side, so we can write
+    \[A_n = \sum_{j = 0}^n K^j\]
+    Multiplying on the left by $(\id - K)$ gives
+    \[(\id - K) A_n = (\id - K)\sum_{j = 0}^n K^j = \sum_{j = 0}^n K^j - K^{j+1}\]
+    We note that $(\id - K)$ is a telescoping series, so we will only be left with $K^0$ and $-K^{n+1}$, giving
+    \[(\id - K) A_n = \id - K^{n+1}\]
+    Next we need to show that $K^{n+1} \rightarrow 0$ as $n \rightarrow \infty$ in order to justify the equality. Note that $\norm{K} < 1$, so $\norm{K}^2 \leq \norm{K}$. Thus for some index $m$, we note that $\norm{K}^m \leq \norm{K}^{m-1} < ... < 1$, thus the sequence $\norm{K}^m$ is a monotonically decreasing sequence in $\R$. By the properties of the norm, this sequence is bounded below by zero, and is bounded above by the previous iterate of the sequence. Thus, there is a converging subsequence $\norm{K}^{\ph(n)} \rightarrow 0$ as $\ph(n) \rightarrow \infty$, which implies $\norm{K}^n \rightarrow 0$, so $K^n \rightarrow 0$ as $n\rightarrow \infty$. This implies that $\lim_{n \rightarrow \infty}A_n = (\id - K)\inv$. We can recover the bound of the norm on the right hand side by the following:
+    \newpage
+    \tightalignbreak
+    \begin{align*}
+        &\norm{\lim_{n \rightarrow \infty} A_n} &\text{(Given.)}\\
+        &= \lim_{n \rightarrow \infty}\norm{A_n} &\text{(Limits exist.)}\\
+        &=\lim_{n \rightarrow \infty}\norm{\sum_{j = 0}^n K^j} &\text{(Definition.)}\\
+        &\leq \lim_{n \rightarrow \infty}\sum_{j = 0}^n \norm{K^j} &\text{(Triangle inequality.)}\\
+        &\leq \lim_{n \rightarrow \infty}\sum_{j = 0}^n \norm{K}^j &\text{(Cauchy-Schwartz.)}\\
+        &= \frac{1}{1 - \norm{K}} &\text{(Geometric series.)}
+    \end{align*}
+    \vspace{-12mm}\alignbreak
+    Therefore, the norm on the right hand side is bounded by $(1 - \norm{K})\inv$. This is well defined, since $\norm{K} < 1$. Therefore, $\lim_{n \rightarrow \infty} A_n \in \mathfrak{B}(X)$, which completes the proof.
+\end{solution}
 \end{document}
