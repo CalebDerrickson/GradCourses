@@ -1,0 +1,126 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{CMSC 37000: Homework 2}
+\author{Caleb Derrickson}
+\date{February 9, 2024}
+
+\usetikzlibrary{positioning, arrows.meta, bending}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+
+
+\newpage
+\section{Problem 2}
+Consider a rooted binary tree $T$, in which every vertex $u$ is labelled with an integer number $x_u$. We say that $T$ satisfies Property $\mathbf{H}$ if
+\[\text{for every vertex $u$ and every child $v$ of $u$, $x_u \geq x_v$}.\]
+Consider the following problem: given a tree $T$, change the smallest possible number of vertex labels $x_u$ so that the tree satisfies property $\mathbb{H}$. When we change the label of $u$, we can assign $x_u$ any integer number we want. Design a DP-algorithm that solves this problem. Specifically, do the following:
+\begin{enumerate}
+    \item Define subproblems.
+    \item Define the dynamic-programming table and explain the meaning of its entries.
+    \item Write the initialization step of your algorithm.
+    \item Write the recurrence formula for computing the entries of the table. 
+    \item Explain why the recurrence formula is true.
+    \item Find the running time of your algorithm.
+\end{enumerate}
+\newpage
+\section{Problem 3}
+Consider the flow network $G$ and flow $f$ shown in the figure below. For every edge $e$, the slow amount $f(e)$ on the edge and its capacity are written next to $e$ as \textcolor{red}{$f(e)$} $(c(e))$.
+\begin{itemize}[$\bullet$]
+    \item Draw the residual graph $G_f$ (draw all forward and backward edges of $G_f$). For every edge, indicate whether it is a forward or backward edge.
+    \item Write the residual capacity of every edge $e$ of $G_f$ (you can write it next to the drawing of the edge).
+\end{itemize}
+
+\renewcommand{\d}{3}
+\begin{center}
+    
+\begin{tikzpicture}[
+    node distance=2cm,
+    arrow/.style={-Stealth, shorten >=1pt, shorten <=1pt},
+    mynode/.style={draw, circle, minimum size=1mm, fill=lightgray},
+    edgelabel/.style={font=\footnotesize, sloped}
+]
+
+% Nodes
+\node[mynode, label=below left:$s$] at (-2*\d,0) (s) {};
+\node[mynode, label=above right:$x$] at (-0.2*\d,\d) (x) {};
+\node[mynode, label=below left:$u$] at (-\d,0) (u) {};
+\node[mynode, label=below right:$v$] at (0, 0) (v) {};
+\node[mynode, label=below right:$t$] at (\d,0) (t) {};
+\node[mynode, label=below right:$y$] at (-0.6*\d,-\d) (y) {};
+
+% Edges
+\draw[arrow] (s)  -- node[edgelabel, above] {\textcolor{red}{6} (10)} (u);
+
+
+\draw[arrow] (s) -- node[edgelabel, above] {\textcolor{red}{2} (2)} (x);
+\draw[arrow] (s) -- node[edgelabel, above] {\textcolor{red}{4} (4)} (y);
+
+\draw[arrow] (u) -- node[edgelabel, above] {\textcolor{red}{8} (8)} (v);
+
+\draw[arrow] (v) -- node[edgelabel, above] {\textcolor{red}{10} (12)} (t);
+
+\draw[arrow] (x) -- node[edgelabel, above] {\textcolor{red}{0} (4)} (t);
+\draw[arrow] (x) -- node[edgelabel, above] {\textcolor{red}{2} (3)} (v);
+
+\draw[arrow] (y) -- node[edgelabel, above] {\textcolor{red}{2} (11)} (u);
+\draw[arrow] (y) -- node[edgelabel, above] {\textcolor{red}{2} (2)} (t);
+\end{tikzpicture}
+\end{center}
+\partbreak
+\begin{solution}
+
+    I will include the residual graph below, which will have its backward edges dashed, and the forward edges solid (this is the same convention as shown in class). To create the residual graph $G_f$, we consider each edge separately in $G$. If the edge is fully saturated, we replace the original edge with a backward edge of the same flow value. If the edge is not saturated, i.e., the flow along that edge is less than its capacity, we replace the existing edge with a forward edge; with flow value $f_e - c(e)$; and a backward edge; with flow value $f_e$.   
+\end{solution}
+
+\begin{center}
+    
+\begin{tikzpicture}[
+    node distance=2cm,
+    arrow/.style={-Stealth, shorten >=1pt, shorten <=1pt},
+    mynode/.style={draw, circle, minimum size=1mm, fill=lightgray},
+    edgelabel/.style={font=\tiny, sloped}
+]
+
+% Nodes
+\node[mynode, label=below left:$s$] at (-2*\d,0) (s) {};
+\node[mynode, label=above right:$x$] at (-0.2*\d,\d) (x) {};
+\node[mynode, label=below left:$u$] at (-\d,0) (u) {};
+\node[mynode, label=below right:$v$] at (0, 0) (v) {};
+\node[mynode, label=below right:$t$] at (\d,0) (t) {};
+\node[mynode, label=below right:$y$] at (-0.6*\d,-\d) (y) {};
+
+% Edges
+\draw[arrow, bend left=10] (s) to node[edgelabel, above] {4} (u);
+\draw[arrow, dashed, bend left=10] (u) to node[edgelabel, below] {6} (s);
+
+\draw[arrow, dashed] (x) -- node[edgelabel, above] {2} (s);
+
+\draw[arrow, dashed] (y) -- node[edgelabel, above] {4} (s);
+
+\draw[arrow, dashed] (v) -- node[edgelabel, above] {8} (u);
+
+\draw[arrow, bend left=10] (v) to node[edgelabel, above] {2} (t);
+\draw[arrow, bend left=10, dashed] (t) to node[edgelabel, below] {10} (v);
+
+\draw[arrow] (x) -- node[edgelabel, above] {4} (t);
+
+\draw[arrow, bend left=10] (x) to node[edgelabel, above] {1} (v);
+\draw[arrow, bend left=10, dashed] (v) to node[edgelabel, below] {2} (x);
+
+\draw[arrow, bend left=10] (y) to node[edgelabel, below] {9} (u);
+\draw[arrow, bend left=10, dashed] (u) to node[edgelabel, above] {2} (y);
+
+\draw[arrow, dashed] (t) to node[edgelabel, above] {2} (y);
+\end{tikzpicture}
+\end{center}
+\end{document}
