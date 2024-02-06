@@ -17,8 +17,22 @@
 
 \newpage
 \section{Problem 1}
-
-
+We are given a set of intervals $I_1, ..., I_n$ on the real line. Each interval $I_i$ is specified by the start and end points $s_i$ and $t_i$, respectively:
+\[I_i = [s_i, t_i]\]
+Additionally, for each interval $I_i$, we are given a color $c_i$ which is either red or black. We want to find a subset of intervals $A$ so that 
+\begin{itemize}[$\bullet$]
+    \item no two intervals in $A$ intersect;
+    \item there is an equal number of red and black intervals in $A$;
+    \item the total length of all intervals in $A$ is maximized.
+\end{itemize}
+Design a polynomial-time dynamic programming algorithm that finds an optimal solution. Describe your algorithm in detail. Prove its correctness. Specifically, do the following:
+\begin{enumerate}
+    \item Define a dynamic-programming table and explain the meaning of its entries.
+    \item Write the initialization step of your algorithm.
+    \item Write the recurrence formula for computing the entries of the table.
+    \item Explain the formula.
+    \item Find the running time of your algorithm.
+\end{enumerate}
 \newpage
 \section{Problem 2}
 Consider a rooted binary tree $T$, in which every vertex $u$ is labelled with an integer number $x_u$. We say that $T$ satisfies Property $\mathbf{H}$ if
@@ -32,6 +46,70 @@ Consider the following problem: given a tree $T$, change the smallest possible n
     \item Explain why the recurrence formula is true.
     \item Find the running time of your algorithm.
 \end{enumerate}
+\partbreak
+\begin{solution}
+
+    \begin{enumerate}
+        \item \underline{Defining subproblems}:
+        
+        \hop
+        Starting from the root of the tree, we can consider the two subtrees, labelled $T_L$ and $T_R$, which have its children as roots. The analysis preformed on the tree $T$ is then equivalent to the analysis preformed separately on $T_L$ and $T_R$, bar the case where we consider the root of $T$ with the roots of $T_L$ and $T_R$. We can then repeat this delegation of subproblems up to the leaves of the tree $T$. This will then be treated as a separate case in recursion. 
+
+        \item \underline{The DP Table}:
+
+        \hop
+        In order to keep track of the two subtrees $T_L$ and $T_R$, we need to establish two tables, labelled $L[n]$ and $R[n]$ respectively, in which the entries of the tables respect the decision made at each iteration of the algorithm. We can also define another DP table, call it $A[n]$, which will have entries of our decision made at each iteration. Note that the table $A[n]$ is necessary, as the updating of $L[n]$ and $R[n]$ will be handled separately.
+
+        \newpage
+        \item \underline{Initilization}:
+
+        \hop
+        The initialization of our algorithm basically translates to our handling of the leaves of $T$. Since we wish to establish a hierarchy on the tree, meaning the values of the nodes at depth $d$ bound the values of the nodes at depth $d+1$. Note that, in the case of leaves, we are only considering the value of the leaf $x_v$ and its parent $x_u$. To this extent, we will take the minimum of these two values, and set the new node value to it. That is, in the case where $u$ is a leaf of $T$, with parent $v$, $x_u'= \min\{x_u, x_v\}$. 
+
+        \item \underline{The Recurrence Formula}: 
+
+        \hop
+        Since we are considering the case where $u$ is a leaf separately, we can assume that the vertex $u$ has children $v_L$ and $v_R$. Our three DP tables make the handling of this case easy, since we can take $x_u' = \max\{x_{u_L}, x_{u_R}\}$. Note that the values of $x_{u_L}$ and $x_{u_{R}}$ are the updated values from a previous step in recursion. The DP tables are then updated as follows: supposing vertex $u$ is the root node considered at iteration $i$, then $A[i] = \max\{L[i-1], R[i-1], T[i]\}$, where $T[i] = x_u$. The update of $L$ will be $\max\{L[i-1], T[i]\}$, with a similar update schema for $R$. 
+
+        \item \underline{The Algorithm's Validity}:
+
+        \hop
+        By the structure of the proposed algorithm, we have established nodes of greater depth will have smaller values than nodes at lower depths. Thus, our algorithm will produce a tree which comports with the desired result. The minimum number of value modifications is also guaranteed, due to our separate handling of the leaves of $T$. Note that, if we take the example tree as a test for our proposed algorithm, the nodes modified are different than the proposed solution. Nevertheless, the number of changed node values is similar. If we run the proposed algorithm on the given example, we will get the result given below. Note that the number of changed node values, 5, is equal to the given solution. I have colored the nodes in a similar manner. 
+        \vspace{10mm}
+        \begin{center}
+                \begin{tikzpicture}[level distance=1.5cm,
+                            level 1/.style={sibling distance=4cm},
+                            level 2/.style={sibling distance=2cm},
+                            level 3/.style={sibling distance=1.5cm},
+                            every node/.style={scale=0.8}]
+                      \node[circle,draw,fill=yellow!70] (root) {10}
+                        child {node[circle,draw,fill=yellow!70] {10}
+                          child {node[circle,draw,fill=blue!40] {6}
+                            child {node[circle,draw,fill=blue!40] {6}}
+                            child {node[circle,draw,fill=yellow!70] {6}}
+                          }
+                          child {node[circle,draw,fill=blue!40] {10}
+                            child {node[circle,draw,fill=blue!40] {1}}
+                          }
+                        }
+                        child {node[circle,draw,fill=blue!40] {10}
+                          child {node[circle,draw,fill=blue!40] {1}
+                            child {node[circle,draw,fill=yellow!70] {1}}
+                          }
+                          child {node[circle,draw,fill=blue!40] {9}
+                            child {node[circle,draw,fill=blue!40] {7}}
+                            child {node[circle,draw,fill=yellow!70] {9}}
+                          }
+                        };
+                \end{tikzpicture}
+        \end{center}
+
+        \item \underline{The Running Time}:
+
+        \hop
+        By the structure of our algorithm, we will need to traverse each node a linear number of times. The same can be said for the edges. Thus our running time is $O(|V| + |E|)$, where $V$ is the set of vertices in $T$ and $E$ is the set of edges of our tree.
+    \end{enumerate}
+\end{solution}
 \newpage
 \section{Problem 3}
 Consider the flow network $G$ and flow $f$ shown in the figure below. For every edge $e$, the slow amount $f(e)$ on the edge and its capacity are written next to $e$ as \textcolor{red}{$f(e)$} $(c(e))$.
