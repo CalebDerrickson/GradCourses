@@ -1,0 +1,87 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31210: Homework 5}
+\author{Caleb Derrickson}
+\date{February 8, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Problem 12.6}
+Use the Dominated convergence Theorem to prove Corollary 12.36 for differentiation under an integral sign. 
+
+\newpage
+\section{Problem 12.8}
+Let $f_n : X \into \C$. be a sequence of measurable functions converging to $f$ pointwise almost everywhere. Suppose there exists $g \in L^p(X)$ such that $|f_n| \leq g$ almost everywhere. Then $f_n \into f$ in the $L^p$-norm. 
+
+\newpage
+\section{Problem 12.12}
+Prove the following generalization of H\"older's inequality: if $1 \leq p_i \leq \infty$, where $i = 1, ..., n$ satisfy
+\[\sum_{i = 1}^n \frac{1}{p_i} = 1\]
+and $f_i \in L^{p_i}(X, \mu)$, then $f_1 \cdots f_n \in L^1(X, \mu)$ and 
+\[\left| \int f_1 \cdots f_n \ d\mu\right| \leq \norm{f_1}_{p_1} \cdots \norm{f_n}_{p_n}.\]
+
+\newpage
+\section{Problem 12.15}
+If $f \in L^p (\R^n) \cap L^q(\R^n)$, where $p < q$, prove that $f \in L^r(\R^n)$ for any $p < r < q$, and show that 
+\[\norm{f}_r \leq (\norm{f}_p)^{\frac{1 / r - 1 / q}{1 / p - 1 / q}} (\norm{f}_q)^{\frac{1 / p - 1 / r}{1 / p - 1 / q}},\]
+This result is one of the simplest examples of an \textit{interpolation inequality}.
+
+\newpage
+\section{Problem 12.17}
+Prove that the unit ball in $L^p([0, 1])$, where $1 \leq p \leq \infty$, is not strongly compact.
+
+\newpage
+\section{Problem 12.18}
+Give an example of a bounded sequence in $L^1([0, 1])$ that does not have a weakly convergent subsequence. Why does this not contract the Banach-Analoglu Theorem?
+
+\newpage
+\section{Problem 6.2}
+Consider $C([0, 1])$ with the sup-norm. Let 
+\[N = \left \{ f \in C([0, 1]) : \int_0^1 f(x) \ dx = 0\right\}\]
+be the closed linear subspace of $C([0, 1])$ of functions with zero mean. Let 
+\[X = \left\{ f \in C([0, 1]) : f(0) = 0\right\}\]
+and define $M = N \cap X$. 
+\subsection{Problem 6.2, part a}
+If $u \in C([0, 1])$, prove that 
+\[d(u, N) = \inf_{n \in N} \norm{u - n} = |\overline{u}|\]
+where $|\overline{u}| = \int_0^1 u(x) \ dx$ is the mean of $u$, so the infimum is attained when $n = u - \overline{u} \in N$. 
+
+\newpage
+\subsection{Problem 6.2, part b}
+If $u(x) = x \in X$, show that
+\[d(x, M) = \inf_{m \in M}\norm{u - m} = 1/2,\]
+but that the infimum is not attained for any $m \in M$.
+
+\newpage
+\section{Problem 6.5}
+Suppose that $\{H_n : n \in \N\}$ is a set of orthogonal closed subspaces of a Hilbert space $H$. We define the infinite direct sum
+\[\bigoplus_{n = 1}^\infty H_n = \left \{ x_n : x_n \in H_n \text{ and } \sum_{n=1}^\infty \norm{x_n}^2 < \infty\right\}.\]
+Prove that $\bigoplus_{n = 1}^\infty H_n$ is a closed linear subspace of $H$.
+
+\newpage
+\section{Problem 6.11}
+Prove that if $M$ is a dense linear subspace of a Hilbert space $H$, then $H$ has an orthonormal basis consisting of elements in $M$. Does the same result hold for arbitrary dense subsets of $H$?
+
+\newpage
+\section{Problem 6.14}
+Define the Hermite polynomials $H_n$ by 
+\[H_n(x) = (-1)^ne^{x^2} \frac{d^n}{dx^n}\left( e^{-x^2}\right).\]
+\subsection{Problem 6.14, part a}
+Show that 
+\[\ph_n(x)  = e^{-x^2/2}H_n(x)\]
+is an orthogonal set in $L^2(\R)$.
+
+\newpage
+\subsection{Problem 6.14, part b}
+show that the $n$-th Hermite function $\ph_n$ is an eigenfunction of the linear operator
+\[H = -\frac{d^2}{dx^2} + x^2\]
+with eigenvalue $\lm_n = 2n+1$.
+\end{document}
