@@ -83,7 +83,47 @@ Prove the following generalization of H\"older's inequality: if $1 \leq p_i \leq
 \[\sum_{i = 1}^n \frac{1}{p_i} = 1\]
 and $f_i \in L^{p_i}(X, \mu)$, then $f_1 \cdots f_n \in L^1(X, \mu)$ and 
 \[\left| \int f_1 \cdots f_n \ d\mu\right| \leq \norm{f_1}_{p_1} \cdots \norm{f_n}_{p_n}.\]
+\partbreak
+\begin{solution}
 
+    This claim will be proven via induction on $n$. 
+    \begin{itemize}
+        \item \underline{Base Case}: $n = 1$
+
+        \hop
+        Then the summation runs only over one $p_i$, in particular $p_1$. Since $\frac{1}{p_1} = 1$, this implies that $p_1 = 1$. Then 
+        \[\left| \int f_1 \ d\mu\right| = \norm{f_1}_1 \leq \norm{f_1}_1\]
+        Since equality is a subcase of ``$\leq$".
+
+        \item \underline{Induction Hypothesis}: 
+        
+        \hop
+        Next we assume the inequality above holds for some cases up to and including the case $k$, $k > 1$. This implies that 
+        \[\sum_{i = 1}^k \frac{1}{p_i} = 1,\]
+        and
+        \[\left| \int f_1 \cdots f_k \ d\mu \right| \leq \norm{f_1}_{p_1} \cdots \norm{f_k}_{p_k}.\]
+        We will now show that the subsequent case, $k+1$, holds.
+
+        \item \underline{Induction Case}: $n = k+1$.
+
+        \hop
+        Since each $1 \leq p_i \leq \infty$, we need to consider the case when $p_{k+1} = \infty$. If this is true, then 
+        \[\sum_{i = 1}^{k+1}\frac{1}{p_i} = \sum_{i = 1}^{k}\frac{1}{p_i} = 1.\]
+        Thus, H\"older's inequality can be applied, where we separate the function $f_{k+1}$ from the first $k$ functions. Then, 
+        \[\left| \int f_1 \cdots f_{k+1} \ d\mu \right| \leq \norm{f_1\cdots f_{k}}_1 \norm{f_{k+1}}_\infty.\]
+        Then, we can apply the induction hypothesis to get 
+        \[\left| \int f_1 \cdots f_{k+1} \ d\mu \right| \leq \norm{f_1}_{p_1}\cdots \norm{f_k}_{p_k} \norm{f_{k+1}}_\infty\]
+        Which is what we wanted to show. \par
+
+        \hop
+        We next assume that $p_{k+1} \neq \infty$. Define the following H\"older conjugates:
+        \[p := \frac{p_{k+1}}{p_{k+1} - 1}, \quad q := p_{k+1}\]
+        Applying H\"older's Inequality in a similar fashion to the previous case gives, 
+        \[\norm{f_1\cdots f_{k}f_{k+1}}_1 \leq \norm{f_1\cdots f_k}_p \norm{f_{k+1}}_q\]
+        Which by the Induction Hypothesis, satisfies the given equality. Next, we need to show that the summation is satisfied. From the definition of $p, q$, we have
+        \[\sum_{i =1}^{k+1}\frac{1}{p_i} = \frac{1}{p} + \frac{1}{q} = 1 - \frac{1}{p_{k+1}} + \frac{1}{p_{k+1}} = 1\]
+    \end{itemize}
+\end{solution}
 
 \newpage
 \section{Problem 12.15}
@@ -164,22 +204,69 @@ and define $M = N \cap X$.
 If $u \in C([0, 1])$, prove that 
 \[d(u, N) = \inf_{n \in N} \norm{u - n} = |\overline{u}|\]
 where $|\overline{u}| = \int_0^1 u(x) \ dx$ is the mean of $u$, so the infimum is attained when $n = u - \overline{u} \in N$. 
+\partbreak
+\begin{solution}
+
+    We first consider two cases, where $u \in C([0, 1])\setminus N, u \in N$. If $u \in N$, then $d(u, N) = \inf_{n \in N} \norm{u - n} = 0$, since the norm is positive function, and equals zero only when the term inside is equal zero. This implies $n = u$ is the unique element. If $u \in C([0, 1]) \setminus N$, we then have by Theorem 6.13 that there us a unique closest element for $u$ in $N$, denoted $y$, such that 
+    \[\norm{u - y} = \min_{z \in N} \norm{u - z}.\]
+    Furthermore, the element $y$ is the unique element of $N$ with the property that $(u - y) \perp N$. Denote $y = u - \overline{u}$. Note that since $u \not \in N$, $\int_0^1 u(x) \ dx \neq 0$, thus $\overline{u} \not \in N$. We next need to show that $y \in N$. This is shown by the following:
+    \[\int_0^1 u(x) - \overline{u} \ dx = \int_0^1 u(x) \ dx - \int_0^1\overline{u} \ dx = \overline{u} - \overline{u} = 0.\]
+    Next we need to show that $(u - y) \perp N$. Take $n \in N$, then
+    \[\int_0^1 (u - y)(x) n(x) \ dx = \overline{u} \int_0^1 n(x) = 0.\]
+    Therefore, $d(u, N) = |\overline{u}|$.
+\end{solution}
+
 
 \newpage
 \subsection{Problem 6.2, part b}
 If $u(x) = x \in X$, show that
 \[d(x, M) = \inf_{m \in M}\norm{u - m} = 1/2,\]
 but that the infimum is not attained for any $m \in M$.
+\partbreak
+\begin{solution}
+
+    From part a, we see that 
+    \[d(x, M) = \left|\int_0^1 x \ dx\right| = \frac{1}{2}.\]
+    Therefore, we choose $y = x - \frac{1}{2}$. Note that $y \not\in M$, however, since setting $x =0$, then $y = -\frac{1}{2}$. This violates the property any element has in $M$. Therefore, the claim has been shown.
+\end{solution}
 
 \newpage
 \section{Problem 6.5}
 Suppose that $\{H_n : n \in \N\}$ is a set of orthogonal closed subspaces of a Hilbert space $H$. We define the infinite direct sum
 \[\bigoplus_{n = 1}^\infty H_n = \left \{ x_n : x_n \in H_n \text{ and } \sum_{n=1}^\infty \norm{x_n}^2 < \infty\right\}.\]
 Prove that $\bigoplus_{n = 1}^\infty H_n$ is a closed linear subspace of $H$.
+\partbreak
+\begin{solution}
+
+    For the sake of simplicity, let $H = \bigoplus_{n =1}^\infty$. To show that $H$ closed, take a sequence $x_n$ in $H$. We want to show that $x_n \into x \in H$. Note that, since $x_n \in H$, then $x_n$ can be written as a summation of sequences $y^k_n$, for which each $y^k_n \in H_k$. Then $x_n = \sum_{k}y^k_n$. Then, 
+    \[\norm{x_n - x_m}^2 = \norm{\sum_{k} y^k_n - y^k_m}^2 = \sum_{k} \norm{y^k_n - y^k_m}^2\]
+    Note that since each $H_k$ is closed, then $\sum_{k} \norm{y^k_n - y^k_m}^2 \into 0$. Note that summing over all $k$ implies 
+    \[\norm{y^k_n - y_m^k}^2 \leq \sum_k\norm{y^k_m - y^k_n}^2 \into 0.\]
+    This tells us $\norm{y^k_n - y_m^k} \into 0$ for all $k$. Since each $H_k$ is closed, we have that $y_n^k \into y^k$ for some $y^k \in H_k$. We can then show that $x_n \into \sum_k y^k$.
+    \[\norm{x_n - \sum_k y^k}^2 = \norm{\sum_k (y^k_n - y_n)}^2 = \sum\norm{y^k_n - y_n}^2 \leq \liminf_{m \into \infty} \sum_k \norm{y^k_n - y^k_m}^2.\]
+    Since each $\norm{y^k_n - y^k_m}$ can be made less than $\ep$ for sufficiently large $m, n$, we have that $\norm{x_n - \sum_k y^k}^2 < \ep$. Therefore, $x = \sum_k y^k$. We now need to show that $y_k \in H$. Note that
+    \[\sum_k\norm{y^k}^2 \leq \liminf_{m \into \infty}\sum_k\norm{y^k_m}^2 = \liminf_{m \into \infty} \norm{x_m}^2 = \norm{x}^2 < \infty.\]
+    Therefore, $y_k \in H$, so $H$ is closed. 
+\end{solution}
+
 
 \newpage
 \section{Problem 6.11}
 Prove that if $M$ is a dense linear subspace of a Hilbert space $H$, then $H$ has an orthonormal basis consisting of elements in $M$. Does the same result hold for arbitrary dense subsets of $H$?
+\partbreak
+\begin{solution}
+
+    Since we are not given information on the dimensionality of $H$, we need to consider two separate cases of when $H$ is finite or infinite dimensional. We will first consider the case when $H$ is finite dimensional. Since any subspace of a linear space is closed in finite dimensions, the only dense linear subspace of $H$ is the space $H$ itself. The claim that $H$ then has an orthonormal basis from $M$ holds since $H$ has an orthonormal basis. \par
+    
+    \hop 
+    Next consider the case when $H$ is infinite dimesnsional. Since we suppose that $M$ is a dense linear subspace of $H$, we can take $H$ to be separable. Because of this, there is a countable dense subset $\{x_n : n \in \N\}$ of $H$. Note that this subset is agnostic to $M$. Since $M$ itself is dense in $H$, we can take a sequence $x_{m, n} \in M$ such that $x_{m, n} \into x_n$ as $m \into \infty.$ Then the set $\{ x_{m, n} : m, n \in \N\}$ is a countable subset of $M$, which is dense in $H$. \par
+
+    \hop
+    To connect this new set to $H$, suppose that we have an arbitrary subset $P$ of $M$ that is dense in $H$. Let $P_B = \{x_n : n \in \N\}$ then be the largest linearly independent subset of $P$. Then since $P_B$ spans every element of $B$, $B \subseteq P_B$, thus $P_B$ is dense in $H$. Therefore, the closure of $P_B$ is then equal to $H$. Via Gram-Schmidt, we can take the basis $P_B$ and transform it into an orthonormal set of vectors, $P_N$ whose closed span is equal to the span of $P_B$. This implies that $P_N$ is an orthonormal basis of $H$. Since we have that elements of $P_N$ are linear combinations of elements of $M$, $P_N \subseteq M$, thus $P_N$ is an orthonormal basis of $H$ whose elements belong to the dense linear subspace $M$. \par
+
+    \hop
+    To give a counterexample for any arbitrary dense subset, take $H = \R^2$, and consider $P_B$ to be any rotation of the basis vectors, $e_1, e_2$ by an irrational angle, say $n\pi$ degrees for any $n \in \N$. Then, $P_B$ is dense in $H$, however, $P_B$ does not have a finite set of linearly independent vectors. Since $\pi$ is irrational, rotations of the basis vectors will never overlap since, if they did, then that would imply that $\pi$ was irrational, which is not the case. Therefore, the result cannot hold for arbitrary dense subsets of a Hilbert space.  
+\end{solution}
 
 \newpage
 \section{Problem 6.14}
@@ -189,10 +276,84 @@ Define the Hermite polynomials $H_n$ by
 Show that 
 \[\ph_n(x)  = e^{-x^2/2}H_n(x)\]
 is an orthogonal set in $L^2(\R)$.
+\partbreak
+\begin{solution}
+
+    First, since each $\ph_n$ is orthogonal to every function of the form $e^{(-x^2/2)}p_m$, where $p_m$ is a polynomial of lower degree of $n$, we just need to show that $e^{-x^2/2}x^m$ is orthogonal to $\ph_n$. Integrating by parts $m$ times, and taking each residual from integration by parts to go to zero, we can see that
+    \[\int_\R e^{-x^2/2}\ph_n(x) \ dx = (-1)^n\int_\R x^m \frac{d^n}{dx^n} \left( e^{-x^2}\right) \ dx = (-1)^{m+n}m!\int_\R \frac{d^{n-m}}{dx^{n-m}}\left(e^{-x^2}\right) \ dx = 0.\]
+    The last integral is equal zero since the differentiated function vanishes as $|x| \into \infty$.
+\end{solution}
 
 \newpage
 \subsection{Problem 6.14, part b}
 show that the $n$-th Hermite function $\ph_n$ is an eigenfunction of the linear operator
 \[H = -\frac{d^2}{dx^2} + x^2\]
 with eigenvalue $\lm_n = 2n+1$.
+\partbreak
+\begin{solution}
+
+    First, let 
+    \[A = \frac{d}{dx} + x, \quad A^* = -\frac{d}{dx} + x.\]
+    We will first show that $AA^* - 1 = H$. Taking a test function $\psi$, we see that,
+    \tightalignbreak
+    \begin{align*}
+        &(AA^*)\psi = A(A^* \psi) \\
+        &= A\left( -\frac{d\psi}{dx} + x\psi \right) \\
+        &= -A\left(\frac{d\psi}{dx}\right) + A\left( x\psi\right)\\
+        &= -\left( \frac{d^2\psi}{dx^2} + x\frac{d\psi}{dx}\right) + \frac{d}{dx}\left( x\psi\right) + x^2\psi\\
+        &= -\left( \frac{d^2\psi}{dx^2} + x\frac{d\psi}{dx}\right) + x\frac{d\psi}{dx} + \psi + x^2\psi\\
+        &= - \frac{d^2\psi}{dx^2} + \psi + x^2\psi\\
+        &= \left(- \frac{d^2}{dx^2} + 1 + x^2\right)\psi
+    \end{align*}\vspace{-10mm}\alignbreak
+    Therefore, the action that $AA^*$ preforms on $\psi$ is equivalent to the form above, which is equivalent to $H + 1$. This implies that $AA^* - 1 = H$, which is what we wanted to show.\par
+
+    \newpage
+    Next, we need to prove the following recurrence relation between Hermite Polynomials:
+    \[\frac{dH_n}{dx} = 2n H_{n-1} = -H_{n+1} + 2xH_n\]
+    We can relate the first and the third relations together via:
+    \begin{align*}
+        \frac{dH_n}{dx} &= (-1)^n\frac{d}{dx}\left[ e^{x^2} \frac{d^n}{dx^n}\left(e^{-x^2}\right)\right]\\
+        &= (-1)^n e^{x^2} \frac{d^{n+1}}{dx^{n+1}}\left(e^{-x^2}\right) + (-1)^n 2xe^{x^2}\frac{d^n}{dx^n}\left( e^{-x^2} \right)\\
+        &= -H_{n+1} + 2xH_n
+    \end{align*}
+
+    Next, we can observe the differentiation term in the $n+1$ Hermite polynomial.
+    \begin{align*}
+        \frac{d^{n+1}}{dx^{n+1}}\left( e^{-x^2}\right) &= \frac{d^n}{dx^n}\left(-2xe^{-x^2}\right)\\
+        &= -2x\frac{d^n}{dx^n}\left( e^{-x^2}\right) - 2n \frac{d^{n-1}}{dx^{n-1}}\left( e^{-x^2}\right)
+    \end{align*}
+    We can then multiply both sides by $(-1)^{n+1}e^{x^2}$ to get 
+    \[H_{n+1} = 2xH_n - 2nH_{n-1}\]
+    Using the found equation above, we can remove the $H_n$ term from both sides to get
+    \[\frac{dH_n}{dx} = 2nH_{n-1}\]
+    Next, we need to investigate the actions $A$ and $A^*$ have on on $\ph_n$. From the found relations above, we have
+    \begin{align*}
+        A\ph_n &= \left( \frac{d}{dx} + x\right)\left( e^{-x^2/2}H_n\right)\\
+        &= \frac{d}{dx}\left[ e^{-x^2/2}H_n\right] + xe^{-x^2/2}H_n\\
+        &= -xe^{-x^2/2}H_n + e^{-x^2/2}\frac{dH_n}{dx} + xe^{-x^2/2}H_n\\
+        &= e^{-x^2/2}\frac{dH_n}{dx}\\
+        &= 2ne^{-x^2/2}H_{n-1}\\
+        &= 2n\ph_{n-1}
+    \end{align*}
+    \newpage
+    Similarly,
+    \begin{align*}
+        A^*\ph_n &= \left(-\frac{d}{dx} + x\right)\left(e^{-x^2/2}H_n\right)\\
+        &= -\frac{d}{dx}\left[ e^{-x^2/2}H_n\right] + xe^{-x^2/2}H_n\\
+        &= xe^{-x^2/2}H_n - e^{-x^2/2}\frac{dH_n}{dx} + xe^{-x^2/2}H_n\\
+        &= e^{-x^2/2}\left(-\frac{dH_n}{dx} + 2xH_n\right)\\
+        &= e^{-x^2/2}H_{n+1}\\
+        &= \ph_{n+1}
+    \end{align*}
+
+    We can now finally see that action $H$ has on $\ph_n$. Via everything we have shown above, we can write
+    \begin{align*}
+        H\ph_n &= (AA^* - 1)\ph_n\\
+        &= AA^*\ph_n - \ph_n\\
+        &= A(\ph_{n+1}) - \ph_n\\
+        &= 2(n+1)\ph_n - \ph_n\\
+        &= (2n+1)\ph_n
+    \end{align*}
+    Therefore, $\ph_n$ is an eigenfunction of $H$ with eigenvalue $2n+1$.
+\end{solution}
 \end{document}
