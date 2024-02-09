@@ -33,11 +33,37 @@ Design a polynomial-time dynamic programming algorithm that finds an optimal sol
     \item Explain the formula.
     \item Find the running time of your algorithm.
 \end{enumerate}
+\partbreak
+\begin{solution}
+
+    First, to ensure we are working with reasonably ordered subintervals, we need to sort all intervals according to their starting time. Assume that we have $n$ intervals, of various lengths. The DP table, denoted as DP, will then be designated as a 2D table. DP will have rows up to the number of subintervals, $n$, where row $i$ will consider the first $i$ rows in the interval. Since there are only two colors considered, we only need to be concerned with storing the number of, say, red intervals. DP's columns will then carry the total number of red intervals used. \par
+
+    \hop
+    We will next explain the initialization of our DP table. Naturally, if we have not considered any intervals yet, we should have a maximum possible length of zero. We therefore set DP[0][j] = 0 for all j. Next, we need to consider the total number of black subintervals which can be chosen after each consideration i. So for every row $i$, the $j$-th elements need to be chosen carefully: if $j$ is greater than the remaining number of black subintervals, we will initialize this as a -1, since this would be an unfeasible pairing. Furthermore, by the restriction that we require the same number of red intervals as black intervals, we set all elements in the 0-th column to -1, where we exclude the [0, 0] case (it is already set to zero). \par
+
+    \newpage
+    I will explain my rationality in my recurrence formula while building it up / considering all cases. Suppose there is some optimal choice of subintervals $S'$. When considering interval $i$, we then have two choices:
+    \begin{enumerate}
+        \item $i \not \in S'$.
+        \item $i \in S'$.
+    \end{enumerate}
+
+    Considering the first case, where we exclude $i$ from $S'$, the best selection of subintervals has already been chosen up to and including subinterval $i$. Thus DP[i][j] = DP[i-1][j]. The second case, where $i \in S'$, is then broken down based on the coloring of interval $i$. If interval $i$ is red, we first need to consider if there is another possible black interval we can choose, to maintain the equal number of red and black intervals. If this is satisfied, and there is a viable black interval we can choose in some possible future iteration, we update the DP table as follows: DP[i][j] = $\max \{$DP[i][j], DP[i-1][j-1] + $(t_i - s_i)\}$. If the interval $i$ is instead black, we need not worry about violating the equal number of red and black intervals, since we are already considering such a specific number of red intervals already in the recursion. Thus, the DP table will be updated in this manner: DP[i][j] = $\max \{$DP[i][j], DP[i-1][j] + $(t_i - s_i) \}$. Thus, the recursion formula is 
+\[
+\text{DP}[i][j] = \begin{cases}
+    \max \{ \text{DP}[i][j], \text{DP}[i-1][j-1] + (t_i - s_i) \}, & \text{Interval } i \text{ is red} \\
+    \max \{ \text{DP}[i][j], \text{DP}[i-1][j] + (t_i - s_i) \}, & \text{Interval } i \text{ is black}.
+\end{cases}
+\]
+\hop
+Therefore, when choosing the collection of subintervals which maximizes the length and maintains balance between red and black intervals, we consider the last row of the DP table. Each entry of the last row considers a different number of allowed red intervals, thus taking the max over the last row will return the best possible total length of subintervals. The only two places which will bottleneck us in terms of running time is the sorting of the intervals, and filling out the DP table. The sorting of subintervals can be done in, at best, O($n\log \ n$) time, whereas the DP table needs a running time of O($n^2$) to compute all entries. Therefore, the running time is O($n^2$). 
+\end{solution}
+
 \newpage
 \section{Problem 2}
 Consider a rooted binary tree $T$, in which every vertex $u$ is labelled with an integer number $x_u$. We say that $T$ satisfies Property $\mathbf{H}$ if
 \[\text{for every vertex $u$ and every child $v$ of $u$, $x_u \geq x_v$}.\]
-Consider the following problem: given a tree $T$, change the smallest possible number of vertex labels $x_u$ so that the tree satisfies property $\mathbb{H}$. When we change the label of $u$, we can assign $x_u$ any integer number we want. Design a DP-algorithm that solves this problem. Specifically, do the following:
+Consider the following problem: given a tree $T$, change the smallest possible number of vertex labels $x_u$ so that the tree satisfies property $\mathbf{H}$. When we change the label of $u$, we can assign $x_u$ any integer number we want. Design a DP-algorithm that solves this problem. Specifically, do the following:
 \begin{enumerate}
     \item Define subproblems.
     \item Define the dynamic-programming table and explain the meaning of its entries.
@@ -74,7 +100,7 @@ Consider the following problem: given a tree $T$, change the smallest possible n
         \item \underline{The Algorithm's Validity}:
 
         \hop
-        By the structure of the proposed algorithm, we have established nodes of greater depth will have smaller values than nodes at lower depths. Thus, our algorithm will produce a tree which comports with the desired result. The minimum number of value modifications is also guaranteed, due to our separate handling of the leaves of $T$. Note that, if we take the example tree as a test for our proposed algorithm, the nodes modified are different than the proposed solution. Nevertheless, the number of changed node values is similar. If we run the proposed algorithm on the given example, we will get the result given below. Note that the number of changed node values, 5, is equal to the given solution. I have colored the nodes in a similar manner. 
+        By the structure of the proposed algorithm, we have established nodes of greater depth will have smaller values than nodes at lower depths. Thus, our algorithm will produce a tree which comports with the desired result. The minimum number of value modifications is also guaranteed, due to our separate handling of the leaves of $T$. Note that, if we take the example tree as a test for our proposed algorithm, the nodes modified are different than the proposed solution. Nevertheless, the number of changed node values is similar. If we run the proposed algorithm on the given example, we will get the result given below. Note that the number of changed node values, 5, is equal to the given solution. I have colored the nodes in a similar manner. Note that my algorithm returns the accessed values in DFS, the number of changed nodes can just be obtained when comparing the values of the array $A$ and the original tree $T$. 
         \vspace{10mm}
         \begin{center}
                 \begin{tikzpicture}[level distance=1.5cm,
@@ -104,10 +130,11 @@ Consider the following problem: given a tree $T$, change the smallest possible n
                 \end{tikzpicture}
         \end{center}
 
+        \newpage
         \item \underline{The Running Time}:
 
         \hop
-        By the structure of our algorithm, we will need to traverse each node a linear number of times. The same can be said for the edges. Thus our running time is $O(|V| + |E|)$, where $V$ is the set of vertices in $T$ and $E$ is the set of edges of our tree.
+        By the structure of our algorithm, we will need to traverse each node a linear number of times. The same can be said for the edges. Thus our running time is $O(|V| + |E|)$, where $V$ is the set of vertices in $T$ and $E$ is the set of edges of our tree. Note that looping over the arrays $A$ and $T$ is done in linear time, scaling on the number of vertices. This bound will be less than the calculation of the DP tables, thus discarded. 
     \end{enumerate}
 \end{solution}
 \newpage
@@ -137,8 +164,7 @@ Consider the flow network $G$ and flow $f$ shown in the figure below. For every 
 \node[mynode, label=below right:$y$] at (-0.6*\d,-\d) (y) {};
 
 % Edges
-\draw[arrow] (s)  -- node[edgelabel, above] {\textcolor{red}{6} (10)} (u);
-
+\draw[arrow] (s) -- node[edgelabel, above] {\textcolor{red}{6} (10)} (u);
 
 \draw[arrow] (s) -- node[edgelabel, above] {\textcolor{red}{2} (2)} (x);
 \draw[arrow] (s) -- node[edgelabel, above] {\textcolor{red}{4} (4)} (y);
