@@ -15,11 +15,67 @@
 
 \newpage
 \section{Problem 12.6}
-Use the Dominated convergence Theorem to prove Corollary 12.36 for differentiation under an integral sign. 
+Use the Dominated Convergence Theorem to prove Corollary 12.36 for differentiation under an integral sign. 
+\partbreak
+\begin{solution}
+
+    I will include the Dominated Convergence Theorem and Corollary 12.36 for reference.
+
+    \begin{center}\rule{16.5cm}{0.5pt}\end{center}
+    \begin{quote}
+    \vspace{-6mm}
+        \textbf{Dominated Convergence Theorem}: Suppose that $(f_n)$ is a sequence of integrable functions, $f_n: X \into \overline{\R}$, on a measure space $(X, A, \mu)$ that converges pointwise to a limiting function $f: X \into \overline{\R}$. If there is an integrable function $g: X \into [0, \infty]$ such that
+        \[|f_n(x)| \leq g(x) \quad \text{for all $x \in X$ and $n \in \N$},\]
+        then $f$ is integrable and 
+        \[\lim_{n \into \infty} \int f_n \ d\mu = \int f \ d\mu.\]
+    \end{quote}
+    \vspace{-10mm}
+    \begin{center}\rule{16.5cm}{0.5pt}\end{center}
+    \jump
+
+    \begin{center}\rule{16.5cm}{0.5pt}\end{center}
+    \begin{quote}
+    \vspace{-6mm}
+        \textbf{Corollary 12.36}: Suppose that $(X, A , \mu)$ is a complete measure space, $I \subset \R$ is an open interval, and $f : X \times I \into \overline{\R}$ is a measurable function such that:
+        \begin{itemize}
+            \item $f(\cdot, t)$ is integrable on $X$ for each $t \in I$;
+            \item $f(x, \cdot)$ is differentiable in $I$ for each $x \in X \setminus N$, where $\mu(N) = 0$;
+            \item there is an integrable function $g: X \into [0, \infty]$ such that 
+            \[ \left| \frac{\partial f}{\partial t}(x, t) \right| \leq g(x) \quad \text{a.e. in $X$ for every $t \in I$.}\]
+            Then
+            \[\ph (t) = \int_X f(x, t) \ d\mu(x)\]
+            is a differentiable function of $t$ in $I$, and 
+            \[\frac{d\ph}{dt} (t) = \int_X \frac{\partial f}{\partial t}(x, t) \ d\mu(x).\]
+        \end{itemize}
+        
+        \end{quote}
+    \vspace{-10mm}
+    \begin{center}\rule{16.5cm}{0.5pt}\end{center}
+
+    \newpage
+    Suppose we have a sequence of functions $d_n : X \times I \into \overline{\R}$ defined as
+    \[d_n(x, t) = \frac{f(x, t + \frac{1}{n}) - f(x, t)}{1 / n}\]
+    Note that this is the $n$-th approximation to $\frac{\partial f}{\partial t}$. Since for some $n$ sufficiently large, there exists some $\ep > 0$ for which $|d_n - \frac{\partial f}{\partial t}| < \ep$. By the reverse triangle inequality, we see that 
+    \[|d_n - \frac{\partial f}{\partial t}| < \ep \implies |d_n| < |\frac{\partial f}{\partial t}| + \ep.\]
+    Since the partial derivative is bounded by some $g: X \into [0, \infty]$, we have that $|d_n| \leq g(x)$, since $\ep$ is arbitrary. Therefore, we have 
+    \[\lim_{n \into \infty}\int_X d_n \ d\mu(x) = \int_X \lim_{x \into \infty} d_n \ d\mu(x) = \int_X \frac{\partial f}{\partial t}(x, t) \ d\mu(x).\]
+    Note that $d_n$ is differentiable in $I$ for all $n$, thus the derivative is defined. This then proves Corollary 12.36. 
+\end{solution}
+
 
 \newpage
 \section{Problem 12.8}
 Let $f_n : X \into \C$. be a sequence of measurable functions converging to $f$ pointwise almost everywhere. Suppose there exists $g \in L^p(X)$ such that $|f_n| \leq g$ almost everywhere. Then $f_n \into f$ in the $L^p$-norm. 
+\partbreak
+\begin{solution}
+
+    We can first note that $\lim_{n \into \infty} |f_n(x)| = |f(x)| \leq |g(x)|$. This implies that $|f_n(x)| \leq |g(x)|$, so we can rewrite the convergence of $f_n$ as
+    \[|f_n - f|^p \leq (|f_n| + |f|)^p \leq (|g| + |g|)^p = 2^p|g|^p.\]
+    Since $g \in L^p$, we have that $\int |g|^p < \infty$, therefore, Theorem 12.35 applies. Therefore, we can write
+    \[\lim_{n \into \infty} \norm{f_n - f}_p^p = \lim_{n \into \infty} \int |f_n - f|^p \ d\mu = \int \lim_{n \into \infty} |f_n - f|^p = 0.\]
+    Therefore, $f_n \into f$ in the $L^p$ norm.
+\end{solution}
+
 
 \newpage
 \section{Problem 12.12}
@@ -28,19 +84,74 @@ Prove the following generalization of H\"older's inequality: if $1 \leq p_i \leq
 and $f_i \in L^{p_i}(X, \mu)$, then $f_1 \cdots f_n \in L^1(X, \mu)$ and 
 \[\left| \int f_1 \cdots f_n \ d\mu\right| \leq \norm{f_1}_{p_1} \cdots \norm{f_n}_{p_n}.\]
 
+
 \newpage
 \section{Problem 12.15}
 If $f \in L^p (\R^n) \cap L^q(\R^n)$, where $p < q$, prove that $f \in L^r(\R^n)$ for any $p < r < q$, and show that 
 \[\norm{f}_r \leq (\norm{f}_p)^{\frac{1 / r - 1 / q}{1 / p - 1 / q}} (\norm{f}_q)^{\frac{1 / p - 1 / r}{1 / p - 1 / q}},\]
 This result is one of the simplest examples of an \textit{interpolation inequality}.
+\partbreak
+\begin{solution}
+
+    Suppose there are constants $\alpha \in (0, 1)$, and $m, n > 1$ be conjugates. By H\"older's Inequality, we then have 
+    \[\norm{f}_r^r = \int |f|^r = \int |f|^{\alpha r} |f|^{(1 - \alpha)r} \leq \left( \int |f|^{\alpha m r}\right)^{1 / m} \left( \int |f|^{(1 - \alpha)nr}\right)^{1 / n} \]
+
+    We wish to have the right hand side to have the form given, that is, we need to choose $\alpha, m , n$ such that
+    \begin{center}
+        \begin{align}
+            \alpha m r &= p\\
+            (1 - \alpha)nr &= q\\
+            \frac{1}{m} + \frac{1}{n} &= 1        
+        \end{align}
+    \end{center}
+    We will first solve for $\alpha$. Note that (1) implies that $\alpha = \frac{p}{mr}$. (2) implies $\frac{1}{n} = \frac{(1 - \alpha)r}{q}$, and (3) implies $\frac{1}{m} = 1 - \frac{1}{n}$. Plugging this all in, we have that 
+    \[\alpha = \frac{p}{r}\left(1 - \frac{(1 - \alpha)r}{q}\right).\]
+    We can then solve for $\alpha$.
+
+    \tightalignbreak
+    \begin{align*}
+        &\alpha = \frac{p}{r}\left(1 - \frac{(1 - \alpha)r}{q}\right)&\text{(Given.)}\\
+        &\alpha = \frac{p}{r}\left( 1 - \frac{r}{q}\right) + \frac{\alpha p}{q} &\text{(Distributing.)}\\
+        &\alpha\left( 1 - \frac{p}{q} \right) = \frac{p}{r}\left(1 - \frac{r}{q}\right) &\text{(Rearranging.)}\\
+        \alpha &= \left( \frac{pq - rp}{rq}\right)\left( \frac{q - p}{q}\right)\inv &\text{(Rearranging.)}\\
+        &= \left( \frac{pq - rp}{rq}\right)\left( \frac{q}{q - p}\right) &\text{(Taking inverse.)}\\
+        &= \frac{pq - rp}{rq - rp} &\text{(Simplifying.)}\\
+        &= \frac{1/r - 1/q}{1/p-1/q} &\text{(Dividing by $rpq$.)}
+    \end{align*}
+    \vspace{-12mm}\alignbreak
+    From the original equation, we now have that 
+    \[\norm{f}_r \leq \left((\norm{f}^p_p)^{1/m} (\norm{f}_q^q)^{1/n}\right)^{1/r} = \norm{f}_p^{p/mr}\norm{f}_q^{q/nr}.\]
+    From (1) and (2), we can substitute the powers by $\alpha$ and $1 - \alpha$, respectively. Note that
+    \[1 - \alpha = 1 - \frac{1/r-1/q}{1/p - 1/q} = \frac{1/p-1/q}{1/p-1/q} - \frac{1/r-1/q}{1/p - 1/q} = \frac{1/p - 1/r}{1/p - 1/q}.\]
+    We therefore have the desired inequality. 
+\end{solution}
 
 \newpage
 \section{Problem 12.17}
 Prove that the unit ball in $L^p([0, 1])$, where $1 \leq p \leq \infty$, is not strongly compact.
+\partbreak
+\begin{solution}
+
+    As a counterexample, we let $n \in \N$, so that $I_n = (2^{-n}, 2^{-(n-1)})$, and $f_n = 2^{n/p}\chi_{I_n}.$ Note that 
+    \[\norm{f_n}_p = \int_0^1 |2^{n/p}\chi_{I_n}(x)| \ d\mu(x) = \int^{2^{-n+1}}_{2^{-n}} 2^n \ d\mu(x) = 2^n(2^{-n+1} - 2^{-n}) = 2 - 1 = 1.\]
+    Similarly, we have that $\norm{f_n - f_m}\infty = 1$. For $m \neq n$. For $p \in [1, \infty)$, we have that
+    \[\norm{f_n - f_m}_p = \left(2^n \chi_{I_n}(x) - 2^m \chi_{I_m}(x) \ d\mu(x)\right)^{1/p} = (1 + 1)^{1/p} = 2^{1/p}.\]
+    Note that the integral above can be broken into two integrals, which are both of the previous integral. Since we have the difference under the sup-norm is 1, we cannot take infinitely large $p$ to maintain the p-norm less than $\ep$. Therefore, no subsequence of $(f_n)$ can be Cauchy, so none can converge. 
+\end{solution}
+
 
 \newpage
 \section{Problem 12.18}
 Give an example of a bounded sequence in $L^1([0, 1])$ that does not have a weakly convergent subsequence. Why does this not contract the Banach-Analoglu Theorem?
+\partbreak
+\begin{solution}
+
+    The choice of $f_n$ is similar to Problem 2.17, with $f_n = 2^n \chi_{I_n}$. Suppose that $(f_{n_j})$ is a subsequence of $(f_n)$, and define a function $g \in L^\infty$ by 
+    \[g = \sum_{j = 1}^\infty (-1)^j \chi_{I_{n_j}}.\]
+    Take $\ph \in (L^1)^*$ as $\ph (f) = \int fg.$ Then,
+    \[\int_0^1 2^{n_j} \chi_{I_{n_j}}(x) \sum_{k = 1}^\infty (-1)^k\chi_{I_{n_k}}(x) \ d\mu(x) = \int_{2^{-n_j}}^{2^{-n_j + 1}} 2^{n_j} (-1)^j \ d\mu(x) = 2^{n_j}(2^{-n_j} - 2^{-n_j + 1})(-1)^j = (-1)^j. \]
+    Note that when taking the sum, the only term that will survive with respect to the outside indicator function is the one related to $n_j$. Therefore, $(f_{n_j})$ cannot converge weakly. Note that this does not contradict the Banach-Alaoglu Theorem since $L^1$ is not reflexive.
+\end{solution}
 
 \newpage
 \section{Problem 6.2}
