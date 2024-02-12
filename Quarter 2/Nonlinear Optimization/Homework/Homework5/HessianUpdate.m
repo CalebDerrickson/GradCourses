@@ -14,13 +14,13 @@ function H_update = HessianUpdate(H, s_k, y_k)
     end
 
     %Define r_k
-    r_k = theta_k.*y_k + (1 - theta_k)*mtimes(H, s_k);
+    r_k = theta_k.*y_k + (1 - theta_k).*mtimes(H, s_k);
 
     %Now update H
-    top = dot(mtimes(H, s_k), mtimes(s_k', H));
+    top = mtimes(mtimes(H, s_k), mtimes(s_k', H));
     H_update = H - top / big;
     
-    top = r_k * r_k';
+    top = mtimes(r_k,r_k');
     H_update = H_update + (1/dot(s_k, r_k)) * top;
 
 end

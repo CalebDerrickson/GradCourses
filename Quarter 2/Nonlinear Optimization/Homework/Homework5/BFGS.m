@@ -51,6 +51,6 @@ if k ~= niter
     BFGS_seq = BFGS_seq(1:k, :);
     ngrad_seq = ngrad_seq(1:k);
 end
-plot(ngrad_seq);
+semilogy(ngrad_seq);
 
 end

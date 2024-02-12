@@ -7,19 +7,19 @@ function alpha = Backtracking(funcfgH, x, p_k )
     
 %Constants for the backtracking
 rho = 0.5;
-c1 = 1e-3;
+c1 = 10e-4;
 alpha = 1;
 
 func = @(x, varargin) funcfgH(x, varargin{:});
 
 %Sanitization
-if iscolumn(p_k) p_k = p_k';
+if iscolumn(p_k) p_k = p_k'; end
 
 
 %Priming for while loop
 [f_k, grad_k, ~] = func(x, max(size(x)), '', 'fg');
-x_next = x + alpha * p_k';
-target = f_k + c1 * alpha * grad_k * p_k;
+x_next = x + alpha * p_k;
+target = f_k + c1 * alpha * dot(grad_k, p_k);
 [current, ~, ~] = func(x_next, max(size(x_next)), '', 'f');
 
 
@@ -27,8 +27,8 @@ while current > target
  
     alpha = alpha * rho;
 
-    x_next = x + alpha * p_k';
-    target = f_k + c1 * alpha * grad_k * p_k;
+    x_next = x + alpha * p_k;
+    target = f_k + c1 * alpha * dot(grad_k,p_k);
     [current, ~, ~] = func(x_next, max(size(x_next)), '', 'f');
 end
 
