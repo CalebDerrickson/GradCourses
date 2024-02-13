@@ -147,11 +147,31 @@ Explain under what circumstances the conditions you obtained at 5 are identical 
 \partbreak
 \begin{solution}
 
-    An obvious instance when the two results would coincide is when we do not have any inequality constraints. This would of course depend on the problem, and not enitrely illustrative to the modified problem. 
+    An obvious instance when the two results would coincide is when we do not have any inequality constraints. This would of course depend on the problem, and not entirely illustrative to the modified problem. Another choice is when $\scI \setminus (\scA(y\star) \cap \scI) = \phi$, that is, all inequality constraints lead to having an equality constraint in the modified problem. In this case, the results should coincide. The likeliness of this happening is honestly unknown to me.
 \end{solution}
 \newpage
 \section{Problem 2}
+Formalize and prove the argument I gave in class that the truncated CG from the line-search Newton CG algorithm (Algorithm 7.1) always produces a descent direction at step $j$ provided $d_j\T B_k d_j > 0$  (and this has, of course, to hold for all iteration before 1.) Recall in this setup we do not assume $B_k$ be positive definite, only symmetric.
+\partbreak
+\begin{solution}
 
+    This will be rationalized via induction on $j$. Note that the algorithm will have its inner loop terminate when $d_{j+1}\T B_k d_{j+1} \leq 0$, or when the residual $r_{j+}$ has its norm smaller than some tolerance. Thus we will investigate the $d_{j+1}\T B_k d_{j+1}$ term in each induction step, since the latter condition returns a descent direction.
+    \begin{itemize}
+        \item \underline{Base case:} $j = 0$
+
+        \hop
+        If $j = 0$, then we have two cases for the algorithm's termination, which depends on the size of $\norm{r_{j+1}}$. If $\norm{r_1} \geq \ep_k$, then we consider the expression $d_{j+1}\T B_kd_{j+1}$. Since we discussed that $d_{j+1}\T B_kd_{j+1} \leq 0$, then we will return $z_1$, which is simply $z_0 + \alpha_0d_0$. By initial conditions, we have $z_0 = 0, \ d_0 = -\grad f_k, \ r_0 = \grad f_k$. Therefore, we have
+        \[z_1 = \alpha_0d_0 = \left( \frac{r_0\T r_0}{d_0\T B_k d_0}\right)(-\grad f_k)\]
+        Since $d_0\T B_kd_0 > 0$ by the given assumptions, we have that the returned search direction, $z_1$ is just a scaled steepest descent, which is certainly a descent direction. If $\norm{r_{1} < \ep_k}$, we will similarly return $z_1$, which was shown to be a descent direction. Therefore, we will return a descent direction for $j = 0$.
+    
+        \item \underline{Induction Hypothesis}: 
+
+        \hop 
+        We will now assume this holds for some $l < j$, and we will show that the $l+1$ case holds. Note in this case, the algorithm will terminate at the $l+2$ step, so we will similarly have two choices to consider. If $\norm{r_{l+2}} < \ep_k$, we will return $z_{l+2}$, else we return $z_{l+2}$ in the next iteration of the inner loop, since $d_{l+2}\T B_k d_{l+2} \leq 0$ is assumed. Therefore, the inner loop will return $z_{l+2}$. Note that 
+        \[z_{l+2} = z_{l+1} + \alpha_{l+1}d_{l+1} = z_{l+1} + \left( \frac{r_{l+1}\T r_{l+1}}{d_{j+1}\T B_kd_{l+1}}\right)d_{l+1}.\]
+        By the above inference, $z_{l+1}$ will be the descent direction produced by case $l$. Therefore, by the induction hypothesis, it is a descent direction. Furthermore, we have that $d_{j+1}\T B_kd_{l+1} > 0$, since the algorithm will terminate on step $l + 2$. Therefore, the scalar in parenthesis is $\geq 0$. If $r_{l+1}\T r_{l+1} = 0$, then $z_{l+2} = z_{l+1}$, which is a descent direction. Else, we increase $z_{l+1}$ by a scaled $d_{l+1}$, which is a descent direction by the previous iteration of the loop. Therefore, we return a descent direction, proving the statement by induction.  
+    \end{itemize}
+\end{solution}
 
 \newpage
 \section{Problem 3}
