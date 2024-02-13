@@ -1,4 +1,6 @@
 function alpha = Backtracking(funcfgH, x, p_k )
+global func_counter
+
 
 % Parameters
 %   func_eval - pointer to function we are evaluating
@@ -7,7 +9,7 @@ function alpha = Backtracking(funcfgH, x, p_k )
     
 %Constants for the backtracking
 rho = 0.5;
-c1 = 10e-4;
+c1 = 1e-4;
 alpha = 1;
 
 func = @(x, varargin) funcfgH(x, varargin{:});
@@ -22,6 +24,7 @@ x_next = x + alpha * p_k;
 target = f_k + c1 * alpha * dot(grad_k, p_k);
 [current, ~, ~] = func(x_next, max(size(x_next)), '', 'f');
 
+func_counter = func_counter + 2;
 
 while current > target
  
@@ -30,6 +33,8 @@ while current > target
     x_next = x + alpha * p_k;
     target = f_k + c1 * alpha * dot(grad_k,p_k);
     [current, ~, ~] = func(x_next, max(size(x_next)), '', 'f');
+
+    func_counter = func_counter + 2;
 end
 
 end
