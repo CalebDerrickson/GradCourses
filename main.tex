@@ -1,0 +1,362 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31210: Homework 6}
+\author{Caleb Derrickson}
+\date{February 16, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newcommand{\scP}{\mathcal{P}}
+\newcommand{\scT}{\mathbb{T}}
+\newcommand{\into}{\rightarrow}
+\newcommand{\scM}{\mathcal{M}}
+\newcommand{\scH}{\mathcal{H}}
+\newcommand{\scN}{\mathcal{N}}
+\newcommand{\scV}{\mathcal{V}}
+\newcommand{\scW}{\mathcal{W}}
+\renewcommand{\grad}{\nabla}
+\renewcommand{\star}{^{*}}
+
+\newpage
+\section{Problem 7.1}
+Let $\ph_n$ be the function defined as
+\[\ph_n(x) = c_n(1 + cos(x))^n.\]
+
+\subsection{Problem 7.1, part a}
+Prove (7.5) for $\ph_n$, that is, 
+\[\lim_{n\rightarrow \infty} \int_{\delta \leq |x| \leq \pi} \ph_n (x) \ dx = 0 \quad \text {for every } \delta > 0.\]
+\partbreak
+\begin{solution}
+
+    To evaluate this expression, we will consider the integral separately. Note that over the given domain, we can separate this integral into two, depending on our approach to $\delta$.
+    \[\int_{\delta \leq |x| \leq \pi} \ph_n(x) \ dx = \int_{-\pi}^{-\delta} \ph_n(x) \ dx + \int_{\delta}^\pi \ph_n(x) \ dx\]
+    Since these two integrals are the same, up to bound evaluations, we will consider only solving an indefinite integral, then applying the two bounds. We then have
+    \[\int \ph_n(x) \ dx = \int (1 + \cos(x))^n \ dx\]
+    Applying the Binomial Theorem, we can write
+    \[\int (1 + \cos(x))^n \ dx = \int \sum_{k = 0}^n {n\choose k} \cos^k (x) \ dx\]
+    Note that I have simplified the powers of 1 to just 1. We can then express $\cos(x)$ as a sum of complex exponentials. That is, $\cos(x) = \frac{1}{2}(e^{ix} + e^{-ix})$. Plugging this is, we have
+    \[\int \sum_{k = 0}^n {n\choose k} \cos^k (x) \ dx = \int \sum_{k = 0}^n {n\choose k} \left(\frac{1}{2} (e^{ix} + e^{-ix}) \right)^k \ dx = \int \sum_{k = 0}^n {n\choose k} \frac{1}{2^k}\left( e^{ix} + e^{-ix} \right)^k \ dx\]
+    Applying the Binomial Theorem once more, we have
+    \[\int \sum_{k = 0}^n {n\choose k} \frac{1}{2^k}\left( e^{ix} + e^{-ix} \right)^k \ dx = \int \sum_{k = 0}^n {n\choose k} \frac{1}{2^k}\sum_{l = 0}^k {k \choose l} \left( e^{ix}\right)^{(k - l)} \left( e^{-ix}\right)^l  \ dx\]
+    As we are raising an exponential by a power in the inner summation, we can simplify the expression depending only on $x$ by
+    \[\left( e^{ix}\right)^{(k - l)} \left( e^{-ix}\right)^l = e^{i(k - l)x}  e^{-ilx}=  e^{i(k - 2l)x}\]
+    Therefore, we have 
+    \[\int \sum_{k = 0}^n {n\choose k} \frac{1}{2^k}\sum_{l = 0}^k {k \choose l} \left( e^{ix}\right)^{(k - l)} \left( e^{-ix}\right)^l  \ dx = \int \sum_{k = 0}^n {n\choose k} \frac{1}{2^k}\sum_{l = 0}^k {k \choose l} e^{i(k - 2l)x} \ dx\]
+    Since both summations are finite, we are free to switch the order of summation and integration. We then need to evaluate the following: 
+    \[\sum_{k = 0}^n {n\choose k} \frac{1}{2^k}\sum_{l = 0}^k {k \choose l} \int e^{i(k - 2l)x} \ dx\]
+    This is a simple integral to take. By standard calculus, we have 
+    \[\int e^{i(k - 2l)x} \ dx = \frac{-i}{k - 2l} e^{i(k - 2l)x}\]
+    I will omit the constant of integration, since I am immediately applying the bounds. For each integral, we get the same result, up to applying bounds. Since there is no explicit need to have the two \textit{finite} summations separate, we can sum over them at the same time to get
+    \[\int_{-\pi}^{-\delta} \ph_n(x) \ dx + \int_{\delta}^\pi \ph_n(x) \ dx = \sum_{k = 0}^n {n\choose k} \frac{1}{2^k}\sum_{l = 0}^k {k \choose l}\left(\frac{-i}{k - 2l}\right)\left[ e^{i(k - 2l)x}\Big|_{-\pi}^{-\delta} + e^{i(k - 2l)x}\Big|_{\delta}^\pi\right]\]
+    Applying bounds, 
+    \[ \sum_{k = 0}^n {n\choose k} \frac{1}{2^k}\sum_{l = 0}^k {k \choose l}\left(\frac{-i}{k - 2l}\right)\left[ e^{-i(k - 2l)\delta} - e^{-i(k - 2l)\pi} + e^{i(k - 2l)\pi} - e^{i(k - 2l)\delta} \right]\]
+    Note that the value of the integral only depends on the evaluation of the exponential inside the brackets. So we will investigate them. Note that we can rewrite the exponentials as sines via
+    \[e^{-i(k - 2l)\delta} - e^{-i(k - 2l)\pi} + e^{i(k - 2l)\pi} - e^{i(k - 2l)\delta} = -2i\sin((k -2l)\delta) +2i\sin(k - 2l)\pi)\]
+    
+    Using the sine angle difference formula, $\sin(\alpha -\beta) = \sin(\alpha)\cos(\beta) - \cos(\alpha)\sin(\beta)$, we get
+    \[\sin(k\delta)\cos(2l\delta) - cos(k\delta)\sin(2l \delta) + \sin(k\pi)\cos(2l\pi) - \cos(k\pi) \sin(2l\pi)\]
+    No matter what the values of $k$ and $l$ are, we always have $\sin(k\pi) = 0$, and $\sin(2\pi l) = 0$. Therefore, both terms will equal zero, effectively canceling everything out. Also, this should hold for all $\delta > 0$, so  it should hold for the bound of zero. Therefore, we have that 
+    \[\int_{-\pi}^{-\delta} \ph_n(x) \ dx + \int_{\delta}^\pi \ph_n(x) \ dx = 0.\]
+    Applying the limit as $n \into \infty$, we have thus shown  
+    \[\lim_{n\rightarrow \infty} \int_{\delta \leq |x| \leq \pi} \ph_n (x) \ dx = 0 \quad \text {for every } \delta > 0.\]
+\end{solution}
+
+
+\newpage
+\subsection{Problem 7.1, part b}
+Prove that if the set $\scP$ of trigonometric polynomials is dense in the space of periodic functions on $\mathbf{T}$ with the uniform norm, then $\scP$ is dense in the space of all continuous functions on $\mathbf{T}$ with the $L^2$-norm.
+\partbreak
+\begin{solution}
+
+
+\end{solution}
+
+
+\newpage
+\subsection{Problem 7.1, part c}
+Is $\scP$ is dense in the space of all continuous functions on $[0, 2\pi]$ with the uniform norm?
+
+\newpage
+\section{Problem 7.2}
+Suppose that $f: \scT \into \C$ is a continuous function, and 
+\[S_N = \frac{1}{\sqrt{2\pi}} \sum_{n = -N}^{N} \hat{f}_n e^{inx} \]
+is the $N$th partial sum of its Fourier series
+
+\subsection{Problem 7.2, part a}
+Show that $S_N = D_N \ast f$, where $D_N$ is the \textit{Dirichlet kernel}
+\[D_N = \frac{1}{2\pi}\frac{\sin [(N + 1/2)x]}{\sin(x/2)}\]
+\partbreak
+\begin{solution}
+
+    We aim to show
+    \[D_N \ast f = \int_\scT D_N(x - y)f(y) \ dy = S_N.\]
+    Note that the form given for the Dirichlet kernel can be rewritten as follows (this will be proven after its use):
+    \[D_N = \frac{1}{2\pi}\frac{\sin [(N + 1/2)x]}{\sin(x/2)} = \frac{1}{2\pi}\sum_{n = -N}^{N} e^{inx}\]
+    The latter is far more applicable to our problem. Applying this, we have the following:
+    \tightalignbreak
+    \begin{align*}
+        &D_N\ast f = \frac{1}{2\pi}\int_{\scT} D_n(x - y) f(y) \ dy &\text{(Given.)}\\
+        &= \frac{1}{2\pi}\int_{\scT} \sum_{n =-N}^N e^{in(x-y)} f(y) \ dy &\text{(By above.)}\\
+        &= \frac{1}{2\pi} \sum_{n =-N}^N \int_{\scT}e^{in(x-y)} f(y) \ dy &\text{(Finite sum.)}\\
+        &= \frac{1}{2\pi} \sum_{n =-N}^N \int_{\scT}e^{inx}e^{-iny} f(y) \ dy &\text{(Product of exponentials.)}\\
+        &= \frac{1}{2\pi} \sum_{n =-N}^N e^{inx}\int_{\scT}e^{-iny} f(y) \ dy &\text{(Constant of integration.)}\\
+        &=\frac{1}{\sqrt{2\pi}}\sum_{n =-N}^N \left( \frac{1}{\sqrt{2\pi}}\int_{\scT}e^{-iny} f(y) \ dy\right)e^{inx}  &\text{(Rearranging.)}\\
+        &=\frac{1}{\sqrt{2\pi}}\sum_{n =-N}^N \hat{f}_ne^{inx}  &\text{(By definition.)}\\
+        &= S_N &\text{(Given.)}
+    \end{align*}    
+    \vspace{-12mm}\alignbreak
+    We will next show that the Dirichlet kernel can be rewritten in such a form. Using the geometric series expansion, we can write
+    \[\frac{\sin [(n + 1/2)x]}{\sin(x/2)} = \frac{-2i\sin [(n + 1/2)x]}{-2i\sin(x/2)} = \frac{e^{-(n+1/2)ix} - e^{(n+1/2)ix}}{e^{-ix/2} - e^{ix/2}} = \sum_{k = -n}^n e^{ikx}\]
+    The intermediate step employed $\sin(x) = \frac{1}{2i}(e^{ix} - e^{-ix})$. Usually the geometric series is written from \textit{zero} to n. That is, 
+    \[\sum_{k = 0}^n ar^k = a\left[ \frac{1 - r^{n+1}}{1 - r}\right]\]
+    This can be extended to negative terms via
+    \[\sum_{k = -n}^n r^k = r^{-n}\left[ \frac{1 - r^{2n+1}}{1-r}\right].\]
+    
+\end{solution}
+
+
+\newpage
+\subsection{Problem 7.2, part b}
+Let $T_N$ be the mean of the first $N+1$ partial sums,
+\[T_N = \frac{1}{N+1} \left \{ S_0 + S_1 + \dots + S_N\right \}.\]
+Show that $T_N = F_N \ast f$, where $F_N$ is the \textit{Fej\'er kernel}
+\[F_N(x) = \frac{1}{2\pi (N+1)}\left( \frac{\sin [(N + 1)x/2]}{\sin(x/2)}\right)^2 \]
+\partbreak
+\begin{solution}
+    
+    The Fej\'er kernel can be written in terms of the Dirichlet kernel in the following manner (this will be proven after its use):
+    \[F_N(x) = \frac{1}{N+1}\sum_{k = 0}^N D_k(x)\]
+    Using this information, we can write the following:
+    \tightalignbreak
+    \begin{align*}
+        &F_N \ast f = \int_T F_N(x - y)f(y) \ dy &\text{(Given.)}\\
+        &= \frac{1}{2\pi (N+1)}\int_\scT \sum_{k = 0}^N D_k(x - y) f(y) \ dy &\text{(By above.)}\\
+        &= \frac{1}{N+1}\sum_{k = 0}^N\int_{\scT}D_k(x - y) f(y) \ dy &\text{(Finite sum.)}\\
+        &= \frac{1}{N+1}\sum_{k = 0}^NS_k \ dy &\text{(By part a.)}\\
+        &= \frac{1}{N+1}\{ S_0 + S_1 + \cdots + S_N\} &\text{(Expanding.)}\\
+        &= T_N &\text{(Given.)}
+    \end{align*}
+    \vspace{-12mm}\alignbreak
+    \newpage
+    We next need to show that the Fej\'er kernel can be written in such a manner. This can be shown by the following:
+    \tightalignbreak
+    \begin{align*}
+        &F_N(x) = \frac{1}{N+1}\left(\frac{\sin\left[ (N+1)x/2\right]}{\sin(x/2)}\right)^2 &\text{(Given.)}\\
+        &= \frac{1}{N+1}\frac{1}{\sin^2(x/2)}\left(\sin\left[ (N+1)x/2\right]\right)^2 &\text{(Rearranging.)}\\
+        &= \frac{1}{N+1}\frac{1}{\sin^2(x/2)}\frac{1 - \cos \left[ (N+1)x\right]}{2} &\text{(Trig identity.)}\\
+        &= \frac{1}{N+1}\frac{1}{2\sin^2(x/2)}\sum_{k = 0}^N \left[ \cos(kx) - \cos((k+1)x)\right] &\text{(Reinterpretation.)}\\
+        &= \frac{1}{N+1}\frac{1}{\sin^2(x/2)}\sum_{k = 0}^N \left[ \sin((k+1/2)x) \sin(x/2)\right] &\text{(Trig identity.)}\\
+        &= \frac{1}{N+1}\frac{1}{\sin(x/2)}\sum_{k = 0}^N \left[ \sin((k+1/2)x) \right] &\text{(Simplifying.)}\\
+        &= \frac{1}{N+1}\sum_{k = 0}^N \frac{\left[ \sin((k+1/2)x) \right]}{\sin(x/2)} &\text{(Rearranging.)}\\
+        &= \frac{1}{N+1}\sum_{k = 0}^N D_k(x) &\text{(Given.)} 
+    \end{align*}
+    \vspace{-12mm}\alignbreak
+\end{solution}
+
+\newpage
+\subsection{Problem 7.2, part c}
+Which of the families $(D_N)$ and $(F_N)$ are the approximate identities as $N\rightarrow \infty$? What can you say about the uniform convergence of the partial sums $S_N$ and the averaged partial sums $T_N$ to $f$?
+
+
+\newpage
+\section{Problem 8.1}
+If $M$ is a linear subspace of a linear space $X$, then the \textit{quotient space} $X/M$ is the set $\{ x + M : x \in X\}$ of affine spaces
+\[x + M = \{x + y : y \in M\}\]
+
+\subsection{Problem 8.1, part a}
+Show that $X/M$ is a linear space with respect to the operations 
+\[\lm(x + M) = \lm x + M, \quad (x + M) + (y + M) = (x + y) + M.\]
+\partbreak
+\begin{solution}
+
+    Fix $x \in X$, and let $y \in M$. Then since $M \subseteq X$ is a linear subspace of $X$, $x + y \in X$. Therefore, $\lm(x + y) = \lm x + \lm y \in X$. Since $M$ is a linear subspace, then $\lm y \in M$. Therefore, $\lm(x + M) = \lm x + M \in X/M$. \par
+    
+    \jump
+    Similarly, fix $x , y \in X$. Then for the quotient space, there exists $u, v \in M$ for which $x+u, y+v$ are in the affine space. Since $M$ is a linear subspace of $X$, then $(x + u) + (y + v) = (x + y) + (u + v)$. Again, since $M$ is a linear subspace, $u + v \in M$, and $x + y \in X$, therefore, $(x + M) + (y + M) = (x + y) + M \in X/M$. Therefore, $X/M$ is a linear space.   
+\end{solution}
+\newpage
+\subsection{Problem 8.1, part b}
+Suppose that $X = M \oplus N$. Show that $N$ is linearly isomorphic to $X/M$. 
+
+\newpage
+\subsection{Problem 8.1, part c}
+The \textit{codimension} of $M$ in $X$ is the dimension of $X/M$. Show that a subspace of a Banach with finite codimension is closed. 
+
+\newcommand{\range}{\text{range}}
+
+\newpage
+\section{Problem 8.3}
+Let $\scM, \scN$ be closed subspaces of a Hilbert space $\scH$ and $P, Q$ the orthogonal projections with range$(P) = \scM$, range$(Q) = \scN$. Prove that the following are equivalent:
+\begin{enumerate}[a)]
+    \item $\scM \subset \scN$;
+    \item $QP = P$;
+    \item $PQ = P$;
+    \item $\norm{Px} \leq \norm{Qx}$ for all $x \in \scH$;
+    \item $\braket{x}{Px} \leq \braket{x}{Qx}$ for all $x \in \scH$.
+\end{enumerate}
+\partbreak
+\begin{solution}
+
+    \begin{enumerate}
+        \item[] \underline{$a) \implies b)$}:
+
+        \hop
+        Let $x \in \scH$. Since $P$ is a projection over a linear space, by Theorem 8.2, $\scH$ can be decomposed into a direct sum of the kernel and range of $P$. In particular, $\scH = \range (P) \oplus \ker (P)$. This implies any element of our Hilbert space can be uniquely decomposed into $x = z + y; \  z \in \range(P), \ y \in \ker (P)$. Since $\scM \subset \scN, \ \range(P) \subset \range(Q)$. This implies that $Q(z) = z$. Therefore, the following can be said:
+        \[QP(x) = Q(P(z) + P(y)) = Q(z) + 0 = z.\]
+        Note that $P(x) = P(z) + P(y) = z$. Therefore, the operations $QP$ and $P$ are equivalent. 
+
+        \item[] \underline{$b) \implies a)$}:
+
+        \hop
+        If $QP = P$, then for any $z \in \range(P)$, 
+        \[QP(z) = P(z) \implies Q(z) = z \implies z \in \range(Q).\]
+        Therefore, $\range(P) \subset \range(Q)$, so $\scM \subset \scN$. Thus, we have shown the statement $(b)$ is equivalent to $(a)$.
+
+        \newpage
+        \item [] \underline{$a) \implies c)$}:
+
+        \hop
+        Let $x \in \scH$. By Theorem 8.2, $\scH = \range (Q) \oplus \ker (Q)$. Therefore, $x$ can be uniquely decomposed into $x = z + y; \ z \in \range (Q), \ y \in \ker(Q)$. Then, 
+        \[PQ(x) = P(Q(z) + Q(y)) = P(z).\]
+        If $\range(P) \subset \range(Q)$, then $\ker(Q) \subset \ker(P)$, since $\scH$ can be decomposed into direct sums according to the operator respectively. This implies that for $y \in \ker(Q), \ y \in \ker (P)$. Therefore, 
+        \[P(x) = P(z + y) = P(z) + P(y) = P(z).\]
+        Therefore, $PQ = P$.
+
+        \item[] \underline{$c) \implies a)$}:
+
+        \hop
+        Take $x = z + y; \ z \in \range(Q), \ y \in \ker(Q)$. Since $PQ = P$, then the following can be said
+        \[PQ(x) = P(x) \implies P(Qz + Qy) = P(z) + P(y) \implies Pz = Pz + Py \implies Py = 0.\]
+        This implies that $\ker (Q) \subset \ker(P)$, which implies that $\range(P) \subset \range(Q)$, by the same logic form the previous implication. 
+    
+        \item[] \underline{$c) \implies d)$}:
+
+        \hop
+        This is the easiest way to show. Since $PQ = Q$, then the following can be said:
+        \[\norm{Px} = \norm{QPx} \leq \norm{Q}\norm{Px} = \norm{Qx}\]
+        The last inequality is via Proposition 8.4, that is, for a nonzero orthogonal projection, $\norm{Q} = 1$. 
+
+        \item[] \underline{$d) \implies e)$}:
+
+        \hop
+        Since $\norm{Px} \leq \norm{Qx},$ then $\norm{Px}^2 \leq \norm{Qx}^2$. Then by the inner product norm definition, 
+        \[\norm{Px}^2 = \braket{Px}{Px} = \braket{x}{P^2x} = \braket{x}{Px}\]
+        Similarly, $\norm{Qx}^2 \leq \braket{x}{Qx}$. Therefore $\braket{x}{Px} \leq \braket{x}{Qx}$.
+
+        \newpage
+        \item[] \underline{$e) \implies a)$}:
+
+        \hop
+        Suppose false, that is, there exists an $x \in \scH$ where $x \in \scM$, but $x \not\in \scN$. We will assume that $(e)$ holds as well. Then $x \in \range (P), \ x\not \in \range(Q)$. Since $\scH = \range (Q) \oplus \ker (Q)$, this implies $x \in \ker(Q)$.  Therefore, 
+        \[\braket{x}{Px} \leq \braket{x}{Qx} = 0 \implies \braket{x}{Px} \leq 0\]
+        Since $P$ is an orthogonal projection, then 
+        \[\braket{x}{Px} = \braket{x}{P^2x} = \braket{Px}{Px} = \norm{Px}^2 \geq 0.\]
+        Since $\norm{Px}^2 \leq 0$ and $\norm{Px}^2 \geq 0$, then $\norm{Px}^2 = 0$, meaning $Px = 0$. Since we require $x \in \range(P)$, this implies that $x = 0$. But $0 \in \range(Q)$, since $\range(Q)$ is a linear vector subspace of $\scH$. Therefore, we have a contradiction. This implies that there does not exist an $x \in \scH$ such that $x \in \scM$, but $x \not \in \scN$. Therefore, $\scM \subset \scN$. 
+    \end{enumerate}
+
+    From the above implications, we have the following graph of implications. We can see that we can get to any node from any other node. 
+    \usetikzlibrary {graphs}
+    \usetikzlibrary{positioning, arrows.meta, bending}
+    \renewcommand{\d}{2.5}
+    \begin{center}
+        \begin{tikzpicture}[
+            node distance=2cm,
+            arrow/.style={-Stealth, shorten >=1pt, shorten <=1pt},
+            mynode/.style={draw, circle, fill=lightgray},
+            edgelabel/.style={font=\footnotesize, sloped}
+            ]
+            
+            % Nodes
+            \node[mynode, label=$a$] at (0,0) (a) {};
+            \node[mynode, label=$b$] at (\d,0) (b) {};
+            \node[mynode, label=right:$c$] at (0,-\d) (c) {};
+            \node[mynode, label=below:$d$] at (-\d, -\d) (d) {};
+            \node[mynode, label=$e$] at (-\d,0) (e) {};
+            
+            % Edges
+            %\draw[arrow] (s) -- node[edgelabel, above] {\textcolor{red}{6} (10)} (u);
+            \draw[arrow] (a) -> (b);
+            \draw[arrow] (b) -> (a);
+            \draw[arrow] (a) -> (c);
+            \draw[arrow] (c) -> (a);
+            \draw[arrow] (c) -> (d);
+            \draw[arrow] (d) -> (e);
+            \draw[arrow] (e) -> (a);
+        \end{tikzpicture}
+    \end{center}
+
+\end{solution}
+
+
+\newpage
+\section{Problem 8.5}
+Let $\scH = L^2(\scT; \R^3)$ be the Hilbert space of $2\pi$-periodic, square integrable, vector-valued functions $\textbf{u}: \scT^3 \into \R^3$, with the inner product
+\[\braket{\textbf{u}}{\textbf{v}} = \int_{\scT^3} \textbf{u}(\textbf{x}) \cdot \textbf{v}(\textbf{x}) \ d\textbf{x}.\]
+We define the subspaces $\scV$ and $\scW$ of $\scH$ by 
+\begin{align*}
+    &\scV \  =  \ \{ \textbf{v} \in C^\infty (\scT^3;\R^3) : \grad \cdot \textbf{v} = 0\},\\
+    &\scW  \ =  \ \{ \textbf{w} \in C^\infty (\scT^3;\R^3) : \textbf{w} = \grad\ph \text{ for some } \ph : \scT^3 \into \R\}.
+\end{align*}
+\subsection{Problem 8.5, part 1}
+Show that $\scH = \scM \oplus \scN$ is the orthogonal direct sum of $\scM = \overline{\scV}$ and $\scN = \overline{\scW}$.
+\partbreak
+\begin{solution}
+
+    We will first show that $\braket{\textbf{v}}{\textbf{w}} = 0$, for $\textbf{v} \in \scV$ and $\textbf{w} \in \scW$. Note first by integration by parts, we have
+    \[\grad \cdot (\ph\textbf{v}) = \ph(\grad \cdot \textbf{v}) + \textbf{v}\cdot \grad\ph\]
+    Since $\grad \cdot \textbf{v} = 0$, we can rewrite the inner product as 
+    \[\braket{\textbf{v}}{\textbf{w}} = \int_{\scT^3} \grad \cdot(\ph \textbf{v}) \ d^3\textbf{x}\]
+    By the Divergence Theorem of Vector calculus, 
+    \[\int_{\scT^3} \grad \cdot(\ph \textbf{v}) \ d^3\textbf{x} = \int_{\partial \scT^3} \ph\textbf{v} \cdot d\textbf{S}\]
+    where $\partial \scT^3$ is the boundary of our Torus, and $d\textbf{S}$ is the surface indicated by the normal vector to the torus at a point. Integration over any simple loop on our torus will return zero, since the torus is $2\pi$ periodic, and no external forces act upon it which returns a nonzero value. Therefore, 
+    \[\int_{\partial \scT^3} \ph\textbf{v} \cdot d\textbf{S} = 0\]
+    which implies $\scV \cap \scW = \{0\}$. Note that this implies $\scV \subseteq \scW^\perp, \ \scW \subseteq \scV^\perp.$ Via the fact that $\scH = \overline{\scW} \oplus \scW^\perp$, we just need to show that $\scW^\perp = \overline{\scV}$. Since $\overline{\scV}$ is the smallest closed subset which contains $\scV$ and $\scV \subseteq \scW^\perp$, $\overline{\scV} \subseteq \scW^\perp$. We next need to show that $\overline{\scV} \subseteq \scW^\perp$. \par
+    
+    \hop
+    Suppose false, that is, there exists a $\textbf{u} \in \scW^\perp$ such that $u \not \in \overline{\scV}$, yet we have that $\braket{\textbf{u}}{\textbf{w}} = 0$ for any $\textbf{w} \in \scW$. Let $\textbf{w} \in \scW$. Therefore, there exists a $\ph : \scT^3 \into \R$ such that $\textbf{w} = \grad \ph$. Since $\braket{\textbf{u}}{\textbf{w}} = 0,$ then,
+    \[\int \textbf{u} \cdot \grad \ph = 0.\]
+    By integration by parts, we have that 
+    \[\int \grad \cdot (\textbf{u}\ph) = \int \ph(\grad \cdot \textbf{u}).\]
+    From the previous calculations, we found that the left integral equals zero, therefore, 
+    \[\int \ph (\grad \cdot \textbf{u}) = 0.\]
+    This should hold for any $\ph$, which implies $\grad \cdot u = 0$, giving us a contradiction. Therefore, $\scW^\perp = \overline{\scV}$, so $\scH = \overline{\scV} \oplus \overline{\scW}$.
+\end{solution}
+
+\newpage
+\subsection{Problem 8.5, part 2}
+\hop
+Let $P$ be the orthogonal projection onto $\scM$. The velocity $\textbf{v}(\textbf{x}, t) \in \R^3$ and pressure $p(\textbf{x}, t) \in \R$ of an incompressible, viscous fluid satisfy the \textit{Navier-Stokes equations}
+\begin{align*}
+    &\textbf{v}_t + \textbf{v} \cdot \grad \textbf{v} + \grad p = \nu \Delta \textbf{v},\\
+    &\grad \cdot \textbf{v} = 0.
+\end{align*}
+Show that the velocity \textbf{v} satisfies the nonlocal equation
+\[\textbf{v}_t + P[\textbf{v}\cdot \grad \textbf{v}] = \nu \Delta \textbf{v}.\]
+
+\newpage
+\section{Problem 8.7}
+If $\ph_y$ is the bounded linear functional defined as $\ph_y (x) = \braket{y}{x}$, prove that $\norm{\ph_y} = \norm{y}$.
+\partbreak
+\begin{solution}
+    We will first begin with the definition of a linear operator. Let $x$ be chosen nonzero, then 
+    \[\norm{\ph_y(x)} = \sup\frac{|\ph_y(x)|}{\norm{x}} = \sup\frac{|\braket{y}{x}|}{\norm{x}}.\]
+    Via Cauchy Schwartz, the numerator is bounded by $\norm{y}\norm{x}$. Then
+    \[\norm{\ph_y(x)} \leq \sup\frac{\norm{x}\norm{y}}{\norm{x}} = \sup\norm{y} = \norm{y}.\]
+    Next, we need to find a value in $\scH$ which saturates this bound. Substituting in $x \mapsto y$, we see
+    \[\frac{|\ph_y(y)|}{\norm{y}} = \frac{\norm{y}^2}{\norm{y}} = \norm{y}.\]
+    Therefore, the bound can be achieved, implying $\norm{\ph_y} = \norm{y}$. Note if $x = 0$, then clearly, $\ph_y(x) = 0$. This value will be bounded by $\norm{y}$, since $\norm{y}\geq 0$. The same logic of setting $y = 0$ shows this bound can be achieved.  
+\end{solution}
+
+\newpage
+\section{Problem 8.9}
+Let $A \subset \scH$ be such that
+\[\scM = \{ x \in \scH : x \text{ is a finite linear combinations of elements in $A$}\}\]
+is a dense linear subspace of $\scH$. Prove that any bounded linear functional on $\scH$ is uniquely determined by its values on $A$. If $\{ u_\alpha\}$ is an orthonormal basis, find a necessary and sufficient condition on a family of complex numbers $c_\alpha$ for there to be a bounded linear functional $\ph$ such that $\ph(u_\alpha) = c_\alpha$.
+\end{document}
