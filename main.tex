@@ -13,16 +13,7 @@
 
 \tableofcontents
 
-\newcommand{\scP}{\mathcal{P}}
-\newcommand{\scT}{\mathbb{T}}
-\newcommand{\into}{\rightarrow}
-\newcommand{\scM}{\mathcal{M}}
-\newcommand{\scH}{\mathcal{H}}
-\newcommand{\scN}{\mathcal{N}}
-\newcommand{\scV}{\mathcal{V}}
-\newcommand{\scW}{\mathcal{W}}
-\renewcommand{\grad}{\nabla}
-\renewcommand{\star}{^{*}}
+
 
 \newpage
 \section{Problem 7.1}
@@ -71,10 +62,13 @@ Prove (7.5) for $\ph_n$, that is,
 
 \newpage
 \subsection{Problem 7.1, part b}
-Prove that if the set $\scP$ of trigonometric polynomials is dense in the space of periodic functions on $\mathbf{T}$ with the uniform norm, then $\scP$ is dense in the space of all continuous functions on $\mathbf{T}$ with the $L^2$-norm.
+Prove that if the set $\scP$ of trigonometric polynomials is dense in the space of periodic functions on $\scT$ with the uniform norm, then $\scP$ is dense in the space of all continuous functions on $\scT$ with the $L^2$-norm.
 \partbreak
 \begin{solution}
 
+    Suppose that $f$ is a periodic function. Since $\scP$ is dense in the space of periodic functions, there exists a sequence $f_n \in \scP$ such that $\norm{f_n - f}_{\infty} \into 0$ as $n \into \infty$. That is, there exists a $N \in \N$ such that when $n \geq N \implies \sup_{x \in \R}|f_n(x) - f(x)| < \frac{\ep}{\sqrt{2\pi}}$. If the supremum of the sequence $|f_n(x) - f(x)| < \frac{\ep}{\sqrt{2\pi}}$, then $|f_n(x) - f(x)| < \frac{\ep}{\sqrt{2\pi}}$ for every $x \in \R$. Moreover, $|f_n(x) - f(x)|^2 < \left(\frac{\ep}{\sqrt{2\pi}}\right)^2$. Then, 
+    \[\norm{f_n - f}_{L^2}^2 = \int_{\scT} |f_n(x) - f(x)|^2 \ dx < \int_{\scT} \frac{\ep^2}{2\pi} \ dx= \ep^2.\]
+    Therefore, $\norm{f_n - f}_{L^2} < \ep$, implying that $\scP$ is also dense with respect to the $L^2$-norm. 
 
 \end{solution}
 
@@ -82,7 +76,11 @@ Prove that if the set $\scP$ of trigonometric polynomials is dense in the space 
 \newpage
 \subsection{Problem 7.1, part c}
 Is $\scP$ is dense in the space of all continuous functions on $[0, 2\pi]$ with the uniform norm?
+\partbreak
+\begin{solution}
 
+    Unless I'm missing something, this is the result of Theorem 7.3, which states that the set of trigonometric polynomials are dense in $C(\scT)$ with respect to the uniform norm. The only thing that is different is $\scT$ is defined on the interval $[-\pi, \pi]$, which for every function $f$ defined on $\scT$, we can define $g(x) := f(x+\pi)$. Since $f(x)$ is continuous and $2\pi$ periodic, then so is $g(x)$. Therefore, the claim has been shown.  
+\end{solution}
 \newpage
 \section{Problem 7.2}
 Suppose that $f: \scT \into \C$ is a continuous function, and 
@@ -163,7 +161,38 @@ Show that $T_N = F_N \ast f$, where $F_N$ is the \textit{Fej\'er kernel}
 \newpage
 \subsection{Problem 7.2, part c}
 Which of the families $(D_N)$ and $(F_N)$ are the approximate identities as $N\rightarrow \infty$? What can you say about the uniform convergence of the partial sums $S_N$ and the averaged partial sums $T_N$ to $f$?
+\partbreak
+\begin{solution}
 
+    Firstly, the Dirichlet kernel fails to be strictly positive, which can be seen on its Wikipedia page. So the Dirichlet kernel immediately fails at being an approximate identity. By the form of the Fej\'er kernel given, its easy to see that its strictly positive, passing the first required condition. Next, we want to show that its integral equals one for all $N \in \N$. This requires separate handling for the $n = 0$ case, as we will see when evaluating the integral. From part b, we had found an equivalent form for writing the Fej\'er kernel in terms of a sum over Dirichlet kernels. That is,
+    \[F_N = \frac{1}{2\pi (N+1)}\sum_{k = 0}^N D_k(x) = \frac{1}{2\pi(N+1)} \sum_{k = 0}^N\sum_{n = -k}^k e^{inx}\]
+    Supposing $n \neq 0$ in any of the terms, we can write
+    \[\int_{-\pi}^\pi F_N(x) \ dx  = \frac{1}{2\pi(N+1)} \sum_{k = 0}^N\sum_{n = -k}^k \int_{-\pi}^\pi e^{inx} \ dx = \left[\dots\right] \frac{1}{in}e^{inx}\Big|_{-\pi}^\pi = \left[\dots\right] \frac{2}{n}\sin (n\pi) = 0.  \]
+    For the case when $n = 0$, we see that this happens for every term in the series. Since there are $N+1$ terms in the series in which we are evaluating the integral at $n = 0$, we will need to multiply in the $N+1$ at the end. Note that $e^{i(0)x} = 1$ for all $x$, so 
+    \[\int_{-\pi}^\pi 1 \ dx = 2\pi.\]
+    Thus, adding up all the zero terms, we get that the value of the integral is equal $2\pi(N+1)$, implying that $\int F_N = 1$ for all $N \in \N$. Next, we need to show that 
+    \[\lim_{n \into \infty} \int_{\delta \leq |x| \leq \pi}\ph_n(x) \ dx = 0, \quad \text{ for every } \delta > 0.\]
+    This is slightly more involved. We can note that instead of evaluating the one integral from $-\pi$ to $\pi$, we have 
+    \[\int_{\delta \leq |x| \leq \pi} F_N(x) \ dx = \int_{-\pi}^{-\delta} F_N(x) \ dx + \int_{\delta}^{\pi} F_N(x) \ dx,\]
+    where we will take $N \into \infty$ after integral evaluation. We will employ the same trick as was performed earlier, where we evaluate an indefinite integral and apply different bounds then. Since we have to worry about the case when $n = 0$, we will evaluate this first. Everything up to integral evaluation is the same as the previous part, so
+    \[\int F_N(x) = \frac{1}{2\pi(N+1)}\sum_{k = 0}^N\sum_{n = -k}^k \left[\int_{-\pi}^{-\delta} 1 \ dx + \int_{\delta}^\pi 1 \ dx \right]= \frac{1}{2\pi(N+1)} (N+1) 2(\pi - \delta) = 1 - \frac{\delta}{\pi}.\]
+    We now consider the case when $n \neq 0$, which will mean the the integral is nontrivial, but easy, so
+    \begin{align*}
+        &\int F_N(x) = \frac{1}{2\pi(N+1)}\sum_{k = 0}^N\sum_{n = -k}^k \left[\int_{-\pi}^{-\delta} e^{inx}+ \int_{\delta}^\pi e^{inx} \right]= \left[\cdots\right] \frac{1}{in}\left[ e^{-in\delta} - e^{-in\pi} + e^{in\pi} - e^{in\delta}\right]\\
+        &= \frac{1}{2\pi(N+1)}\sum_{k = 0}^N\sum_{n = -k}^k \frac{1}{n}\left[ 2\sin(n\pi) - 2\sin(n\delta)\right]
+    \end{align*}
+    Note that for any integer of $\pi$, $\sin(n\pi) =0$, so this term can be thrown away. We can simplify then to
+    \[\int F_N(x) \ dx = -\frac{1}{\pi(N+1)}\sum_{k = 0}^N\sum_{n = -k}^k \frac{1}{n}\sin(n\delta)\]
+    Since the sine function is odd, and $1/n$ is also odd, then their product is even, so instead of the summation running from $-k$ to $k$, we can double the summation, and just run from $1$ to $k$, since the zero term has already been evaluated. We then have 
+    \[\int F_N(x) \ dx = -\frac{2}{\pi(N+1)}\sum_{k = 0}^N\sum_{n = 1}^k \frac{1}{n}\sin(n\delta)\]
+    Ignoring the terms at the front, the summation acts like 
+    \[\sin(\delta) + \sin{\delta} + \frac{1}{2}\sin{\delta} + \sin{\delta} + \frac{1}{2}\sin{\delta} +\frac{1}{3}\sin{3\delta} + \cdots \]
+    Grouping the terms together, we have that the double summation can be simplified to  
+    \[\sum_{n = 0}^N \left( \frac{N}{n+1}  -1\right)\sin((n+1)\delta)\]
+    I finally have that
+    \[\int_{\delta \leq |x| \leq \pi} F_N(x) \ dx = 1 - \frac{\delta}{\pi} - \frac{2}{\pi(N+1)}\sum_{n = 0}^N \left( \frac{N}{n+1}  -1\right)\sin((n+1)\delta). \]
+    It seems as though the summation doesn't converge as $N \into \infty$, since it spikes for $\delta$ sufficiently close to zero. I'm not entirely sure what's wrong, but I know that the Fej\'er kernel is an approximate identity. 
+\end{solution}
 
 \newpage
 \section{Problem 8.1}
@@ -184,12 +213,27 @@ Show that $X/M$ is a linear space with respect to the operations
 \newpage
 \subsection{Problem 8.1, part b}
 Suppose that $X = M \oplus N$. Show that $N$ is linearly isomorphic to $X/M$. 
+\partbreak
+\begin{solution}
+
+    Let $T: N \into X/M$ be defined as $T(y) = y + M$ for any $y \in N$. To show that this is a linear isomorphism, we need to show three things: $T$ is injective, $T$ is surjective, and $T$ is linear. To show injectivity, let $y_1, y_2 \in N$ be such that $Ty_1 = Ty_2$. This implies that $y_1 + M = y_2 + M$, and in particular, $y_1 \in y_2 + M$. Because of this, there exists an $x \in M$ such that $y_1 = y_2 + x$. Rearranging, we have $y_1 - y_2 = x$. Note that $N$ is linear, so $y_1 - y_2 \in N$. Since $M \cap N = \{0\}$, this implies that $x = 0$, therefore $y_1 = y_2$. Therefore, $T$ is injective. \par
+
+    \jump
+    To show surjectivity, let $z + M \in X / M$. Since $X = M \oplus N$, then $z = x + y$ for $x \in M, y \in N$. Since $x \in M$, and by the linearity of the quotient space shown above, we have that $(x + y) + M = (x + M) + (y + M) = y + M.$ Therefore, $z + M = y + M$, implying that $T$ is surjective. \par
+    
+    \jump
+    Finally we show linearity of the operator $T$. By the work we did in part a, this is almost immediate, since for $\mu , \nu$ constants and $y_1, y_2 \in N$, we have
+    \[T(\mu y_1 + \nu y_2) = (\mu y_1 + \nu y_2) + M = \mu (y_1 + M) + \nu (y_2 + M) = \mu T(y_1) + \nu T(y_2).\]
+\end{solution}
 
 \newpage
 \subsection{Problem 8.1, part c}
-The \textit{codimension} of $M$ in $X$ is the dimension of $X/M$. Show that a subspace of a Banach with finite codimension is closed. 
+The \textit{codimension} of $M$ in $X$ is the dimension of $X/M$. Is a subspace of a Banach space with finite codimension necessarily closed? 
+\partbreak
+\begin{solution}
 
-\newcommand{\range}{\text{range}}
+    Suppose we have a projection $P$ which projects onto $N$ along $M$. By theorem 8.2, $X = \range P \oplus \ker P$, with $N = \range P$ and $M = \ker P$. In the last part, we showed that $N$ is linearly isomorphic to $X / M$, which we are supposing has finite dimension. Since there is an isomorphism between $\range P$ and $X / M$, then $\range P$ has finite dimension. Note that the projection $P$ is continuous as well, and is a linear mapping. Therefore, by Theorem 5.25, the kernel of $P$, $M$, is closed. So yes, $M$ is necessarily closed.  
+\end{solution}
 
 \newpage
 \section{Problem 8.3}
@@ -333,12 +377,33 @@ Show that $\scH = \scM \oplus \scN$ is the orthogonal direct sum of $\scM = \ove
 \subsection{Problem 8.5, part 2}
 \hop
 Let $P$ be the orthogonal projection onto $\scM$. The velocity $\textbf{v}(\textbf{x}, t) \in \R^3$ and pressure $p(\textbf{x}, t) \in \R$ of an incompressible, viscous fluid satisfy the \textit{Navier-Stokes equations}
-\begin{align*}
+\vspace{-4mm}\begin{align*}
     &\textbf{v}_t + \textbf{v} \cdot \grad \textbf{v} + \grad p = \nu \Delta \textbf{v},\\
     &\grad \cdot \textbf{v} = 0.
-\end{align*}
+\end{align*}\vspace{-10mm}
+
 Show that the velocity \textbf{v} satisfies the nonlocal equation
 \[\textbf{v}_t + P[\textbf{v}\cdot \grad \textbf{v}] = \nu \Delta \textbf{v}.\]
+\vspace{-16mm}
+\partbreak
+\vspace{-3mm}
+\begin{solution}
+
+    Na\"ively applying the projection to the above equation, we have 
+    \[P\left[ \frac{\partial \textbf{v}}{\partial t} + \textbf{v} \cdot \grad \textbf{v} + \grad p\right] = P\left[ \nu \Delta\textbf{v}\right].\]
+    Clearly, $P$ is a linear operator, as well as $\grad p \in \overline{\scW}$. We can then simplify to,
+    \[P\left[ \frac{\partial \textbf{v}}{\partial t}\right] + P\left[\textbf{v} \cdot \grad \textbf{v} \right] = P\left[ \nu \Delta\textbf{v}\right].\]
+    For this equation to be equal to the given equation, we need to show that $\textbf{v}_t, \ \nu\Delta \textbf{v} \in \overline{\scV}$. Since the spatial differential operator acts independently on the temporal differential operator, we have 
+    \[\grad \cdot (\textbf{v}_t) = \grad \cdot \frac{\partial \textbf{v}}{\partial t} = \frac{\partial}{\partial t}(\grad \cdot \textbf{v}) = 0. \quad \implies \frac{\partial \textbf{v}}{\partial t} \in \overline{\scV}.\]
+    Furthermore, by the definition of the Laplacian operator\footnote{I am most comfortable with denoting the Laplacian operator as $\grad^2$ over $\Delta$.}, we have that 
+    \[\grad^2 \textbf{v} = \grad (\grad \cdot \textbf{v}) - \grad \cross (\grad \cross \textbf{v}).\]
+    Taking the divergence of a curl is equal to zero, plugging that in, we have
+    \[\grad \cdot \grad^2\textbf{v} = \grad \cdot \grad (\grad \cdot \textbf{v}) = \grad^2(\grad \cdot \textbf{v}).\]
+    Therefore, the divergence operator commutes with the Laplacian. Since $\grad \cdot \textbf{v} = 0$, this implies that $\nu \grad^2 \textbf{v} \in \overline{\scV}$. Therefore, the projection $P$ will do nothing to these two terms. The equation then simplifies to 
+    \[\frac{\partial \textbf{v}}{\partial t} + P\left[ \textbf{v}\cdot \grad \textbf{v}\right] = \nu \grad^2 \textbf{v},\]
+    which is what we wanted to find.
+\end{solution}
+
 
 \newpage
 \section{Problem 8.7}
@@ -355,8 +420,42 @@ If $\ph_y$ is the bounded linear functional defined as $\ph_y (x) = \braket{y}{x
 \end{solution}
 
 \newpage
-\section{Problem 8.9}
+\section{Problem 8.9, part 1}
 Let $A \subset \scH$ be such that
 \[\scM = \{ x \in \scH : x \text{ is a finite linear combinations of elements in $A$}\}\]
-is a dense linear subspace of $\scH$. Prove that any bounded linear functional on $\scH$ is uniquely determined by its values on $A$. If $\{ u_\alpha\}$ is an orthonormal basis, find a necessary and sufficient condition on a family of complex numbers $c_\alpha$ for there to be a bounded linear functional $\ph$ such that $\ph(u_\alpha) = c_\alpha$.
+is a dense linear subspace of $\scH$. Prove that any bounded linear functional on $\scH$ is uniquely determined by its values on $A$. 
+\partbreak
+\begin{solution}
+
+    Since any element in $\scM$ can be expressed as a finite linear combination of elements in $A$, take $U$ to be the maximally linear independent set of vectors in $A$. Then $U$ spans $A$, as well as $\scM$. We then have that any $x \in \scM$ can be defined uniquely by a finite linear combination of elements in the basis set $U$. Define $\psi$ as a linear functional which acts on $\scM$ where $\norm{\psi} = M$ is bounded. Since every elements of $\scM$ requires finite combinations of elements in our basis set, $\scM$ has finite dimension. Therefore, by Hahn Banach, we can extend our functional $\psi$ to a bounded linear functional $\ph : \scH \into \R$ which acts on the entire Hilbert Space. Since $\ph$ is a bounded linear functional on $\scH$, the by the Riesz Representation theorem, Theorem 8.12, there is a unique vector $y \in \scH$ such that $\ph(x) = \braket{y}{x}$. Since $\scM$ is dense in $\scH$, $y$ can be taken as a limit of a sequence of elements in $\scM$, which are uniquely determined by a linear combination of elements in $U$. Thus the claim has been shown. 
+
+\end{solution}
+
+\newpage
+\subsection{Problem 8.9, part 2}
+If $\{ u_\alpha\}$ is an orthonormal basis, find a necessary and sufficient condition on a family of complex numbers $c_\alpha$ for there to be a bounded linear functional $\ph$ such that $\ph(u_\alpha) = c_\alpha$.
+\partbreak
+\begin{solution}
+
+    I claim that a necessary and sufficient condition for there to exists such a bounded linear functional is for $\{ c_\alpha \} \in \ell^2$, that is $\sum_{\alpha \in I}|c_\alpha|^2 < \infty$ for $I$ being an arbitrary index set. We will break this up into two cases, based on the size of the index set.
+
+    \begin{itemize}
+        \item \underline{$I$ is countable}:
+
+        \hop
+        Since $\{u_\alpha\}$ is an orthonormal basis, then by Parseval's equality, for any $x \in \scH$, $x = \sum_{\alpha \in I} \braket{u_\alpha}{x}u_\alpha$. For sufficienly, we suppose $\sum_{\alpha \in I} |c_\alpha|^2 < \infty$. Define $c = (\alpha_1, \dots, \alpha_n, \dots)$ to be the vector whose $\alpha$-th element is $c_{\alpha}$ in the basis given. Then,
+        \[\ph_{c}(u_\alpha) = \braket{c}{u_\alpha} = c_\alpha = \ph(u_\alpha)\]
+        Therefore, by Problem 8.7, $\norm{\ph} = \norm{\ph_c} = \norm{c} < \infty$ by assumption. therefore, $\ph$ is bounded.  \par
+        
+        \jump
+        For necessity, we suppose that $\norm{\ph} < \infty.$ Define $c_n = (c_1, \dots, c_n, 0, \dots 0)$ to have nonzero entries in only the first $n$ entries (with respect to the given orthonormal basis). Then,
+        \[\norm{c_n}^2 = \sum_{\alpha \in I} |\braket{u_\alpha}{c_\alpha}|^2 = \sum_{\alpha =1}^n |{c_\alpha}|^2 = \ph(c_n) \leq \norm{\ph}\norm{c_n}.\]
+        Dividing by $\norm{c_n}$ on both sides, this implies $\norm{c_n} \leq \norm{\phi}$. Since this should hold for all $n$, we see that $\sum_{\alpha \in I} |c_{\alpha}|^2 < \infty,$ satisfying necessity. 
+
+        \item \underline{$I$ is uncountable}:
+
+        \hop
+        The same analysis can be done as in the case when $I$ is countable. By the previous part, we can take $A$ to be the span of $\{u_\alpha\}$, for $\alpha$ in some countable index set. Then we see the same necessary and sufficient condition to hold as in the countable case. 
+    \end{itemize}
+\end{solution}
 \end{document}
