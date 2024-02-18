@@ -1,0 +1,81 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{CMSC 37000: Homework 3}
+\author{Caleb Derrickson}
+\date{February 26, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+You work for a cryptocurrency startup. the startup has a supercomputer that can mine two types of coins: CatCoins and DogCoins. The profit from mining these coins varies over time. the profit for mining CatCoins on day $i$ is $c_i > 0$ and the profit for mining DogCoins on day $i$ is $d_i > 0$. There are $k$ days and your goal is to determine what coin to mine on day $i$ for every $i \in \{1, ..., k\}$. However, the computer cannot immediately switch from mining CatCoins to mining DogCoins or vice versa, because each type of coins requires its own software, and it takes 1 day to load it. So, for example, if the computer mines CatCoins on day $i$, it can start mining DogCoins only on day $i+2$ and there will be no profit on day $i+1$. \par
+
+\hop
+Design a DP algorithm that given numbers $c_1, ..., c_k$ and $d_1, ..., d_k$ finds the maximum profit the startup can get. Please do the following:
+\begin{enumerate}
+    \item Define subproblems. 
+    \item Define the dynamic-programming table and explain the meaning of its entries. 
+    \item Write the initialization step of your algorithm.
+    \item Write the recurrence formula for computing the entries of the table.
+    \item Explain why the recurrence formula is correct. 
+    \item Find the running time of your algorithm.
+\end{enumerate}
+\partbreak
+\begin{solution}
+
+    $T[i+1] = \max\{current[i+1] + current[i+2], other[i+2]\}?$
+\end{solution}
+
+\newpage
+\section{Problem 2}
+Convert the following LP to the canonical form. Then write the dual LP
+\begin{align*}
+    &\text{maximize: } x - w            \\[-1.5ex]
+    &\text{subject to}                  \\[-1.5ex]
+    & \hspace{19mm} x + y + z \leq 5    \\[-1.5ex]
+    & \hspace{19mm} x - z + w = 3       \\[-1.5ex]
+    & \hspace{19mm} x \geq 0            \\[-1.5ex]
+    & \hspace{19mm} y \geq 0            \\[-1.5ex]
+    & \hspace{19mm} z \geq -2           \\[-1.5ex]
+    & \hspace{19mm} w \geq 0
+\end{align*}
+Is this LP feasible? If it is feasible, is it bounded or unbounded? Is the dual feasible? If it is feasible, is it bounded or unbounded?
+
+\newpage
+\section{Problem 3}
+In this problem, we will design an algorithm for solving the Minimum Vertex Cover problem in bipartite graphs. Let $G = (X, Y, E)$ be a bipartite graph with parts $X$ and $Y$. Consider the following linear programming formulation of the Minimum Vertex Cover Problem. There is an LP variable $x_u$ for every vertex $ u \in X \cup Y$.
+\begin{align*}
+    &\text{minimize: } \sum_{u \in X\cup Y} x_u\\[-1.5ex]
+    &\text{subject to}\\[-1.5ex]
+    &\hspace{19mm} x_u + x_v \geq 1 \text{ for every edge } (u, v) \in E\\[-1.5ex]
+    &\hspace{19mm} x_u \geq 0
+\end{align*}
+\begin{enumerate}
+    \item Prove that the value of this program is at most the minimum cover size.
+    \item Let $\xhat$ be an optimal solution. Prove that $\xhat \in [0, 1]$ for every $u \in X\cup Y$.
+    \item Assume additionally that $\xhat$ is a vertex solution. Prove that then $\xhat_u \in \{0, 1\}$. To this end, consider the set of graph vertices $A$:
+    \[A = \{ u \in X \cup Y : \xhat_u \neq 0 \text{ and } \xhat_u \neq 1\}.\]
+    We need to prove that $A$ is empty. Assume to the contrary that $A$ is not empty. Denote $\ep = \min \{ \xhat_u , 1 - \xhat_u : u \in A\}$. Consider solutions $x'$ and $x''$ defined by
+    \begin{equation*}
+        x'_u = \begin{cases}
+            \xhat_u &\text{if } u \neq A\\
+            \xhat_u + \ep &\text{if } u \in A\cap X\\
+            \xhat_u - \ep &\text{if } u \in A\cap Y\\
+        \end{cases}\quad
+        x''_u = \begin{cases}
+            \xhat_u &\text{if } u \neq A\\
+            \xhat_u - \ep &\text{if } u \in A\cap X\\
+            \xhat_u + \ep &\text{if } u \in A\cap Y\\
+        \end{cases}
+    \end{equation*}
+    Prove that $x'$ and $x''$ are feasible solutions. conclude that $\xhat$ is not a vertex solution. 
+    \item Design a polynomial-time algorithm that solves the Minimum Vertex Cover in bipartite graphs. Assume that you have an LP solver that given a linear program finds an optimal vertex solution $\xhat$.
+\end{enumerate}
+
+\end{document}
