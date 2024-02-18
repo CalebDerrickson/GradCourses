@@ -1,0 +1,52 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31210: Homework 7}
+\author{Caleb Derrickson}
+\date{February 23, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Problem 8.12}
+Suppose that $A: \scH \into \scH$ is a bounded, self-adjoint, linear operator such that there is a constant $c > 0$ with 
+\[c \norm{x} \leq \norm{Ax} \quad \text{ for all } x \in \scH.\]
+Prove that there is a unique solution $x$ of the equation $Ax = y$ for every $y \in \scH$.
+
+\newpage
+\section{Problem 8.13}
+Prove that an orthogonal set of vectors $\{u_\alpha : \alpha \in \scA \}$ in a Hilbert space $\scH$ is an orthonormal basis if and only if 
+\[\sum_{\alpha \in \scA} u_\alpha \otimes u_\alpha = \id. \]
+
+\newpage
+\section{Problem 8.14}
+Suppose that $A, B \in \mfB (\scH)$ satisfy
+\[\braket{x}{Ay} = \braket{x}{By} \quad \text{ for all } x, y \in \scH.\]
+Prove that $A = B$. Use a polarization type identity to prove that if $\scH$ is a complex Hilbert space and 
+\[\braket{x}{Ax} = \braket{x}{Bx} \quad \text{ for all } x\in \scH,\]
+then $A = B$. What can you say about $A$ and $B$ for real Hilbert spaces?
+
+\newpage
+\section{Problem 8.17}
+Prove that strong convergence implies weak convergence. Also prove that strong and weak convergence are equivalent in a finite-dimensional Hilbert space.
+
+\newpage
+\section{Problem 8.18}
+Let $u_n$ be a sequence of orthonormal vectors in a Hilbert space. Prove that $u_n \rightharpoonup 0$ weakly.  
+
+
+\newpage
+\section{Problem 8.20}
+\newcommand{\xbar}{\Bar{x}}
+Let $\scH$ be a real Hilbert space and $\ph \in \scH\star$. Define the quadratic functional $f: \scH \into \R$ by 
+\[f(x) = \frac{1}{2}\norm{x}^2 - \ph(y).\]
+Prove that there is a unique element $\xbar \in \scH$ such that 
+\[f(\xbar) = \inf_{x \in \scH} f(x).\]
+
+\end{document}
