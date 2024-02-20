@@ -74,19 +74,20 @@ while numloops < maxloops
     d = B\A(:, Nasis(q));
     qual_d = [];
   
-
-    for i = 1:length(d)
-        if d(i) <= 0
-            fprintf("Problem is unbounded\n");
-            if numloops == 0 
-                x(Basis) = x_B;
-                x(Nasis) = x_N; 
-                obj = dot(c, x); 
-            end
-            return;
+    if all (d <= 0) 
+        fprintf("Problem is unbounded\n");
+        if numloops == 0 
+            x(Nasis) = x_N; 
+            x(Basis) = x_B;
+            obj = dot(c, x); 
         end
-        if d(i) == 0 continue; end
+        return;
+    end
+    
+    for i = 1:length(d)
+        if (d(i) > 0)
             qual_d = [qual_d i]; %#ok<AGROW>
+        end
     end
     
     % Calculate x_q+
