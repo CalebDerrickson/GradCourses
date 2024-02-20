@@ -1,4 +1,4 @@
-function [x, obj] = simplex(A, b, c, maxloops)
+function [x, obj] = simplex(A, b, c, e, maxloops)
 clc
 
 %Sanitization
@@ -6,49 +6,36 @@ if iscolumn(b) b = b'; end
 if iscolumn(c) c = c'; end
 [m, n] = size(A);
 if max(size(b)) ~= m
-    fprintf("Error in sizes: expected size of b: %d. got: %d", n, max(size(b)))
+    fprintf("Error in sizes: expected size of b: %d. got: %d", m, max(size(b)))
+    x = 0;
+    obj = 0;
     return;
 end
 if max(size(c)) ~= n
     fprintf("Error in sizes: expected size of c: %d. got: %d", m, max(size(c)))
+    x = 0;
+    obj = 0;
     return;
 end
 
 
 % Indicate the indices associated to N and B
-temp1 = zeros(1, n);
-temp2 = 1:n;
-
-Nasis = zeros(1,n);
-Basis = zeros(1,n);
-for i = 1:n-1
-    if isequal(c(i:n), temp1(i:n))
-        Basis = temp2(i:n);
-        Nasis = temp2(1:i-1);
-        break;
-    end
-end
-
-if isequal(Nasis, temp1) || isequal(Basis, temp1)
-    fprintf("Error in marking Basis and Nonbasis sets");
-    return;
-end
+Basis = find(e);
+Nasis = uint8(find(~e));
 
 B = A(:, Basis);
 N = A(:, Nasis);
 
 x = zeros(1, n);
 x_N = zeros(1, length(Nasis));
-x_B = zeros(1, length(Basis)); %#ok<PREALL>
+x_B = zeros(1, length(Basis)); 
 
 numloops = 0;
 while numloops < maxloops
 
     % Compute x_B, lambda
-    x_B = B\b';
+    x_B = (B\b')';
     x_N = 0.*x_N;
-
-    %x(setdiff(temp2, Basis)) = 0;
     
     lambda = B'\c(Basis)';
     % Compute s_N
@@ -60,7 +47,10 @@ while numloops < maxloops
     
     [min_ele, q] = min(s_N);
 
-    if s_N(q)  >= 0
+    if min_ele  >= 0
+        fprintf("Minima found\n");
+        x(Basis) = x_B;
+        x(Nasis) = x_N; 
         obj = dot(c, x);
         return;
     end
@@ -69,6 +59,11 @@ while numloops < maxloops
     min_indices = (s_N == min_ele );
     if sum(min_indices) > 1
         fprintf("Degernate minimum, return\n");
+        if numloops == 0 
+            x(Basis) = x_B;
+            x(Nasis) = x_N; 
+            obj = dot(c, x); 
+        end
         return;
     end
 
@@ -76,17 +71,22 @@ while numloops < maxloops
     % Check if all d <= 0
     % note all d > 0 for next step
     
-    d = B\A(:, q);
+    d = B\A(:, Nasis(q));
     qual_d = [];
-    
+  
+
     for i = 1:length(d)
         if d(i) <= 0
-            fprintf("Problem is unbounded");
+            fprintf("Problem is unbounded\n");
+            if numloops == 0 
+                x(Basis) = x_B;
+                x(Nasis) = x_N; 
+                obj = dot(c, x); 
+            end
             return;
         end
         if d(i) == 0 continue; end
-        
-        qual_d = [qual_d i]; %#ok<AGROW>
+            qual_d = [qual_d i]; %#ok<AGROW>
     end
     
     % Calculate x_q+
@@ -98,11 +98,11 @@ while numloops < maxloops
     [x_q, p] = min(x_qual);
     
     % Update x_B, x_N
-    x_B = x_B - x_q*d;
+    x_B = x_B - x_q*d';
     x_N(q) = x_q;
 
     %Update x_B and x_N
-    x(Basis) = x_B;
+    x(Basis) = x_B';
     x(Nasis) = x_N;
 
     % Update B and N
@@ -116,5 +116,6 @@ while numloops < maxloops
 numloops = numloops + 1;
 end
 
-
+x = [x_B x_N];
+obj = dot(c, x);
 end

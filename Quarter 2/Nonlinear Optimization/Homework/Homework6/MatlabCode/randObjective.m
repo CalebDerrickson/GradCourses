@@ -5,8 +5,8 @@ function c = randObjective(A)
 % Initialize the obj function
 % Add obj function with random distribution. 
 
-n = size(A(:, 1));
-u = randn(n, 1);
+[~, n] = size(A);
+u = rand(n, 1);
 
 c = ones(n, 1);
 

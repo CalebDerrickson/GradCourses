@@ -1,9 +1,7 @@
-function b = randSolve(A,m)
+function b = randSolve(A, e)
 
-% m is the size of number of non zero entries in e
-n = size(A(:, 1));
-e = [ones(1, m) zeros(1, n)];
+if isrow(e) e = e'; end
 
-b = mtimes(A, e');
+b = mtimes(A, e);
 
 end
