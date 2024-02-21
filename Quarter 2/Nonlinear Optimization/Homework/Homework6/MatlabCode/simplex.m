@@ -1,5 +1,6 @@
 function [x, obj] = simplex(A, b, c, e, maxloops)
-clc
+
+global degen_counter
 
 %Sanitization
 if iscolumn(b) b = b'; end
@@ -21,7 +22,7 @@ end
 
 % Indicate the indices associated to N and B
 Basis = find(e);
-Nasis = uint8(find(~e));
+Nasis = uint32(find(~e));
 
 B = A(:, Basis);
 N = A(:, Nasis);
@@ -48,7 +49,6 @@ while numloops < maxloops
     [min_ele, q] = min(s_N);
 
     if min_ele  >= 0
-        fprintf("Minima found\n");
         x(Basis) = x_B;
         x(Nasis) = x_N; 
         obj = dot(c, x);
@@ -58,12 +58,10 @@ while numloops < maxloops
     % Check to see if minum is degenerate.
     min_indices = (s_N == min_ele );
     if sum(min_indices) > 1
-        fprintf("Degernate minimum, return\n");
-        if numloops == 0 
+        degen_counter = degen_counter + 1;
             x(Basis) = x_B;
             x(Nasis) = x_N; 
             obj = dot(c, x); 
-        end
         return;
     end
 
@@ -93,13 +91,13 @@ while numloops < maxloops
     % Calculate x_q+
     x_qual = zeros(1, length(qual_d));
     for i = 1:length(qual_d)
-        x_qual(i) = x_B(i) / d(i);
+        x_qual(i) = x_B(qual_d(i)) / d(qual_d(i));
     end
     
     [x_q, p] = min(x_qual);
     
     % Update x_B, x_N
-    x_B = x_B - x_q*d';
+    x_B = x_B - (x_q.*d)';
     x_N(q) = x_q;
 
     %Update x_B and x_N
@@ -108,7 +106,7 @@ while numloops < maxloops
 
     % Update B and N
     tempBal = Basis(p);
-    Basis(p) = q;
+    Basis(p) = Nasis(q);
     Nasis(q) = tempBal;
         
     B = A(:, Basis);
