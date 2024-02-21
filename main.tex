@@ -64,14 +64,25 @@ Use the implicit function theorem to show that, for equality constraint problems
     For the sake of simplicity, I will denote the separate terms as the variable in which we are differentiating. So the term inverse term will just be expressed as $x_2\inv$. Then the transposed gradient, with taking gradient with respect to $x_1$ and $x_2$, will be written as 
     \[x\T = \mqty[x_1\T \\x_2\T].\]
     Therefore, we have 
-    \[\grad_x F(x_1, h(x_1)) = \mqty[x_1\T \\x_2\T] \mqty[-x_2]\inv \mqty[x_1] = \mqty[-x_1x_2\inv x_1\\-x_1\T x_2\inv x_1] = \mqty[-x_1x_2\inv \\-x_1\T x_2\inv]\mqty[x_1]\]
+    \[\grad_x F(x_1, h(x_1)) = \mqty[x_1\T \\x_2\T] \mqty[-x_2]\inv \mqty[x_1] = \mqty[-x_1\T x_2\inv x_1\\-x_2\T x_2\inv x_1] = \mqty[-x_1\T x_2\inv \\-x_2\T x_2\inv]\mqty[x_1]\]
     I can assure you that all matrix multiplications are correct, since the matrix associated with $x_1$ and $x_2$ are $m \times n$ and $m \times m$, respectively. This can be inferred by my entire writing of the Jacobian at the top of this page. This equality will hold only in our open set $U$, by the Implicit Function Theorem.
 \end{solution}
 \newpage
 \subsection{Problem 1, part 2}
 Write the first-order optimality conditions for $\min_{x_1} f(x_1, h(x_1))$ at $x_1\star$ and infer from here the \textit{first-order optimality conditions for equality constrained optimization} of Theorem 12.1. If you look carefully at them it should be pretty clear what the Lagrange multipliers should be; particularly if you take a look at what you are supposed to obtain (to figure the answer out you can work backwards from what you try to obtain by obtaining the Lagrange multipliers from the optimality 
 conditions). We will call these Lagrange multipliers sometimes the optimal Lagrange multipliers (since they satisfy the KKT conditions), and we will denote them by $\lm_i\star, i \in \scE$.
+\partbreak
+\begin{solution}
 
+    By the KKT conditions, since we are working only with equality conditions, we have only three implications (assuming there exists some $\lm\star$), 
+    \begin{align*}
+        \grad_x \scL(x\star, \lm\star) &= 0,\\
+        c_i(x\star) &= 0,  \quad \forall \ i \in \scE\\
+        \lm_i\star c_i(x\star) &= 0 \ \ \quad \forall \ i \in \scE
+    \end{align*}
+    By the form of the Jacobian given, we can see that $\lm = \grad_{x_1}h(x_1)$. This has a value at the minimum $x_1\star$, which is $\lm\star = \grad_{x_1}h(x_1\star)$. Here the Lagrangian of the system is with respect to our new minimization problem $\min_{x_1} f(x_1, h(x_1))$, which from the terminology in the first part, is $F$. Therefore, the gradient of the Lagrangian is given as 
+    \[\grad_x \scL(x\star, \lm\star) = \grad_x \left( F - \sum_{i \in \scE} \lm_i\star \grad c_i(x\star)\right) \implies \grad_x F = \sum_{i \in \scE} \lm_i\star \grad^2c_i(x\star) \]
+\end{solution}
 
 \newpage
 \subsection{Problem 1, part 3}
