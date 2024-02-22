@@ -160,7 +160,7 @@ Prove that the following matrix is invertible
 
     Denote the given matrix by $A$ for simplicity. Here, let's suppose false. That is, there exists an $\textbf{x} \neq 0$, but $\textbf{x} \in \ker (A)$. Then $A\textbf{x} = \textbf{0}$. Since the given matrix is of finite size, we can write $\textbf{x} = [\textbf{x}_1, \textbf{x}_2]$ of suitable dimensions. Thus, 
     \[A\textbf{x} = \mqty[\grad^2_{xx}\scL(x\star, \lm\star) &J\T\\ J&0]\mqty[\textbf{x}_1\\\textbf{x}_2] \implies \mqty[\grad^2_{xx}\scL(x\star, \lm\star)\textbf{x}_1 + J\T \textbf{x}_2\\ J\textbf{x}_1] = \mqty[0\\0].\]
-    Since we have that the Jacobian is invertible (it has full column rank by LICQ), then $J\textbf{x}_1 = 0 \iff \textbf{x}_1 = 0$. Plugging that into the first equation, we have that $J\T \textbf{x}_2 = 0$, but since $J\T$ is invertible (the eigenvalues of the matrix remain constant under transposition, assuming over the real numbers), then $J\T \textbf{x}_2 = 0 \iff \textbf{x}_2 = 0$. Then, $\textbf{x} = \textbf{x}_1 \oplus \textbf{x}_2 = 0 \oplus 0 = 0$. But we assumed that $\textbf{x} \neq 0$, which leads to a contradiction. Therefore, the only element in the kernel of $A$ is the zero vector, implying that $A$ is invertible.  
+    Since we have that the Jacobian is invertible (it has full column rank by LICQ), then $J\textbf{x}_1 = 0 \iff \textbf{x}_1 = 0$. Plugging that into the first equation, we have that $J\T \textbf{x}_2 = 0$, but since $J\T$ is invertible (the eigenvalues of the matrix remain constant under transposition, assuming over the real numbers), then $J\T \textbf{x}_2 = 0 \iff \textbf{x}_2 = 0$. Then, $\textbf{x} = \textbf{x}_1 \oplus \textbf{x}_2 = 0 \oplus 0 = 0$. But we assumed that $\textbf{x} \neq 0$, which leads to a contradiction. Therefore, the only element in the kernel of $A$ is the zero vector, implying that $A$ is invertible.
 \end{solution}
 
 \newpage
@@ -170,7 +170,8 @@ Observe that the first-order KKT conditions at part 2 are nonlinear equations in
 \begin{solution}
 
     For multivariable systems, the Newton's method for root finding is given as 
-    \[\textbf{x}_{n+1} = \textbf{x}_n - J_\textbf{F}(\textbf{x}_n)\inv F(\textbf{x}_n)\]
+    \[\textbf{x}_{n+1} = \textbf{x}_n - J_\textbf{F}(\textbf{x}_n)\inv F(\textbf{x}_n),\]
+    Where the Jacobian given is of the form in parts 1 and 2. Note that by part 6, we have that the Jacobian is perfectly invertible, thus the given equation is well defined given the circumstances. The Wiki states that we achieve quadratic convergence for Newton's iteration, which is quite interesting. Note that this quadratic convergence is achieved for points near the minima, which imposes two requirements for our starting point: that is is sufficiently close to the minima and that it is at least feasible. In reality, this method will not be implemented in practice, since we require the inverse of the Jacobian of the constraints, which scales unfavorably for given dimensions of the problem. This has to be done at each iteration, so we will incur a large amount of numerical dead weight.   
 \end{solution}
 
 \newpage
