@@ -18,6 +18,17 @@
 Suppose that $A: \scH \into \scH$ is a bounded, self-adjoint, linear operator such that there is a constant $c > 0$ with 
 \[c \norm{x} \leq \norm{Ax} \quad \text{ for all } x \in \scH.\]
 Prove that there is a unique solution $x$ of the equation $Ax = y$ for every $y \in \scH$.
+\partbreak
+\begin{solution}
+
+    For this proof, we have to show two things: that there is a solution for all $x \in \scH$ and that solution is unique. First, we wish to show that $\range (A)$ is closed, which we can then apply Theorem 8.18, which will give us that $Ax$ has a solution for $y$ orthogonal to $\ker (A\star)$, which is $\ker(A)$ since $A$ is self-adjoint. To show $\range (A)$ is closed, take a Cauchy sequence $Ax_n \in\scH$. Then, by the property given of $A$, we have that 
+    \[\norm{x_n - x_m} \leq \frac{1}{c}\norm{Ax_n - Ax_m}\]
+    Since $Ax_n$ is Cauchy, we have that $\norm{x_n - x_m} \into 0$ as $n, m \into \infty$. Therefore, $x_n$ is a Cauchy sequence in $\scH$. Since $\scH$ is complete, then $x_n \into x \in \scH$, as $n \into \infty$. Note then that
+    \[\norm{x_n - x} = \frac{\norm{A}}{\norm{A}}\norm{x_n - x} \geq \frac{1}{\norm{A}}\norm{Ax_n - Ax}\]
+    The last step is an application of Cauchy Schwartz. The multiplication and division of the norm of $A$ can be done since $A$ is bounded (and assumed not the $0$-matrix)\footnote{Even if we assumed that $A$ could be the zero-matrix, then the solutions of $Ax$ would not be unique, therefore we exclude this case.}. The line above then implies that $\norm{Ax_n - Ax} \into 0$ as $n \into \infty$, since it is bounded by $\norm{x_n - x}$. Therefore, $x\in \range (A)$, so it is closed. By Theorem 8.18, we have that $Ax = y$ as solutions for all $y$ orthogonal to $\ker (A)$, since $A$ is self adjoint. I claim that $\ker (A) = \{0\}$, since if it weren't, then there would exist some $x \in \scH$ nonzero such that $Ax = 0$. But, 
+    \[\norm{x} \leq c\norm{Ax} = 0 \implies \norm{x} = 0 \iff x = 0.\]
+    Therfore, we see a contradiction on $x$, so $\ker (A) = \{0\}$. Therefore, $Ax = y$ has a solution for all $y \in \scH$, since all of $\scH$ is orthogonal to the zero set. Finally, we need to show that the solution is unique for all $x \in \scH$. Suppose there were $x_1, x_2 \in \scH$ such that $Ax_1 = Ax_2 = y$. But then $A(x_1 - x_2) = 0$, which implies that $x_1 - x_2 = 0$, since the kernel of $A$ is the zero set. Therefore, $x_1 = x_2$, so the solution is unique for all $x \in \scH$, proving the statement. 
+\end{solution}
 
 \newpage
 \section{Problem 8.13}
