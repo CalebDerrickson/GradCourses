@@ -209,20 +209,94 @@ Assume additionally that $\xhat$ is a vertex solution. Prove that then $\xhat_u 
 We need to prove that $A$ is empty. Assume to the contrary that $A$ is not empty. Denote $\ep = \min \{ \xhat_u , 1 - \xhat_u : u \in A\}$. Consider solutions $x'$ and $x''$ defined by
 \begin{equation*}
     x'_u = \begin{cases}
-        \xhat_u &\text{if } u \neq A\\
+        \xhat_u &\text{if } u \not \in  A\\
         \xhat_u + \ep &\text{if } u \in A\cap X \ ,\\
         \xhat_u - \ep &\text{if } u \in A\cap Y\\
     \end{cases}\quad
     x''_u = \begin{cases}
-        \xhat_u &\text{if } u \neq A\\
+        \xhat_u &\text{if } u \not \in A\\
         \xhat_u - \ep &\text{if } u \in A\cap X\\
         \xhat_u + \ep &\text{if } u \in A\cap Y\\
     \end{cases}
 \end{equation*}
-Prove that $x'$ and $x''$ are feasible solutions. conclude that $\xhat$ is not a vertex solution. 
+Prove that $x'$ and $x''$ are feasible solutions. Conclude that $\xhat$ is not a vertex solution. 
+\partbreak
+\begin{solution}
 
+    The bulk of the analysis was given to us in the problem, so we just need to show that $x'$ and $x''$ are feasible solutions. To show this, we just need to show that $x'$ and $x''$ satisfy the equality constraints. This will be shown case-by-case:
+    \begin{enumerate}
+        \item \underline{$x'$ is a feasible solution}:
+
+        \hop 
+        \begin{enumerate}
+            \item \underline{$x'_u \geq 0$ for all $u \in X\cup Y$}:
+
+            \hop
+            Since we have two options for $\ep$, it would be the most straightforward to break it into two cases.
+
+            \begin{enumerate}
+                \item \underline{Case 1}: $\ep = \xhat_v$ for some $v \in A$.
+
+                \hop
+                By the construction of $x'$, for all $u \not \in A$, $x'_u = \xhat_u$, which since $\xhat$ is an optimal solution, $\xhat_u \geq 0 $ for $u \not \in A$. Next we consider $u \in X \cap A$. Since $\ep \geq 0$, (since $\xhat$ is a feasible solution), this implies $\xhat_u + \xhat_v \geq 0$ for all $u \in X\cap A, \ \implies \xhat_u + \ep \geq 0$. We next consider $u \in A \cap Y$. Since $\xhat_v$ is chosen to be the minimal value for all $u \in A$, this implies that $\xhat_u \geq \xhat_v$ for all $u \in A \cap Y$. Then, $\xhat_u - \xhat_v \geq 0, \ \implies \xhat_u - \ep \geq 0$. 
+
+                \item \underline{Case 2}: $\ep = 1 - \xhat_v$ for some $v \in A$.
+
+                \hop
+                Again, by construction of $x'$ we need to only consider $u \in A$. Since $\xhat$ is a feasible solution, then we have that $\xhat_v \in [0, 1]$, this implies that $1 - \xhat_v \in [0, 1]$, i.e. $\ep = 1 - \xhat_v \geq 0$. Since $\ep$ is chosen as $1 - \xhat_v$, then this value is less than (or equal to) $\xhat_u$ for all $u \in A$ (if it wasn't, then it wouldn't have been chosen). This implies that $1 - \xhat_v \leq \xhat_u$ for all $u \in A$, which implies that $\ep \leq \xhat_u$, so $\xhat_u - \ep \geq 0$. \par
+                
+                \jump
+                Therefore, in either case, $x'_u \geq 0$ for all $u \in X\cup Y$.
+            \end{enumerate}
+
+            \newpage
+            \item \underline{$x'_u + x'_v \geq 1$ for all $(u, v) \in E$}:
+
+            \hop
+            We then need to consider all cases for $(u, v) \in E$. Note that if $u, v \not \in A$, then $x'_u = \xhat_u$ and $x'_v = \xhat_v$, and since $\xhat$ is a feasible solution, $\xhat_u + \xhat_v \geq 1$. Thus we consider the two cases when either one is in $A$, or both are in $A$. 
+
+            \begin{enumerate}
+                \item \underline{$u \in A, \ v \not \in A$}:
+
+                \hop
+                Note by the symmetry of the construction of $x'$, it doesn't matter which vertex is in $A$, so letting $u \in A$ is sufficient for showing this case. Then, $x'_u + x'_v$ is equal to either $\xhat_u + \xhat_v + \ep$ or $\xhat_u + \xhat_v - \ep$. Note that since $\ep \geq 0$, then the former cases implies that $x'_u + x'_v \geq 1$. We then need to show the latter. Since we assume $v \not \in A$, then $\xhat_v \in \{0, 1\}$. If $\xhat_v = 0$, then this would imply that $\xhat_u \geq 1$, but since $\xhat \in [0, 1]$ for all elements, this would imply that $\xhat_u = 1$. But we assume that $\xhat_u \in A$, which is a contradiction. So we then consider the case when$\xhat_v = 1$. This then gives $\xhat_u + 1 - \ep$, but by the following:
+                \begin{align*}
+                    &\xhat_u + 1 - \ep = \xhat_u + 1 - \min\{\xhat_a, \ 1 - \xhat_a : a \in A\} \\[-1.5ex]
+                    &\geq \{\xhat_u + 1 - \xhat_a, \xhat_u + 1 - 1 + \xhat_a\}                  \\[-1.5ex]
+                    &\geq \{\xhat_u + 1 - \xhat_u, \xhat_u + \xhat_a\}                          \\[-1.5ex]
+                    &\geq \{1, \ 1\},   
+                \end{align*}
+                 we see that $x'_u + x'_u \geq 1$ for either choice of $v$. I condensed down the two cases (for $\ep$) above for brevity. 
+
+                 \item \underline{$u \in A, \ v \in A$}:
+
+                 \hop
+                 Note that it we can assume that $u \in X,  \ v \in Y$, since the graph is bipartite. We then have that $x'_u + x'_v = (\xhat_u - \ep) + (\xhat_v + \ep) = \xhat_u + \xhat_u \geq 1$. 
+
+                 \jump
+                 Therefore, we see that in any case, $x'_u + x'_v \geq 1$ for all $(u, v) \in E$.
+            \end{enumerate}
+        \end{enumerate}
+
+        \item \underline{$x''$ is a feasible solution}:
+
+        \hop
+        By the work done to show that $x'$ is a feasible solution, is is easy to see that $x''$ is also a feasible solution. By the construction of $x'$ and $x''$, they assign identical values to $u \not \in A$, but swapped for $u \in A$. By constructing a new bipartite graph, which simply swaps the places of vertex sets $X$ and $Y$, we get that $x''$ in the new graph is the same as $x'$ in the original graph, which was just shown to be a feasible solution. Therefore, $x''$ is a feasible solution in the original graph (by the proposed isomorphism).  
+    \end{enumerate}
+
+    \newpage
+    Thus, by the work done above, we have shown that $x'$ and $x''$ are feasible solutions. Furthermore, note that 
+    \[\xhat = \frac{x' + x''}{2}\]
+    Since $\xhat$ was assumed to be a vertex solution - that is, there does not exist two feasible solutions for which $\xhat$ is a convex combination of the two - we assume that there does not exist an $\alpha \in (0, 1)$ for which
+    \[\xhat = \alpha x' + (1 - \alpha) x''.\]
+    But this was shown to be false, for $\alpha = \frac{1}{2}$. Thus, we get a contradiction, therefore, $|A| = 0$, implying that $\xhat_u \in \{0, 1\}$ for all $u \in X\cup Y$.
+\end{solution}
 \newpage
 \subsection{Problem 3, part 4}
 Design a polynomial-time algorithm that solves the Minimum Vertex Cover in bipartite graphs. Assume that you have an LP solver that given a linear program finds an optimal vertex solution $\xhat$.
+\partbreak
+\begin{solution}
 
+    In the previous parts of this problem, we showed that our relaxation of the integer linear program returns the same minimal value as the integer linear program (ILP = OPT = LP). Furthermore, we are given that the ILP is constructed to match the minimum vertex cover. Therefore, our linear program will return the minimum vertex cover. Thus, to solve the minimum vertex cover for bipartite graphs, we need to form the linear program in the form given in part 1, call an oracle (the LP solver, say an interior point method) to solve the LP, then return the solution. We assume the LP solver will provide a solution in at most polynomial time. To form the standard problem, we note that the matrix $A$ will just be the adjacency matrix, of the bipartite graph, and our $b$ will be the vector of ones. we will then solve for the value $x$, and return the vertices which have a nonzero value - $R = \{ x_u \in x : x_u = 1\}.$  
+\end{solution}
 \end{document}
