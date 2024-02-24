@@ -182,14 +182,26 @@ Prove that the value of this program is at most the minimum vertex cover size.
 \partbreak
 \begin{solution}
 
-    A simple way (maybe the only way) to show this is to show that the optimal value (the minimum vertex cover, OPT) is a feasible solution to the LP. Let us suppose that the minimum vertex cover can be represented via a binary array, $\xhat$, which indicates whether or not vertex $i$ is within the minimum vertex cover. Clearly, for each $u$, $\xhat_u \geq 0$ since each value in $\xhat$ is either zero or one. All that is left to show is that for any $(u, v) \in E, \xhat_u + \xhat_v \geq 1$.  
+    A simple way (maybe the only way) to show this is to show that the optimal value (the minimum vertex cover, OPT) is a feasible solution to the LP. Let us suppose that the minimum vertex cover can be represented via a binary array, $\xhat$, which indicates whether or not vertex $i$ is within the minimum vertex cover. Clearly, for each $u$, $\xhat_u \geq 0$ since each value in $\xhat$ is either zero or one. All that is left to show is that for any $(u, v) \in E, \xhat_u + \xhat_v \geq 1$.  \par
+
+    \hop
+    Suppose false, that is, there exists an edge $(u, v) \in E$ such that $\xhat_u + \xhat_v < 1$. This would imply that both $\xhat_u$ and $\xhat_v$ are equal to zero, since $\xhat$ is a binary array. Since $G$ is a bipartite graph, then without loss of generality assume $u \in X$, $v \in Y$, since there is an edge between them. Since the cover is minimum vertex cover, then we require at least one external vertex, call it $e$, to connect to $u$. And since $G$ is bipartite, $e$ cannot connect to $v$, since it is already connected to $u$. Therefore, we need an additional vertex, call it $d$ to cover $v$. Since we require two external vertices to cover these two, and it would be more efficient to just connect the two vertices $(u, v)$, then $\xhat$ is not a minimum vertex cover, which leads to a contradiction. Therefore, $\xhat_u + \xhat_v \geq 1$ for every edge $(u, v) \in E$. \par
+
+    \hop
+    Since $\xhat$ is a feasible solution for the LP, then the value of the minimum cover, OPT, will be at least the value of the output of the LP, since the LP finds the minimum of its feasible solutions. Therefore, LP $\leq$ OPT.
     
 \end{solution}
 
 \newpage
 \subsection{Problem 3, part 2}
 Let $\xhat$ be an optimal solution. Prove that $\xhat_u \in [0, 1]$ for every $u \in X\cup Y$.
+\partbreak
+\begin{solution}
 
+    Suppose false. That is, there exists a vertex $u \in X \cup Y$ for which its value $\xhat_u > 1$.\footnote{It is obvious by positivity of vertex values why we neglect the case when $\xhat_u < 0$.} By the first constraint condition, we have that, for every neighbor $v$ of $u$, $\xhat_u + \xhat_v \geq 1$, but $\xhat_u > 1$, so $\xhat_u + \xhat_v > 1 + \xhat_v$. Since the output is optimal, and setting the values of all neighbors of $u$ to zero is feasible, then $\xhat_v = 0$ for all neighbors of $v$ of $u$. Denote the set of neighbors of $u$ as $N(u)$. Without loss of generality we assume the graph is connected. In this case, we have that $|N(N(u))| \geq |N(u)|$, since for each vertex $v \in N(u)$, it has to have at least one neighbor. Since all vertices $v \in N(u)$ have their value $\xhat_v = 0$, then by the first constraint, every vertex $w \in N(N(u))$, the neighbors of the neighbors of $u$, need to have their values $\xhat_u \geq 1$. This would then imply 
+    \[\sum_{u \in X \cup Y} \xhat_u = \sum_{\text{All other $u$}}\xhat_u + \sum_{w \in N(N(u))}\xhat_w + \xhat_u\]
+    But since $|N(N(u))| \geq |N(u)|$, it would be more efficient to have that some values $\xhat_v$ for $v \in N(u)$ to be nonzero. Therefore, $\xhat$ is note an optimal solution, giving a contradiction. 
+\end{solution}
 \newpage
 \subsection{Problem 3, part 3}
 Assume additionally that $\xhat$ is a vertex solution. Prove that then $\xhat_u \in \{0, 1\}$. To this end, consider the set of graph vertices $A$:
@@ -198,7 +210,7 @@ We need to prove that $A$ is empty. Assume to the contrary that $A$ is not empty
 \begin{equation*}
     x'_u = \begin{cases}
         \xhat_u &\text{if } u \neq A\\
-        \xhat_u + \ep &\text{if } u \in A\cap X\\
+        \xhat_u + \ep &\text{if } u \in A\cap X \ ,\\
         \xhat_u - \ep &\text{if } u \in A\cap Y\\
     \end{cases}\quad
     x''_u = \begin{cases}
