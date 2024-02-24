@@ -29,7 +29,16 @@ Design a DP algorithm that given numbers $c_1, ..., c_k$ and $d_1, ..., d_k$ fin
 \partbreak
 \begin{solution}
 
-    $T[i+1] = \max\{current[i+1] + current[i+2], other[i+2]\}?$
+    Since we need to take into consideration the cool-down on switching between coins, we should compare the values of the next two days for both coins. As such, we define the DP table T to have entries depicting the value of the next two chosen days. It would also be convenient to store an integer value in the DP table, so our table would be of size $2 \times n/2$, where the first row stores the max value of the next two days with respect to the recurrence, and the second row stores our choice; whether to stay with the current coin we are mining, or switch to the other. To this extent, we will define the recurrence of the FIRST row of the DP table as 
+    \[T[0][i+1] = \max\{current[i+1] + current[i+2], other[i+2]\},\]
+    and the SECOND row of the DP table to store the index of the choice taken above. In other words: if the maximum of the two values were the next two values in the current array, we take the set $T[1][i+1] = 0$, else we set it to 1. We then have another 2d array which stores the two arrays of coin values, and update the current array to reflect the value of $T[1][i+1]$. This will ensure that we are mining the for the most amount of money in any given sprint. There are two things left to consider: 
+    \begin{enumerate}
+        \item The initialization of our DP array.
+        \item What if, when choosing our next value in the DP array, the values we are choosing are the same?
+        \item What if $k$, the number of days we are considering, is odd?
+    \end{enumerate}
+    The first is relatively simple: since our recurrence formula does not depend on the current iterative value (we are not accessing the i - th value in T), we can set T[0][0] = 0 and T[1][0] = -1, to represent a choice among zero days. We can simply remove this column in our DP table and shift everything over to the left by one if we so desire, but it simply doesn't matter. The next item to discuss is when in our DP table would there be any ambiguity in whether we shift to the other array, or remain with our current array. This will exactly happen when, in our maxing function, that the two values are equivalent. In this case, we would need to look at the $\textit{next two}$ days in the array, if there are such two days. If we see that in the next two days that the value of current is the maximum value, we then stick with the current, else we move to the other array. Finally, if the number of days in the array is odd, then when we get to the last choice in our DP table, we would only have one day to look at, and $i+2$ would represent an out of bounds index value. To this extent, since we would only be losing mining time if we switched now, we would be better of sticking with our current array. Therefore, with all of this being considered, we would be maximizing our profit with the described algorithm. In discussing the running time of our algorithm, since we are only looping over both arrays once, and for each iteration of our algorithm, we are considering the next two values in our index, we can conclude we operate in $O(n/2) = O(\log_2 n)$ time, with also a memory cost of $O(\log_2 n)$. 
+    
 \end{solution}
 
 \newpage
@@ -46,7 +55,118 @@ Convert the following LP to the canonical form. Then write the dual LP
     & \hspace{19mm} w \geq 0
 \end{align*}
 Is this LP feasible? If it is feasible, is it bounded or unbounded? Is the dual feasible? If it is feasible, is it bounded or unbounded?
+\partbreak
+\begin{solution}
 
+    This problem has to it multiple subproblems. I will enumerate them via the following:
+    \begin{enumerate}
+        \item Converting the LP to canonical form.
+        \item Writing the corresponding Dual LP.
+        \item Assessing the Feasibility and boundedness of the primal.
+        \item Assessing the Feasibility and boundedness of the dual.
+    \end{enumerate}
+    \vspace{-6mm}\hspace{4mm} \rule{15cm}{1pt}
+    \begin{enumerate}
+        \item \underline{Canonical form of the LP}:
+
+        \hop
+        In order to convert this Linear program into its canonical form, we seek to convert it to the form
+        \begin{align*}
+            &\text{maximize:} c\T x         \\[-1.5ex]
+            &\text{subject to}      \\[-1.5ex]
+            &\hspace{19mm} Ax \leq b\\[-1.5ex]
+            &\hspace{19mm} x \geq 0
+        \end{align*}
+        We see that, the form of the given constraints is almost in this form - with the exception of the $z$ variable it is correct. To assuage this, we introduce two new variables $z_+$ and $z_-$ such that $z = z_+ - z_-$. Note that, when $z = -2$, then $z_+ = 0$ and $z_- = 2$. Therefore, the minimum value with which $z$ can feasibly achieve is faithfully represented by two positive variables $z_+, z_-$. We also see for strictly positive values of $z$, $z_- = 0$. Therefore, the LP now becomes 
+        \begin{align*}
+            &\text{maximize: } x - w                    \\[-1.5ex]
+            &\text{subject to}                          \\[-1.5ex]
+            & \hspace{19mm} x + y + z_+ - z_- \leq 5    \\[-1.5ex]
+            & \hspace{19mm} x - z_+ + z_- + w = 3       \\[-1.5ex]
+            & \hspace{19mm} x \geq 0                    \\[-1.5ex]
+            & \hspace{19mm} y \geq 0                    \\[-1.5ex]
+            & \hspace{19mm} z_+ \geq 0                  \\[-1.5ex]
+            & \hspace{19mm} z_- \geq 0                  \\[-1.5ex]
+            & \hspace{19mm} w \geq 0
+        \end{align*}
+        The system of constraints can now be written as $Ax \leq b$, $ x \geq 0$, where 
+        \[A = \mqty[1&1&1&-1&0\\1&0&-1&1&1], \quad x = \mqty(x\\y\\z_+\\z_-\\w), \quad b = \mqty(5\\3), \quad c = \mqty(1\\0\\0\\0\\-1).\]
+
+        \item \underline{Writing the Dual LP}:
+
+        \hop
+        In writing the dual of an LP, it is important to keep in mind the following: \footnote{This comes from the Wikipedia page for Dual Linear programs.}
+        \begin{itemize}
+            \item Each primal constraint has a dual constraint.
+            \item Each primal variable becomes a dual constraint.
+            \item The coefficient of a dual variable in the dual constraint is the coefficient of its primal variable in its primal constraint. 
+        \end{itemize}
+        To this end, we note that we have 2 constraints in our primal LP, which will give way to two variable in the dual, which I'll call $y_1$ and $y_2$, mind the overlapping notation. The second tells us that our dual problem will as many constraints as there are variables in the original problem. Therefore, we will have 5 constraints imposed on our dual, some of which might become redundant upon further inspection. Finally, in order to write our system of constraints, we need to take in mind that our coefficients for our dual variables will be the coefficient of its corresponding primal constraint. We then have the following system of constraints:
+        \begin{align*}
+            &y_1 + y_2 \geq 1   \\[-1.5ex]
+            &y_2 \geq 0         \\[-1.5ex]
+            -&y_1 + y_2 \geq 0  \\[-1.5ex]
+            &y_1 - y_2 \geq 0   \\[-1.5ex]
+            &y_1 \geq -1        \\[-1.5ex]
+        \end{align*}
+        Therefore, we can write our dual LP as the following:
+        \begin{multicols}{2}
+
+            \begin{align*}
+            &\text{minimize } b\T y     \\[-1.5ex]
+            &\text{subject to}          \\[-1.5ex]
+            &\hspace{19mm} A\T y \geq c \\[-1.5ex]
+            &\hspace{19mm} y \geq 0     \\[-1.5ex]
+            \end{align*}
+            
+        \columnbreak
+        Where, 
+        \begin{align*}
+            &A\T = \mqty[1&1\\0&1\\-1&1\\1&-1\\-1&0], \ b = \mqty(5\\3), \ c = \mqty(1\\0\\0\\0\\-1)
+        \end{align*}
+        \end{multicols}
+        Note the problem just asks for us to write just the Dual LP, not requiring us to write it in canonical form.  
+
+        \item \underline{Feasibility and boundedness of the Primal LP}:
+
+        \hop
+        Boundedness of an LP says that the LP itself has an optimal solution. What would be a better way to show feasibility than to find the optimal solution? I used an online Linear program solver\footnote{Hosted at https://online-optimizer.appspot.com. } to solve my linear program. Here is my input to the solver:
+        \begin{lstlisting}
+        var x1 >= 0; 
+        var x2 >= 0; 
+        var x3 >= 0; 
+        var x4 >= 0; 
+        var x5 >= 0; 
+        
+        maximize z:       x1 - x5;
+        subject to c11:   x1 + x2 + x3 - x4 <= 5;
+        subject to c12:   x1 - x3 + x4 + x5  = 3;
+        
+        end;
+        \end{lstlisting}
+        The optimal value the solver found was $(x, y, z_+, z_-, w) = (4,0,1,0,0)$, giving a maximum value of 4. Therefore, the problem is bounded, which notably also implies feasibility. 
+
+        \item \underline{Feasibility and boundedness of the Dual LP}:
+
+        \hop
+        Before we throw or problem into an LP solver, it is worthwhile to note some of the constraints of the Dual LP are extraneous. The second constraint is a given, since we require $y_1$ and $y_2 \geq 0$. From the third and the fourth constraint, we see that $y_1 - y_2$ is both greater than and less than zero, implying $y_1 - y_2 = 0$. In order to reasonably apply the primal LP to the online linear solver, we should write it in canonical form, which would just introduce two new variables $y_2^+$ and $y_2^-$, where we substitute $y_2^+ - y_2^-$ for $y_2$. The following was fed into the online solver:
+        
+        \begin{lstlisting}
+        var y1 >= 0; 
+        var y2 >= 0; 
+        var y3 >= 0;
+        
+        minimize z:       5*y1 + 3*y2 - 3*y3;
+        subject to c11:   y1 + y2 - y3 >= 1;
+        subject to c12:   y1 - y2 + y3 = 0;
+        
+        end;   
+        \end{lstlisting}
+
+        We see that the optimal value is achieved for $(y_1, y_2^+, y_2^-) = (0.5, 0.5, 0)$, giving a minimal value of 4, which is the same as the primal maximal value. Therefore, the primal LP is shown to be both feasible and bounded.
+    \end{enumerate}
+    
+\end{solution}
 \newpage
 \section{Problem 3}
 In this problem, we will design an algorithm for solving the Minimum Vertex Cover problem in bipartite graphs. Let $G = (X, Y, E)$ be a bipartite graph with parts $X$ and $Y$. Consider the following linear programming formulation of the Minimum Vertex Cover Problem. There is an LP variable $x_u$ for every vertex $ u \in X \cup Y$.
@@ -56,26 +176,41 @@ In this problem, we will design an algorithm for solving the Minimum Vertex Cove
     &\hspace{19mm} x_u + x_v \geq 1 \text{ for every edge } (u, v) \in E\\[-1.5ex]
     &\hspace{19mm} x_u \geq 0
 \end{align*}
-\begin{enumerate}
-    \item Prove that the value of this program is at most the minimum cover size.
-    \item Let $\xhat$ be an optimal solution. Prove that $\xhat \in [0, 1]$ for every $u \in X\cup Y$.
-    \item Assume additionally that $\xhat$ is a vertex solution. Prove that then $\xhat_u \in \{0, 1\}$. To this end, consider the set of graph vertices $A$:
-    \[A = \{ u \in X \cup Y : \xhat_u \neq 0 \text{ and } \xhat_u \neq 1\}.\]
-    We need to prove that $A$ is empty. Assume to the contrary that $A$ is not empty. Denote $\ep = \min \{ \xhat_u , 1 - \xhat_u : u \in A\}$. Consider solutions $x'$ and $x''$ defined by
-    \begin{equation*}
-        x'_u = \begin{cases}
-            \xhat_u &\text{if } u \neq A\\
-            \xhat_u + \ep &\text{if } u \in A\cap X\\
-            \xhat_u - \ep &\text{if } u \in A\cap Y\\
-        \end{cases}\quad
-        x''_u = \begin{cases}
-            \xhat_u &\text{if } u \neq A\\
-            \xhat_u - \ep &\text{if } u \in A\cap X\\
-            \xhat_u + \ep &\text{if } u \in A\cap Y\\
-        \end{cases}
-    \end{equation*}
-    Prove that $x'$ and $x''$ are feasible solutions. conclude that $\xhat$ is not a vertex solution. 
-    \item Design a polynomial-time algorithm that solves the Minimum Vertex Cover in bipartite graphs. Assume that you have an LP solver that given a linear program finds an optimal vertex solution $\xhat$.
-\end{enumerate}
+
+\subsection{Problem 3, part 1}
+Prove that the value of this program is at most the minimum vertex cover size.
+\partbreak
+\begin{solution}
+
+    A simple way (maybe the only way) to show this is to show that the optimal value (the minimum vertex cover, OPT) is a feasible solution to the LP. Let us suppose that the minimum vertex cover can be represented via a binary array, $\xhat$, which indicates whether or not vertex $i$ is within the minimum vertex cover. Clearly, for each $u$, $\xhat_u \geq 0$ since each value in $\xhat$ is either zero or one. All that is left to show is that for any $(u, v) \in E, \xhat_u + \xhat_v \geq 1$.  
+    
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part 2}
+Let $\xhat$ be an optimal solution. Prove that $\xhat_u \in [0, 1]$ for every $u \in X\cup Y$.
+
+\newpage
+\subsection{Problem 3, part 3}
+Assume additionally that $\xhat$ is a vertex solution. Prove that then $\xhat_u \in \{0, 1\}$. To this end, consider the set of graph vertices $A$:
+\[A = \{ u \in X \cup Y : \xhat_u \neq 0 \text{ and } \xhat_u \neq 1\}.\]
+We need to prove that $A$ is empty. Assume to the contrary that $A$ is not empty. Denote $\ep = \min \{ \xhat_u , 1 - \xhat_u : u \in A\}$. Consider solutions $x'$ and $x''$ defined by
+\begin{equation*}
+    x'_u = \begin{cases}
+        \xhat_u &\text{if } u \neq A\\
+        \xhat_u + \ep &\text{if } u \in A\cap X\\
+        \xhat_u - \ep &\text{if } u \in A\cap Y\\
+    \end{cases}\quad
+    x''_u = \begin{cases}
+        \xhat_u &\text{if } u \neq A\\
+        \xhat_u - \ep &\text{if } u \in A\cap X\\
+        \xhat_u + \ep &\text{if } u \in A\cap Y\\
+    \end{cases}
+\end{equation*}
+Prove that $x'$ and $x''$ are feasible solutions. conclude that $\xhat$ is not a vertex solution. 
+
+\newpage
+\subsection{Problem 3, part 4}
+Design a polynomial-time algorithm that solves the Minimum Vertex Cover in bipartite graphs. Assume that you have an LP solver that given a linear program finds an optimal vertex solution $\xhat$.
 
 \end{document}
