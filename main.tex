@@ -1,0 +1,133 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31020: Homework 7}
+\author{Caleb Derrickson}
+\date{February 28, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+
+
+\newpage
+\section{Problem 2}
+Find the range of parameters $\mu$ for which the problem 18.12 has a solution whose component $x$ is the same as the solution of the problem 18.10, assuming that the latter satisfies LICQ and strong second-order conditions. In particular, this will elucidate how penalty parameters should be chosen. 
+\partbreak
+\begin{solution}
+
+    For reference, I will include the entirety of 18.10 and 18.12 below.
+    \quotebreak
+    \vspace{-9mm}
+    \begin{multicols}{2}
+    \begin{quote}
+        \underline{\textbf{18.10}}:
+        \begin{align*}
+            & \min_x f(x)                \\[-1.5ex]
+            &\text{subject to}:                     \\[-1.5ex]
+            &\hspace{20mm} c_i(x) = 0, \ i \in \scE \\[-1.5ex]
+            &\hspace{20mm} c_i(x) \geq 0, \ i \in \scI
+        \end{align*}
+    \end{quote}
+    \columnbreak
+    \begin{quote}
+        \underline{\textbf{18.12}}:
+        \begin{align*}
+            & \min_{x, v, w, t} f(x) + \mu \sum_{i \in \scE}(v_i + w_i) + \mu \sum_{i \in \scI} t_i        \\[-1.5ex]
+            &\text{subject to}: \\[-1.5ex]
+            &\hspace{20mm} c_i(x) = v_i - w_i, \ i \in \scE, \\[-1.5ex]
+            &\hspace{20mm} c_i(x) \geq -t_i, \hspace{7mm} i \in \scI, \\[-1.5ex]
+            &\hspace{20mm} v, w, t \geq 0
+        \end{align*}
+    \end{quote}
+    \end{multicols}
+    \vspace{-12mm}\quotebreak
+
+    Here, we impose $\mu > 0$, since if $\mu$ were less than zero, we would then wish to max out our penalty terms, which is not equivalent to the original problem. If $\mu = 0$, then the penalty terms $v, w, t$ would contribute nothing to the original problem, but would be chosen as free parameters, which is not exactly the original problem. Hence, we enforce $\mu > 0$. We need to get a tighter bound than this, which can be found via the KKT conditions on 18.12. We will assume that KKT holds, since the necessary conditions for KKT are met, as well as it being a requirement for second order optimality. We first write the Lagrangian of 18.12. First, for the sake of brevity, denote $z = (x, v, w, t)$, and $\delta = (\lambda, \alpha, \beta, \gamma)$. The new parameters, $\alpha, \beta, \gamma$, will come from positivity of the minimizing variables $v, w, t$. Furthermore, to distinguish the Lagrangian from problem 18.10 from the Lagrangian in 18.12, we will denote them respectively as $\scL_1, \scL_2$. The Lagrangian is now
+    \[\scL_2(z, \delta) = f(x) + \mu\sum_{i \in \scE} (v_i + w_i) + \mu \sum_{i \in \scI} t_i - \sum_{i \in \scE} \lm_i (c_i(x) - v_i + w_i) - \sum_{i \in \scL} \lm_i (c_i(x) + t_i) - \alpha\T v - \beta\T w - \gamma\T t\]
+    If we want to condense these down into a clearer equation, we will introduce the indicator vectors, $\ind_\scE, \ind_\scI$, which will have value 1 if the index element is in the denoted set, and zero otherwise. The Lagrangian now becomes
+    \[\scL_2(z, \delta) = f(x) + \mu\ind_\scE\T (v + w) + \mu\ind_\scI\T t - \ind_\scE\T(\lm (c(x) - v + w)) - \ind_\scI\T (\lm (c(x) + t)) - \alpha\T v - \beta\T w - \gamma\T t\]
+
+    \newpage
+    KKT conditions of 18.12 then tell us the following (assuming some optimal solution $(z\star, \delta\star)$):
+
+    \tightalignbreak
+    \vspace{-6mm}\begin{align}
+        &\grad_z \scL_2(z\star, \delta\star) = 0,                                     \label{KKT1}\\[-1.5ex]
+        &c_i(x\star) -(v_i\star - w_i\star) = 0,                                      \label{KKT2}\\[-1.5ex]
+        &0 \leq c_i(x\star) \geq - t_i\star,                                          \label{KKT3}\\[-1.5ex]
+        &(v\star, w\star, t\star) \geq 0,                                             \label{KKT4}\\[-1.5ex]
+        &\delta\star \geq 0,                                                          \label{KKT5}\\[-1.5ex]
+        &\lm_i\star(c_i(x\star) + t_i\star) = 0,         \hspace{10mm}\forall \ i \in \scI \label{KKT6}\\[-1.5ex]
+        &\alpha_i\star v_i\star = 0,                \hspace{27mm}\forall \ i \in \scE \label{KKT7}\\[-1.5ex]
+        &\beta_i\star w_i\star = 0,                 \hspace{26mm}\forall \ i \in \scE \label{KKT8}\\[-1.5ex]
+        &\gamma_i\star t_i\star = 0,                \hspace{28mm}\forall \ i \in \scI \label{KKT9}
+    \end{align}
+    \vspace{-15mm}\alignbreak
+
+    We should first take into consideration with which entries of $\lm$ we are affecting. We see in the Lagrangian itself, when we take the gradient with respect to $z$, we will receive different parts of the constraint vector. To this end, I will denote $\lm = \lm^1 \oplus \lm^2,$ where $\lm^1 \in \R^{|\scE|}$, and $\lm^2 \in \R^{|\scI|}$. Writing our the first condition, we have the following:
+    \begin{align*}
+        \grad_z\scL(z\star, \delta\star) = \mqty[\grad_x\scL_1(x\star, \lm\star)\\\mu\ind + \lm^1 - \alpha\\ \mu\ind - \lm^1 - \beta\\\mu\ind - \lm^2 - \gamma] = \mqty[0\\0\\0\\0] \implies \mqty[\grad_x\scL_1(x\star, \lm\star) = 0\\\mu = \alpha_i - \lm_i^1, \ i \in \scE\\ \mu = \beta_i + \lm_i^1, \ i \in \scE \\ \mu = \gamma_i + \lm^2_i, \ i \in \scI]
+    \end{align*}
+    The first condition aligns with the KKT conditions of 18.10. Adding the second and third lines implies that 
+    \[\mu = \frac{\alpha_i + \beta_i}{2}, \ i \in \scE.\]
+    Therefore, $\mu$ is fixed upon choice of $\alpha$ and $\beta$. Taking the fourth row, we can multiply each side by $t_i\star$ to get $\mu t_i\star = \gamma_i\star t_i\star + \lm_i^2 t_i\star$. From (\ref{KKT2}), we see that $w_i\star = v_i\star$ for all $i$. In accordance with the first equation's KKT results, we have the $\lm_i\star c_i(x\star) = 0$ for $i \in \scI$. Therefore, (\ref{KKT6}) simply states that $\lm_i\star t_i\star = 0$. Furthermore, from (\ref{KKT9}), we can see that $\mu t_i\star = 0$, which implies that $t_i\star = 0$ since $\mu > 0$. Next, observe the following:
+    \[\mu(v_i\star + w_i\star) = \mu v_i\star + \mu w_i\star = \alpha_i\star v_i\star - \lm_i\star v_i\star + \beta_i\star w_i\star + \lm_i\star w_i\star = \lm_i\star(w_i\star - v_i\star)\]
+    Here, we distributed the $\mu$ and took different values of $\mu$ from the gradient term $(\ref{KKT1})$. But by, (\ref{KKT2}), we have that $\mu(v_i\star + w_i\star) = 0$, therefore $v_i\star = -w_i\star$. BUT we also have that they are equal as well. Since this can only happen when both are zero, we have that $v_i\star, w_i\star = 0$. Note that this is true because we assumed KKT conditions hold for 18.10, which allows us to prove these penalty terms are zero. 
+
+    \newpage
+    Finally, observe the system of values for $\mu$ from the gradient term. 
+    \begin{align*}
+        &\alpha_i  = \mu + \lm^1_i, \ i \in \scE\\
+        &\beta_i = \mu - \lm_i^1, \ i \in \scE\\
+        &\gamma_i = \mu - \lm_i^2, \ i \in \scI
+    \end{align*}
+    By the logic provided above, we found that these parameters are free (but fixed), since $v_i\star = w_i\star = t_i\star = 0$. However, by (\ref{KKT5}), they are positive. Thus, to prevent any term to be negative, we require that our choice of $\mu$ should be greater than any $\lm_i$, $i \in \scI \cup \scE$. Therefore, I claim that 
+    
+    \[\mu \geq \max\{\lm_i : i \in \scE \cup \scI\}\]
+    
+    is a valid bound. In order for this to hold, we need to show that the second order conditions are held for 18.12 as well. In particular, we have that 
+    \[u\T\grad^2_{zz}\scL_2(z\star, \delta\star) u > 0 \text{ for all } u \in \mathcal{C}(z\star, \delta\star),\]
+    where $\mathcal{C}$ denotes the critical cone at $(z\star, \delta\star)$. For reference, the general definition for an element to be in the critical cone is the following:
+    \[u \in \mathcal{C}(x\star, \lm\star) \iff \begin{cases}
+    \grad_x c_i(x\star)\T w = 0 &\text{ for } i \in \scE\\
+    \grad_x c_i(x\star)\T w = 0 &\text{ for } i \in \scI \cap \scA \text{ with } \lm_i\star > 0\\
+    \grad_x c_i(x\star)\T w \geq 0 &\text{ for } i \in \scI \cap \scA \text{ with } \lm_i\star = 0\\ 
+    \end{cases}
+    \]
+    The constraint equations will come from the KKT conditions. This will then give
+    \[\mqty[u_1\\u_2\\u_3\\u_4] \in \mathcal{C}(z\star, \delta\star) \iff \begin{cases}
+        \grad_x c_i(x\star)\T u_i^1 - u^2_i + u^3_i = 0, &\text{ for } i \in \scE\\
+        \grad_xc_i(x\star)\T u^1 + u^4_i = 0 \ (\geq 0), &\text{ for } \lm_i\star > 0 \ ( = 0) \text{ for all } i \in \scI \cap \scA\\
+        u_i^2 = 0 \ ( \geq 0) &\text{ for } \alpha_i\star > 0 \ (= 0) \text{ for all } i \in \scE\\
+        u_i^3 = 0 \ (\geq 0) &\text{ for } \beta_i\star > 0 \ (= 0) \text{ for all } i \in \scE\\
+        u_i^4 = 0 \ (\geq 0) &\text{ for } \gamma_i\star > 0 \ (= 0) \text{ for all } i \in \scI
+    \end{cases}\]
+
+    Quick note: since $\alpha_i = \mu + \lm_i^1$, we have that $\alpha_i > 0$, (since $\mu > 0$). Then $u_i^2 = 0$. We only issue we see is when either condition for $\gamma_i, \beta_i = 0$. This is avoided IF we restrict $\mu$ even further, so that 
+    \[\mu > \max\{ \lm_i : i \in \scE \cup \scI\}.\]
+    When this is the case, we have that $\beta_i\star > 0, \gamma_i\star > 0$, which implies that $u_i^3 = u_i^4 = 0$. Therefore, the critical cone for 18.12 aligns with the critical cone for 18.10.
+
+    \newpage
+    Finally, we need to see that the second order sufficient conditions hold for 18.12. We have already calculated the gradient of the Lagrangian for 18.12 when analyzing the KKT conditions. We can take the hessian from there. Note that the last three rows are constants, so their derivative is zero. Thus, we see the following:
+\[
+\grad_{zz}^2 \scL(z\star, \delta\star) = \mqty[
+    \grad_{xx}^2\scL(x\star, \lm\star) & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 0
+]
+\]
+
+    Thus, 
+    \[u\T\grad^2_{zz}\scL_2(z\star, \delta\star) u = u_1\T\grad^2_{xx}\scL_2(x\star, \lm\star) u_1 > 0,\]
+    by assumption that 18.10 satisfies the second order sufficient conditions. 
+\end{solution}
+
+\end{document}
