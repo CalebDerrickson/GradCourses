@@ -14,7 +14,30 @@
 
 \newpage
 \section{Problem 1}
+\subsection{Problem 1, part 1}
+Prove that in this circumstance (random matrix $A$, $e = (1, 1, ..., 1)\T \in \R^n$, $b = Ae$, random objective $c = e + 100*u $) you can readily determine a strictly feasibly point in the set defined in 14.12(b). Determine a value for that ensures that this point belongs to the neighborhood $\scN_{-\infty}(\gamma)$. You will use this point as a starting point and the corresponding value gamma in algorithm 14.2. 
+\partbreak
+\begin{solution}
 
+    The strictly feasible set is defined as 
+    \[\scF^0 = \{(x, \lm, s) : Ax = b, \ A\T \lm + s = c, \ (x, s) > 0\}\]
+    Since we have that $b$ is formed by the vector of all ones ($e$) applied to A, we can easily see that $x = e$ is known. Moreover, we can partition $c$ so that $s = 100*u$, and $A\T \lm = e$. Since we don't know that $A$ is invertible (let alone square), we cannot readily solve the system. However, since $A$ is full row rank, then the matrix $AA\T$ is not only square, but invertible. Multiplying by $A$ on both sides gives $AA\T \lm= Ae = b$, which implies $\lm = (AA\T)\inv b$, which can be readily computed. \par
+
+    \jump
+    Next, we will determine a value for $\gamma$ which ensures our point $(x, \lm, s)$ is within $\scN_{-\infty}(\gamma)$. Note that
+    \[\scN_{-\infty}(\gamma) = \{(x, \lm, s) \in \scF ^0 : x_is_i \geq \gamma \mu \text{ for all } i = 1, 2, ..., n\}\]
+    By the calculations done above, we have that 
+    \[x = e, \quad s = 100*u\]
+    Therefore, in order for our point to be in $\scN_{-\infty}(\gamma)$ for some gamma, we need that $x_is_i \geq \gamma\mu$ for all $i$. The form of $\mu$ is given as 
+    \[\mu = \frac{1}{n}x\T s = \frac{100}{n}e\T u = \frac{100}{n}\sum_i u_i = 100 * u_{avg}.\]
+    Moreover, $x_is_i = 100 * u_i$ for all $i$, we therefore need $\gamma$ to satisfy $\gamma \leq \frac{u_i}{u_{avg}}$ for all $i$, so pick the smallest of such values. Then 
+    \[\gamma = \min\left\{ \frac{u_i}{u_{avg}} : i = 1, 2, ..., n\right\}.\]
+    We need to show that $\gamma \in (0, 1]$. Since $u$ is a random vector whose elements are computed over a uniform distribution over (0, 1), we have that $u_i \in (0, 1)$ for all $i$. Hence the smallest element is in $(0, 1)$. Note $\gamma$ cannot be negative by this construction. Furthermore, since $u_i \in (0, 1)$, then by uniform distribution, $u_{avg} \approx \frac{1}{2}$, with equality held when $n \to \infty$. Since $u_{avg} \in(0, 1)$, then $\min (u_{i})/2 \in (0, 1)$. Therefore, $\gamma \in (0, 1]$.   
+\end{solution}
+
+\newpage
+\subsection{Problem 1, part 2}
+Implement the long step interior point method from the textbook. (Algorithm 14.2) starting from the feasible strictly interior point above. Apply it at n=2m, at 10 random instances and report the mean and standard deviation of the time it took to solve the problem; Do it for m=5,10, …. for as high as your computation is tolerable on your computer (overall run time for this exercise should not be more than 1 hour once the parameters are chosen). Compare the time to solution with the one of simplex (use the code from last time) for the same size (e.g. by plotting both means on the same graph for the ranges you have data for both). Experiment with the parameters (i.e. the size of the centering parameter and the parameter defining the neighborhood size) within the ranges suggested by the book.
 
 \newpage
 \section{Problem 2}
@@ -130,4 +153,63 @@ Find the range of parameters $\mu$ for which the problem 18.12 has a solution wh
     by assumption that 18.10 satisfies the second order sufficient conditions. 
 \end{solution}
 
+\newpage
+\section{Problem 3}
+Consider the following linear program, which contains "free variables" denoted by $y$
+\[\min c\T x + d\T y, \text{ subject to } A_1x + A_2y = b, \ x \geq 0.\]
+By introducing Lagrange multipliers $\lm$ for the equality constraints $s$ for the bounds $x \geq 0$, write down the optimality conditions for this problem in analogous fashion to (14.3). Following (14.4) and (14.16), use the conditions to derive the general step equations for a primal-dual interior-point method. Express these equations in an augmented system form analogously to (14.42) and explain why it is not possible to reduce further to a formulation like (14.44) in which the coefficient matrix is symmetric positive definite. 
+\partbreak
+\begin{solution}
+
+    To begin, we should analyze the conditions which KKT provides for the given problem (This is 14.3). First, we need to form the Lagrangian, which is explicitly
+    \[\scL(x, y, \lm, s) = c\T x + d\T y - \lm\T (A_1x + A_2 y - b) - s\T x,\]
+    where $\lm$ is the slack term for the equality constraints, and $s$ is the slack term for the inequality constraints. Next, define $z = (x, y)$: the KKT conditions thus yield:
+    \begin{align*}
+        \grad_z \scL(x, y, \lm, s) =& \mqty[\grad_x \scL\\\grad_y \scL] = \mqty[c - A_1\T\lm - s\\d - A_2\T \lm] = \mqty[0\\0],\\
+        A_1x + A_2y =& b, \\
+        (x, s) \geq& 0,\\
+        \lm (A_1x + A_2y - b) =& 0,\\
+        s_ix_i =& 0, \quad i = 1, ..., n 
+    \end{align*}
+    Next, we need to construct the mapping $F$, given as 14.4. Following the book, we have that
+    \begin{align*}
+        F(x, y, \lm, s)=& \mqty[c - A_1\T \lm - s\\ d - A_2\T \lm\\A_1x + A_2y - b\\XSe ] = 0\\
+        &(x, s, \lm) \geq 0
+    \end{align*}
+    Here, the matrices $X$ and $S$ are equivalent to that in the book. That is, $X = $ diag($x$), $S = $ diag($s$). Next, we aim to take the Jacobian of $F$. This will be done in the same manner as in class, where we advance each term by $\Delta$, cut off all nonlinear terms, and set equal to zero. The procedure is detailed below. For the last row, I will instead demonstrate the procedure for some element $x_is_i$, $i \leq n$.
+
+    \alignbreak
+    \begin{align*}
+        &F(x + \Delta x, y + \Delta y, \lm + \Delta\lm, s + \Delta s) = \mqty[c - A_1\T \lm - A_1\T\Delta\lm - s - \Delta s\\d - A_2\T \lm - A_2\T \Delta\lm\\A_1x + A_1\Delta x + A_2 y + A_2 \Delta y - b\\x_is_i + x_i\Delta s_i + \Delta x_i s_i + \Delta x_i \Delta s_i]\\
+        &= \mqty[c - A_1\T \lm - A_1\T\Delta\lm - s - \Delta s\\d - A_2\T \lm - A_2\T \Delta\lm\\A_1x + A_1\Delta x + A_2 y + A_2 \Delta y - b\\x_is_i + x_i\Delta s_i + \Delta x_i s_i] = \mqty[0\\0\\0\\0]\\
+        &\hspace{12mm}\implies \mqty[0&0&A_1\T&\id\\0&0&A_2\T&0\\A_1&A_2&0&0\\S&0&0&X]\mqty[\Delta x\\\Delta y\\\Delta \lm \\\Delta s] = \mqty[c - s - A_1\T\lm\\d - A_2\T \lm\\b - A_2y - A_1x\\SXe - \sigma\mu e] = \mqty[-r^1_c\\-r_c^2\\-r_b\\-r_{xs}]
+    \end{align*}
+    \alignbreak
+    Where the final term $\sigma \mu e$ represents the central path term. I tried keeping the same notation as the book, but since we are minimizing over two variables, I had to superscript the $r_c$ terms to differentiate them. Let us then solve for the last row for $\Delta s$ in order to eliminate it. The last equation implies 
+    \[S\Delta x + X\Delta s = -r_{xs},\]
+    which can be simplified by the following:
+    \newcommand{\h}{^{1/2}}
+    \newcommand{\mh}{^{-1/2}}
+    \alignbreak
+    \begin{align*}
+        &S\Delta x + X\Delta s = -r_{xs}\\
+        &S\h S\h \Delta x + X\h X\h \Delta s = -r_{xs}\\
+        &X\h S\h (S\h X\mh \Delta x + S\mh X\h \Delta s) = -r_{xs}\\
+        &S\h X\mh \Delta x + S\mh X\h \Delta s = -X\mh S\mh r_{xs}\\
+        &D\inv \Delta x + D \Delta s = -X\mh S\mh r_{xs}\\
+        &D \Delta s = -( X\mh S\mh r_{xs} + D\inv \Delta x) \\
+        &\Delta s = -(D\inv X\mh S\mh r_{xs} + D^{-2}\Delta x)\\
+        &\Delta s = -(S\h X\mh X\mh S\mh  r_{xs} + D^{-2}\Delta x)\\
+        &\Delta s = -X\inv r_{xs} - X\inv S \Delta x
+    \end{align*}
+    \alignbreak
+
+    Where $D$ is defined in the same way as in the book. Then, we can add $-X\inv$ times the last row to the first equation to eliminate the last row. This operation is done only on the first since we want the last column of the matrix to be only zeros. We then get:
+    \begin{align*}
+        \mqty[-X\inv S &0 &A_1\T \\ 0&0&A_2\T\\A_1&A_2&0]&\mqty[\Delta x\\\Delta y\\ \Delta \lm] = \mqty[-r_c^1 + X\inv r_{xs}\\ -r_c^2\\-r_b]\\
+        &\Delta s = -X\inv r_{xs} - X\inv S\Delta x 
+    \end{align*}
+    This is analogous to the augmented system in the book (14.42). Note that, it is not possible to reduce any more, since this matrix has the possibility to contain zero columns. Note that, we can arbitrarily assume that the matrices $A_1$ and $A_2$ are full row rank (by preconditioning). Hence, the second (block) column could potentially have linearly dependent (individual) columns. Hence, the kernel of our matrix is nonzero. This was not a problem for the case done in the book, since $A$ is assumed full row, and $A\T$ is then full column, implying the coefficient matrix has both full row and full column ranks. Therefore, we cannot go further. 
+
+\end{solution}
 \end{document}
