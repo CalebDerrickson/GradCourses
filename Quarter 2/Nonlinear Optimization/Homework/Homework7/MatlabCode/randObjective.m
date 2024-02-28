@@ -1,4 +1,4 @@
-function c = randObjective(A)
+function [c, u] = randObjective(A)
 
 % Get size of objective function
 % Set random distribution vector.
@@ -10,7 +10,7 @@ u = rand(n, 1);
 
 c = ones(n, 1);
 
-c = (c + 50.*u)';
+c = (c + 100.*u)';
 
 
 end
