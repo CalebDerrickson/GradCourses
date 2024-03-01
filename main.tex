@@ -1,0 +1,300 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 31210: Homework 8}
+\author{Caleb Derrickson}
+\date{March 1, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Exercise 9.1}
+Prove that $\rho(A\star) = \overline{\rho(A)}$, where $\overline{\rho(A)}$ is the set $\{\lm \in \C : \overline{\lm} \in \rho(A)\}$. 
+\partbreak
+\begin{solution}
+
+    We should first show that $((A - \lm \id)\inv)\star = (A\star - \overline{\lm}\id)\inv$. Let $x, y \in \scH$, then, for $\overline{\lm} \in \rho(A\star)$. 
+    \alignbreak
+    \begin{align*}
+        &(A\star - \overline{\lm}\id)\inv y = x\\
+        &y = (A\star - \overline{\lm}\id)x\\
+        &y\star = ((A\star - \overline{\lm}\id)x)\star\\
+        &y\star = (A\star x - \overline{\lm}x)\star\\
+        &y\star = (A\star x)\star - (\overline{\lm}x)\star\\
+        &y\star = x\star A - \lm x\star\\
+        &y\star = x\star (A - \lm \id)\\
+        &y\star = x\star (A - \lm \id)\\
+        &y\star (A - \lm \id)\inv = x\star\\
+        &((A - \lm \id)\inv)\star y = x
+    \end{align*}
+    \alignbreak
+    For the proof above to hold, we need to show that if $\overline{\lm} \in \rho(A\star)$, then $\lm\in\rho(A)$. For this, we need to show that $(A - \lm\id)$ is bijective. Let $x, y \in \scH$, then
+    \[(A - \lm\id)x = \left(x\star(A - \overline{\lm}\id)\star\right)\star = \left(y\star\right)\star = y.\]
+    This holds by standard adjoint properties, as well as $(A - \overline{\lm}\id)$ being surjective. We next need to show that $(A - \lm \id)$ is injective. Take $x_1, x_2 \in \scH$ which under the given operator maps to the same $y \in \scH$. Then,
+    \[(A - \lm\id)x_1 - (A - \lm\id)x_1 = (A - \lm\id)(x_1 - x_2) = \left(x_1\star (A\star - \overline{\lm}\id)\right)\star - \left(x_2\star (A\star - \overline{\lm}\id)\right)\star = (y\star - y\star)\star = 0.\]
+    This impies that $x_1\star - x_2\star \in \ker(A\star - \lm\id)$, which is equal to zero since $(A\star - \lm\id)$ is injective. Therefore, $x_1\star = x_2\star$, so $x_1 = x_2$, implying that $(A - \lm\id)$ is injective, hence bijective. Then $\lm \in \rho(A)$.
+    \newpage
+    Finally, we note that, by above, we have that $(A\star - \overline{\lm}\id)\inv = \left((A - \lm\id)\inv\right)\star$. This implies that if $\overline{\lm} \in \rho(A\star)$, then $\lm \in \rho(A)$, which implies that $\overline{\lm} \in \overline{\rho(A)}$. This satisfies one direction of the equality. Next we take a $\lm \in \rho(A)$. Then by the above calculations, we have that $\lm \in \overline{\rho(A\star)}$, which implies that $\overline{\lm} \in \rho(A\star)$. This shows the equality to hold. 
+\end{solution}
+
+\newpage
+\section{Exercise 9.3}
+Suppose that $A$ is a bounded linear operator of a Hilbert space and $\mu, \lm \in \rho(A)$. Prove that the resolvent set $R_\lm$ of $A$ satisfies the \textit{resolvent equation}
+\[R_\lm - R_\mu = (\mu - \lm) R_\lm R_\mu.\]
+\partbreak
+\begin{solution}
+
+    We will go straight into calculations.
+    \tightalignbreak
+    \begin{align*}
+    &R_\lm - R_\mu = (\lm\id - A)\inv - (\mu\id - A)\inv &\text{(Given.)}\\
+    &= (\lm\id - A)\inv\left[ \id - (\lm\id - A)(\mu\id - A)\inv \right] &\text{(Factoring.)}\\
+    &= (\lm\id - A)\inv(\mu\id - A)\inv \left[ (\mu\id -A) - (\lm\id - A) \right] &\text{(Factoring.)}\\
+    &= (\lm\id - A)\inv(\mu\id - A)\inv \left[ (\mu - \lm)\id  \right] &\text{(Simplifying.)}\\
+    &= (\mu - \lm)(\lm\id - A)\inv(\mu\id - A)\inv &\text{(Rearranging.)}\\
+    &= (\mu - \lm)R_\lm R_\mu &\text{(Definition.)}
+    \end{align*}
+    \myendalignbreak
+\end{solution}
+
+\newpage
+\section{Exercise 9.6}
+Let $G$ be a multiplication operator on $L^2(\R)$ defined by 
+\[Gf(x) = g(x)f(x)\]
+where $g$ is continuous and bounded. Prove that $G$ is a bounded linear operator on $L^2(\R)$ given by 
+\[\sigma(G) = \overline{\{g(x) : x \in \R\}}\]
+Can an operator of this form have eigenvalues?
+\partbreak
+\begin{solution}
+
+    Let us first show that $G$ is linear. Take $h, f \in L^2(\R)$, and $\mu, \lm \in \R$. Then
+    \[G(\lm h + \mu f)(x) = g(x)(\lm h(x) + \mu f(x)) = \lm g(x) h(x) + \mu g(x) f(x) = \lm Gh(x) + \mu Gf(x).\]
+    Next, let us show that $G$ is bounded. Suppose that $|g(x)|$ is bounded by $M$. Then 
+    \[\norm{Gf}^2 = \int_\R |g(x)f(x)|^2 \ dx \leq \int_\R |g(x)|^2|f(x)|^2 \ dx \leq \sup_{x \in \R}|g(x)|^2\int_\R |f(x)|^2 \ dx = M^2\norm{f}^2\]
+    This implies that $\norm{Gf}^2 \leq M^2\norm{f}^2$, which means $\norm{Gf} \leq M\norm{f}$. Therefore, $G$ is bounded. \par
+
+    \jump
+    Finally, we need to show that the spectrum of $G$ is given by the above set. We will show this via inclusions on both sides. For the sake of simplicity, denote the set $\overline{\{g(x) : x \in \R\}}$ by $A$.
+    \begin{enumerate}
+        \item[] \underline{$\lm \in \sigma(G) \implies \lm \in A$}:
+
+        \hop
+        Since $\lm \in \sigma(G)$, then $\sigma \not\in \rho(G)$. Therefore, $(\lm\id - G)$ is not bijective. Therefore, we should break this into cases based on whether the operator is not injective or surjective. We will take the two cases based on these. Note that a $\lm$ could satisfy both; in this case, we take either branch.
+        \begin{enumerate}
+            \item[] \underline{Case 1}: $\lm \id - G$ is not injective.
+
+            \hop
+            This implies that $\ker(\lm\id - G) \neq \{0\}$. This implies there exists $f \neq 0$ for which $f \in \ker(\lm\id - G)$. Then $(\lm\id - G)f = 0$, so $(g(x) - \lm)f(x) = 0$ (a.e.). this implies then that $\lm = g(x)$ for some $x \in \scM$, where $\scM$ is a subset of measure nonzero on the real line. This implies $\lm \in A$.  
+
+        \item[] \underline{Case 2}: $\range (\lm\id - G) \neq \scH$.
+
+            Suppose false. That is, $\range (\lm\id - G) \neq \scH$, yet $\lm \not \in A$. The first property implies there exists $z \in \scH$ such that $(\lm\id - G)y \neq z$ for any $y \in \scH$. The second property means that $\lm\neq g(x)$ for any $x \in \R$. Therefore, $\lm - g(x) \neq 0$ for any $x$. Then, we have that
+            \[(\lm\id - G)y \neq z \implies \lm y - Gy \neq z \implies (\lm - g(x))y \neq z \implies y \neq \frac{z}{\lm - g(x)}\]
+            Note that $\lm - g(x) \in \R$ for any $x \in \R$, so we can essentially treat it as a nonzero scalar quantity. We have that $\frac{z}{\lm - g(x)} \in \scH$, by linearity. But such a $y$ cannot exist, by assumption. Therefore, we have a contradiction. Which implies that $\lm \in A.$
+        \end{enumerate}
+
+        \item[] \underline{$\lm \in A \implies \lm \in \sigma(G)$}:
+
+        \hop
+        Let $\lm \in A$. Since $A$ is closed, there exists some sequence $\lm_n$ for which $\lm_n \to \lm$ as $n \to \infty$. Since $g$ is continuous, we have there existing some $x_n \subset \R$ for which $g(x_n) = \lm_n$. Then, $Gf(x_n) = g(x_n)g(x_n)$. We have then that $(\lm\id - G)f(x_n) = \lm f(x_n) - g(x_n)f(x_n) = (\lm - g(x_n))f(x_n).$ Note that $\norm{\lm\id - G} = \norm{\lm - g(x_n)} = \norm{\lm - \lm_n}$. Furthermore, 
+        \[\norm{(\lm\id - G)\inv} = \frac{1}{\norm{\lm_n  - g(x)}}\]
+        The inverse of $(\lm\id - G)$ can be taken, since we can arbitrarily pick some sequence with this restriction. Note however that the norm of $(\lm\id - G) \to 0$ as $n \to \infty$, which means that the inverse goes to infinity. This implies that $G$ is not bounded, which violates our assumption. Therefore, $\lm \not \in\rho(G)$ so $\lm \in \sigma(G)$. 
+    \end{enumerate}
+\end{solution}
+
+
+\newpage
+\section{Exercise 9.7}
+Let $K : L^2([0, 1]) \to L^2([0, 1])$ be the integral operator defined by 
+\[Kf(x) = \int_0^x f(y) \ dy.\]
+\subsection{Exercise 9.7, part a}
+Find the adjoint operator $K\star$.
+\partbreak
+\begin{solution}
+
+    The Adjoint of $K$ will be the operator $K\star$ such that
+    \[\braket{Kf}{g} = \braket{f}{K\star g}\]
+    for $f, g \in L^2([0, 1])$. Taking the inner product, we have that 
+    \[\braket{Kf}{g} = \int_0^1(Kf)(x)g(x)\ dx = \int_0^1 g(x)\int_0^x f(y) \ dy \ dx = \int_0^1 f(y)\int_y^1 g(x) \ dx \ dy = \braket{f}{K\star g}.\]
+    
+    The second to last equality is given to us by Fubini's theorem, where the two sets 
+    \[\{[x, y] : x \in [0, 1] \text{ and } y \in [0, x]\} \quad \text{ and } \quad\{[x, y] : x \in [y, 1] \text{ and } y \in [0, 1]\}\]
+    characterize the same regions in $\R^2$. Here, I propose that 
+    \[K\star f(x) = \int_x^1 f(x) \ dx.\]
+    
+\end{solution}
+\newpage
+\subsection{Exercise 9.7, part b}
+Show that $\norm{K} = 2/\pi$.
+\partbreak
+\newcommand{\px}{\frac{\partial}{\partial x}}
+\newcommand{\ppx}{\frac{\partial^2}{\partial x^2}}
+
+\begin{solution}
+
+    This part requires a few steps before getting to the result. We should first show that $\norm{K}^2 = \norm{K\star K}$. For the purposes of this analysis, we will assume $f \leq 1$, by the properties of the norm.  
+    \[\norm{Kf}^2 = \braket{Kf}{Kf} = \braket{f}{K\star K f} \leq \norm{f}\norm{K\star K f} \leq \norm{f}^2\norm{K\star K} = \norm{K\star K}\]
+    Similarly, we can write,
+    \[\norm{Kf}^2 = \braket{Kf}{Kf} = \braket{KK\star f}{ f} \leq \norm{KK\star f}\norm{f} \leq \norm{f}^2\norm{KK\star} = \norm{K\star K}.\]
+    Therefore, we have that $\norm{K}^2 = \norm{K\star K}$. Note that $K\star K$ is self adjoint. From the result of Theorem 9.16, its norm is equal to its largest eigenvalue. Suppose then that $f$ is the corresponding eigenfunction. Then,
+    \[K\star K f = \lm f\]
+    Assume that $f$ has integral $F$, which in turn has integral $E$. Differentiating both sides twice gives,
+    \[\lm\ppx f = \ppx \int_x^1\int_0^y f(u) \ du  dy = \ppx \int_x^1F(y) - F(0)  dy = \ppx\left[E(1) - E(x) - F(0) + xF(0)\right] = -f(x).\]
+    We then have the differential equation $\lm \ppx f = -f(x)$, which, when denoting $\omega^2 = \frac{1}{\lm}$, has solution
+    \[f(x) = c_1e^{i\omega x} + c_2e^{-i\omega x}\]
+    To get the value for $\lm$, we need to plug this back into the equation $K\star K f = \lm f$ to get the following:
+    \tightalignbreak
+    \begin{align*}
+        &K\star K f = \int_x^1\int_0^y c_1e^{i\omega u} + c_2 e^{-i\omega u} \ du \ dy &\text{(Given.)}\\
+        &= \int_x^1 \left[ \frac{c_1}{i\omega}e^{i\omega u} - \frac{c_2}{i\omega}e^{-i\omega u}\right]_0^y \ dy &\text{(Integrating.)}\\
+        &= \int_x^1 \left[\frac{c_1}{i\omega}e^{i\omega y} - \frac{c_2}{i\omega}e^{-i\omega y} - \frac{c_1}{i\omega} + \frac{c_2}{i\omega} \right] \ dy &\text{(Taking limits.)}\\
+        &= \left[-\frac{c_1}{\omega^2}e^{i\omega y} - \frac{c_2}{\omega^2}e^{-\omega y} - \frac{c_1}{i\omega}y + \frac{c_2}{i\omega}y\right]_x^1 &\text{(integrating.)}\\
+        &= -\frac{1}{\omega^2}(c_1e^{i\omega} + c_2e^{-i\omega}) + \frac{1}{i\omega}(c_2 - c_1) + \frac{1}{\omega^2}f(x) + \frac{1}{i\omega}(c_1 - c_2)x &\text{(Taking bounds.)}
+    \end{align*}
+    \vspace{-12mm}\alignbreak
+
+    Since we have that $K\star Kf = \lm f(x)$, we require $c_1 = c_2$ and the first term equal zero. This then implies 
+    \[c_1e^{i\omega} + c_2e^{-i\omega} = 0 \iff \cos(\omega) = 0\]
+    We then get that $\omega = \frac{(2n+1)\pi}{2}, \ n \in \Z$. Therefore, 
+    \[\lm = \frac{1}{\omega^2} = \frac{4}{(2n+1)^2\pi^2}\]
+    We want the largest value for $\lm$ to relate it to the norm of $K\star K$. Therefore, 
+    \[\norm{K}^2 = \frac{4}{\pi^2} \implies \norm{K} = \frac{2}{\pi},\]
+    which is what we wanted.
+\end{solution}
+
+
+\newpage
+\subsection{Exercise 9.7, part c}
+Show that the spectral radius of $K$ is equal to zero. 
+\partbreak
+\begin{solution}
+
+    The easiest way to show this is to first find the resolvent set $\rho(K)$, then taking its complement. If $\lm \in \rho(K)$, then $(K - \lm\id)$ is bijective. Let $g, f \in L^2([0, 1])$. By bijectivity, $f = (K - \lm \id) g$. The following thus holds:
+    \tightalignbreak
+    \begin{align*}
+        &f = (K - \lm \id) g &\text{(Given.)}\\
+        &f = \int_0^x g(t) \ dt - \lm g(x) &\text{(Given.)}\\
+        &f = \int_0^x g(t) \ dt - \lm \frac{d}{dx}\int_0^xg(t) \ dt &\text{(Fundamental Theorem.)}\\
+        &-\frac{1}{\lm}f(x) = \frac{d}{dx}\int_0^xg(t) \ dt - \frac{1}{\lm} \int_0^x g(t) \ dt &\text{(Rearranging.)}\\
+        &-\frac{1}{\lm}e^{-x/\lm}f(x) = e^{-x/\lm}\frac{d}{dx}\int_0^xg(t) \ dt - \frac{1}{\lm}e^{-x/\lm} \int_0^x g(t) \ dt &\text{(Multiplying both sides.)}\\
+        &\frac{d}{dx}\left(e^{-x/\lm}\int_0^x g(t) \ dt\right) = -\frac{1}{\lm} e^{-x\lm}f(x) &\text{(Product rule.)}\\
+        &e^{-x/\lm}\int_0^x g(t) \ dt = -\frac{1}{\lm}\int_0^x e^{-u/\lm}f(u) \ du &\text{(Integrating both sides.)}\\
+        &\int_0^x g(t) \ dt = -\frac{1}{\lm}\int_0^x e^{(x-u)/\lm}f(u) \ du &\text{(Rearranging.)}\\
+        &f = -\frac{1}{\lm}\int_0^x e^{(x - u) / \lm} f(u) \ du  - \lm g(x) &\text{(Plugging back into 3.)}\\
+        &g(x) = -\frac{1}{\lm} f(x) - \frac{1}{\lm^2}\int_0^x e^{(x - u)/\lm}f(u) \ du &\text{(Rearranging.)}\\
+        \implies & g(x) = (K - \lm\id)\inv f=   -\frac{1}{\lm} f(x) - \frac{1}{\lm^2}\int_0^x e^{(x - u)/\lm}f(u) \ du  
+    \end{align*}
+    \vspace{-12mm}\alignbreak
+    Therefore, an explicit formula for the inverse has been found. We can see that this formula will not hold only for $\lm = 0$, which implies that $0 \not \in \rho(K)$. Then $0 \in \sigma(K)$. This is the only value inside the spectrum of $K$, since if there were any other nonzero values in the spectrum, then its inverse would not be defined, which is only true for the zero value. Therefore, $\sigma(K) = \{0\}.$
+\end{solution}
+\newpage
+\section{Exercise 9.8}
+We define the right shift operator $S$ on $\ell^2(\Z)$ by 
+\[S(x)_k = x_{k-1} \quad \text{for all $k \in \Z$},\]
+where $x = (x_k)_{k = -\infty}^\infty$ is in $\ell^2(\Z)$. Prove the following facts.
+\begin{enumerate}[a)]
+    \item The point spectrum of $S$ is empty.
+    \item $\range (\lm\id - S) = \ell^2(\Z)$ for every $\lm \in \C$ with $|\lm| > 1$.
+    \item $\range (\lm\id - S) = \ell^2(\Z)$ for every $\lm \in \C$ with $|\lm| < 1$.
+    \item The spectrum of $S$ consists of the unit circle $\{\lm\in\C : |\lm| = 1\}$ and is purely continuous.
+\end{enumerate}
+\partbreak
+\begin{solution}
+
+    \begin{enumerate}[a)]
+        \item \underline{The point spectrum of $S$ is empty.}
+
+        \hop
+        Suppose false, that is there exists a $\lm \in \sigma(S)$ for which $(S - \lm \id)$ is not injective. This would imply that for $x^1, x^1 \in \ell^2(\Z)$, $x^1 \neq x^2$, we have that 
+        \[(S - \lm\id) x^1 = (S - \lm\id)x^2.\]
+        When rearranging, we have that 
+        \[S(x^1 - x^2) = \lm (x^1 - x^2)\]
+        This implies that the action that $S$ does to the vector $x^1 - x^2$ simply multiplies it by some $\lm$. Since $S$ is the shift operator, we then have that 
+        \[(x^1 - x^2)_{k - 1} = \lm(x^1 - x^2)_k, \quad \forall k \in \Z\]
+        Note that $x^1 - x^2 \in \ell^2(\Z)$, this means that 
+        \[\sum_{k \in \Z} (x^1 - x^2)_{k} < \infty.\]
+        Therefore, its series is bounded. This means, by the relation we found between successive terms, we have 
+        \[\sum_{k \in \Z}\norm{(x^1 - x^2)_k - \lm(x^1 - x^2)_{k-1}} = 0 \implies \norm{x^1 - x^2 - \lm x^1 + \lm x^2} = 0 \implies \norm{(1 - \lm)(x^1 - x^2)} = 0\]
+        Since $x^1 \neq x^2$, we have that $|\lm| = 1$. Plugging $\lm = 1$, (as an example) back into the equation expressing non-injectivity, we have
+        \[(S - \id) x^1 = (S - \id)x^2 = y\]
+        When rearranging, we have that
+        \[0 = S(x^1 - x^2) + (x^1 - x^2) = y - x^1 - Sx^1\]
+        Note that $S(x^1 - x^2) = x^1 - x^2$, implying $S(x^2 - x^1) = x^2 - x^1$ when multiplying both sides by $-1$. We then get that 
+        \[2(x^1 - x^2) = y - x^1 - Sx^1 = 0 \implies x^1 - x^2 = 0 \implies x^1 = x^2.\]
+        This violates the non-injectivity of $(S - \id)$, implying that $\lm $ is not in the point spectrum. Therefore, the point spectrum is empty.
+
+        \item \underline{$\range (\lm\id - S) = \ell^2(\Z)$ for every $\lm \in \C$ with $|\lm| > 1$.}
+
+        \hop
+        Suppose false, that is, there exists some $z \in \ell^2(\Z)$ for which $(\lm\id - S)x \neq z$ for any $x \in \ell^2(\Z)$. Taking the inner product of these two values gives us
+        \[\braket{z}{(\lm\id - S)x} \neq \norm{z}^2 \iff \braket{z}{\lm x} - \braket{z}{Sx} \neq \norm{z}^2.\]
+        Take $x = z$, then
+        \[\lm\norm{z}^2 - \braket{z}{Sz} \neq \norm{z}^2 \iff (\lm - 1) \norm{z}^2 \neq \braket{z}{Sz}\]
+        Rewriting the norm as an inner product of $z$ with itself, we can rearrange to get that
+        \[\lm \braket{z}{z} \neq \braket{z}{Sz + z}\]
+        This implies that $z \neq Sz + z$, so $Sz \neq 0$. Then $z \not \in \ker(S)$. Therefore, $z \in \range(S)$, so there exists some $y \in \ell^2(\Z)$ for which $Sz = y$. Then, 
+        \[(S - \lm\id)z = Sz - \lm z \neq 0 - 0 \implies z \not \in \ker(\lm \id - S), \implies z \in \range(\lm\id - S).\]
+        Therefore, we have found a contradiction, implying that $\range(\lm\id - S) = \ell^2(\Z)$. 
+
+        \item \underline{$\range (\lm\id - S) = \ell^2(\Z)$ for every $\lm \in \C$ with $|\lm| < 1$}:
+
+        \hop
+        Let us first consider the case when $\lm = 0$. In this case, we wish to show that $\range(\id - S) = \ell^2(\Z)$. Suppose this is false, that is, there exists some $z \in \ell^2(\Z)$ for which $Sx \neq z$ for any $x \in \ell^2(\Z)$. Then, taking the inner product implies 
+        \[\braket{z}{Sx} \neq \braket{z}{z} \implies \braket{z}{Sx - z} \neq 0\]
+        Let $x$ be defined as the element for which, when $S$ is applied to it, equals $z$. That is, we take $x = S\star z$, where $S\star$ is the left shift operator. Clearly, the inverse of the right shift operator is the left shift operator (over $\Z$, this is not the case over $\N$). Then, 
+        \[\braket{z}{SS\star z - z} \neq 0 \implies \braket{z}{z - z} \neq 0.\]
+        This is a contradiction. Therefore, $\range(S) = \ell^2(\Z)$. Note that if $\lm \neq 0$, the same proof from part b applies, since I did not use $|\lm| > 1$; only $\lm \neq 0$. 
+
+        \item \underline{The spectrum of $S$ consists of the unit circle $\{\lm\in\C : |\lm| = 1\}$ and is purely continuous.}
+
+        \hop
+        From part $a$, we found that $\lm \in \sigma(S)$ only when $|\lm| = 1$ . Thus, the first clause of the statement is true. We just need to show that the spectrum is purely continuous. Since $|\lm| = 1$ is not in the point spectrum, then necessarily, $(S - \lm\id)$ is surjective (if it wasn't then $\lm \not \in \sigma(S)$. Thus, we need to show that $\range(S - \lm \id)$ is dense in $\ell^2(\Z)$ when $|\lm| = 1$. By Theorem 8.17, for a bounded linear operator $A$ defined on Hilbert space $\scH$, then $\overline{\range(A)} \oplus \ker(A\star) = \scH$. For this theorem to apply, we need to show that $S - \id$ is bounded (it is clearly linear), and that $\ker (A\star) = 0$. Let $x \in \ell^2(\Z)$. Then, by Parseval's identity, for and orthonormal basis $\{e_k\}$ for $\ell^2(\Z)$, we have
+        \begin{align*}
+            \norm{(S - \lm\id)x}^2 &= \sum_k |\braket{e_k}{(S - \lm\id)x}|^2 \leq \sum_k|\braket{e_k}{Sx}|^2 + |\lm|^2\sum_k|\braket{e_k}{x}|^2 \\
+            &= \norm{Sx}^2 + |\lm|^2\norm{x}^2 \leq (\norm{S}^2 + |\lm|^2)\norm{x}^2
+        \end{align*}
+        Since the right shift operator is bounded, then $S - \lm\id$ is bounded. Next, we need to show that $\ker(S\star - \overline{\lm}\id) = \{0\}$. If $z \in \ker (S\star - \overline{\lm}\id)$, then $S\star z - \overline{\lm} z = 0$, so $S\star z = \overline{\lm} z$. Taking the adjoint of both sizes implies that 
+        \[z\star S = \lm z\star \implies z\star(S - \lm\id) = 0 \implies z\star \in \ker (S - \lm\id)\]
+        Note that I am borrowing notation from linear algebra when taking the adjoint. Since we have that $S - \lm\id$ is injective, then its kernel is equal to zero. Therefore, $z\star = 0$, so $z = 0$. Therefore, $\ker(A\star) = \{0\}$, so $\ell^2(\Z) = \overline{\range(S -\lm\id)}$. Therefore the range of $S - \lm\id$ is dense in $\ell^2(\Z)$, implying that all $\lm$'s in the spectrum of $S$ are in the continuous spectrum. 
+    \end{enumerate}
+\end{solution}
+
+\newpage
+\section{Exercise 9.12}
+Let $\scH$ be a separable Hilbert space with an orthonormal basis $\{e_n\}$, and $A\in \scB(\scH)$ such that
+\[\sum_n \norm{Ae_n}^2 < \infty.\]
+\subsection{Exercise 9.12, part a}
+Prove that the Hilbert-Schmidt norm defined in $(9.18)$ is independent of the basis. That is, show that for any other orthonormal basis $\{f_n\}$ one has
+\[\sum_n \norm{Af_n}^2 = \sum_n\norm{Ae_n}^2.\]
+\partbreak
+\begin{solution}
+
+    By above, and Parseval's identity (both are orthonormal bases of $\scH$), we can write,
+    \begin{align*}
+        \norm{A}_{HS}^2 =& \sum_{n = 1}^\infty\norm{Ae_n}^2 = \sum_{n = 1}^{\infty}\sum_{k = 1}^{\infty}|\braket{e_k}{Ae_n}|^2 \quad \text{( AND )} \quad \sum_{n = 1}^{\infty}\sum_{k = 1}^{\infty} |\braket{f_k}{Ae_n}|^2\\
+        &\sum_{n = 1}^{\infty}\norm{Af_n}^2 = \sum_{n = 1}^{\infty}\sum_{k = 1}^{\infty} |\braket{f_k}{Af_n}|^2 \quad \text{( AND )} \quad \sum_{n = 1}^{\infty}\sum_{k = 1}^{\infty} |\braket{e_k}{Af_n}|^2
+    \end{align*}
+    These two can be related to each-other by the following: we can rewrite the second line's second implication as
+    \[\sum_{n = 1}^{\infty}\norm{Af_n}^2 = \sum_{n = 1}^{\infty}\sum_{k = 1}^{\infty} |\overline{\braket{Af_n}{e_k}}|^2 = \sum_{n = 1}^{\infty}\sum_{k = 1}^{\infty} |\braket{Af_n}{e_k}|^2\]
+    Since $\norm{A} = \norm{A\star}$, we can freely interchange the place of $A$ inside the above inner product. Then
+    \[ \sum_{n = 1}^{\infty}\sum_{k = 1}^{\infty} |\braket{Af_n}{e_k}|^2 =  \sum_{n = 1}^{\infty}\sum_{k = 1}^{\infty} |\braket{f_n}{Ae_k}|^2\]
+    Note that the two summations, that of the first line and the one directly above, are equivalent (up to summation indices). Therefore, 
+    \[\sum_n\norm{Af_n}^2 = \sum_n\norm{Ae_n}^2.\]
+\end{solution}
+\newpage
+\subsection{Exercise 9.12, part b}
+Prove that 
+\[\norm{A}_{HS} = \norm{A\star}_{HS}.\]
+\partbreak
+\begin{solution}
+
+    Without loss of generality, take the orthonormal basis $\{f_k\}$ from above\footnote{This is without loss of generality since we showed in the previous part that the Hilbert-Schmidt norm is independent of basis.}. Then,
+    \[\norm{A}_{HS}^2 = \sum_n \norm{Af_n}^2 = \sum_{n = 1}^{\infty}\sum_{k = 1}^{\infty}|\braket{e_k}{Af_n}|^2 = \sum_{n = 1}^{\infty}\sum_{k = 1}^{\infty}|\braket{A\star e_k}{f_n}|^2 = \sum_{k = 1}^{\infty}\norm{A\star e_k}^2 = \norm{A\star}_{HS}^2\]
+\end{solution}
+\end{document}
