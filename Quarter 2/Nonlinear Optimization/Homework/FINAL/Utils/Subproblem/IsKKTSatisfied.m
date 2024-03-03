@@ -1,10 +1,6 @@
-function flag = IsKKTSatisfied(x, see, Q_0, d_vecs, a_vecs, mu, lm, gamma)
+function flag = IsKKTSatisfied(x, see, Q_0, d_vecs, a_vecs, mu, lm, gamma, g)
 
 flag = false;
-
-% Calculate g = Gx + c
-[c, G]  = CalculateG(x, see, Q_0, d_vecs, a_vecs, mu, lm, gamma);
-g = mtimes(G, x) + c;
 
 if ~isequal(g, zeros(size(g)))
     return

@@ -5,6 +5,7 @@ function [x, obj] =  final(m, n, s, p)
 % x Write CalculateConstraint function
 % x Write CalculateProjectionDiffNorm function
 % - Write SolveSubproblem function (hard)
+%       - Write Algorithm 16.1 or 16.2
 % - Understand what to pass into AUGLAG
 % x Setup random instances
 % - Form the problem to pass into AUGLAG
