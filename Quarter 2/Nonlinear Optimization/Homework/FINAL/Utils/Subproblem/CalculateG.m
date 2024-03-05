@@ -1,4 +1,4 @@
-function [c,G] = CalcuateG(x, see, Q_0, d_vecs, a_vecs, mu, lm, gamma)
+function [c,G] = CalculateG(x, see, Q_0, d_vecs, a_vecs, mu, lm, gamma)
 
 % a_vecs will be accessed as ROW vectors, as well as d_vecs
 % The last d_vec (m+1, :) is reserved for D_0!

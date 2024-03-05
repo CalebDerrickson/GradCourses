@@ -1,25 +1,24 @@
-function [x_seq, obj_seq] =  AUGLAG(c, Q, a_vecs, d_vecs, gamma)
+function [x_seq, obj_seq] =  AUGLAG(c, Q_0, a_vecs, d_vecs, gamma, l, u, p)
 
-[m, n] = size(Q);
+[m, n] = size(Q_0);
 % Choose an initial point x0 and initial multipliers lm0
 % The origin is given as a feasible point. 
 
 % Choose convergence tolerances eta_star and om_star
 % Don't know what these should exactly by atm. Temp values.
-eta_star = 5;
-om_star = 5;
-
+eta_star = 10e-3;
+om_star = 10e-4;
+10e-3
 % Some constants
-MAX_ITER = 10;
 num_iterations = 1;
 
 %Initializing sequences 
-mu_seq = zeros(1, MAX_ITER);
-om_seq = zeros(1, MAX_ITER);
-eta_seq = zeros(1, MAX_ITER);
-x_seq = zeros(MAX_ITER, n);
-lm_seq = zeros(MAX_ITER, n);
-obj_seq = zeros(1, MAX_ITER);
+mu_seq = zeros(1, p);
+om_seq = zeros(1, p);
+eta_seq = zeros(1, p);
+x_seq = zeros(p, n);
+lm_seq = zeros(p, n);
+obj_seq = zeros(1, p);
 
 mu_seq(1) = 10;
 om_seq(1) = 1/mu_seq(1);
@@ -27,11 +26,11 @@ eta_seq(1) = 1 / mu_seq(1)^0.1;
 
 
 
-for k = 1:MAX_ITER
-    x_seq(k, :) = SolveSubproblem();
+for k = 1:p
+    x_seq(k+1, :) = SolveSubproblem(x_seq(k, :), c, Q_0, d_vecs, a_vecs, mu_seq(k), lm_seq(k, :), gamma, l, u);
     
     % Calculating constraint for solution to subproblem
-    [constr_vec, constr_norm] = CalculateConstraint(x_seq(k), a_vecs, d_vecs);
+    [constr_vec, constr_norm] = CalculateConstraint(x_seq(k+1), a_vecs, d_vecs);
     
     if constr_norm <= eta_seq(k)
         % Test for convergence
