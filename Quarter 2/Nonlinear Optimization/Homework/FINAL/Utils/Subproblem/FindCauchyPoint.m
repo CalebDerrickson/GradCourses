@@ -43,13 +43,9 @@ for j = 1:length(t_break)
     x_j = calculate_x_t_j(j, x, t_break, t_bar, g);
     
     % Calculate all f's
-    f = dot(c, x_j) + 0.5 * dot(x_j, mtimes(G, x_j'));
+    % Not Used f = dot(c, x_j) + 0.5 * dot(x_j, mtimes(G, x_j'));
     f_prime = dot(c, p_j) + dot(x_j, mtimes(G, p_j'));
     f_dprime = dot(p_j, mtimes(G, p_j'));
-    
-    if abs(f_dprime) < 1e-8
-        dbstop in FindCauchyPoint at 61
-    end
 
     % Finally, break into cases
     if f_prime > 0
@@ -58,8 +54,20 @@ for j = 1:length(t_break)
     else
         % Calculate delta_t_star
         delta_t_star = -f_prime / f_dprime;
-        if delta_t_star > 0 && delta_t_star < t_break(j+1) - t_break(j)
-        % Return optimal value
+
+        if j == length(t_break)
+            if delta_t_star >= 0 && delta_t_star < (t_break(j) - t_break(j-1))
+                % Return optimal value
+                x_c = calculate_x_t_j(j, x, delta_t_star + t_break, t_bar, g);
+                return;
+            else
+                x_c =x_j;
+                return;
+            end
+        end
+
+        if delta_t_star >= 0 && delta_t_star < (t_break(j+1) - t_break(j))
+            % Return optimal value
             x_c = calculate_x_t_j(j, x, delta_t_star + t_break, t_bar, g);
             return;
         end
@@ -67,4 +75,6 @@ for j = 1:length(t_break)
 
 end %for
 
+% Error?
+x_c = x;
 end

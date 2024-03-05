@@ -6,6 +6,10 @@ function lag = LagCalc(x, c, Q_0, d_vecs, a_vecs, mu, lm, gamma)
 
 [m, ~] = size(a_vecs);
 
+if isrow(x)
+    x = x';
+end
+
 term1 = dot(c, x);
 term2 = dot(x, mtimes(Q_0, x));
 term3 = gamma * (dot(x, mtimes(diag(d_vecs(m+1, :)), x) ));

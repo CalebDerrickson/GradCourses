@@ -21,7 +21,7 @@ rng(s);
 [c, q_0, d_vecs, a_vecs] = GetRandomVariables(m, n);
 
 % Temp value
-gamma = 1;
+gamma = 0;
 
 l = -1.*ones(1, n);
 u = ones(1, n);

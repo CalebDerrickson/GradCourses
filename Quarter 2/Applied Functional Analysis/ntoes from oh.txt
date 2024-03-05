@@ -1,0 +1,7 @@
+termineates when Gx +c = 0 or when we are outside the box. 
+
+Only for the inactive set
+
+insead of doing Projected CG on tthe entire x, we then jsut to it in when x is in the null space
+
+first do cauchy point as iterate, then do algo 16.2 if we want better convergence

@@ -29,6 +29,15 @@ eta_seq(1) = 1 / mu_seq(1)^0.1;
 for k = 1:p
     x_seq(k+1, :) = SolveSubproblem(x_seq(k, :)', c, Q_0, d_vecs, a_vecs, mu_seq(k), lm_seq(k, :), gamma, l, u);
     
+    % Should be incremented RIGHT after the next calcualtion step
+    num_iterations = num_iterations + 1;
+    obj_seq(k) = dot(c, x_seq(k+1, :));
+
+    % checking if made any progress
+    if all(all(abs(x_seq(k+1, :) - x_seq(k, :)) < 1e-12))
+        break;
+    end
+
     % Calculating constraint for solution to subproblem
     [constr_vec, constr_norm] = CalculateConstraint(x_seq(k+1, :), a_vecs, d_vecs, gamma);
     
@@ -54,14 +63,12 @@ for k = 1:p
         om_seq(k+1) = 1/ (mu_seq(k+1));
 
     end
-    % Should be incremented RIGHT after the next calcualtion step
-    num_iterations = num_iterations + 1;
-    obj_seq(k) = dot(c, x_seq(k+1, :));
+
 end
 
 % Resize x_sequence and objective according to number of iterations
-x_seq(:, :) = x_seq(num_iterations, :);
-obj_seq(:) = obj_seq(num_iterations);
+x_seq = x_seq(num_iterations, :);
+obj_seq = obj_seq(num_iterations);
 
-
+fprintf("Num iterations: %d\n", num_iterations);
 end

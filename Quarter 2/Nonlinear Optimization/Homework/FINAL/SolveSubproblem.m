@@ -18,8 +18,10 @@ for k = 1:MAX_ITER
     [c, G]  = CalculateG(x_s, see, Q_0, d_vecs, a_vecs, mu, lm, gamma);
     g = mtimes(G, x_s) + c';
 
+    if IsKKTSatisfied(x_s, see, Q_0, d_vecs, a_vecs, mu, lm, gamma, g)
+        return;
+    end
 
-    
     % set x = x_k and find the Cauchy point x^c
     x_k = x_s;
     x_c = FindCauchyPoint(x_k, l, u, g, c, G);
@@ -37,12 +39,6 @@ for k = 1:MAX_ITER
     %x_kk = ProjectedCG(A, G, x_k, g, l, u);
     %x_s = x_kk;
     x_s = x_c;
-
-    if all(all(l <= x_s)) && all(all(x_s <= u))
-        % stop with x_s being the solution
-        return;
-    end
-    
 end
 % end(for)
 end
