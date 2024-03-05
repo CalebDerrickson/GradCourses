@@ -1,6 +1,7 @@
 function flag = IsKKTSatisfied(x, see, Q_0, d_vecs, a_vecs, mu, lm, gamma, g)
 
 flag = false;
+[m, n] = size(a_vecs);
 
 if ~isequal(g, zeros(size(g)))
     return

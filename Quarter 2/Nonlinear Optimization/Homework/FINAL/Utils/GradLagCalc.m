@@ -6,9 +6,10 @@ function grad_lag = GradLagCalc(x, c, Q_0, d_vecs, a_vecs, mu, lm, gamma)
 
 [m, ~] = size(a_vecs);
 
+
 term1 = c;
-term2 = 2*mtimes(Q_0, x);
-term3 = 2*gamma*mtimes( diag( d_vecs(m+1, :) ) , x);
+term2 = 2*mtimes(Q_0, x');
+term3 = 2*gamma*mtimes( diag(d_vecs(m+1, :)) , x');
 
 term4 = 0;
 for i = 1:m

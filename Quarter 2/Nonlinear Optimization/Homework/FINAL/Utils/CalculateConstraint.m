@@ -7,8 +7,8 @@ function [constr_vec, constr_norm] = CalculateConstraint(x, a_vecs, d_vecs, gamm
 constr_vec = zeros(1, m);
 
 for i =1:m
-    temp = dot(a_vecs(i, :), x) + gamma* dot(x, mtimes( diag( d_vecs(i, :) ), x));
-    constr_vec(i, :) = temp;
+    temp = dot(a_vecs(i, :), x) + gamma* dot(x, mtimes(diag(d_vecs(i, :)), x'));
+    constr_vec(i) = temp;
 end
 
 constr_norm = norm(constr_vec);

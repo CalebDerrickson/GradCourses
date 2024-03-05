@@ -1,22 +1,25 @@
 function x_s = SolveSubproblem(x, see, Q_0, d_vecs, a_vecs, mu, lm, gamma, l, u)
 
+if isrow(x)
+    x = x';
+end
+
 % Given a feasible starting point x0
 x_s = x;
 
 % For k = 1, ...
 MAX_ITER = 100;
 for k = 1:MAX_ITER
-    
+    if isrow(x_s)
+        x_s = x_s';
+    end
 
     % Calculate g = Gx + c
-    [c, G]  = CalculateG(x, see, Q_0, d_vecs, a_vecs, mu, lm, gamma);
-    g = mtimes(G, x) + c;
+    [c, G]  = CalculateG(x_s, see, Q_0, d_vecs, a_vecs, mu, lm, gamma);
+    g = mtimes(G, x_s) + c';
 
-    % If the KKT conditions are satisfied (for g = Gx + c)
-    if IsKKTSatisfied(x, see, Q_0, d_vecs, a_vecs, mu, lm, gamma, g)
-        % stop with x_s being the solution
-        return;
-    end
+
+    
     % set x = x_k and find the Cauchy point x^c
     x_k = x_s;
     x_c = FindCauchyPoint(x_k, l, u, g, c, G);
@@ -34,6 +37,12 @@ for k = 1:MAX_ITER
     %x_kk = ProjectedCG(A, G, x_k, g, l, u);
     %x_s = x_kk;
     x_s = x_c;
+
+    if all(all(l <= x_s)) && all(all(x_s <= u))
+        % stop with x_s being the solution
+        return;
+    end
+    
 end
 % end(for)
 end
