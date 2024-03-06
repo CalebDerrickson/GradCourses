@@ -1,4 +1,4 @@
-function [x_seq, obj_seq] =  AUGLAG(c, Q_0, a_vecs, d_vecs, gamma, l, u, p)
+function [x_seq, obj_seq, lm_seq, mu_seq] =  AUGLAG(c, Q_0, a_vecs, d_vecs, gamma, l, u, p)
 
 [m, n] = size(a_vecs);
 % Choose an initial point x0 and initial multipliers lm0
@@ -69,6 +69,5 @@ end
 % Resize x_sequence and objective according to number of iterations
 x_seq = x_seq(num_iterations, :);
 obj_seq = obj_seq(num_iterations);
-
-fprintf("Num iterations: %d\n", num_iterations);
+lm_seq = lm_seq(num_iterations, :);
 end
