@@ -1,3 +1,5 @@
 **/textbook/
 **/Textbook/
 **/*.asv
+**/bin/
+**/obj/
