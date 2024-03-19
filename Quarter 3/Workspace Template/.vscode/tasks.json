@@ -1,0 +1,30 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Build Testbed",
+            "windows": {
+                "command": "${workspaceFolder}\\build-all.bat"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "Clean Everything",
+            "windows": {
+                "command": "${workspaceFolder}\\clean-all.bat",
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build"
+        },
+    ],
+    "version": "2.0.0"
+}
