@@ -1,0 +1,103 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 37710: Homework 1}
+\author{Caleb Derrickson}
+\date{March 29, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+As we saw in class, $k$-means clustering minimizes the average square distance distortion
+\begin{align}
+    J_{avg^2} = \sum_{j = 1}^k\sum_{\textbf{x} \in C_j} d(\textbf{x}, \textbf{m}_j)^2, \label{Javg}
+\end{align}
+where $d(\textbf{x}, \textbf{x}') = \norm{\textbf{x} - \textbf{x}'}$ and $C_j$ is the set of points belonging to cluster $j$. Another distortion function that we mentioned is the intra-cluster sum of squared distances,
+\[J_{IC} = \sum_{j = 1}^k \frac{1}{|C_j|}\sum_{\textbf{x} \in C_j} \sum_{\textbf{x}' \in C_j} d(\textbf{x}, \textbf{x}')^2.\]
+
+\partbreak
+\subsection{Problem 1, part a}
+Given that in $k$-means, $\textbf{m}_j = \frac{1}{|C_j|}\sum_{\textbf{x} \in C_j} \textbf{x}$, show that $J_{IC} = 2J_{avg^2}$.
+\partbreak
+\begin{solution}
+
+    Fix $j \in \{1, 2, ..., k\}$, that is, let us focus on one cluster. The two distortion functions for cluster $j$ would then be 
+    \[J_{avg^2} = \sum_{\textbf{x} \in C_j}d(\textbf{x}, \textbf{m}_j)^2, \quad J_{IC} = \frac{1}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} d(\textbf{x}, \textbf{x}')^2.\]
+
+    Starting with the intra-cluster distortion, we will show the equality for $C_j$.
+
+    \tightalignbreak
+    \begin{align*}
+        &J_{IC} = \frac{1}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} d(\textbf{x}, \textbf{x}')^2 &\text{(Given.)}\\
+        &= \frac{1}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} (\textbf{x} - \textbf{x}')\T (\textbf{x} - \textbf{x}') &\text{(Euclidean distance.)}\\
+        &= \frac{1}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} \left[ \textbf{x}\T \textbf{x} - 2\textbf{x}\T \textbf{x}' + (\textbf{x}')\T (\textbf{x}')\right] &\text{(Expanding.)}\\
+        &= \frac{1}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} \textbf{x}\T \textbf{x} - \frac{2}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j}\textbf{x}\T \textbf{x}' + \frac{1}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} (\textbf{x}')\T (\textbf{x}') &\text{(Expanding.)}\\
+        &= \sum_{\textbf{x} \in C_j} \textbf{x}\T \textbf{x} - \frac{2}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} \textbf{x}\T \textbf{x}' + \sum_{\textbf{x}' \in C_j} (\textbf{x}')\T (\textbf{x}') &\text{(Independent summations.)}\\ 
+        &= \sum_{\textbf{x} \in C_j} \textbf{x}\T \textbf{x} - \frac{2}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} \textbf{x}\T \textbf{x}' + \sum_{\textbf{x}' \in C_j} \textbf{x}\T \textbf{x} &\text{(Dummy index.)}\\
+        &= 2\sum_{\textbf{x} \in C_j} \textbf{x}\T \textbf{x} - \frac{2}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} \textbf{x}\T \textbf{x}' &\text{(Simplifying.)}\\
+        &= 2\sum_{\textbf{x} \in C_j} \textbf{x}\T \textbf{x} - \frac{4}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} \textbf{x}\T \textbf{x}' + \frac{2}{|C_j|} \sum_{\textbf{x} \in C_j}\sum_{\textbf{x}' \in C_j} \textbf{x}\T \textbf{x}' &\text{(Adding a zero.)}\\
+        &= 2\sum_{\textbf{x} \in C_j}\left[ \textbf{x}\T \textbf{x} - \frac{2}{|C_j|} \sum_{\textbf{x}' \in C_j} \textbf{x}\T \textbf{x}' + \frac{1}{|C_j|} \sum_{\textbf{x}' \in C_j} \textbf{x}\T \textbf{x}'\right] &\text{(Grouping Summations.)}\\
+        &= 2\sum_{\textbf{x} \in C_j}\left[ \textbf{x}\T \textbf{x} - \frac{2}{|C_j|} \sum_{\textbf{x}' \in C_j} \textbf{x}\T \textbf{x}' + \frac{1}{|C_j|^2} \sum_{\textbf{x}' \in C_j} \sum_{\textbf{x}'' \in C_j} (\textbf{x}')\T \textbf{x}''\right] &\text{(Multiplying by 1.)}\\
+        &= 2\sum_{\textbf{x} \in C_j}\left[ \textbf{x}\T \textbf{x} - 2 \textbf{x}\T \left(\sum_{\textbf{x}' \in C_j}\frac{1}{|C_j|}\textbf{x}'\right) + \frac{1}{|C_j|^2} \left(\sum_{\textbf{x}' \in C_j}\textbf{x}'\right)\T \left(\sum_{\textbf{x}'' \in C_j}  \textbf{x}''\right)\right] &\text{(Linearity of inner product.)}\\
+        &= 2\sum_{\textbf{x} \in C_j}\left[ \textbf{x}\T \textbf{x} - 2 \textbf{x}\T \textbf{m}_j + \textbf{m}_j \T \textbf{m}_j\right] &\text{(Given form of $\textbf{m}_j$.)}\\
+        &= 2\sum_{\textbf{x} \in C_j}\left[ (\textbf{x} - \textbf{m}_j)\T (\textbf{x} - \textbf{m}_j)\right] &\text{(Factoring.)}\\
+        &= 2\sum_{\textbf{x} \in C_j} \norm{\textbf{x} - \textbf{m}_j}^2 &\text{(Euclidean Distance.)}\\
+        &= 2\sum_{\textbf{x} \in C_j} d(\textbf{x}, \textbf{m}_j)^2 &\text{(Given distance.)}\\
+        \implies& J_{IC} = 2J_{avg^2} &\text{(Given.)}
+    \end{align*}
+    \vspace{-12mm}\alignbreak
+    Note that the above proof has only in mind one cluster. It is easy to see however, that this behavior should hold for all clusters since clusters should not overlap (i.e., no point should be assigned to two clusters). Therefore, the claim has been shown. 
+\end{solution}
+
+\newpage
+\subsection{Problem 1, part b}
+Let $\gamma_i \in \{1, 2, ..., k\}$ be the cluster that the $i$-th data-point is assigned to, and assume that there are $n$ points in total, $\textbf{x}_1, \textbf{x}_2, ..., \textbf{x}_n$. Then (\ref{Javg}) can be written as 
+\begin{align}
+    J_{avg^2}(\gamma_1, ..., \gamma_n, \textbf{m}_1, ..., \textbf{m}_k) = \sum_{i = 1}^n d(\textbf{x}_i, \textbf{m}_{\gamma_i})^2.\label{mod javg}
+\end{align}
+Recall the $k$-means clustering alternates the following two steps:
+\begin{enumerate}
+    \item Update the cluster assignments:
+    \[\gamma_i \leftarrow \argmin_{j \in \{1, 2, ..., k\}} d(\textbf{x}_i, \textbf{m}_j), \quad i = 1, 2, ..., n.\]
+    \item Update the centroids:
+    \[\textbf{m}_j \leftarrow \frac{1}{|C_j|} \sum_{i : \gamma_i = j} \textbf{x}_i, \quad j = 1, 2, ..., k. \]
+\end{enumerate}
+Show that the first of these steps minimizes (\ref{mod javg}) as a function of $\gamma_1, ..., \gamma_n$, while holding $\textbf{m}_1, ..., \textbf{m}_k$ constant, while the second step minimizes it as a function of $\textbf{m}_1, ..., \textbf{m}_k$, while holding $\gamma_1, ..., \gamma_n$ constant. The notation $`` i : \gamma_i = j"$ should be read as ``all $i$ for which $\gamma_i = j"$. 
+\partbreak
+\begin{solution}
+
+    For the first step, we are given that the updated $\gamma_i$ is chosen such that each point is matched with the closest centroid, for all $i$. Since both the problem of $d(\cdot)$ and $d(\cdot)^2$ are minimized for the same values, we can say that $\gamma_i$ also minimizes the \textit{squared} distances between all points and the centroids. Thus, for the updated $\gamma$, the value of the summation of the squared distances is minimized. Then,
+    \[\gamma = \argmin_\gamma \sum_{i = 1}^n d(\textbf{x}_i, \textbf{m}_{\gamma_j})^2 = \argmin_\gamma J_{avg^2}(\gamma, \Vec{\textbf{m}}).\]
+    Thus, $\gamma$ minimizes (\ref{mod javg}), while holding the centroids constant. We will now investigate the second update schema. This minimization will be proven in a comparatively methodical manner, taking the gradient of $J_{avg}^2$ and setting it to zero. Here we are guaranteed that the value will be given as a minima, since summing convex functions results in a convex function. We will then have only one extreme value, which is a global minimum. The gradient with respect to $\textbf{m}$ is then
+    \[\grad_\textbf{m} \sum_{i = 1}^n d(\textbf{x}_i, \textbf{m}_{\gamma_j})^2 = -2\sum_{\textbf{x}_i \in C_j} (\textbf{x}_i - \textbf{m}_{\gamma_j})\]
+    \newpage
+    Setting this equal to zero gives
+    \[\sum_{\textbf{x} \in C_j} \textbf{x} = \sum_{\textbf{x}\in C_j} \textbf{m}_{\gamma_j} =|C_j|\textbf{m}_{\gamma_j} \iff \textbf{m}_{\gamma_j} = \frac{1}{|C_j|}\sum_{\textbf{x} \in C_j} \textbf{x}.\]
+    Which is what we wanted to find.
+\end{solution}
+
+\newpage
+\subsection{Problem 1, part c}
+Prove that as $k$-means progresses, the distortion decreases monotonically iteration-by-iteration. 
+\partbreak
+\begin{solution}
+
+    As argued in the previous part, the distortion function $J_{avg^2}$ is convex (in this context). Thus, taking the minimum in each parameter separately will allow the function to iteratively proceed to the minimum. Therefore, the change in each iteration of $k$-means will provide us a distortion value bounded above by the previous iteration value, implying the algorithm decreases monotonically. 
+\end{solution}
+
+\newpage
+\subsection{Problem 1, part d}
+Give an upper bound on the maximum number of iterations required for full convergence of the algorithm, i.e., the point where neither the centroids, nor the cluster assignments change anymore (note: we do not expect you to prove the bound in Inaba et al., something much looser and simpler will do. 
+\partbreak
+\begin{solution}
+
+    Note that the elements of $\gamma$ are sampled entirely from the values $\{1, 2, ..., k\}$. If no progress have been made in a new iteration, we surely cannot expect the next iteration to improve as well. This will repeat ad infinitum. Thus, our stopping criterion to ensure no excessive looping is when we observe no (meaningful) change in our chosen distortion function. Initially, $\gamma$ will have a random value, in which each entry is chosen at random. By the previous part, since the algorithm should monotonically decrease our distortion function, no value of $\gamma$ should repeat. In the worst case, the assignment of $\gamma$ will never repeat, only stopping once we have exhausted possible unique values of $\gamma$. Thus, we will see in the worst case our algorithm will iterate $k^n$ times, as we sample values up to $k$, $n$ times. Thus, the iteration is bounded by $k^n$. 
+\end{solution}
+\end{document}
