@@ -75,7 +75,7 @@ Show that the first of these steps minimizes (\ref{mod javg}) as a function of $
 
     For the first step, we are given that the updated $\gamma_i$ is chosen such that each point is matched with the closest centroid, for all $i$. Since both the problem of $d(\cdot)$ and $d(\cdot)^2$ are minimized for the same values, we can say that $\gamma_i$ also minimizes the \textit{squared} distances between all points and the centroids. Thus, for the updated $\gamma$, the value of the summation of the squared distances is minimized. Then,
     \[\gamma = \argmin_\gamma \sum_{i = 1}^n d(\textbf{x}_i, \textbf{m}_{\gamma_j})^2 = \argmin_\gamma J_{avg^2}(\gamma, \Vec{\textbf{m}}).\]
-    Thus, $\gamma$ minimizes (\ref{mod javg}), while holding the centroids constant. We will now investigate the second update schema. This minimization will be proven in a comparatively methodical manner, taking the gradient of $J_{avg}^2$ and setting it to zero. Here we are guaranteed that the value will be given as a minima, since summing convex functions results in a convex function. We will then have only one extreme value, which is a global minimum. The gradient with respect to $\textbf{m}$ is then
+    Thus, $\gamma$ minimizes (\ref{mod javg}), while holding the centroids constant. We will now investigate the second update schema. This minimization will be proven in a comparatively methodical manner, taking the gradient of $J_{avg}^2$ and setting it to zero. The gradient with respect to $\textbf{m}$ is then
     \[\grad_\textbf{m} \sum_{i = 1}^n d(\textbf{x}_i, \textbf{m}_{\gamma_j})^2 = -2\sum_{\textbf{x}_i \in C_j} (\textbf{x}_i - \textbf{m}_{\gamma_j})\]
     \newpage
     Setting this equal to zero gives
@@ -99,5 +99,132 @@ Give an upper bound on the maximum number of iterations required for full conver
 \begin{solution}
 
     Note that the elements of $\gamma$ are sampled entirely from the values $\{1, 2, ..., k\}$. If no progress have been made in a new iteration, we surely cannot expect the next iteration to improve as well. This will repeat ad infinitum. Thus, our stopping criterion to ensure no excessive looping is when we observe no (meaningful) change in our chosen distortion function. Initially, $\gamma$ will have a random value, in which each entry is chosen at random. By the previous part, since the algorithm should monotonically decrease our distortion function, no value of $\gamma$ should repeat. In the worst case, the assignment of $\gamma$ will never repeat, only stopping once we have exhausted possible unique values of $\gamma$. Thus, we will see in the worst case our algorithm will iterate $k^n$ times, as we sample values up to $k$, $n$ times. Thus, the iteration is bounded by $k^n$. 
+\end{solution}
+
+\newpage
+\section{Problem 2}
+Implement the $k$-means algorithm in a language of your choice (Python is recommended), initializing the cluster centers randomly, as explained in the slides. The algorithm should terminate when the cluster assignments (and hence, the centroids) don’t change anymore.
+
+\subsection{Problem 2, part a}
+The toy dataset \textbf{toydata.txt} contains 500 points in $\R^2$ coming from 3 well separated clusters. Test your code on this data and plot the final result as a 2D plot in which each point’s color or symbol indicates its cluster assignment. Note that because of the random initialization, different runs may produce different results, and in some cases the algorithm might not correctly identify the three clusters. Plot the value of the distortion function as a function of iteration number for 20 separate runs of the algorithm on the same plot. Comment on the plot.
+\partbreak
+\begin{solution}
+
+    I have implemented the $k$-means algorithm in C++ (just for the experience), and plotted in Python. I will provide the two given plots below. The first plot, Figure \ref{fig:kmeans}, is a scenario where the algorithm reached a global minima: all clusters are being utilized. I make this distinction here, since in Figure \ref{fig:Differentvals}, we see two different convergent values - one just below 700 and another below 2000. It seems as though the chance where we utilize only two clusters happens in the case where one of the clusters, which have their initial positions uniformly distributed, is simply to far away to catch any points. This means that the initial distortion value will be noticeably larger, and catch the higher minima. Note that I have plotted the distortion value on a log scale to separate the plot lines for ease of viewing.   
+
+    
+\end{solution}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figure/kmeans.png}
+    \caption{$K$-means on Toy Data.}
+    \label{fig:kmeans}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figure/Different vals.png}
+    \caption{20 Different values and their converging minima.}
+    \label{fig:Differentvals}
+\end{figure}
+
+\clearpage
+\newpage
+\subsection{Problem 2, part b}
+Now implement the $k$–means++ algorithm discussed in class and repeat part (a) using its result as initialization (except for the 2D plot). Comment on the convergence behavior of $k$–means++ vs. the original algorithm.
+\partbreak
+\begin{solution}
+
+    I have (hopefully) implemented the $k$-means++ algorithm correctly, and present the resulting distortion plot in Figure \ref{fig:k-means++}, we can see that the convergence for $k$-means++ is less (6 compared to 8), with one outlier condition, which ran for noticeably longer. All points converged to the global minimum, and the iterations needed to get to the minimum is 2 to 6 (with the outlier removed). 
+\end{solution}
+
+\vspace{4cm}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figure/kmeans++.png}
+    \caption{$k$-means initialized by $k$-means++.}
+    \label{fig:k-means++}
+\end{figure}
+
+\clearpage
+\newpage
+\subsection{Problem 2, part c}
+Test both the original k-means and k-means++ algorithms on the MNIST dataset. Each image in MNIST is 28x28 pixels, represented as a 784-dimensional vector. Again, comment on the convergence behavior of k-means++ vs. the original algorithm. Comment on how the results differ when you set the number of clusters to 10 and 16.
+\partbreak
+\begin{solution}
+
+    
+\end{solution}
+
+
+\newpage
+\section{Problem 3}
+Recall the "Mixture of $k$ Gaussians" model used in clustering
+\begin{align}
+    p(\textbf{x}, z) = \pi_z \scN (\textbf{x};\boldsymbol{\mu}_z, \boldsymbol{\Sigma}_z), \label{Gauss}
+\end{align}
+where $\textbf{x} \in \R^d, z \in \{1, 2, ..., k\}$ is its cluster assignment, and $\scN (\textbf{x};\boldsymbol{\mu}_z, \boldsymbol{\Sigma}_z)$ is the $d$-dimensional normal density
+\[\scN (\textbf{x};\boldsymbol{\mu}_z, \boldsymbol{\Sigma}_z) = (2\pi)^{-d/2} |\boldsymbol{\Sigma}_z|^{-1/2} \exp \left( -(\textbf{x} - \boldsymbol{\mu}_z)\T \boldsymbol{\Sigma}_z\inv (\textbf{x} - \boldsymbol{\mu}_z) / 2\right).\]
+The parameters of this restricted model are $\theta = (\pi_1, ..., \pi_k, \boldsymbol{\mu}_1, ..., \boldsymbol{\mu}_k, \boldsymbol{\Sigma}_1, ..., \boldsymbol{\Sigma}_k).$
+
+\subsection{Problem 3, part a}
+Let $\{(\textbf{x}_1, z_1), (\textbf{x}_2, z_2), ..., (\textbf{x}_n, z_n)\}$ be an $n$-point sample from this model. Write down the corresponding log-likelihood $\ell(\theta)$. As usual, you may ignore constant terms in the log-likelihood. 
+\partbreak
+\begin{solution}
+
+    I am relatively new to statistics, so forgive me if my explanations are poorly written. The likelihood function seeks to describe a given set of parameters $\theta$ are more likely to be the true set of parameters, assuming we have fixed random variables $\textbf{x}$. Since the given parameters are discrete and constitute all probable cases for the model, we will sum over them for each random instance encountered. Furthermore, since each random instance is assumed independent, we have the likelihood function to be 
+    \[L(\theta) = \prod_{i = 1}^n \sum_{j = 1}^k \pi_i \scN (\textbf{x}_j; \boldsymbol{\mu}_j, \boldsymbol{\Sigma}_j).\]
+    This results in a log-likelihood function of 
+    \[\ell(\theta) = \sum_{i =1}^n \ln\left(\sum_{j = 1}^k \pi_j \scN (\textbf{x}_i; \boldsymbol{\mu}_j, \boldsymbol{\Sigma}_j)\right)\]
+    by properties of the natural log. I am refraining from expanding out the $\scN$ term, just to preserve ease of readability.
+\end{solution}
+
+
+\newpage
+\subsection{Problem 3, part b}
+Let $p_{i, j}$ be the probability $p(z_i = j | \textbf{x}_i)$ of the $i$-th data point coming from the $j$-th cluster (given that its position is $\textbf{x}_i$). Derive an expression for this probability.  
+\partbreak
+\begin{solution}
+
+    Seeing as though this is an occurrence of one event happening from a set of $k$ events ($\textbf{x}_i$ being in the $j$-th cluster), we would imagine that the probability of this event occurring would result in the proportional behavior of the values of $j$ in the overall parameter $\theta$. In other words, we would set 
+    \[p_{i, j} = \frac{p(\textbf{x}_i, j)}{\sum_{l = 1}^k p(\textbf{x}_i, l)} = \frac{\pi_j\scN(\textbf{x}; \boldsymbol{\mu}_j, \boldsymbol{\Sigma}_j)}{\sum_{l = 1}^k \pi_l \scN (\textbf{x}_i ; \boldsymbol{\mu}_l, \boldsymbol{\Sigma}_l)}.\]
+\end{solution}
+
+\newcommand{\lbarthetaold}{\overline{\ell}_{\theta_{old}}(\theta)}
+
+\newpage
+\subsection{Problem 3, part c}
+Derive the expected log-likelihood $\lbarthetaold$ in terms of these $p_{i, j}$ conditional probabilities. Here the expectation is taken over the values of the hidden variables $(z_1, ..., z_n)$, and the subscript $\theta_{old}$ signifies that the $p_{i, j}'s$ are computed with respect to the old values of the parameters, whereas $\overline{\ell}$ itself is a function of the new values of the parameters. 
+\partbreak
+\begin{solution}
+
+    The expected value of the log-likelihood is given as the general expected value formula, 
+    \[E (\theta, \theta_{old}) = \sum_{l = 1}^k p_{i, l}\ln\left(p(\textbf{x}, z)\right),\]
+    where the term in the natural log is the probability function of our new parameters, and $p_{i, l}$ is our old probabilities. This new probability represents the probability over all input data, $\textbf{x}$, thus, we can break them apart by data entry, to write
+    \[E (\theta, \theta_{old}) = \sum_{l = 1}^k p_{i, l}\sum_{n = 1}^N\ln\left(\pi_n\scN(\textbf{x}_n; \boldsymbol{\mu}_n, \boldsymbol{\Sigma}_n)\right).\]
+    Note that I have pulled out the product from the natural log and turned it into a sum. Since this new sum is independent of the old, we can pull it to the front as follows:
+    \[E (\theta, \theta_{old}) = \sum_{n = 1}^N\sum_{l = 1}^k p_{i, l}\ln\left(\pi_n\scN(\textbf{x}_n; \boldsymbol{\mu}_n, \boldsymbol{\Sigma}_n)\right).\]
+    Next, we notice the old conditional probability term is the expected value of the second term, implying that we can rewrite the expected value as
+    \[E(\theta, \theta_{old}) =  \sum_{n = 1}^N\sum_{l = 1}^k p_{l, l}\ln\left(\pi_\scN(\textbf{x}_n; \boldsymbol{\mu}_n, \boldsymbol{\Sigma}_n)\right).\]
+
+    Plugging in what we have, we see that the expectation value is of the form
+    \[E(\theta, \theta_{old}) = \sum_{n = 1}^N\sum_{l = 1}^k p_{n, l} \left[ \ln(\pi_l) - \frac{d}{2}\ln (2\pi) - \frac{1}{2}\ln(|\det (\boldsymbol{\Sigma}_l)|) - \frac{1}{2}(\textbf{x}_n - \boldsymbol{\mu}_l)\T \boldsymbol{\Sigma}\inv_l (\textbf{x}_n - \boldsymbol{\mu}_l)\right]\]
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part d}
+The expectation maximization algorithm updates the parameters of the mixture by maximizing $\lbarthetaold$. Let us start with the ``cluster priors'' $\pi_1, ..., \pi_k.$ Since $(\pi_1, ..., \pi_k)$ is a discrete distribution, we must have that $\sum_{j = 1}^k \pi_j = 1$. Using this constraint, derive the update rule for the cluster priors. 
+\partbreak
+\begin{solution}
+
+    Taking the constraint we have on the cluster priors, we can substitute in a single term for the whole sum. In particular, when replacing the last cluster prior, we have that 
+    \[\pi_k = 1 - \sum_{j = 1}^{k-1} \pi_j\]
+    This will be used in differentiation. When finding the particular $pi_j$ which maximizes $\lbarthetaold$, we can employ simple calculus: taking the derivative with respect to $\pi_j$ and setting equal to zero. We see that, when differentiating, we should keep in mind the one instance of $p_{i, j}$ which is not a constant with respect to differentiation, in particular, $\pi_j$. Therefore, the sum over clusters can be dropped, since the only one which is not a constant is the $j$-cluster. We then see that, when differentiating, 
+    \[\frac{d E}{d\pi_j} = \sum_{i = 1}^N \left[p_{i, j}\frac{1}{\pi_j} - p_{k, j}\frac{1}{1 - \sum_{l = 1}^{k-1} \pi_l}\right] = 0\]
+    After rearranging, we have that
+    \[\pi_j = \frac{1 - \sum_{l = 1}^{k-1}\pi_l}{\sum_{i = 1}^N p_{k, j}}\sum_{i = 1}^N p_{i, j}\]
+    Note that the denominator is constant with respect to the sum, we can then simplify to
+    \[\pi_j = \frac{1}{N}\frac{1 - \sum_{l = 1}^{k-1}\pi_l}{p_{k, j}}\sum_{i = 1}^N p_{i, j}\]
 \end{solution}
 \end{document}
