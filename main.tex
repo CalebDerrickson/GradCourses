@@ -89,7 +89,7 @@ Prove that as $k$-means progresses, the distortion decreases monotonically itera
 \partbreak
 \begin{solution}
 
-    As argued in the previous part, the distortion function $J_{avg^2}$ is convex (in this context). Thus, taking the minimum in each parameter separately will allow the function to iteratively proceed to the minimum. Therefore, the change in each iteration of $k$-means will provide us a distortion value bounded above by the previous iteration value, implying the algorithm decreases monotonically. 
+    It is easy to see that taking the minimum in each parameter separately will allow the function to iteratively proceed to the minimum. Since each subpart of the $k$-means algorithm minimizes their respective piece, we see that their joined influence produces a lower value than the previous iteration. Therefore, the change in each iteration of $k$-means will provide us a distortion value bounded above by the previous iteration value, implying the algorithm decreases monotonically. 
 \end{solution}
 
 \newpage
@@ -221,10 +221,56 @@ The expectation maximization algorithm updates the parameters of the mixture by 
     Taking the constraint we have on the cluster priors, we can substitute in a single term for the whole sum. In particular, when replacing the last cluster prior, we have that 
     \[\pi_k = 1 - \sum_{j = 1}^{k-1} \pi_j\]
     This will be used in differentiation. When finding the particular $pi_j$ which maximizes $\lbarthetaold$, we can employ simple calculus: taking the derivative with respect to $\pi_j$ and setting equal to zero. We see that, when differentiating, we should keep in mind the one instance of $p_{i, j}$ which is not a constant with respect to differentiation, in particular, $\pi_j$. Therefore, the sum over clusters can be dropped, since the only one which is not a constant is the $j$-cluster. We then see that, when differentiating, 
-    \[\frac{d E}{d\pi_j} = \sum_{i = 1}^N \left[p_{i, j}\frac{1}{\pi_j} - p_{k, j}\frac{1}{1 - \sum_{l = 1}^{k-1} \pi_l}\right] = 0\]
+    \[\frac{d E}{d\pi_j} = \sum_{i = 1}^N \left[p_{i, j}\frac{1}{\pi_j} - p_{k, j}\frac{1}{1 - \sum_{l = 1}^{k-1} \pi_l}\right] = 0.\]
     After rearranging, we have that
-    \[\pi_j = \frac{1 - \sum_{l = 1}^{k-1}\pi_l}{\sum_{i = 1}^N p_{k, j}}\sum_{i = 1}^N p_{i, j}\]
-    Note that the denominator is constant with respect to the sum, we can then simplify to
-    \[\pi_j = \frac{1}{N}\frac{1 - \sum_{l = 1}^{k-1}\pi_l}{p_{k, j}}\sum_{i = 1}^N p_{i, j}\]
+    \[\frac{1}{\pi_j}\sum_i p_{i, j} = \frac{1}{1 - \sum_{j = 1}^{k-1} \pi_j}\sum_i p_{k, j}. \]
+    Finally, after simplification, we have
+    \[\pi_j = \frac{1}{N}\sum_{i = 1}^N p_{i, j}.\]
+    
 \end{solution}
+
+
+\newpage
+\subsection{Problem 3, part e}
+Similarly derive the update rule for the $\boldsymbol{\mu}_1, ..., \boldsymbol{\mu}_k$ location parameters and $\boldsymbol{\Sigma}_1, ..., \boldsymbol{\Sigma}_k$ covariance matrices. 
+\vspace{-2mm}\partbreak\vspace{-2mm}
+\begin{solution}
+
+    The update rules for $\boldsymbol{\mu}$ and $\boldsymbol{\Sigma}$ are done similarly. We will show the update scheme for the $\boldsymbol{\mu}$'s first, then the $\boldsymbol{\Sigma}$'s after. 
+    \tightalignbreak\vspace{-2mm}
+    \begin{align*}
+        &\grad_{\boldsymbol{\mu}_j} = E(\theta, \theta_{old}) &\text{(Given.)}\\
+        &= -\frac{1}{2}\sum_{i = 1}^N p_{i, j} \grad_{\boldsymbol{\mu}_j}(\textbf{x}_i - \boldsymbol{\mu}_j) \boldsymbol{\Sigma}\inv_j (\textbf{x}_i - \boldsymbol{\mu}_j) &\text{(Simplifying.)}\\
+        &= -\frac{1}{2}\sum_{i = 1}^N p_{i, j} (2\boldsymbol{\Sigma}\inv_j \textbf{x}_i + 2\boldsymbol{\Sigma}\inv_j \boldsymbol{\mu}_j) = 0 &\text{(Simplifying and setting to zero.)}\\
+        \implies & \boldsymbol{\Sigma}\inv_j\boldsymbol{\mu}_j\sum_{i = 1}^Np_{i, j} = \sum_{i = 1}^N p_{i, j}\boldsymbol{\Sigma}\inv_j \textbf{x}_i &\text{(Rearranging.)}\\
+        \boldsymbol{\mu}_j &= \frac{\sum_{i = 1}^N{p_{i, j}\textbf{x}_i}}{\sum_{i = 1}^N{p_{i, j}}} &\text{(Simplifying.)}
+    \end{align*}
+    \vspace{-12mm}\alignbreak\vspace{-6mm}
+    \begin{align*}
+        &\grad_{\boldsymbol{\Sigma}\inv_j} E(\theta, \theta_{old}) = \sum_{i = 1}^N p_{i, j} \grad \left[ -\frac{1}{2} \ln{(|\det \boldsymbol{\Sigma}_j)|}  - \frac{1}{2}(\textbf{x}_i - \boldsymbol{\mu}_j)\T \boldsymbol{\Sigma}\inv_j (\textbf{x}_i - \boldsymbol{\mu}_j)\right] &\text{(Applying Gradient.)}\\
+        &= \sum_{i = 1}^N p_{i, j} \grad \left[ \frac{1}{2} \ln{(|\det \boldsymbol{\Sigma}\inv_j|)}  - \frac{1}{2}(\textbf{x}_i - \boldsymbol{\mu}_j)\T \boldsymbol{\Sigma}\inv_j (\textbf{x}_i - \boldsymbol{\mu}_j)\right] &\text{(inverse properties.)}\\
+        &= \sum_{i = 1}^N p_{i, j} \left[ ((\boldsymbol{\Sigma}\inv_j)\T)\inv - \frac{1}{2}(\textbf{x}_i - \boldsymbol{\mu}_j)\T \boldsymbol{\Sigma}\inv_j (\textbf{x}_i - \boldsymbol{\mu}_j)\right] &(\bigstar)\\
+        &= \sum_{i = 1}^N p_{i, j} \left[ ((\boldsymbol{\Sigma}\inv_j)\T)\inv - (\textbf{x}_i - \boldsymbol{\mu}_j) (\textbf{x}_i - \boldsymbol{\mu}_j)\T \right] &(\bigstar \bigstar)\\
+        &= \sum_{i = 1}^N p_{i, j} \left[ \boldsymbol{\Sigma}_j - (\textbf{x}_i - \boldsymbol{\mu}_j) (\textbf{x}_i - \boldsymbol{\mu}_j)\T \right] &\text{($\boldsymbol{\Sigma}_j$ is symmetric.)}\\
+        &\implies \boldsymbol{\Sigma}_j \sum_{i = 1}^N p_{i, j} = \sum_{i = 1}^N p_{i, j}(\textbf{x}_i - \boldsymbol{\mu}_j)(\textbf{x}_i - \boldsymbol{\mu}_j)\T  &\text{(Setting to zero.)}\\
+        &\boldsymbol{\Sigma}_j = \frac{\sum_{i = 1}^N p_{i, j}(\textbf{x}_i - \boldsymbol{\mu}_j)(\textbf{x}_i - \boldsymbol{\mu}_j)\T}{\sum_{i = 1}^N p_{i, j}}
+    \end{align*}
+    \vspace{-12mm} \alignbreak
+
+    The lines labelled ($\bigstar$) and ($\bigstar \bigstar$) come from The Matrix Cookbook, https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf, equations 57 and 72, respectively.  
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part f}
+Compare these update rules to the $k$-means update rules derived in Question 1. 
+\partbreak
+\begin{solution}
+
+    the only update scheme we found in Problem 1 was the centroid update within a given cluster. This formula resembles the cluster priors, with a notable difference that we are summing over all data points, rather than the cluster paradigm seen in $k$-means.   
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part g}
+Apply the Mixture of Gaussians clustering algorithm to the toy data in Question 2. Plot the final result as a 2D plot in which each point's color or symbol indicates its cluster assignment. Comment on the plot and the convergence speed compared to that of $k$-means. 
+
 \end{document}
