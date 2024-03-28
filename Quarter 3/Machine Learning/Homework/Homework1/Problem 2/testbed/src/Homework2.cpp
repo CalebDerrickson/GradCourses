@@ -3,15 +3,26 @@
 #include <fstream>
 #include <math.h>
 #include <random>
+#include <numeric>
 #include <algorithm>
 #include <ctime>
 
+// Private funcitons
+double distance(const std::vector<double>& point, const std::vector<double>& cluster);
+int pickRandomWeightedIndex(const std::vector<double>& weights);
+double calculateD(const std::vector<double>& point, const std::vector<std::vector<double>>& clusters);
+bool Convergence(std::vector<int>& prevAssignment, std::vector<int>& currAssignment);
+std::vector<double> vectorAdd(std::vector<double>& A, std::vector<double>& B);
+std::vector<double> vectorScalarMult(std::vector<double>&A, double a);
 
-Homework2::Homework2(const char* filePath, const int k) :
+
+Homework2::Homework2(const char* filePath, const int k, const char* outPath, flags flag) :
     _data({}),
     _outData({}),
     _filePath(filePath),
-    _numClusters(k)
+    _numClusters(k),
+    _outPath(outPath),
+    _initClustersFlag(flag)
 {
 
 }
@@ -101,7 +112,7 @@ int Homework2::WriteOutData()
     // OutFile.close();
     
     //Change to std::ios::trunc after 20 times run
-    std::ofstream OutFile1("outputDistortion.txt", std::ios::app);
+    std::ofstream OutFile1(_outPath, std::ios::app);
     if(!OutFile1.is_open()) {
         return 0;
     }
@@ -156,19 +167,9 @@ void Homework2::PrintData()
     }
 }
 
-double distance(const std::vector<double>& point, const std::vector<double>& cluster)
-{
-    double res = 0;
-    for (int i = 0; i < point.size(); i++) {
-        res += std::pow(point[i] - cluster[i], 2);
-    }
-
-    res = std::pow(res, 0.5);
-    return res;
-}
 
 
-void Homework2::InitClusters()
+void Homework2::RandomInitClusters()
 {
     // Getting the min and max values for float distribution
     double minVal = INFINITY;
@@ -200,6 +201,52 @@ void Homework2::InitClusters()
     }
 }
 
+
+
+
+void Homework2::KMeansPlusPlus()
+{
+    // Initialize rng
+    std::uniform_real_distribution<double> unif(0, _data.size()-1);
+    std::default_random_engine re;
+    re.seed(time(0));
+
+    // Choose first cluster randomly from the points
+    _clusterCentroids.push_back(_data[unif(re)]);
+
+    const int dataSize = _data.size();
+
+    // begin (for)
+    for (int i = 1; i < _numClusters; i++) {
+    
+        // Calculate probability weight vector
+        std::vector<double> prob_vec{};
+        double sum = 0;
+        for (int j = 0; j < dataSize; j++) {
+            prob_vec.push_back(std::pow(calculateD(_data[j], _clusterCentroids), (double)2.0));
+            sum += prob_vec[j];
+        }
+        prob_vec = vectorScalarMult(prob_vec, 1.0/sum);
+        
+        // Choose the rest of the clusters via probability
+        int chosenIndex = pickRandomWeightedIndex(prob_vec);
+        _clusterCentroids.push_back(_data[chosenIndex]);
+        
+        // end (for)
+    }
+}
+
+
+void Homework2::InitClusters()
+{
+    if (_initClustersFlag == flags::KMEANSPP) {
+        KMeansPlusPlus();
+    }
+    else {
+        RandomInitClusters();
+    }
+}
+
 void Homework2::CalculateDistortion()
 {
     // This is J_avg^2
@@ -225,30 +272,9 @@ void Homework2::CalculateDistortion()
     _distortion.push_back(sum);
 }
 
-bool Convergence(std::vector<int>& prevAssignment, std::vector<int>& currAssignment) 
-{
-    return (prevAssignment == currAssignment);
-}
 
-std::vector<double> vectorAdd(std::vector<double>& A, std::vector<double>& B) {
-    std::vector<double> C(A.size(), 0);
 
-    for (int i = 0; i < A.size(); i++) {
-        C[i] = A[i] + B[i];
-    }
 
-    return C;
-}
-
-std::vector<double> vectorScalarMult(std::vector<double>&A, double a) {
-    std::vector<double> B(A.size(), 0);
-
-    for (int i = 0; i < A.size(); i++) {
-        B[i] = a*A[i];
-    }
-
-    return B;
-}
 
 int Homework2::KMeans()
 {
@@ -323,7 +349,7 @@ int Homework2::KMeans()
         CalculateDistortion();
         int temp = _distortion.size();
 
-        // std::cout<<"Distortion Value: "<< _distortion[temp - 1]<<std::endl;
+        std::cout<<"Distortion Value: "<< _distortion[temp - 1]<<std::endl;
         // Have not converged (yet), reassign prevAssignment
         prevAssignment = _clusterAssignment;
     }
@@ -331,3 +357,66 @@ int Homework2::KMeans()
     return 1;
 }
 
+// PRIVATE FUNCTIONS
+
+double distance(const std::vector<double>& point, const std::vector<double>& cluster)
+{
+    double res = 0;
+    for (int i = 0; i < point.size(); i++) {
+        res += std::pow(point[i] - cluster[i], 2);
+    }
+
+    res = std::pow(res, 0.5);
+    return res;
+}
+
+int pickRandomWeightedIndex(const std::vector<double>& weights) {
+    // Calculate the cumulative sum of weights
+    std::vector<double> cumulativeSum(weights.size());
+    std::partial_sum(weights.begin(), weights.end(), cumulativeSum.begin());
+
+    // Generate a random number within the total sum of weights
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dis(0.0, cumulativeSum.back());
+    double randomNum = dis(gen);
+
+    // Find the index where the random number falls
+    auto it = std::upper_bound(cumulativeSum.begin(), cumulativeSum.end(), randomNum);
+    return std::distance(cumulativeSum.begin(), it);
+}
+
+double calculateD(const std::vector<double>& point, const std::vector<std::vector<double>>& clusters)
+{
+    std::vector<double> D_list{};
+    for (int j = 0; j < clusters.size(); j++) {
+        D_list.push_back(distance(point, clusters[j]));
+    }
+
+    return *std::min_element(D_list.begin(), D_list.end());
+}
+
+bool Convergence(std::vector<int>& prevAssignment, std::vector<int>& currAssignment) 
+{
+    return (prevAssignment == currAssignment);
+}
+
+std::vector<double> vectorAdd(std::vector<double>& A, std::vector<double>& B) {
+    std::vector<double> C(A.size(), 0);
+
+    for (int i = 0; i < A.size(); i++) {
+        C[i] = A[i] + B[i];
+    }
+
+    return C;
+}
+
+std::vector<double> vectorScalarMult(std::vector<double>&A, double a) {
+    std::vector<double> B(A.size(), 0);
+
+    for (int i = 0; i < A.size(); i++) {
+        B[i] = a*A[i];
+    }
+
+    return B;
+}
