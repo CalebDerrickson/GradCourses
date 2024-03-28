@@ -221,6 +221,7 @@ The expectation maximization algorithm updates the parameters of the mixture by 
     Taking the constraint we have on the cluster priors, we can substitute in a single term for the whole sum. In particular, when replacing the last cluster prior, we have that 
     \[\pi_k = 1 - \sum_{j = 1}^{k-1} \pi_j\]
     This will be used in differentiation. When finding the particular $pi_j$ which maximizes $\lbarthetaold$, we can employ simple calculus: taking the derivative with respect to $\pi_j$ and setting equal to zero. We see that, when differentiating, we should keep in mind the one instance of $p_{i, j}$ which is not a constant with respect to differentiation, in particular, $\pi_j$. Therefore, the sum over clusters can be dropped, since the only one which is not a constant is the $j$-cluster. We then see that, when differentiating, 
+<<<<<<< HEAD
     \[\frac{d E}{d\pi_j} = \sum_{i = 1}^N \left[p_{i, j}\frac{1}{\pi_j} - p_{k, j}\frac{1}{1 - \sum_{l = 1}^{k-1} \pi_l}\right] = 0.\]
     After rearranging, we have that
     \[\frac{1}{\pi_j}\sum_i p_{i, j} = \frac{1}{1 - \sum_{j = 1}^{k-1} \pi_j}\sum_i p_{k, j}. \]
@@ -273,4 +274,12 @@ Compare these update rules to the $k$-means update rules derived in Question 1.
 \subsection{Problem 3, part g}
 Apply the Mixture of Gaussians clustering algorithm to the toy data in Question 2. Plot the final result as a 2D plot in which each point's color or symbol indicates its cluster assignment. Comment on the plot and the convergence speed compared to that of $k$-means. 
 
+=======
+    \[\frac{d E}{d\pi_j} = \sum_{i = 1}^N \left[p_{i, j}\frac{1}{\pi_j} - p_{k, j}\frac{1}{1 - \sum_{l = 1}^{k-1} \pi_l}\right] = 0\]
+    After rearranging, we have that
+    \[\pi_j = \frac{1 - \sum_{l = 1}^{k-1}\pi_l}{\sum_{i = 1}^N p_{k, j}}\sum_{i = 1}^N p_{i, j}\]
+    Note that the denominator is constant with respect to the sum, we can then simplify to
+    \[\pi_j = \frac{1}{N}\frac{1 - \sum_{l = 1}^{k-1}\pi_l}{p_{k, j}}\sum_{i = 1}^N p_{i, j}\]
+\end{solution}
+>>>>>>> 3bfa73585ae21296371bbef57ed1d1adc1a50a69
 \end{document}
