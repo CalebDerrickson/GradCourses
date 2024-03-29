@@ -1,4 +1,5 @@
 #include "Homework2.hpp"
+#include "utils.hpp"
 #include <iostream>
 #include <fstream>
 #include <math.h>
@@ -9,11 +10,11 @@
 
 // Private funcitons
 double distance(const std::vector<double>& point, const std::vector<double>& cluster);
-int pickRandomWeightedIndex(const std::vector<double>& weights);
+// int pickRandomWeightedIndex(const std::vector<double>& weights);
 double calculateD(const std::vector<double>& point, const std::vector<std::vector<double>>& clusters);
-bool Convergence(std::vector<int>& prevAssignment, std::vector<int>& currAssignment);
-std::vector<double> vectorAdd(std::vector<double>& A, std::vector<double>& B);
-std::vector<double> vectorScalarMult(std::vector<double>&A, double a);
+// bool Convergence(std::vector<int>& prevAssignment, std::vector<int>& currAssignment);
+// std::vector<double> vectorAdd(std::vector<double>& A, std::vector<double>& B);
+// std::vector<double> vectorScalarMult(std::vector<double>&A, double a);
 
 
 Homework2::Homework2(const char* filePath, const int k, const char* outPath, flags flag) :
@@ -370,21 +371,21 @@ double distance(const std::vector<double>& point, const std::vector<double>& clu
     return res;
 }
 
-int pickRandomWeightedIndex(const std::vector<double>& weights) {
-    // Calculate the cumulative sum of weights
-    std::vector<double> cumulativeSum(weights.size());
-    std::partial_sum(weights.begin(), weights.end(), cumulativeSum.begin());
-
-    // Generate a random number within the total sum of weights
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> dis(0.0, cumulativeSum.back());
-    double randomNum = dis(gen);
-
-    // Find the index where the random number falls
-    auto it = std::upper_bound(cumulativeSum.begin(), cumulativeSum.end(), randomNum);
-    return std::distance(cumulativeSum.begin(), it);
-}
+// int pickRandomWeightedIndex(const std::vector<double>& weights) {
+//     // Calculate the cumulative sum of weights
+//     std::vector<double> cumulativeSum(weights.size());
+//     std::partial_sum(weights.begin(), weights.end(), cumulativeSum.begin());
+// 
+//     // Generate a random number within the total sum of weights
+//     std::random_device rd;
+//     std::mt19937 gen(rd());
+//     std::uniform_real_distribution<double> dis(0.0, cumulativeSum.back());
+//     double randomNum = dis(gen);
+// 
+//     // Find the index where the random number falls
+//     auto it = std::upper_bound(cumulativeSum.begin(), cumulativeSum.end(), randomNum);
+//     return std::distance(cumulativeSum.begin(), it);
+// }
 
 double calculateD(const std::vector<double>& point, const std::vector<std::vector<double>>& clusters)
 {
@@ -396,27 +397,27 @@ double calculateD(const std::vector<double>& point, const std::vector<std::vecto
     return *std::min_element(D_list.begin(), D_list.end());
 }
 
-bool Convergence(std::vector<int>& prevAssignment, std::vector<int>& currAssignment) 
-{
-    return (prevAssignment == currAssignment);
-}
+// bool Convergence(std::vector<int>& prevAssignment, std::vector<int>& currAssignment) 
+// {
+//     return (prevAssignment == currAssignment);
+// }
 
-std::vector<double> vectorAdd(std::vector<double>& A, std::vector<double>& B) {
-    std::vector<double> C(A.size(), 0);
+// std::vector<double> vectorAdd(std::vector<double>& A, std::vector<double>& B) {
+//     std::vector<double> C(A.size(), 0);
+// 
+//     for (int i = 0; i < A.size(); i++) {
+//         C[i] = A[i] + B[i];
+//     }
+// 
+//     return C;
+// }
 
-    for (int i = 0; i < A.size(); i++) {
-        C[i] = A[i] + B[i];
-    }
-
-    return C;
-}
-
-std::vector<double> vectorScalarMult(std::vector<double>&A, double a) {
-    std::vector<double> B(A.size(), 0);
-
-    for (int i = 0; i < A.size(); i++) {
-        B[i] = a*A[i];
-    }
-
-    return B;
-}
+// std::vector<double> vectorScalarMult(std::vector<double>&A, double a) {
+//     std::vector<double> B(A.size(), 0);
+// 
+//     for (int i = 0; i < A.size(); i++) {
+//         B[i] = a*A[i];
+//     }
+// 
+//     return B;
+// }
