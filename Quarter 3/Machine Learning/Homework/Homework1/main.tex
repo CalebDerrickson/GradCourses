@@ -154,8 +154,32 @@ Test both the original k-means and k-means++ algorithms on the MNIST dataset. Ea
 \partbreak
 \begin{solution}
 
-    
+    The comparison plots are given below, with respect to all notable combinations. We see that $k$-means++ converges to the same minimum as $k$-means, but does it in consistently less iterations and lesser initial distortion value. For the difference in $k$-means++ and random initialization, we see an average iteration length of 86 and 100, respectively.  
 \end{solution}
+
+\newpage
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figure/clusterdifferencerandom.png}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figure/clusterdifferencekmeans.png}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figure/10clustersmnist.png}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figure/16clustersmnist.png}
+\end{figure}
+
+\clearpage
 
 
 \newpage
@@ -221,6 +245,7 @@ The expectation maximization algorithm updates the parameters of the mixture by 
     Taking the constraint we have on the cluster priors, we can substitute in a single term for the whole sum. In particular, when replacing the last cluster prior, we have that 
     \[\pi_k = 1 - \sum_{j = 1}^{k-1} \pi_j\]
     This will be used in differentiation. When finding the particular $pi_j$ which maximizes $\lbarthetaold$, we can employ simple calculus: taking the derivative with respect to $\pi_j$ and setting equal to zero. We see that, when differentiating, we should keep in mind the one instance of $p_{i, j}$ which is not a constant with respect to differentiation, in particular, $\pi_j$. Therefore, the sum over clusters can be dropped, since the only one which is not a constant is the $j$-cluster. We then see that, when differentiating, 
+<<<<<<< HEAD:Quarter 3/Machine Learning/Homework/Homework1/main.tex
 <<<<<<< HEAD
     \[\frac{d E}{d\pi_j} = \sum_{i = 1}^N \left[p_{i, j}\frac{1}{\pi_j} - p_{k, j}\frac{1}{1 - \sum_{l = 1}^{k-1} \pi_l}\right] = 0.\]
     After rearranging, we have that
@@ -276,10 +301,101 @@ Apply the Mixture of Gaussians clustering algorithm to the toy data in Question 
 
 =======
     \[\frac{d E}{d\pi_j} = \sum_{i = 1}^N \left[p_{i, j}\frac{1}{\pi_j} - p_{k, j}\frac{1}{1 - \sum_{l = 1}^{k-1} \pi_l}\right] = 0\]
+=======
+    \[\frac{d E}{d\pi_j} = \sum_{i = 1}^N \left[p_{i, j}\frac{1}{\pi_j} - p_{k, j}\frac{1}{1 - \sum_{l = 1}^{k-1} \pi_l}\right] = 0.\]
+>>>>>>> d022d703bbd96ccdcbfc60ce38fd00b823f2cd5d:main.tex
     After rearranging, we have that
-    \[\pi_j = \frac{1 - \sum_{l = 1}^{k-1}\pi_l}{\sum_{i = 1}^N p_{k, j}}\sum_{i = 1}^N p_{i, j}\]
-    Note that the denominator is constant with respect to the sum, we can then simplify to
-    \[\pi_j = \frac{1}{N}\frac{1 - \sum_{l = 1}^{k-1}\pi_l}{p_{k, j}}\sum_{i = 1}^N p_{i, j}\]
+    \[\frac{1}{\pi_j}\sum_i p_{i, j} = \frac{1}{1 - \sum_{j = 1}^{k-1} \pi_j}\sum_i p_{k, j}. \]
+    Finally, after simplification, we have
+    \[\pi_j = \frac{1}{N}\sum_{i = 1}^N p_{i, j}.\]
+    
 \end{solution}
+<<<<<<< HEAD:Quarter 3/Machine Learning/Homework/Homework1/main.tex
 >>>>>>> 3bfa73585ae21296371bbef57ed1d1adc1a50a69
+=======
+
+
+\newpage
+\subsection{Problem 3, part e}
+Similarly derive the update rule for the $\boldsymbol{\mu}_1, ..., \boldsymbol{\mu}_k$ location parameters and $\boldsymbol{\Sigma}_1, ..., \boldsymbol{\Sigma}_k$ covariance matrices. 
+\vspace{-2mm}\partbreak\vspace{-2mm}
+\begin{solution}
+
+    The update rules for $\boldsymbol{\mu}$ and $\boldsymbol{\Sigma}$ are done similarly. We will show the update scheme for the $\boldsymbol{\mu}$'s first, then the $\boldsymbol{\Sigma}$'s after. 
+    \tightalignbreak\vspace{-2mm}
+    \begin{align*}
+        &\grad_{\boldsymbol{\mu}_j} = E(\theta, \theta_{old}) &\text{(Given.)}\\
+        &= -\frac{1}{2}\sum_{i = 1}^N p_{i, j} \grad_{\boldsymbol{\mu}_j}(\textbf{x}_i - \boldsymbol{\mu}_j) \boldsymbol{\Sigma}\inv_j (\textbf{x}_i - \boldsymbol{\mu}_j) &\text{(Simplifying.)}\\
+        &= -\frac{1}{2}\sum_{i = 1}^N p_{i, j} (2\boldsymbol{\Sigma}\inv_j \textbf{x}_i + 2\boldsymbol{\Sigma}\inv_j \boldsymbol{\mu}_j) = 0 &\text{(Simplifying and setting to zero.)}\\
+        \implies & \boldsymbol{\Sigma}\inv_j\boldsymbol{\mu}_j\sum_{i = 1}^Np_{i, j} = \sum_{i = 1}^N p_{i, j}\boldsymbol{\Sigma}\inv_j \textbf{x}_i &\text{(Rearranging.)}\\
+        \boldsymbol{\mu}_j &= \frac{\sum_{i = 1}^N{p_{i, j}\textbf{x}_i}}{\sum_{i = 1}^N{p_{i, j}}} &\text{(Simplifying.)}
+    \end{align*}
+    \vspace{-12mm}\alignbreak\vspace{-6mm}
+    \begin{align*}
+        &\grad_{\boldsymbol{\Sigma}\inv_j} E(\theta, \theta_{old}) = \sum_{i = 1}^N p_{i, j} \grad \left[ -\frac{1}{2} \ln{(|\det \boldsymbol{\Sigma}_j)|}  - \frac{1}{2}(\textbf{x}_i - \boldsymbol{\mu}_j)\T \boldsymbol{\Sigma}\inv_j (\textbf{x}_i - \boldsymbol{\mu}_j)\right] &\text{(Applying Gradient.)}\\
+        &= \sum_{i = 1}^N p_{i, j} \grad \left[ \frac{1}{2} \ln{(|\det \boldsymbol{\Sigma}\inv_j|)}  - \frac{1}{2}(\textbf{x}_i - \boldsymbol{\mu}_j)\T \boldsymbol{\Sigma}\inv_j (\textbf{x}_i - \boldsymbol{\mu}_j)\right] &\text{(inverse properties.)}\\
+        &= \sum_{i = 1}^N p_{i, j} \left[ ((\boldsymbol{\Sigma}\inv_j)\T)\inv - \frac{1}{2}(\textbf{x}_i - \boldsymbol{\mu}_j)\T \boldsymbol{\Sigma}\inv_j (\textbf{x}_i - \boldsymbol{\mu}_j)\right] &(\bigstar)\\
+        &= \sum_{i = 1}^N p_{i, j} \left[ ((\boldsymbol{\Sigma}\inv_j)\T)\inv - (\textbf{x}_i - \boldsymbol{\mu}_j) (\textbf{x}_i - \boldsymbol{\mu}_j)\T \right] &(\bigstar \bigstar)\\
+        &= \sum_{i = 1}^N p_{i, j} \left[ \boldsymbol{\Sigma}_j - (\textbf{x}_i - \boldsymbol{\mu}_j) (\textbf{x}_i - \boldsymbol{\mu}_j)\T \right] &\text{($\boldsymbol{\Sigma}_j$ is symmetric.)}\\
+        &\implies \boldsymbol{\Sigma}_j \sum_{i = 1}^N p_{i, j} = \sum_{i = 1}^N p_{i, j}(\textbf{x}_i - \boldsymbol{\mu}_j)(\textbf{x}_i - \boldsymbol{\mu}_j)\T  &\text{(Setting to zero.)}\\
+        &\boldsymbol{\Sigma}_j = \frac{\sum_{i = 1}^N p_{i, j}(\textbf{x}_i - \boldsymbol{\mu}_j)(\textbf{x}_i - \boldsymbol{\mu}_j)\T}{\sum_{i = 1}^N p_{i, j}}
+    \end{align*}
+    \vspace{-12mm} \alignbreak
+
+    The lines labelled ($\bigstar$) and ($\bigstar \bigstar$) come from The Matrix Cookbook, https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf, equations 57 and 72, respectively.  
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part f}
+Compare these update rules to the $k$-means update rules derived in Question 1. 
+\partbreak
+\begin{solution}
+
+    The only update scheme we found in Problem 1 was the centroid update within a given cluster. This formula resembles the cluster priors, with a notable difference that we are summing over all data points, rather than the cluster paradigm seen in $k$-means.   
+\end{solution}
+
+\newpage
+\subsection{Problem 3, part g}
+Apply the Mixture of Gaussians clustering algorithm to the toy data in Question 2. Plot the final result as a 2D plot in which each point's color or symbol indicates its cluster assignment. Comment on the plot and the convergence speed compared to that of $k$-means. 
+\partbreak
+
+\begin{solution}
+
+    I have spent a significant amount of time typing this from scratch in C++ and debugging the whole thing. My best results are shown below. I am not aware of the exact value we should be seeing for the log likelihood, but the results incorrectly cluster all points into the third cluster. This could result from my incorrect initialization of the covariance matrices, since my initial values are just random points within our space. I will include all my code in submission, just for confirmation. 
+\end{solution}
+
+\newpage
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figure/gaussiancluster.png}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width = 0.8\textwidth]{Figure/loglikelihood.png}
+\end{figure}
+
+\clearpage
+\newpage
+
+\section{Problem 4}
+You likely found that on the “toydata” dataset, most of the time even vanilla k–means clustering produces acceptable solutions. Create a dataset of your own for which (on average over many runs) k–means++ improves the performance of k–means by at least a factor of 10 in terms of the distortion function value of the final clustering. Submit the code that you used to generate the dataset.
+
+\partbreak
+\begin{solution}
+
+    A "nice" example of a dataset which would generate this disparity is for there to be two clusters of data points, far from each other, where we initialize $k = 2$. This can be done for arbitrary number of clusters, we just require there to be an equal number of clusters of data sufficiently far from each other. In this example, $k$-means++ will always initialize (or be heavily weighted toward) choosing the initial cluster centroids within different clusters of data, whereas random initialization will have a chance of selecting points within the same cluster as initial steps. Since the two clusters are sufficiently far apart, a cluster centroid will never average out into the other cluster, which would significantly decrease the distortion function. Therefore, we can see that for sufficient distance, we will attain an average distortion function ratio of 10. An example of this is given for the following points in 2D space: 
+\begin{lstlisting}
+-10.0, 1.0
+-10.0, -1.0
+10.0, 1.0
+10.0, -1.0
+\end{lstlisting}
+
+Note the two clusters appearing at -10 and 10 on the x axis. More data points can be included, but this is a concise example to illustrate the disparity.  
+
+\end{solution}
+
+
+>>>>>>> d022d703bbd96ccdcbfc60ce38fd00b823f2cd5d:main.tex
 \end{document}
