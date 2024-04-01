@@ -73,10 +73,48 @@ Assuming that $f \in C^4(0, 1)$, construct an improved quadrature rule which com
     \item $f(x) = \sqrt{x}$
 \end{itemize}
 Compare your numerical results with those obtained from Simpson’s rule – using a cubic approximation on each subinterval, where the cubic is chosen to agree with f at the two endpoints and the midpoint of each subinterval.
+\partbreak
+\begin{solution}
 
+    After some tweaking of coefficients in Python, I found a suitable quadrature rule which only uses slight modifications of Left and Right Reimann sums and scales the same as Simpon's 1/3 composite rule ($O(h^4)$). My proposed quadrature rule, $M_n$, is as follows:
+    \[M_n = \frac{h}{3}\left[\frac{f(0) + f(1)}{2}  + 3\sum_{k = 1}^{n-1}f(k/n)\right]\]
+    Note this is suitably scaled over $[0, 1]$, scaling like terms of the Left and Right Reimann sums by 3, and averaging the end points. The results are given below, where we take $n \to 100$. It seems as though Simpson's rule creates a jagged form of our approximation method, which implies that our proposed quadrature rule scales as Simpon's 1/3 composite rule.
+\end{solution}
+
+\begin{figure}[htbp]
+    \centering
+    \subfigure{\includegraphics[width=0.4\textwidth]{Figures/Problem3 ex.png}}
+    \hfill
+    \subfigure{\includegraphics[width=0.4\textwidth]{Figures/Problem3 sqrtx.png}}
+\end{figure}
+
+\newcommand{\scI}{\mathcal{I}}
+
+\clearpage
 \newpage
 \section{Exercise 4}
 Let $\{v_j\}_{j = 1}^\infty$ be an orthonormal basis of a Hilbert space $\scH$. Let $A$ be a bounded operator from $\scH$ to itself, with bounded inverse. Consider the sequence of vectors $w_j := Av_j$. Is $\{w_j\}_{j = 1}^\infty$ an orthonormal basis? A Schauder basis? If so, can you bound its basis constant?
+\partbreak
+\begin{solution}
+
+    We can see that $w_j = Av_j$ gives us a transformation between $w_j$ and $v_j$. Since $A$ is a bounded operator with bounded inverse, it a continuous operator, it is bijective. Therefore, for any $x \in \scH$, we can write 
+    \begin{align*}    
+        &x = \sum_{i \in \scI} \braket{x}{v_i}v_i = \sum_{i \in \scI} \braket{x}{v_i}A\inv w_i\\
+        &= A\inv\left(\sum_{i \in \scI} \braket{x}{v_i} w_i\right)\\
+        \implies & Ax = \sum_{i \in \scI} \braket{x}{v_i}w_i
+    \end{align*}
+    Since $A$ is bijective, then we can write $Ax = y$ for $y \in \scH$. We can further write
+    \begin{align*}
+        &y = \sum_{i \in \scI} \braket{A\inv y}{A\inv w_i}w_i\\
+        &= \sum_{i \in \scI} \braket{y}{(A\inv)\star A\inv w_i}w_i\\
+        &= \norm{A\inv}_2^2 \sum_{i \in \scI} \braket{y}{w_i}w_i
+    \end{align*}
+    Thus, each vector in $\scH$ can be represented with the $w_j$ vectors, implying that $w_j$ is an orthonormal basis. To prove that it is a Schauder basis, we first note that $v_j$ is a Schauder basis for the Hilbert space $\scH$, since it is an orthonormal basis (here we assume $\scH$ is separable). this implies for any $x \in \scH$, there exists unique coefficients $x_1, ...$ for which 
+    \[x = \sum_{i \in \scI} x_i v_i = \lim_{n \to \infty}\sum_{i = 1}^n x_iv_i\]
+    Since $A$ is bijective, we can multiply through to get 
+    \[Ax = \lim_{n \to \infty}\sum_{i = 1}^n x_iAv_i = \lim_{n \to \infty}\sum_{i = 1}^n x_iw_i\]
+    We can also furthermore write $y = Ax$ for $y \in \scH$. This implies that any $y \in \scH$ is expressible as a linear combination of the $w_i$ components, implying that $w_i$ is a Schauder basis. By the above calculations, we have that $\norm{A\inv}_2 = 1$, therefore, $A\inv$ is a unitary matrix.  
+\end{solution} 
 
 \newcommand{\scX}{\mathcal{X}}
 
@@ -96,14 +134,32 @@ Consider the collection of functions $\scX = \{1, x, \psi_{0, 0}, \psi_{1, 0}, \
 
     I do not like adding hand-written sketches in homework, since I find them to be too messy for any meaningful interpretation. Instead, I have included a plot of the first five functions of $\scX$ in Figure \ref{fig:Exercise5} using Python. We will next show that $\scX$ is a Schauder basis of $C([0, 1])$. That is, we need to show that there exists unique coefficients $\alpha_1, \alpha_2, ...$ for which
     \[v = \sum_{j = 1}^\infty \alpha_j \scX_j \quad \text{for all } v \in C([0, 1]).\]
-    Note that $C([0, 1])$ equipped with the sup-norm is a Banach space, since the space of continuous functions on a compact interval (the interval $[0, 1]$ is closed and bounded) is a Banach Space. This tells us that the problem is well posed. This problem is in essence an existence and uniqueness exercise; we will first show existence. 
+    Note that $C([0, 1])$ equipped with the sup-norm is a Banach space, since the space of continuous functions on a compact interval (the interval $[0, 1]$ is closed and bounded) is a Banach Space. \par
+    
+    \jump
+    Suppose we have a linear combination of $N$ of these functions, which I will denote by $p_N$. Note that, the coefficients of $p_N$ can be chosen such that at the crest of each function $\psi_{i, k}$. We will show then that $p_N \to f$ uniformly on $[0, 1]$. Let $\ep > 0$. Note that $f \in C([0, 1])$, implying it is uniformly continuous. Suppose we have, for some $N_0 \in \N$, we have that for any $|x - y| \leq 2^{-N_0}$, then $|f(x) - f(y)| < \ep$. Note that for $x \in [0, 1]$ and $N \geq N_0$, we have that 
+    \[\frac{k}{2^N} \leq x \leq \frac{k+1}{2^N},\]
+    Note these are the crests of the functions $\psi_{N,k}$ and $\psi_{N, k+1}$ respectively. Denote these two points as $y_1, y_2$. We then have the following:
+    \newpage
+    \begin{align*}
+        |p_N(x) - f(x)| &\leq |p_N(x) - p_N(y_1)| + |p_N(y_1) - f(y_1)| + |f(y_1) - f(x)| &\text{(Triangle Inequality.)}\\
+        &\leq |p_N(y_1) - p_N(y_2)| + |p_N(y_1) - f(y_1)| + |f(y_1) - f(x)| &\text{(By above.)}\\
+        &= |f(y_1) - f(y_2)| + |f(y_1) - f(y_1)| + |f(y_1) - f(x)| &\text{(Agreement of $p_N$ and $f$.)}\\
+        &|f(y_1) - f(y_2)| + |f(y_1) - f(x)| &\text{(Simplifying.)}\\
+        &< \ep &\text{(By assumption.)}
+    \end{align*}
+    This implies that $p_N \to f$ uniformly. Therefore, we have shown that every function in $C([0, 1])$ can be expressed as a linear combination of the $\psi_{i, k}$. To show it is a Schauder basis, we need to show these coefficients are unique. Suppose this is not the case. That is, there exists expansions in this basis for which, 
+    \[f = \sum_{i = 0}^\infty c_i\scX_i = \sum_{i = 0}^\infty a_i\scX_i\]
+    Suppose that after the $N$-th term, these expansions agree, that is, 
+    \[\sum_{i = N}^\infty (c_i - a_i) f_i = 0, \quad \forall x \in [0, 1]\]
+    Since this should hold for all $x \in [0, 1]$, we analyse the $x$ which maximizes the function $f_i$, that is, at the point $\frac{k}{2^M}$, where $f_N = \psi_{M, k}$. We then see that 
+    \[0 = \sum_{i = N}^\infty (c_i - a_i)f_i\left(\frac{k}{2^M}\right) = c_N - a_N\]
+    This implies that $c_N = a_N$, which is a contradiction. Therefore, the expansion is unique, implying that $\psi_{i, k}$ is a Schauder basis. 
 \end{solution}
 
-\newpage
-\vspace{5in}
-\begin{figure}
+\begin{figure}[!h]
     \centering
-    \includegraphics[width = 0.8\textwidth]{Figures/Exercise5.png}
+    \includegraphics[width = 0.425\textwidth]{Figures/Exercise5.png}
     \caption{First five functions of $\scX$ for Exercise 5.}
     \label{fig:Exercise5}
 \end{figure}
@@ -114,16 +170,88 @@ Consider the collection of functions $\scX = \{1, x, \psi_{0, 0}, \psi_{1, 0}, \
 Let $\scH$ be a Hilbert space and let $P, Q: \scH \to \scH$ be two projections. In the following, set $C = i[P, Q] = i(PQ - QP)$. We also assume that $P$ and $Q$ are orthogonal, $i.e.$ $P\star = P$ and $Q\star = Q$.
 \subsection{Exercise 6, part a}
 Find explicit examples of $P$ and $Q$ which do not commute. Make sure to give clear definitions of both them and $\scH$. Sketch a geometric characterization of when this happens. 
+\partbreak
+\begin{solution}
 
+    For an easy example, we examine the space $\R^2$ equipped with the standard inner product, and consider the two linear Projections (in matrix form)
+    \[P = \mqty[1&0\\0&0], \quad Q = \frac{1}{2}\mqty[1&1\\1&1].\]
+    Indeed, these two matrices represent projections on $\R^2$, since 
+    \begin{align*}
+        &P^2 = \mqty[1&0\\0&0]\mqty[1&0\\0&0] = \mqty[1&0\\0&0] = P\\
+        &Q^2 = \frac{1}{4}\mqty[1&1\\1&1]\mqty[1&1\\1&1] = \frac{1}{4}\mqty[2&2\\2&2] = \frac{1}{2}\mqty[1&1\\1&1] = Q.
+    \end{align*}
+    Furthermore, both $P$ and $Q$ are orthogonal, i.e. $P\star = P, Q\star = Q$. We can then say, for any $x, y \in \scH$, 
+    \[\braket{Px}{y} = x\T P\T y = x\T P y = \braket{x}{Py}, \braket{Qx}{y} = x\T Q\T y = x\T Q y = \braket{x}{Qy}.\]
+    Therefore, $P$ and $Q$ are indeed projections. I have included a figure below to demonstrate their action on the Unit circle in $\R^2$. The two operators project onto the vectors (1, 1) and (1, 0), respectively.
+\end{solution}
+\vspace{3mm}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = 0.3\textwidth]{Figures/P and Q.png}
+\end{figure}
+
+\renewcommand{\ker}{\text{ker }}
+
+\renewcommand{\range}{\text{range }}
 \newpage
 \subsection{Exercise 6, part b}
 Show that $0 \leq \braket{v}{Pv} \leq 1$ for all $v \in \scH$. 
+\partbreak
+\begin{solution}
+
+    For the lower bound, we use the property of idempotence of Projections,
+    \[\braket{v}{Pv} = \braket{v}{P^2 v} = \braket{Pv}{Pv} = \norm{Pv}^2 \geq 0.\]
+    Next, fix $v \in \scH$. Since $P$ is an orthogonal projection on $\scH$, we have that $\scH = \range P \oplus  \ker P$. Therefore, there exists $x \in \range P, y \in \ker P$ for which $v = x + y$. Then, 
+    \[\braket{v}{Pv} = \braket{x+y}{x} = \braket{x}{x} + \braket{y}{x} = \norm{x}^2.\]
+    Note that $\braket{y}{x} = 0$, since 
+    \[\braket{y}{x} = \braket{y}{Px} = \braket{Py}{x} = \braket{0}{x} = 0.\]
+    Therefore, we have that
+    \[\frac{\braket{Px}{Px}}{\braket{x}{x}} = \frac{\norm{Px}^2}{\norm{x}^2}= 1\]
+    But $\norm{v} \geq \norm{x}$, and since $\norm{Px} = \norm{Pv}$, we have
+    \[\frac{\norm{Pv}}{\norm{v}} \leq 1. \]
+    Here, we will assume that $\norm{v} = 1$ since for any non unitary $v \in \scH$, we can repeat the process for the vector $w = \alpha v$, where $\alpha = 1/\norm{v}$. Squaring both sides then gives us
+    \[\norm{Pv}^2 \leq 1 \implies \braket{Pv}{Pv} \leq 1 \iff \braket{v}{Pv} \leq 1.\]
+    The absolute value can be dropped on the above process, since we have shown that $\braket{v}{Pv} \geq 0$. Thus, the statement has been shown.
+\end{solution}
+
 
 \newpage
 \subsection{Exercise 6, part c}
-For any $v \in \scH$, set $\barP(v) = \braket{v}{Pv}, \barQ(v) = \braket{v}{Qv}, \sigma^2_P(v) = \braket{v}{(P - \barP \id)^2}$ and $\sigma_Q^2 = \braket{v}{(Q - \barQ \id)^2 v}$. Show that $\sigma_P, \sigma_Q \leq \norm{v} / 2$. Here, $\id$ is the identity operator on $\scH$.  
+For any $v \in \scH$, set $\barP(v) = \braket{v}{Pv}, \barQ(v) = \braket{v}{Qv}, \ \sigma^2_P(v) = \braket{v}{(P - \barP \id)^2 v}$ and $\sigma_Q^2 = \braket{v}{(Q - \barQ \id)^2 v}$. Show that $\sigma_P, \sigma_Q \leq \norm{v} / 2$. Here, $\id$ is the identity operator on $\scH$.  
+\partbreak
+\begin{solution}
+
+    Note that the above property need to be shown only for one projection, via symmetry of their respective definitions. I wasn't able to get exactly the form given, but I got something very similar.
+    \tightalignbreak
+    \begin{align*}
+        &\sigma_P^2 = \braket{v}{(P - \barP \id)^2v} &\text{(Given.)}\\
+        &= \braket{v}{P^2v - 2\barP Pv + \barP^2 v} &\text{(Expanding.)}\\
+        &= \braket{v}{P^2v} - 2\barP \braket{v}{Pv} + \barP^2 \braket{v}{v} &\text{(Expanding.)}\\
+        &= \norm{Pv}^2 - 2\barP \braket{v}{Pv} + \barP^2 \norm{v}^2 &\text{(Projection Properties.)}\\
+        &= \norm{Pv}^2 - 2\barP\norm{Pv}^2 + \barP^2\norm{v}^2 &\text{(Projection Properties.)}\\
+        &= \norm{v}^2\left(\frac{\norm{Pv}^2}{\norm{v}^2} - 2\barP\frac{\norm{Pv}^2}{\norm{v}^2} + \barP^2\right) &\text{(Grouping.)}\\
+        &\leq \norm{v}^2 (1 - 2\barP + \barP^2) &\text{(By last part.)}\\
+        &= \norm{v}^2(1 - \barP)^2 &\text{(Grouping.)}\\
+        \implies &\sigma_P \leq \norm{v}(1 - \barP) &\text{(Taking square root.)}
+    \end{align*}\vspace{-12mm}\alignbreak
+    Note that the absolute value can be dropped from the last line since from part b, $ 0 \leq \barP \leq 1$. My only idea would be to break up $v$ into $v = x + y$ as in the last part, and since $\norm{Pv}^2 = \norm{x}^2$, we can say that $\norm{v} \geq \norm{Pv} = \norm{x}$ (By Triangle inequality). This does not guarantee however, that $\barP \geq 1/2$, which would bridge the gap between the two. However we can say for $v \in \scH$ for which $\norm{x} \geq 1/2$, then this would hold. This is assuming that $\norm{v} = 1$, by rescaling.  
+\end{solution}
 
 \newpage
 \subsection{Exercise 6, part d}
 If $C$ is the commuatator of $P$ and $Q$, show that $\frac{1}{4}|\braket{v}{Cv}|^2 \leq \sigma_P^2(v) \sigma_Q^2(v).$ Argue that $\norm{C} \leq 1/2$. For the last part, you can use without proof that $\norm{C} = \sup_{\norm{v}\leq 1} |\braket{v}{Cv}|$ (this follows from the fact that $C$ is Hermitian).
+\partbreak
+\begin{solution}
+
+    I could not get a satisfying answer to this. I will provide all that I have gotten.
+    \tightalignbreak
+    \begin{align*}
+        &\frac{1}{4}|\braket{v}{Cv}|^2 = \frac{1}{4}\braket{v}{Cv}\braket{v}{C\star v} &\text{(Given.)}\\
+        &= \frac{1}{4}\braket{v}{i(PQ - QP)v}\braket{v}{-i(PQ-QP)v} &\text{(Given.)}\\
+        &= (\braket{v}{PQv} - \braket{v}{QPv})(\braket{v}{PQv} - \braket{v}{QPv})&\text{(Expanding.)}\\
+        &= \braket{v}{PQv}^2 + \braket{v}{QPv}^2 - 2\braket{v}{QPv}\braket{v}{PQv} &\text{(Simplifying.)}
+    \end{align*}\vspace{-12mm}\alignbreak
+    
+    Here is where I am stuck. I could take the approach that $\range QP \subseteq \range P$, and take a bound involving the first two terms, but I would then get stuck on the last term, involving the cross projections.  
+\end{solution}
 \end{document}
