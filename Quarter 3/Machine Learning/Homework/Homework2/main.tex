@@ -91,7 +91,7 @@ Given any $\textbf{x} \in \R^d$, let $\textbf{x}_V$ be the closest point to \tex
 \partbreak
 \begin{solution}
 
-    Denote the projection $P : \R^d \to \R^d$ which projects any vector $\textbf{x}\in \R^d$ to $V$. Define $P$ as $P = \sum_{i = 1}^k \textbf{p}_i \textbf{p}_i\T.$\footnote{This is clearly well defined.} This is equivalent to saying that $P\textbf{x} = \textbf{x}_V$ \textit{in spirit} - to show that $P\textbf{x}$ is of the given form, we need to do some work. First, we will show that $\textbf{x} - P\textbf{x} \in V^\perp$. This is straightforward, since for any $\textbf{p}_j$, we have that 
+    Denote the projection $P : \R^d \to \R^d$ which projects any vector $\textbf{x}\in \R^d$ to $V$. Define $P$ as $P = \sum_{i = 1}^k \textbf{p}_i \textbf{p}_i\T.$\footnote{This is clearly well defined, since $P^2 = P$.} This is equivalent to saying that $P\textbf{x} = \textbf{x}_V$ \textit{in spirit} - to show that $P\textbf{x}$ is of the given form, we need to do some work. First, we will show that $\textbf{x} - P\textbf{x} \in V^\perp$. This is straightforward, since for any $\textbf{p}_j$, we have that 
     \[\left(\textbf{x} - P\textbf{x}\right)\T \textbf{p}_j = \textbf{x}\T \textbf{p}_j - \left( \sum_{i = 1}^d (\textbf{x}\T \textbf{p}_i) \textbf{p}_i\right)\T \textbf{p}_j = \textbf{x}\T \textbf{p}_i - (\textbf{x}\T\textbf{p}_i)(\textbf{p}_i\T\textbf{p}_i) = 0.\]
     Since $V$ is a linear subspace, then for any $\textbf{y} \in V$, $P\textbf{x} - \textbf{y} \in V$. Therefore, the following can be shown: for any $\textbf{y} \in V$,
     \begin{align*}
@@ -101,7 +101,7 @@ Given any $\textbf{x} \in \R^d$, let $\textbf{x}_V$ be the closest point to \tex
     \end{align*}
 
     What I did above was simple expansion. Since $\textbf{x} - P\textbf{x} \in V^\perp$, and $P\textbf{x} - \textbf{y} \in V$, then their inner product is zero by definition. The equation above results in $\norm{\textbf{x} - \textbf{y}}^2 = \norm{\textbf{x} - P\textbf{x}}^2 + \norm{P\textbf{x} - \textbf{y}}^2$. \footnote{This is pretty much the Pythagorean theorem.} This can be bounded below by $\norm{\textbf{x} - P\textbf{x}}^2$, which can be achieved by setting $y = P\textbf{x}$. This is then the minimum of the function, since the second term is $\geq 0$, and only zero when its argument is zero. Therefore, $P\textbf{x} = \textbf{x}_V$. Note by the given form of the projection, we have 
-    \[P\textbf{x} = \sum_{i = 1}^k \textbf{p}_i\textbf{p}_i\T \textbf{x} = \sum_{i = 1}^k (\textbf{p}_i \cdot \textbf{x})\textbf{p}_i = \textbf{x}_V.\]
+    \[\textbf{x}_V = P\textbf{x} = \sum_{i = 1}^k \textbf{p}_i\textbf{p}_i\T \textbf{x} = \sum_{i = 1}^k (\textbf{p}_i \cdot \textbf{x})\textbf{p}_i.\]
     
 \end{solution}
 
@@ -219,14 +219,31 @@ where $D_{i, j} = \norm{\textbf{x}_i - \textbf{x}_j}^2.$
     \end{align*}\vspace{-12mm}\alignbreak
 \end{solution}
 
+\newcommand{\y}{\textbf{y}}
+
 \newpage
 \section{Problem 5}
 Locally Linear Embedding (LLE) finds an embedding that maps $n$ high dimensional input vectors $\textbf{x}_1, ..., \textbf{x}_n \in \R^d$, to lower dimensional output vectors $\textbf{y}_1, ..., \textbf{y}_n \in \R^p$. In the second phase of the algorithm, ($\textbf{y}_1, ..., \textbf{y}_i)$ are found by minimizing the cost function
 \[\Psi(\textbf{y}_1, ..., \textbf{y}_n) = \sum_{i = 1}^n \norm{\textbf{y}_i - \sum_{j} w_{i, j}\textbf{y}_j}^2\]
 given the weights $(w_{i, j})_{i, j}$ found in the first phase. To make the problem well posed, this optimization is performed subject to the constraints 
 \[\sum_{i = 1}^n \textbf{y}_i = 0, \quad \text{and} \quad \frac{1}{n}\sum_{i = 1}^n \textbf{y}_i \textbf{y}_i \T = \id, \]
-where $\id$ is the $p\times p$ identity matrix. Derive the eigenvector problem that LLE reduces to. \textbf{Hint}: you might find it useful to write $\Psi$ in the matrix form, involving the Gram matrix of $(\textbf{y}_1, ..., \textbf{y}_i)$.
+where $\id$ is the $p\times p$ identity matrix. Derive the eigenvector problem that LLE reduces to.
+\partbreak
+\begin{solution}
 
+    We will go straight into calculations.
+    \tightalignbreak
+    \begin{align*}
+        &\Psi = \sum_{i = 1}^n \norm{\textbf{y}_i - \sum_j w_{i, j} \textbf{y}_j}^2 &\text{(Given.)}\\
+        &= \sum_{i = 1}^n \left(\textbf{y}_i - \sum_j w_{i, j} \textbf{y}_j\right)\T \left(\textbf{y}_i - \sum_j w_{i, j} \textbf{y}_j\right) &\text{(Expanding.)}\\
+        &= \sum_{i = 1}^n\y_i \T \y_i - \y_i\T \sum_j w_{i, j}\y_j - \sum_j w_{j, i}\y_j\T \y_i + \left(\sum_j w_{i, j}\y_j\right)\T\left(\sum_j w_{i, j}\y_j\right) &\text{(Expanding.)}\\
+        &= \sum_{i = 1}^n\y_i \T \y_i - \y_i\T \sum_j w_{i, j}\y_j - \sum_j w_{j, i}\y_j\T \y_i + \left(\sum_j w_{j, i}\y_j\T\right)\left(\sum_j w_{i, j}\y_j\right) &\text{(Transpose into sum.)}\\
+        &=  \sum_{i = 1}^n\y_i \T \y_i - \y_i\T \sum_j w_{i, j}\y_j - \sum_j w_{j, i}\y_j\T \y_i + \sum_j \y_j\T \left(\sum_k w_{k, i}w_{i, k}\right)\y_j &\text{(Simplifying, cancelling.)}\\
+        &= \sum_{i = 1}^n \sum_{j = 1}^n \left[\y_i\T\left(\delta_{i, j} - w_{i, j} - w_{j, i} + \sum_k w_{k, i}w_{i, k}\right)\y_j\right] &\text{(Adding zeros.)}\\
+        &= \sum_{i, j} \y_i\T M \y_j &\text{($M_{i, j}$ is given above.)}
+    \end{align*}\vspace{-12mm}\alignbreak
+    Thus, the eigenvector problem has been derived, as in the notes. 
+\end{solution}
 \newpage
 \section{Problem 6}
 The file train35.digits contains 2000 images of 3’s and 5’s from the famous MNIST database of handwritten digits in text format. The size of each image is 28 × 28 pixels. Each row of the file is a representation one image, with the 28 × 28 pixels flattened into a vector of size 784. A value of 1 for a pixel represents black, and value of 0 represents white. The corresponding row of train35.labels is the class label: +1 for the digit 3, or -1 for the digit 5. The file test35.digits contains 200 testing images in the same format as train35.digits. 
