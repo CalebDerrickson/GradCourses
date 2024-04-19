@@ -1,0 +1,66 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 37710: Homework 3}
+\author{Caleb Derrickson}
+\date{April 25, 2024}
+
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+\newcommand{\scC}{\mathcal{C}}
+\newcommand{\scX}{\mathcal{X}}
+
+\newpage
+\section{Problem 1}
+An online algorithm, like the perceptron, is said to be conservative if it changes its hypothesis only when in makes a mistake. Let $\scC$ be a concept class and $A$ be a (not necessarily conservative) online algorithm which has a finite mistake bound $M$ on $\scC$. Prove that there is a conservative algorithm $A'$ for $\scC$ which also has mistake bound $M$.
+
+\newpage
+\section{Problem 2}
+Give an example of a function $k: \scX \times \scX \to \R$ that is symmetric $(k(x, x') = k(x', x))$ and positive in the sense that $k(x, x') \geq 0$ for all $x, x' \in \scX$, but is not positive semidefinite. Conversely, give an example of a kernel that is positive semidefinite, but does not satisfy $k(x, x') \geq 0$ for all $x, x' \in \scX$.
+
+\newpage
+\section{Problem 3}
+Given any function $\psi: \scX \to \scX'$, prove that if $k'$ is a psd kernel on $\scX'$, then $k(x, x') = k'(\psi(x), \psi(x'))$ is a psd kernel on $\scX$.
+
+\newpage
+\section{Problem 4}
+Prove that if $k_1$ and $k_2$ are two positive semi-definite (psd) kernels on a space $\scX$, then 
+\subsection{Problem 4, part a}
+The function, $k(x, x') := k_1(x, x') + k_2(x, x')$ is a psd kernel on $\scX$;
+
+\subsection{Problem 4, part b}
+The function $k_\oplus ((x_1, x_2), (x_1', x_2')) = k_1(x_1, x_1') + k_2(x_2, x_2')$ is a psd kernel on $\scX \times \scX'$.
+
+\subsection{Problem 4, part c}
+Given any function $\psi: \scX \to \scX'$, prove that if $k'$ is a psd kernel on $\scX'$, then $k(x, x') = k'(\psi(x), \psi(x'))$ is a psd kernel on $\scX$.
+
+\subsection{Problem 4, part d}
+Let $\alpha(\textbf{x}, \textbf{x}')$ be the angle between $\textbf{x}, \textbf{x}' \in \R^n$. Prove that the cosine kernel $k_\angle (\textbf{x}, \textbf{x}') = \cos(\alpha(\textbf{x}, \textbf{x}'))$ is a psd kernel on $\scX = \R^n$.
+
+\newcommand{\sgn}{\text{sgn}}
+\newcommand{\scE}{\mathcal{E}}
+
+\newpage
+\section{Problem 5}
+Recall that a training set $\{(x_1, y_1), (x_2, y_2), ..., (x_m, y_m)\}$ is said to have edge $\gamma$ over a set of weak classifiers $H$ if for any distribution $D$ over the training set, there is at least one weak learner $h \in H$ such that $\ep_h = \sum_{i = 1}^m D(i)\ell_{0/1}(h(x_i), y_i) \leq 1/2 - \gamma$.
+
+\subsection{Problem 5, part a}
+Using the inequality $\ell_{0/1}(z, 1) \leq e^{-z}$ prove that after $t$ rounds of boosting the running hypothesis $\hat{h}(x) = \sgn \left(\sum_{s = 1}^t \alpha_s h_s(x)\right)$ satisfies
+\[\ell_{0/1} (\hat{h}(x_i), y_i) \leq m\left(\prod_{s = 1}^t Z_s\right) D_{t+1}(i)\]
+for every example $i = 1, 2, ..., m$.
+
+\subsection{Problem 5, part b}
+Use this to show that  
+\[\scE_{\text{train}}(\hat{h}) \leq \prod_{s = 1}^t 2\sqrt{\ep_s(1 - \ep_s)}.\]
+
+\subsection{Problem 5, part c}
+By plugging into the definition of the edge at round $s$, which is $\gamma_s = 1/2 - \ep_s$ and using the inequality $1 - z \leq e^{-z}$ prove that the training error decreases exponentially,
+\[\scE_{\text{train}}(\hat{h}) \leq \exp(-2\gamma^2t),\]
+as stated in a Theorem in class.
+
+\end{document}
