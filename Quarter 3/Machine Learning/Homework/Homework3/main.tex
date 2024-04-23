@@ -9,41 +9,113 @@
 \onehalfspacing
 \maketitle
 \allowdisplaybreaks
-{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, Alexander Cram, and Alice Yang.
 
 \tableofcontents
 \newcommand{\scC}{\mathcal{C}}
 \newcommand{\scX}{\mathcal{X}}
+\newcommand{\bx}{\textbf{x}}
+\renewcommand{\braket}[2]{\langle #1, #2 \rangle}
+\newcommand{\sgn}{\text{sgn}}
+\newcommand{\scE}{\mathcal{E}}
+
 
 \newpage
 \section{Problem 1}
 An online algorithm, like the perceptron, is said to be conservative if it changes its hypothesis only when in makes a mistake. Let $\scC$ be a concept class and $A$ be a (not necessarily conservative) online algorithm which has a finite mistake bound $M$ on $\scC$. Prove that there is a conservative algorithm $A'$ for $\scC$ which also has mistake bound $M$.
+\partbreak
+\begin{solution}
+
+    With our given $A$, we understand that it updates its hypothesis for any input in the concept class. Define the algorithm $A'$ to be equivalent to $A$ only when we encounter a mistake in prediction, else $A'$ does nothing for correct predictions. Suppose we have a concept class of the form $\scC = \{(x_1, y_1), (x_2, y_2), ..., (x_n, y_n)\}$, where the $y_i$ are the correct classification of the respective example $x_i$. We know that our original algorithm $A$, when every example in our concept class has been applied, will only make at most $M$ mistakes (suppose without loss of generality $M \leq n$). Denote the subset $S$ of $\scC$ to be the examples which $A'$ makes a mistake in classification. Note that, when we rerun our training, both algorithms $A$ and $A'$ will preform identically when run on $S$. Therefore, on this set, $A'$ will make the same number of mistakes as $A$, the latter of which is bounded above by $M$. This implies that $A'$ will itself make at most $M$ mistakes on this set. This gives us that $A'$ will make at most $M$ mistakes. Therefore, the claim has been proven.
+\end{solution}
+
 
 \newpage
 \section{Problem 2}
 Give an example of a function $k: \scX \times \scX \to \R$ that is symmetric $(k(x, x') = k(x', x))$ and positive in the sense that $k(x, x') \geq 0$ for all $x, x' \in \scX$, but is not positive semidefinite. Conversely, give an example of a kernel that is positive semidefinite, but does not satisfy $k(x, x') \geq 0$ for all $x, x' \in \scX$.
+\partbreak
+\begin{solution}
+
+    Let us first define the dataset $\scX$ we are working with. For the first example, let $\scX = \{0, 1\}$, which is just the set containing just zero and one. For the first example, let 
+    \[k(x, x') = (x - x')^2 + (xx')^2.\]
+    This function is clearly symmetric and positive on our dataset. Define $A$ to then be the Gram matrix of this function, that is
+    \[A = \mqty[k(0, 0)&k(0, 1)\\k(1, 0)&k(1, 1)] = \mqty[0&1\\1&1].\]
+    In order for our function $k$ to be psd, it is sufficient to show that this matrix is psd. Note that this is not the case, however, as one of its eigenvalues is negative. In fact, its eigenvalues are 
+    \[\lm_{1, 2} = \frac{1}{2}(1 \pm \sqrt{5}).\]
+    Clearly showing that this matrix is not psd, we can explicitly write show an example of a vector $\textbf{c}$ for which $\textbf{c}\T A\textbf{c} < 0$. By explicitly writing this out, we see
+    \[\textbf{c}\T A\textbf{c} = \mqty[c_1&c_2]\mqty[0&1\\1&1]\mqty[c_1\\c_2] = c_2(c_2 + 2c_1).\]
+    Taking $c_2 = 1, c_1 = -1$, we get the above to equal $-1$. Therefore, $A$ is doubly not psd. \par
+
+    For the second example, let our data set be $\scX = \{-1, 1\}$ and our function to be simply $k(x, x') = xx'$. Forming the matrix $A$ as in the above example gives us
+    \[A = \mqty[1&-1\\-1&1],\]
+    which has eigenvalues $0, 2$. This makes $A$ psd, which in turn makes the function $k$ psd. However, $k$ is clearly not positive for all $x, x' \in \scX$, since $k(-1, 1) = -1 < 0$. Therefore, both examples have been given.
+\end{solution}
 
 \newpage
 \section{Problem 3}
 Given any function $\psi: \scX \to \scX'$, prove that if $k'$ is a psd kernel on $\scX'$, then $k(x, x') = k'(\psi(x), \psi(x'))$ is a psd kernel on $\scX$.
+\partbreak
+\begin{solution}
 
+    We will first show symmetry. Let $\textbf{x}, \textbf{x}' \in \scX$, then
+    \[k(\bx, \bx') = k'(\psi(\bx), \psi(\bx')) = k'(\psi(\bx'), \psi(\bx)) = k(\bx', \bx).\]
+    The above holds since $k'$ is given to be psd, in particular symmetric. Next, let the vector $\xi$ be given as the following: suppose $c_1, ..., c_n \in \R$, then, we have
+    \[\xi = \sum_{i  =1}^n c_i \psi(\bx_i) \in \scX'.\]
+    Since $\xi \in \scX'$, we then have that 
+    \[\braket{\xi}{\xi} \geq 0 \implies \sum_{i = 1}^n\sum_{j  =1}^n c_ic_jk'(\psi(\bx_i), \psi(\bx_j)) \geq 0.\]
+    Since we have the given relation between the two kernels, we have that
+    \[\sum_{i = 1}^n\sum_{j  =1}^n c_ic_jk(\bx_i, \bx_j) \geq 0.\]
+    Therefore, we have that $k$ is a psd kernel. 
+\end{solution}
 \newpage
 \section{Problem 4}
 Prove that if $k_1$ and $k_2$ are two positive semi-definite (psd) kernels on a space $\scX$, then 
 \subsection{Problem 4, part a}
 The function, $k(x, x') := k_1(x, x') + k_2(x, x')$ is a psd kernel on $\scX$;
+\partbreak
+\begin{solution}
 
+    In order for the given function to be a psd kernel, we require $k$ to be both symmetric and have the property that 
+    \[\sum_{i, j}c_ic_jk(x_i, x_j) \geq 0.\]
+    Symmetry is simple, since 
+    \[k(x, x') = k_1(x, x') + k_2(x, x') = k_1(x', x) + k_2(x', x) = k(x', x).\]
+    The above actions are justified since $k_1, k_2$ are psd, hence symmetric. Next, we write down the given sum in terms of $k_1$ and $k_2$.
+    \[\sum_{i, j} c_ic_jk(x_i, x_j) = \sum_{i, j}c_ic_jk_1(x_i, x_j) + \sum_{i, j}c_ic_jk_2(x_i, x_j).\]
+    Since both $k_1$ and $k_2$ are psd, the two sums on the left are positive for any choice $c_1, ..., c_n \in \R$. Hence, the right hand side is positive, so $k$ is shown to be psd. 
+\end{solution}
+
+\newpage
 \subsection{Problem 4, part b}
 The function $k_\oplus ((x_1, x_2), (x_1', x_2')) = k_1(x_1, x_1') + k_2(x_2, x_2')$ is a psd kernel on $\scX \times \scX'$.
+\partbreak
+\begin{solution}
 
+    We will repeat the same process as in the previous example. $k_\oplus$ is symmetric, since
+    \[k_\oplus((x_1, x_2), (x_1', x_2')) = k_1(x_1, x_1') + k_2(x_2, x_2') = k_1(x_1', x_1) + k_2(x_2', x_2) = k_\oplus((x_1', x_2'), (x_1, x_2)).\]
+    Again, this works since $k_1, k_2$ are symmetric. Then, showing its sum is positive, we have
+    \begin{align*}
+        &\sum_{i, j}c_ic_jk_\oplus((x_i^1, x_i^2), (x_j^2, x_j^2)) = \sum_{i, j}c_ic_j(k_1(x_i^1, x_j^1) + k_2(x_i^2, x_j^2)) = \sum_{i, j}c_ic_jk_1(x_i^1, x_j^1) + \sum_{i, j} c_ic_jk_2(x_i^2, x_j^2).
+    \end{align*}
+    Since $k_1, k_2$ are psd, then the two sums on the right are positive. This implies that the sum on the left are positive. Therefore, the function $k_\oplus$ is a psd kernel.
+\end{solution}
+
+\newpage
 \subsection{Problem 4, part c}
 Given any function $\psi: \scX \to \scX'$, prove that if $k'$ is a psd kernel on $\scX'$, then $k(x, x') = k'(\psi(x), \psi(x'))$ is a psd kernel on $\scX$.
+\partbreak
+\begin{solution}
 
+    This is problem 3, just repeated. Please see my answer to problem 3 for my answer. 
+\end{solution}
+
+\newpage
 \subsection{Problem 4, part d}
 Let $\alpha(\textbf{x}, \textbf{x}')$ be the angle between $\textbf{x}, \textbf{x}' \in \R^n$. Prove that the cosine kernel $k_\angle (\textbf{x}, \textbf{x}') = \cos(\alpha(\textbf{x}, \textbf{x}'))$ is a psd kernel on $\scX = \R^n$.
+\partbreak
+\begin{solution}
 
-\newcommand{\sgn}{\text{sgn}}
-\newcommand{\scE}{\mathcal{E}}
+    
+\end{solution}
 
 \newpage
 \section{Problem 5}
@@ -53,14 +125,66 @@ Recall that a training set $\{(x_1, y_1), (x_2, y_2), ..., (x_m, y_m)\}$ is said
 Using the inequality $\ell_{0/1}(z, 1) \leq e^{-z}$ prove that after $t$ rounds of boosting the running hypothesis $\hat{h}(x) = \sgn \left(\sum_{s = 1}^t \alpha_s h_s(x)\right)$ satisfies
 \[\ell_{0/1} (\hat{h}(x_i), y_i) \leq m\left(\prod_{s = 1}^t Z_s\right) D_{t+1}(i)\]
 for every example $i = 1, 2, ..., m$.
+\partbreak
+\begin{solution}
 
+    The Distribution $D_{t+1}(i)$ is given by 
+    \[D_{t+1}(i) = \frac{1}{m}\left(\prod_{s = 1}^t Z_s\right)\inv \exp\left(-y_i\sum_{s = 1}^t \alpha_sh_s(x_i)\right).\]
+    This is given in the slides. We can rearrange this to get
+    \[m\left(\prod_{s = 1}^tZ_s\right)D_{t+1}(i) = \exp\left(-y_i\sum_{s = 1}^t \alpha_s h_s(x_i)\right).\]
+    By the bound given, we have 
+    \[\ell_{0/1}\left(y_i\sum_{s = 1}^t\alpha_sh_s(x_i), 1\right) \leq m\left(\prod_{s = 1}^tZ_s\right)D_{t+1}(i).\]
+    This is equal to the given inequality above, we just need to massage the penalty function. Note that the $\ell_{0/1}$ loss function is given by 
+    \[\ell_{0/1}(x, y) = \begin{cases}0, &x = y\\1, &\text{o.w.}\end{cases}.\]
+    For our case, we have 
+    \[\ell_{0/1}\left(y_i\sum_{s = 1}^t\alpha_sh_s(x_i), 1\right) = \begin{cases}
+        0, &1=y_i\sum_{s = 1}^t\alpha_sh_s(x_i)\\
+        1, &\text{o.w.}
+    \end{cases}\]
+    The equality $1=y_i\sum_{s = 1}^t\alpha_sh_s(x_i)$ can be rephrased as $1=y_i\hat{h}\left|\sum_{s = 1}^t\alpha_sh_s(x_i)\right|$. This gives us the size of the magnitude of the sum, but for the purposes of this problem, we can neglect it. We are primarily concerned with the equality $1 = y_i\hat{h}$, which when plugging into our loss function, we have
+    \[\ell_{0/1}(y_i, \hat{h}) = \begin{cases}
+        0, &y_i = \hat{h}\\
+        1, &\text{o.w.}
+    \end{cases}.\]
+    We can then write
+    \[\ell_{0/1}(y_i, \hat{h}) \leq m\left(\prod_{s = 1}^tZ_s\right)D_{t+1}(i),\]
+    which is what we wanted to show.
+\end{solution}
+
+\newpage
 \subsection{Problem 5, part b}
 Use this to show that  
 \[\scE_{\text{train}}(\hat{h}) \leq \prod_{s = 1}^t 2\sqrt{\ep_s(1 - \ep_s)}.\]
+\partbreak
+\begin{solution}
 
+    By the definition of the training error, 
+    \[\scE _{\text{train}}(\hat{h}) = \frac{1}{m}\sum_{i = 1}^m\ell_{0/1}(\hat{h}(x_i), y_i),\]
+    we can plug in our bound in part a to get
+    \[\scE _{\text{train}}(\hat{h}) \leq \sum_{i = 1}^m D_{t+1}(i)\prod_{s = 1}^tZ_s = \left(\sum_{i = 1}^m D_{t+1}(i)\right)\left(\prod_{s = 1}^tZ_s\right).\]
+    Since the given distribution is discrete, summing over all its entries is equal to one. Hence 
+    \[\scE _{\text{train}}(\hat{h}) \leq \prod_{s = 1}^tZ_s.\]
+    Note that for any $s$, $Z_s = 2\sqrt{\ep_s(1 - \ep_s)}$. This can be substituted in to get
+    \[\scE _{\text{train}}(\hat{h}) \leq \prod_{s = 1}^t2\sqrt{\ep_s(1 - \ep_s)},\]
+    which is what we wanted to show.
+\end{solution}
+
+\newpage
 \subsection{Problem 5, part c}
 By plugging into the definition of the edge at round $s$, which is $\gamma_s = 1/2 - \ep_s$ and using the inequality $1 - z \leq e^{-z}$ prove that the training error decreases exponentially,
 \[\scE_{\text{train}}(\hat{h}) \leq \exp(-2\gamma^2t),\]
 as stated in a Theorem in class.
+\partbreak
+\begin{solution}
+    Substituting in the given form for $\gamma_s$ from the result of part b, we have
+    \[\scE _{\text{train}}(\hat{h}) \leq \prod_{s = 1}^t2\sqrt{(1/2 - \gamma_s)(1/2 + \gamma_s)} = \prod_{s = 1}^t \sqrt{1 - 4\gamma_s^s}.\]
+    By the given bound, we can say that 
+    \[\scE _{\text{train}}(\hat{h}) \leq \prod_{s = 1}^t \sqrt{\exp\left(-4\gamma_s^2\right)} = \prod_{s = 1}^t \exp\left(-2\gamma_s^2\right).\]
+    Since the negative exponential is a monotonically decreasing function, another upper bound can be made by instead substituting the minimum of the $\gamma_s$'s in the exponential. In particular, we have  
+    \[\scE _{\text{train}}(\hat{h}) \leq \prod_{s = 1}^t \exp\left(-2\gamma^2\right),\]
+    which after exponent properties, we get
+    \[\scE _{\text{train}}(\hat{h}) \leq \exp\left(-2\gamma^2\sum_{s = 1}^t\right) = \exp\left(-2\gamma^2t\right).\]
+    This then proves the theorem stated in class. 
+\end{solution}
 
 \end{document}
