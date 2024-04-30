@@ -31,7 +31,7 @@ Throughout the program, I enrolled in a variety of courses covering diverse aspe
 To explore the contents of this repository, simply clone it to your local machine using the following command:
 
 ```bash
-git clone https://github.com/your-username/uchicago-masters-cam.git
+git clone https://github.com/CalebDerrickson/GradCourses.git
 ```
 
 Once cloned, feel free to navigate through the directories and files to access the homework assignments, lecture notes, and code samples. You may also contribute to this repository by submitting pull requests or opening issues for any suggestions or improvements.
