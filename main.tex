@@ -1,0 +1,367 @@
+\input{definitions}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{STAT 37710: Homework 4}
+\author{Caleb Derrickson}
+\date{Friday, May 3, 2024}
+\usetikzlibrary{arrows.meta}
+\begin{document}
+\onehalfspacing
+\maketitle
+\allowdisplaybreaks
+{\color{cit}\vspace{2mm}\noindent\textbf{Collaborators:}} The TA's of the class, as well as Kevin Hefner, and Alexander Cram.
+
+\tableofcontents
+
+\newpage
+\section{Problem 1}
+Consider the two elementary Bayes nets,
+
+\hspace{10mm}
+\begin{minipage}{0.45\textwidth}
+\begin{tikzpicture}
+\begin{scope}[every node/.style={circle,thick,draw}]
+    \node (C) at (3.5,4) {C};
+    \node (A) at (1,1) {A};
+    \node (B) at (6,1) {B};
+
+\end{scope}
+
+\begin{scope}[>={Stealth[black]},
+              every node/.style={fill=white,circle},
+              every edge/.style={draw=black,very thick}]
+    \path [->] (C) edge (B);
+    \path [->] (C) edge (A);
+\end{scope}
+\end{tikzpicture}
+(a)
+\end{minipage}%
+\hfill
+\begin{minipage}{0.45\textwidth}
+\begin{tabular}{|p{\textwidth}}
+\hspace{10mm}
+\begin{tikzpicture}
+\begin{scope}[every node/.style={circle,thick,draw}]
+    \node (C) at (3.5,1) {C};
+    \node (A) at (1,4) {A};
+    \node (B) at (6,4) {B};
+
+\end{scope}
+
+\begin{scope}[>={Stealth[black]},
+              every node/.style={fill=white,circle},
+              every edge/.style={draw=black,very thick}]
+    \path [->] (B) edge (C);
+    \path [->] (A) edge (C);
+\end{scope}
+\end{tikzpicture}(b)
+\end{tabular}
+\end{minipage}%
+
+Write down the joint probability distribution for moth models, and by attempting to factor it, formally deduce the independence relationships:
+\begin{itemize}
+    \item[(a)] $X_A \not \independent X_B$ but $X_A \independent X_B | X_C$.
+    \item[(b)] $X_A \independent X_B$ but $X_A \not \independent X_B | X_C$
+\end{itemize}
+\partbreak
+\begin{solution}
+
+        For the cases where we show dependence (and conditional dependence), I will be invoking the $D$-separation theorem, given in class. This is the only "nice" way I could show dependence of these two nets. I will provide the theorem below, for reference. Note that for the remainder of this homework set, I will denote the separate random variables of each node according to their node label. That is, $X_A \to A$, etc.   
+
+        \hop\begin{boxedquote}{$D$-Separation}{
+        
+        $X \independent Y | \ S$ if and only if all paths from $X$ to $Y$ are blocked. An undirected path from $X$ to $Y$ is said to be blocked if 
+        \begin{enumerate}
+            \item It includes at least one node $Z$ from $S$ such that the arrows along the path at $Z$ meet head to tail or tail to tail; or
+            \item It includes at least one node $W$ such that the arrows along the path at $W$ meet head to head, and neither $W$ nor any of its descendants are in $S$.  
+        \end{enumerate}
+        \jump
+        }    
+        \end{boxedquote}
+        \begin{itemize}
+            \item[(a)] Note that, for two events to be dependent, it is equivalent to say their dependence is conditional upon a set of events which is empty. That is to say, $A \not\independent B \iff A\not\independent B  \ | \ \phi$, where $\phi$ denotes the empty set. Clearly, no elements belong to the empty set. This implies that no paths from $A$ to $B$ are blocked, since by definition a blocked path needs to be with respect to some node in the path. Therefore, $A$ cannot be conditionally independent of $B$ given $\phi$. Since the statements are mutually exclusive, then $A \not \independent B \ | \ \phi$. 
+
+            \newpage
+            Conditional independence is noted by the joint probability distribution of the Bayes net. In general, we have
+            \[p(\textbf{x}) = \prod_{v \in V} p(x_v | \textbf{x}_{pa(v)}),\]
+            so applying this to the Bayes net (a), 
+            \[p(\textbf{x}) = p(A | C)p(B | C)p(C).\]
+            To show conditional independence, we note that by the definition of conditional probability, 
+            \[p(A, B | C) = \frac{p(A, B, C)}{p(C)},\]
+            which by above, we can rewrite as
+            \[p(A, B | C) = \frac{p(A | C)p(B | C)p(C)}{p(C)} = p(A | C)p(B | C).\]
+            Therefore, the claim of conditional independence has been shown.
+            
+            \item[(b)] I will first show independence. Note that the joint probability distribution for Bayes net (b) is
+            \[p(\textbf{x}) = p(C | A, B) p(A)p(B).\]
+            We need to show for independence of two events that $p(A, B) = p(A)p(B)$. Note that for the probability of $p(A, B)$, we can introduce the dependency on $C$ via conditional probability, so that
+            \[p(A, B) = \frac{p(A, B, C)}{p(C | A, B)} = \frac{p(C | A, B)}{p(C | A, B)}p(A)p(B).\]
+            I have plugged in what we got for $p(A, B, C)$ from the form of the probability distribution. Therefore, we have shown independence. 
+
+            \jump
+            Next, we need to show conditional dependence. We can apply the $D$-separation theorem to show that they cannot be conditionally independent. Note that there is one and only one path from $A$ to $B$, which is of the form $A\to C \leftarrow B$. In order for this path to be blocked, we require either of the two conditions stated in the theorem to be met. Note that the first condition is just not applicable, since there is no node, namely $C$, such that the arrows coalescing to $Z$ meet head to tail or tail to tail. The second one is more relevant. Note that the node $C$ meets the condition that along its path, the arrows meet head to head. However, we require that $W$ not be in the conditioning set. This is clearly not met in the Bayes net (b), therefore, there exists an unblocked path from $A$ to $B$, implying that $A \not \independent B \ | \ C$. 
+        \end{itemize}
+\end{solution}
+
+\newpage
+\section{Problem 2}
+Draw a Bayes net (directed graphical model) to represent the joint distribution
+\[p(x_a, x_b, x_c, x_d, x_e) = p(x_a)p(x_b)p(x_c | x_a)p(x_d | x_a, x_b, x_c)p(x_e | x_d).\]
+Assuming that each of the variables are binary but the conditional distributions are of the most general form, how many parameters are required to fully specify this model?
+\partbreak
+\begin{solution}
+
+    Interpreting this through the joint probability distribution function, we have that node $A$ and node $B$ have no parents; node $D$ has parents $A$, $B$, and $C$; node $C$ has one parent, node $A$; and node $E$ has parent $D$. The Bayes net is then of the form below.  
+\begin{center}
+        
+    \begin{tikzpicture}
+    \begin{scope}[every node/.style={circle,thick,draw}]
+        \node (A) at (2,3) {A};
+        \node (B) at (1,1) {B};
+        \node (C) at (4,3) {C};
+        \node (D) at (3,1) {D};
+        \node (E) at (5,1) {E};
+    
+    \end{scope}
+    
+    \begin{scope}[>={Stealth[black]},
+                  every node/.style={fill=white,circle},
+                  every edge/.style={draw=black,very thick}]
+        \path [->] (B) edge (D);
+        \path [->] (D) edge (E);
+        \path [->] (A) edge (D);
+        \path [->] (C) edge (D);
+        \path [->] (A) edge (C);
+        
+    \end{scope}
+    \end{tikzpicture}
+\end{center}
+
+We then need to consider how man parameters are needed to specify this model. Since the random variables are allowed only to manifest on either zero or one, we only require 1 parameter to represent its probability, since the other can be recovered by subtracting the parameter value from one. Hence, for $p(A)$ and $p(B)$, we require only two parameters. This will generalize to the probabilities which hinge on two random variables. In this case, we can create a table, detailing all probabilities corresponding to the relevant variables and notice that each column sums to one. This would imply that we only need to store one row of probabilities, since the second can be recovered in the same manner as above. Therefore, in the cases of $p(C | A)$ and $p(E | D)$, we require only 4 parameters (2 each) to represent their contribution. Finally, this reasoning can be extended to the 4 node case, where we would have to store one cube (in the case of 4 nodes, the table would generalize to a tensor of rank 4), which has size $2^3 = 8$. Therefore, we require 2 + 4 + 8 = 14 parameters. 
+
+\end{solution}
+
+\newpage
+\section{Problem 3}
+Consider the following Bayes net:
+\begin{center}
+    
+\begin{tikzpicture}
+\begin{scope}[every node/.style={circle,thick,draw}]
+    \node[label=  135:{\color{green}\footnotesize 1}] (A) at (1,5) {A};
+    \node[label=  135:{\color{green}\footnotesize 1}] (B) at (2.5,5)   {B};
+    \node[label=  135:{\color{green}\footnotesize 1}] (C) at (4,5)   {C};
+    \node[label= left:{\color{green}\footnotesize 4}] (D) at (1.75,3.5)   {D};
+    \node[label=right:{\color{green}\footnotesize 4}] (E) at (3.25,3.5)   {E};
+    \node[label=right:{\color{green}\footnotesize 4}] (F) at (2.5,2)   {F};
+    \node[label=right:{\color{green}\footnotesize 2}] (G) at (2.5,0.5)   {G};
+
+\end{scope}
+
+\begin{scope}[>={Stealth[black]},
+              every node/.style={fill=white,circle},
+              every edge/.style={draw=black,very thick}]
+    \path [->] (A) edge (D);
+    \path [->] (B) edge (D);
+    \path [->] (B) edge (E);
+    \path [->] (C) edge (E);
+    \path [->] (D) edge (F);
+    \path [->] (E) edge (F);
+    \path [->] (F) edge (G);
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+\newcommand{\from}{\leftarrow}
+State whether the following statements are true or false and briefly justify why
+\begin{enumerate}
+    \item E is conditionally independent of G given F.
+    \item A is conditionally independent of C given B and G.
+    \item B is independent of C.
+    \item A is independent of B given C and G.
+\end{enumerate}
+\partbreak
+\begin{solution}
+
+    I interpret this problem as exercising our knowledge of the $D$-separation theorem. I will be using it extensively here, as well as the results from problem 1. 
+    \begin{enumerate}
+        \item In order for $E$ to be conditionally independent of $G$ given $F$, we require that all paths from $E$ to $G$ are blocked. Notably, any path from $E$ to $G$ needs to go through node $F$. There are two paths from $E$ to $G$: which are $E \to F \to G$ and $E \from B \to D \to F \to G$. For the first path, the arrows of $F$ meet head to tail, which satisfies the first condition for a blocked path. The second path also meets the first condition for a blocked path. Therefore, all paths are blocked from $E$ to $G$, implying that they are conditionally independent given $F$. 
+        \item Note that there are two paths from $A$ to $C$, which are $A \to D \to F \from E \from C$ and $A \to  D \from B \to E \from C$. For the first path, the first conditions of a blocked path are clearly not met. For the second condition, we see that there is one node along the path in which the arrows meet head to head: node $F$. $F$ is not in the conditional set, but $G$ is a descendent of $F$ AND is in the conditional set. This implies that the first path is NOT blocked, which by the $D$-separation theorem, $A$ is NOT conditionally independent of $C$ given $B$ and $G$. 
+        \item Aside from reproducing problem 1, part b, we can clearly see that $B$ is independent of $C$. This statement is then true.
+        \item I will interpret this as saying $A$ is conditionally independent of $B$ given $C$ and $G$. Again, we have two paths from $A$ to $B$, which are $A \to D \from B$ and $A \to D \to F \from E \from B$. The first path does not meet either conditions for it to be blocked, since $D$ is not in the conditioning set. Therefore, the statement is false.  
+    \end{enumerate}
+\end{solution}
+
+\newpage
+\section{Problem 4}
+Write down the form of the joint probability distribution over the variables $X_a, X_b, X_c, X_d, X_e$ implied by the following directed graphical model:
+\begin{center}
+\definecolor{customblue}{RGB}{124,125,192}
+\begin{tikzpicture}[
+   every node/.append style={circle, draw=customblue, inner sep=5pt, minimum size=12pt}]
+\begin{scope}[circle,thick,draw]
+    \node[line width=1mm] (A) at (1,4.5) {$a$};
+    \node[line width=1mm] (B) at (3,4.5) {$b$};
+    \node[line width=1mm] (C) at (4,3)   {$c$};
+    \node[line width=1mm] (D) at (3,1.5) {$d$};
+    \node[line width=1mm] (E) at (1,1.5) {$e$};
+
+
+\end{scope}
+
+\begin{scope}[>={Stealth[black]},
+              every node/.style={fill=white,circle},
+              every edge/.style={draw=black,very thick}]
+    \path [->] (A) edge (B);
+    \path [->] (B) edge (C);
+    \path [->] (A) edge (D);
+    \path [->] (E) edge (D);
+    \path [->] (D) edge (C);
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+Write down all the conditional and unconditional independence relationships implied by this model. 
+\partbreak
+\begin{solution}
+
+    This one is very painful. Hopefully I will not miss any relationships below. I will start from $A$, investigate the path to all other nodes, repeat for $B$, and so on. I will first give the joint probability distribution function, 
+    \[p(\textbf{x}) = p(A)p(B | A)p(C | B, D)p(D | A, E)p(E)\]
+    \begin{itemize}
+        \item \underline{A}:
+        \begin{itemize}
+            \item \underline{$A \to B$}: Since there are no additional nodes required to traverse the path from $A$ to $B$, it is not possible for them to be independent in either case, no matter what nodes are given.
+            \item \underline{$A \to C$}: There are two paths from $A$ to $C$, namely $A \to B \to C$ and $A \to D \to C$. In order to block these paths, we need to be given at least $B$ and $D$, and nothing less, since these two paths do not overlap. Note that the conditioning of $E$ is not necessary, so we can either throw it in or not. Therefore, $A$ is conditionally independent of $C$ given either the set $\{B, D\}$ or $\{B, D, E\}$. 
+            \item \underline{$A \to D$}: There is a direct path from $A$ to $D$, which cannot be blocked. Therefore, $A$ cannot possibly be independent of $D$. 
+            \item \underline{$A \to E$}: Clearly, they are independent, since they are inputs to the system. We will then investigate their conditional independence. There are two paths from $A$ to $E$, namely $A \to D \from E$ and $A \to B \to C \from D \from E$. Trying to add $D$ to the conditioning set violates the second condition for a blocked path. Trying to add $C$ also violates the second condition for the second path. Only when we try to add $B$ to the conditioning set do we see that the first condition of a blocked path is satisfied. The first path then satisfies the second condition for a blocked path, since node $C$ has its arrows pointing head to head and is not in the conditioning set. This implies that the $A$ and $E$ are only independent. This implies that $A$ and $E$ are independent given $B$.
+        \end{itemize}
+        \item \underline{B}:
+        \begin{itemize}
+            \item \underline{$B \to C$}: There is a direct path from $B$ to $C$, which cannot be blocked. Therefore, $B$ and $C$ are not independent. 
+            \item \underline{$B \to D$}: There are two paths from $B$ to $D$, namely $B \to C \from D$ and $B \from A \to D$. Trying to add $C$ to the conditioning set violates the second condition for a blocked path. But when adding $A$ do we see that the first path is blocked by the second condition and the second path is blocked by the first condition. Adding the node $E$ does not change anything, so $B$ is independent $D$ given either the set $\{A, E\}$ or $\{A\}$.
+            \item \underline{$B \to E$}: There are two paths from $B$ to $E$, namely $B \to C \from D \from E$ and $B \from A \to D \from E$. Since both paths are blocked via the second condition for a blocked path ($C$ for the first path and $D$ for the second), we don't need anything for them to be independent. Therefore, $B$ is independent of $E$. We can add $A$ to the conditioning set for the second path to be blocked by the first condition. We can also add $D$ as well, which will block the first path by the second condition. The second condition only specifies that at least one node in the path satisfies that condition, so we are also free to add node $C$ to the conditioning set. Therefore, $B$ and $E$ are independent given any set among the following: $\phi$ $ \{A\}$, $\{A, D\}$, and the set $\{A, C, D\}$.  
+        \end{itemize}
+        \item  \underline{C}:
+        \begin{itemize}
+            \item \underline{$C \to D$}: There is a direct path between these two nodes, so it cannot be blocked. This means that $C$ and $D$ are not independent. 
+            \item \underline{$C \to E$}: There are two paths from $C$ to $E$, namely $C \from B \from A \to D \from E$ and $C \from D \from E$. Adding $D$ to the conditioning set blocks the second path via the first condition, but will violate the second condition on the first path. We then need to add $A$ to the conditioning set, but are free to add $B$ as well, or even both. Therefore, $C$ is independent of $E$ given any of the following sets: $\{A, D\}$, $\{B, D\}$, $\{A, B, D\}$. 
+        \end{itemize}
+        \item \underline{D}
+        \begin{itemize}
+            \item \underline{$D \to E$}: There is a direct path between the two. This cannot be blocked. Therefore they are not independent given any node. 
+        \end{itemize}
+    \end{itemize}
+\end{solution}
+
+
+\newcommand{\bXU}{\boldsymbol{X}_U}
+\newcommand{\bTheta}{\boldsymbol{\Theta}}
+\newpage
+\section{Problem 5}
+Let $\scG$ be a directed graphical model (Bayes net) on a graph with $n$ vertices $V = \{1,2, ..., n\}$ and corresponding random variables $X_1, ..., X_n$. Assume for simplicity that each $X_i$ can take on $k$ different values $\{1, 2, ..., k\}.$ Let $pa(i)$ denote the set of parents of vertex $i$ in the graph. 
+
+As usual, for any subset $U$ of $V$, say $U = \{v_1, ..., v_m\}$, $\bXU$ will denote the vector $(X_{v_1}, ..., X_{v_m})$ of the corresponding variables, and when talking about the probability of this these variables jointly taking on the values $\textbf{x}_U = (x_{v_1}, ..., x_{v_m})$ (where naturally $x_{v_i} \in \{1, 2, ..., k\}$) instead of writing $\mathbb{P}(\bXU = \textbf{x}_U)$, we will use the shorthand $p(\textbf{x}_U)$. For the probability of all variables together instead of $p(\textbf{x}_V)$ we will just use $p(\textbf{x})$.   
+
+Recall that the general form of the joint distribution corresponding to this model is 
+\begin{align}
+    p(\textbf{x}) = \prod_{i = 1}^n p(x_i|x_1^{(i)}, ..., x_{p_i}^{(i)}),\label{P5: joint distro}
+\end{align}
+
+where $x_1^{(i)}, x_2^{(i)}, ..., x_{p_i}^{(i)}$ are values of $X_i$. Since all the variables here are in $\{1, 2, ..., k\}$, can be equivalently written as 
+\[p(\textbf{x}) = \prod_{i = 1}^n[\theta_i]_{x_1^{(i)}, x_2^{(i)}, ..., x_{p_i}^{(i)}}\]
+where each $\theta_i$ is a $k \times k \times ...\times k$ dimensional array with $[\theta_i]_{x_1^{(i)}, x_2^{(i)}, ..., x_{p_i}^{(i)}} = p(x_i | x_1^{(i)}, x_2^{(i)}, ..., x_{p_i}^{(i)})$. such multidimensional arrays are often called tensors. These arrays are parameters of the model. Let $\bTheta$ denote the tensors $\theta_1, ..., \theta_n$ tensors collectively. 
+
+\newpage
+\subsection{Problem 5, part a}
+Write down the log-likelihood $\ell(\bTheta) = \log p(\textbf{x})$ of a single training sample (i.e., sample) $\textbf{x}$ from this model. Now assume that we have a training set $\{\textbf{x}_1, ..., \textbf{x}_m\}$ of $m$ different independent samples from our model and that $[N_i]_{x_1^{(i)}, x_2^{(i)}, ..., x_{p_i}^{(i)}}$ is the number of examples in the training data where $X_i$ took on the value $x_i$, its first parent took on the value $x_1^{(i)}$, etc.. Write down the log-likelihood of the training set in terms of these counts. 
+\partbreak
+\begin{solution}
+
+    For the single training sample, the log-likelihood $\ell(\bTheta)$ is given as $\log p(\textbf{x})$. From \ref{P5: joint distro}, we have
+    \[\ell(\bTheta) = \log \prod_{i = 1}^n [\theta_i]_{x_i, x_1^{(i)}, ..., x_{p_i}^{(i)}} = \sum_{i = 1}^n \log [\theta_i]_{x_i, x_1^{(i)}, ..., x_{p_i}^{(i)}}.\]
+    Assuming that we have a training set of $m$ different samples, the log-likelihood becomes slightly more complicated. Naturally, the likelihood of the distribution is the product over all our data points, so $L(\bTheta) = \prod_{j = 1}^m p(\textbf{x}^{(j)})$. We can extend our results form the first part to see that
+    \[\ell(\bTheta) = \log \prod_{j =1}^m \prod_{i = 1}^n [\theta_i]_{x_i, x_1^{(j, i)}, ..., x_{p_i}^{(j, i)}}.\]
+    To apply the number of examples in our training data, $[N_i]_{{x_i, x_1^{(i)}, ..., x_{p_i}^{i}}}$, we must consider each potential manifestation of its theta parameters. Let us denote $\gamma_i$ to be the possible values of the parents of training data point $X_i$. We then have 
+    \[\ell(\bTheta) = \log \prod_{i = 1}^m\prod _{\gamma_0 = 1}^k\cdots\prod_{\gamma_{p_i} = 1}^k[\theta_i]_{x_i, x_1^{(i)}, ..., x_{p_i}^{i}}^{[N_i]_{\gamma_0, \gamma_1, ..., \gamma_{p_i}}},\]
+    which, after simplification becomes
+    \[\ell(\bTheta) =  \sum_{i = 1}^m\sum_{\gamma_0 = 1}^k\cdots\sum_{\gamma_{p_i} = 1}^k{[N_i]_{\gamma_0, \gamma_1, ..., \gamma_{p_i}}}\log [\theta_i]_{x_i, x_1^{(i)}, ..., x_{p_i}^{i}}.\]
+    We note explicitly here that $[\theta_i]_{\gamma_0, ..., \gamma_{p_i}} = p(\gamma_0 | \gamma_1, ..., \gamma_{p_i})$.
+\end{solution}
+
+\newcommand{\scL}{\mathcal{L}}
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newpage
+\subsection{Problem 5, part b}
+Derive the maximum likelihood estimator of the $\theta_1, ..., \theta_n$ parameter tensors. (The final answer in the special case where every node has two parameters can be found in the slides, but the derivation cannot.) Explain what might be a problem with using maximum likelihood estimation in this context if some of the $[N_i]_{x_1^{(i)}, x_2^{(i)}, ..., x_{p_i}^{(i)}}$ counts are zero. 
+\partbreak
+\begin{solution}
+
+    To derive the maximum likelihood estimator of each $\theta_i$ parameter tensor, we need to solve $n$ separate minimization problems:
+    \begin{align}
+        \max_{\bTheta} \ell(\bTheta) := \sum_{\gamma_0 = 1}^k[N_i]_{\gamma_0, ..., \gamma_{p_i}}\log [\theta_i]_{\gamma_0, ..., \gamma_{p_i}}, \label{P5b: max prob}
+    \end{align}
+    where we consider independent maxes for any $i$. The maximum problem is constrained by the condition
+    \[\sum_{\gamma_0 = 1}^k [\theta_i]_{\gamma_0, ..., \gamma_{p_i}} = 1.\]
+    For the remainder of this problem, I will suppress the subscripts of $\gamma_0, ..., \gamma_{p_i}$ into simply $\bgamma$. To solve this problem, we form the Lagrangian, 
+    \[\scL([\theta_i]_{\bgamma}, \lm) = \sum_{\gamma_0 = 1}^k [N_i]_{\bgamma} \log [\theta_i]_{\bgamma} - \lm \qty(\sum_{\gamma_0 = 1}^k [\theta_i]_{\bgamma} - 1).\]
+    We then by the first order minimization properties, we have
+    \[0 = \frac{\partial \scL}{\partial [\theta_i]_{\bgamma}} = \frac{[N_i]_{\bgamma}}{[\theta_i]_{\bgamma}} - \lm \implies [\theta_i]_{\bgamma} = \frac{1}{\lm}[N_i]_{\bgamma}.\]
+    By the given constraint, we can see that $\lm = \sum [N_i]$, which implies that
+    \[[\theta_i]_{\bgamma} = \frac{[N_i]_{\bgamma}}{\sum_{\gamma_0 = 1}^k [N_i]_{\bgamma}}\]
+
+    Note that if some of the $[N_i]_{\bgamma}$ were to equal zero, then their corresponding $[\theta_i]_{\bgamma} = 0$. This implies some outcomes $\textbf{x}$ in our training data set would be impossible, even though it is likely to occur with small probability. 
+\end{solution}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newpage
+\subsection{Problem 5, part c}
+As we have mentioned in class, the Dirichlet distribution over $k$ random variables $0 \leq v_i \leq 1$ is 
+\[p_{\text{Dir}(\alpha_1, ..., \alpha_k)}(v_1, ..., v_k) = \frac{\Gamma(\alpha_1 + ...+\alpha_k)}{\Gamma(\alpha_1) ... \Gamma(\alpha_k)}v_1^{\alpha_1 - 1}v_2^{\alpha_2 - 1}...v_k^{\alpha_k - 1}.\]
+Here $\alpha_1,..., \alpha_k$ are the parameters of the distribution, and $\Gamma(\cdot)$ is a special function, but you do not need to worry about its form for this exercise.  
+
+The Dirichelt distribution is the favorite prior that Bayesians like to use when approximating the parameters of directed graphical models. Show, in particular, that if node $i$ in our model has just a single parent and the prior distribution on the corresponding $\theta_i$ tensor is that 
+\[p([\theta_i]_{1, b}, ..., [\theta_i]_{k, b}) = \text{Dir}(\alpha, \alpha, ..., \alpha)\]
+for any value $b$ of the parent, then the posterior distribution of these parameters is 
+\[p([\theta_i]_{1, b}, ..., [\theta_i]_{k, b} | \textbf{x}_1, ..., \textbf{x}_m) = \text{Dir}([N_i]_{1, b} + \alpha, [N_i]_{2, b} + \alpha, ..., [N_i]_{k, b} + \alpha).\]
+Show that similarity when $i$ has two parents, and the prior on the entries of $\theta_i$ (which is now a $k\times k\times k)$ array) is 
+\[p([\theta_i]_{1, b, c}, ..., [\theta_i]_{k, b, c}) = \text{Dir}(\alpha, ..., \alpha)\]
+\partbreak
+\begin{solution}
+
+    By Bayes Theorem, we know that the posterior distribution will be given as 
+    \[p(\btheta \ |\  \textbf{x}) \propto p(\textbf{x} | \btheta)p(\theta).\]
+    I am saying they will be proportionate to since I am dropping the normalization constant at the front. Since node $i$ has only one parent, we can repeat the process as we did in part (a), with far simpler expressions. 
+    \[p(\textbf{x} \ | \btheta) = p_\theta(\textbf{x}) = \prod_{j = 1}^mp_\theta(\textbf{x}) = \prod_{j = 1}^m\prod_{i = 1}^n p(x_i^j \ | \textbf{b}) = \prod_{j = 1}^m\prod_{\ell = 1}^n [\theta_i]_{x_\ell^i, b} = \prod_{j  =1}^k \qty([\theta_i]_{j, b})^{[N_i]_{j, b}}.\]
+    If the prior distribution is given as the multinomial above, then
+    \[p(\btheta \ | \ \textbf{x}) \propto \qty[\prod_{j = 1}^k\qty([\theta_i]_{j, b})^{[N_i]_{j, b}}]\qty[\prod_{j = 1}^k \qty([\theta_i]_{j, b})^{\alpha - 1}] = \prod_{j = 1}^k \qty([\theta_i]_{j, b})^{[N_i]_{j, b} + \alpha - 1} = \text{Dir}\qty([N_i]_{1, b} + \alpha, ..., [N_i]_{k, b} + \alpha)\]
+    The derivation for two parents is identically the same, but I will show it regardless. Here, the likelihood function changes ever so slightly for the two parents. 
+    \[p(\textbf{x} \ | \ \btheta ) = \prod_{j = 1}^m\prod_{i = 1}^n p(x_i^j \ | \textbf{b}, \textbf{c}) = \prod_{j  =1}^m\prod_{\ell = 1}^n [\theta_i]_{x_\ell^i, b, c} = \prod_{j = 1}^k \qty([\theta_i]_{j, b, c})^{[N_i]_{j, b}}\]
+    The posterior, which includes the updated prior, is now
+    \[p(\btheta \ | \ \textbf{x}) \propto \qty[\prod_{j = 1}^k\qty([\theta_i]_{j, b, c})^{[N_i]_{j, b, c}}]\qty[\prod_{j = 1}^k \qty([\theta_i]_{j, b, c})^{\alpha - 1}] = \prod_{j = 1}^k \qty([\theta_i]_{j, b})^{[N_i]_{j, b, c} + \alpha - 1} = \text{Dir}\qty([N_i]_{1, b, c} + \alpha, ..., [N_i]_{k, b, c} + \alpha)\]
+    
+\end{solution}
+
+\newpage
+\subsection{Problem 5, part d}
+The mean of the $i$-th component of a Dirichlet distribution $p(v_1, ..,. v_k) = \text{Dir}(\alpha_1, ..., \alpha_k)$
+\[\overline{v}_i = \frac{\alpha_i}{\sum_{i = 1}^k \alpha_i}.\]
+Explain why the Bayesian strategy avoids the problem with zero counts. 
+\partbreak
+\begin{solution}
+
+    To show this, we will first solve the maximization problem for the new posterior distribution. That is, we will solve
+    \[\argmax_{\btheta}\qty[p([\theta_i]_{1, pa(i)}, ..., [\theta_i]_{k, pa(i)} \ | \ \textbf{x}_1, ..., \textbf{x}_m)  ]\]
+    subject to the same constraints as in part b. Note that in part c, we showed the posterior distribution is given in the form of the Dirichlet kernel. To simplify this calculation, we will take the logarithm of the Dirichlet kernel, since both functions $x$ and $\log x$ are monotonically increasing. The Lagrangian then becomes
+    \[\scL(\btheta, \lm) = Z\sum_{j = 1}^k \log\qty[([\theta_i]_{j, pa(i)})^{[N_i]_{j, pa(i)} + \alpha - 1}] - \lm\qty(\sum_{j = 1}^k [\theta_i]_{j, pa(i)} - 1)\]
+    The first order optimality conditions then states
+    \[0 = \frac{\partial \scL}{\partial [\theta_i]_{j, pa(i)}} = \frac{[N_i]_{j, pa(i)} + \alpha - 1}{[\theta_i]_{j, pa(i)}} - \lm \implies [\theta_i]_{j, pa(i)} = \frac{1}{\lm}\qty([N_i]_{j, pa(i)} + \alpha - 1)\]
+    Therefore, with the constraint, we see that
+    \[[\theta_i]_{j, pa(i)} = \frac{[N_i]_{j, pa(i)} + \alpha - 1}{\sum_{j = 1}^k\qty([N_i]_{j, pa(i)} + \alpha -1)} = \frac{[N_i]_{j, pa(i)} + \alpha - 1}{k\alpha - k + \sum_{j = 1}^k\qty([N_i]_{j, pa(i)})}.\]
+    This shows that, even when some counts are zero, the parameter values will always be properly defined. This is the "pseudocount" topic as discussed in class. 
+\end{solution}
+
+\newpage
+\section{Problem 6}
+The croupier in Crooked Casino is known to have two dice: a fair one and a loaded one. To elude detection, his strategy is to use the fair die for a while, then switch to the loaded one, then switch back to the fair one, and so on. The file rolls.txt lists 3000 consecutive rolls of the dies $(y_t \in {0, 1,..., 5})$. Use an HMM to model this process. In particular, implement the Baum–Welch algorithm to learn the transition probability from the fair die to the loaded one and vice versa as well as the emission probabilities of loaded die. Then use the forward-backward algorithm to predict whether which die was likely used at each time t. 
+
+Please implement both algorithms from first principles rather than using existing software. Remember that for the forward-backward you will probably need to store numbers in logarithmic form. Together with your code, please submit the learned transition probability matrix and emission probability matrix, as well as the most likely hidden sequence. Since the Baum–Welch algorithm is liable to getting stuck in local minima, please run it multiple times and report the mean and standard deviation of your results. For the most likely hidden sequence you can just use the matrices from a single run.
+\end{document}
