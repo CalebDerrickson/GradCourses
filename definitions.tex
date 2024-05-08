@@ -1,0 +1,150 @@
+\documentclass[12pt]{article}
+\usepackage[paper=letterpaper,margin=1.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+
+\usepackage{lmodern}     % set math font to Latin modern math
+\usepackage[T1]{fontenc}
+\renewcommand\rmdefault{ptm}
+\usepackage[shortlabels]{enumitem}
+\usepackage{titling}
+\usepackage{graphicx}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{setspace}
+\usepackage{subfigure} 
+\usepackage{braket}
+\usepackage{color}
+\usepackage[parfill]{parskip}
+\usepackage{tabularx}
+\usepackage[table]{xcolor}
+\usepackage{listings}
+\usepackage{mathrsfs}
+\usepackage{stackengine}
+\usepackage{physics}
+\usepackage{afterpage}
+\usepackage{tikz}
+\usepackage{pdfpages}
+\usepackage[export]{adjustbox}
+\usepackage{biblatex}
+
+\setstackEOL{\\}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\setlength{\droptitle}{-6em}
+
+\makeatletter
+% we use \prefix@<level> only if it is defined
+\renewcommand{\@seccntformat}[1]{%
+  \ifcsname prefix@#1\endcsname
+    \csname prefix@#1\endcsname
+  \else
+    \csname the#1\endcsname\quad
+  \fi}
+% define \prefix@section
+\newcommand\prefix@section{}
+\newcommand{\prefix@subsection}{}
+\newcommand{\prefix@subsubsection}{}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+\makeatother
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator*{\argmax}{argmax}
+\newcommand{\partbreak}{\begin{center}\rule{17.5cm}{2pt}\end{center}}
+\newcommand{\alignbreak}{\begin{center}\rule{15cm}{1pt}\end{center}}
+\newcommand{\tightalignbreak}{\vspace{-5mm}\alignbreak\vspace{-5mm}}
+\newcommand{\hop}{\vspace{1mm}}
+\newcommand{\jump}{\vspace{5mm}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\G}{\mathbb{G}}
+\renewcommand{\S}{\mathbb{S}}
+\newcommand{\bt}{\textbf}
+\newcommand{\xdot}{\dot{x}}
+\newcommand{\ydot}{\dot{y}}
+\newcommand{\lm}{\mathrm{\lambda}}
+\renewcommand{\th}{\theta}
+\newcommand{\id}{\mathbb{I}}
+\newcommand{\si}{\Sigma}
+\newcommand{\Si}{\si}
+\newcommand{\inv}{^{-1}}
+\newcommand{\T}{^{\intercal}}
+\renewcommand{\tr}{\text{tr}}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\ph}{\varphi}
+\newcommand{\range}{\text{range}}
+\newcommand{\scP}{\mathcal{P}}
+\newcommand{\scT}{\mathbb{T}}
+\newcommand{\into}{\rightarrow}
+\newcommand{\scM}{\mathcal{M}}
+\newcommand{\scH}{\mathcal{H}}
+\newcommand{\scN}{\mathcal{N}}
+\newcommand{\scV}{\mathcal{V}}
+\newcommand{\scW}{\mathcal{W}}
+\renewcommand{\grad}{\nabla}
+\renewcommand{\star}{^{*}}
+
+\definecolor{cit}{rgb}{0.05,0.2,0.45}
+\addtolength{\jot}{1em}
+\newcommand{\solution}[1]{
+
+
+\noindent{\color{cit}\textbf{Solution:} #1}}
+
+\newcounter{tmpctr}
+\newcommand\fancyRoman[1]{%
+  \setcounter{tmpctr}{#1}%
+  \setbox0=\hbox{\kern0.3pt\textsf{\Roman{tmpctr}}}%
+  \setstackgap{S}{-.9pt}%
+  \Shortstack{\rule{\dimexpr\wd0+.1ex}{.9pt}\\\copy0\\
+              \rule{\dimexpr\wd0+.1ex}{.9pt}}%
+}
+
+\newcommand{\Id}{\fancyRoman{2}}
+\newcommand{\scC}{\mathcal{C}}
+\newcommand{\scX}{\mathcal{X}}
+\newcommand{\scG}{\mathcal{G}}
+\newcommand{\bx}{\textbf{x}}
+\renewcommand{\braket}[2]{\langle #1, #2 \rangle}
+\newcommand{\sgn}{\text{sgn}}
+\newcommand{\scE}{\mathcal{E}}
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern6mu{#1#2}}}
+
+\newcommand{\boxedquote}[2]{
+    \begin{center}\rule{16.5cm}{0.5pt}\end{center}
+     \vspace{-10mm}
+    \begin{quote}
+        \textbf{#1}:
+        #2
+    \end{quote}
+    \vspace{-10mm}
+    \begin{center}\rule{16.5cm}{0.5pt}\end{center}
+}
+
+\newcommand{\mquote}[2]{
+    \begin{quote}
+        \textbf{#1}: #2
+    \end{quote}
+}
