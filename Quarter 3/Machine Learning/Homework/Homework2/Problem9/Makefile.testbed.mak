@@ -37,7 +37,7 @@ compile: #compile .cpp files
 $(OBJ_DIR)/%.cpp.o: %.cpp # compile .cpp to .cpp.o object
 #@mkdir -p $(@D)
 	@echo   $<...
-	@g++ $< $(COMPILER_FLAGS) -c -o $@ $(DEFINES) $(INCLUDE_FLAGS)
+	@g++ $< -g $(COMPILER_FLAGS) -c -o $@ $(DEFINES) $(INCLUDE_FLAGS)
 
 .PHONY: clean
 clean: # clean build directory
