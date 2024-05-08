@@ -20,19 +20,21 @@ public:
     ~FileManager();
 
     int readData(const char del, double fraction = 1);
-    int writeData(const char del);
+    int writeData(const char del, const std::ios_base::openmode mode);
 
     // Used when inPath and OutPath are not specified
     int readData(const char del, const std::string inPath, double fraction = 1);
-    int writeData(const char del, const std::string outPath);
+    int writeData(const char del, const std::string outPath, const std::ios_base::openmode mode);
 
     std::vector<std::vector<T>> getData() {return _data;}
     void setData(std::vector<std::vector<T>> &data) {_data = data;}
     void resetData();
 
-
+    const std::string& getInPath() const noexcept {return _inPath;}
+    const std::string& getOutPath() const noexcept {return _outPath;}
     void setInPath(std::string inPath) {_inPath = inPath;}
     void setOutPath(std::string outPath) {_outPath = outPath;}
+
 
     void printData();
     
@@ -131,7 +133,7 @@ int FileManager<T>::readData(const char del, double fraction)
     return 0;
 }
 template <typename T>
-int FileManager<T>::writeData(const char del)
+int FileManager<T>::writeData(const char del, const std::ios_base::openmode mode)
 {
     
     if (_outPath == "") {
@@ -142,20 +144,18 @@ int FileManager<T>::writeData(const char del)
     }
     
     std::ofstream outFile;
-    outFile.open(_outPath, std::ios::app);
+    outFile.open(_outPath, mode);
 
     if (!outFile.is_open()) {
         std::cout<<" File path "<< _outPath << " is not found. Returning."<<std::endl;
         return 1;
     } 
 
-    const int nRows = _data.size();
-    const int nCols = _data[0].size(); // Assuming constant
-
-    for (int i = 0; i < nRows; i++) {
+    
+    for (int i = 0; i < _data.size(); i++) {
         std::string line = "";
-        for (int j = 0; j < nCols; j++) {
-            if (j != nCols - 1) line.append(std::to_string(_data[i][j]) + del);
+        for (int j = 0; j < _data[i].size(); j++) {
+            if (j != _data[i].size() - 1) line.append(std::to_string(_data[i][j]) + del);
             else line.append(std::to_string(_data[i][j]));
         }
         outFile << line<<std::endl;
@@ -175,12 +175,12 @@ int FileManager<T>::readData(const char del, const std::string inPath, double fr
 }
 
 template<typename T>
-int FileManager<T>::writeData(const char del, const std::string outPath)
+int FileManager<T>::writeData(const char del, const std::string outPath, const std::ios_base::openmode mode)
 {
     // Setting now
     _outPath = outPath;
 
-    return writeData(del);
+    return writeData(del, mode=mode);
 }
 
 template<typename T>

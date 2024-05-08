@@ -12,12 +12,14 @@ public:
     ~Homework4();
 
 
-    state run();
+    void run();
     state initHMM();
+    void collectData();
+    void doViterbi();
 
     private:
     state _internal_state;
     std::unique_ptr<FileManager<int>> _inData; 
-    std::unique_ptr<FileManager<int>> _outData;
-    std::unique_ptr<HMM> _HMM;
+    std::unique_ptr<FileManager<double>> _outData;
+    std::unique_ptr<HMM*> _HMM;
 };
